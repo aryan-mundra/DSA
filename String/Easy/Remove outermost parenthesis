@@ -1,0 +1,32 @@
+import java.util.Stack;
+
+class Remove_outermost_parenthesis {
+    public static void main(String[] args) {
+        String input = "(()())(())";
+        String solution = funtion(input);
+        System.out.println(solution);
+    }
+
+    public static String funtion(String s) {
+        Stack<Character> st = new Stack<>();
+        StringBuilder ans = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            Character ch = s.charAt(i);
+            if (ch == '(') {
+                if (st.size() > 0) {
+                    ans.append(ch);
+                    System.out.println("StringBuilder ans --> " + ans);
+                }
+                st.push(ch);
+            } else {
+                st.pop();
+                if (st.size() > 0) {
+                    ans.append(ch);
+                    System.out.println("StringBuilder ans --> " + ans);
+                }
+            }
+            
+        }
+        return ans.toString();
+    }
+}
