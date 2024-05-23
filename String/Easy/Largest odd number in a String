@@ -1,0 +1,18 @@
+
+class Solution {
+    public static void main(String[] args){
+        String input = "5231444";
+        String ans = largestOddNumber(input);
+        System.out.print(ans);
+    }
+    public static String largestOddNumber(String num) {
+        char[] ch = num.toCharArray();
+        for(int i=ch.length-1;i>=0;i--){
+            int a = ch[i]-'0';
+            if(a %2 == 1){
+                return num.substring(0,i +1);
+            }
+        }
+        return "";
+    }
+}
