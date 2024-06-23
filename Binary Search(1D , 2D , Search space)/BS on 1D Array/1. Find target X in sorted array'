@@ -1,0 +1,77 @@
+
+### Iterative approach
+
+class Solution {
+    public static int search(int[] arr, int target) {
+        int low = 0;
+        int high = arr.length - 1;
+        //int iteration = 1;
+
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            // System.out.println("Iteration " + iteration);
+            // System.out.println("Low: " + low + ", High: " + high + ", Mid: " + mid + ", arr[mid]: " + arr[mid]);
+            // iteration++;
+
+            if (arr[mid] == target) {
+                //System.out.println("Condition met: arr[mid] == target");
+                return mid;
+            } else if (arr[mid] < target) {
+                //System.out.println("Condition met: arr[mid] < target");
+                low = mid + 1;
+            } else {
+                //System.out.println("Condition met: arr[mid] > target");
+                high = mid - 1;
+            }
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        int arr[] = {-1, 0, 3, 5, 9, 12};
+        int target = 9;
+        int index = search(arr, target);
+        if (index == -1) {
+            System.out.println("The target element is not present in the array");
+        } else {
+            System.out.println("The target element is at the " + index + "th index of the array");
+        }
+    }
+}
+
+
+
+### Recursive approach
+
+class Solution {
+    public int search(int[] arr, int target) {
+       int ans = binarySearch(arr,0,arr.length-1,target);
+       return ans;
+    }
+    private int binarySearch(int arr[], int low, int high, int target){
+        while(low<=high){
+            int mid = (low + high)/2;
+            if(arr[mid]==target){
+                return mid;
+            }
+            else if(arr[mid]< target){
+                return binarySearch(arr,mid+1,high, target);
+            }
+            else{
+                return binarySearch(arr,low,mid-1,target);
+            }
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        int arr[] = {-1, 0, 3, 5, 9, 12};
+        int target = 9;
+        int index = search(arr, target);
+        if (index == -1) {
+            System.out.println("The target element is not present in the array");
+        } else {
+            System.out.println("The target element is at the " + index + "th index of the array");
+        }
+    }
+}
