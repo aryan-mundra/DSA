@@ -1,0 +1,139 @@
+
+// Brute force approach 
+
+
+import java.util.*;
+
+class HelloWorld {
+    public static void main(String[] args) {
+        int[] arr = {5,1,1,7,2,9,9,6};
+        int n = arr.length;
+        Arrays.sort(arr);
+        int second_largest = find_second_largest(arr, n);
+        System.out.println("The second largest element in the array is "+ second_largest);
+        
+        int second_smallest = find_second_smallest(arr,n);
+        System.out.println("The second smallest element in the array is "+ second_smallest);
+
+    }
+    
+    private static int find_second_largest(int[] arr, int n){
+        int ans = 0;
+        for(int i=n-1;i>0;i--){
+            if(arr[i] != arr[n-1]){
+                ans = arr[i];
+                break;
+            }
+        }
+        return ans;
+    }
+    
+    private static int find_second_smallest(int[] arr,int n){
+        int ans = 0; 
+        for(int i=0;i<n;i++){
+            if(arr[i] != arr[0]){
+                ans = arr[i];
+                break;
+            }
+        }
+        return ans;
+    }
+}
+
+
+
+
+
+
+//Better approach
+
+class HelloWorld {
+    public static void main(String[] args) {
+        int[] arr = {5,1,1,7,2,9,9,6};
+        int n = arr.length;
+        solution(arr,n);
+    }
+    
+    private static void solution(int[] arr, int n){
+        
+        int small = Integer.MAX_VALUE;
+        int large = Integer.MIN_VALUE;
+        
+        int second_smallest = Integer.MAX_VALUE;
+        int second_largest = Integer.MIN_VALUE;
+        
+        for(int i=0;i<n;i++){
+            small = Math.min(small, arr[i]);
+            large = Math.max(large, arr[i]);
+        }
+        
+        for(int i=0;i<n;i++){
+            if(arr[i] > small && arr[i]<second_smallest){
+                second_smallest = arr[i];
+            }
+            
+            if(arr[i]<large && arr[i] > second_largest){
+                second_largest = arr[i];
+            }
+        }
+        System.out.println("The second smallest element is "+ second_smallest);
+        
+        System.out.println("The second largest element is "+ second_largest);
+    }
+}
+
+
+
+
+
+
+
+
+//  Optimal solution 
+
+import java.util.*;
+
+class HelloWorld {
+    public static void main(String[] args) {
+        int[] arr = {5,1,1,7,2,9,9,6};
+        int n = arr.length;
+        int second_largest = find_second_largest(arr, n);
+        System.out.println("The second largest element is "+ second_largest);
+        
+        int second_smallest = find_second_smallest(arr, n);
+        System.out.println("The second smallest element is "+ second_smallest);
+
+    }
+    
+    private static int find_second_largest(int[] arr, int n){
+        int large = arr[0];
+        int second_largest = Integer.MIN_VALUE;
+        for(int i=0;i<n;i++){
+            if(arr[i] > large){
+                second_largest = large;
+                large = arr[i];
+            }else if(arr[i] > second_largest && arr[i] != large){
+                second_largest = arr[i];
+            }
+        }
+        return second_largest;
+    }
+    
+    private static int find_second_smallest(int[] arr, int n){
+        int small = arr[0];
+        int second_smallest = Integer.MAX_VALUE;
+        for(int i=0;i<n;i++){
+            if(arr[i]<small){
+                second_smallest = small;
+                small = arr[i];
+            }
+            else if(arr[i] < second_smallest && arr[i] != small){
+                second_smallest = arr[i];
+            }
+        }
+        return second_smallest;
+        
+    }
+           
+}
+    
