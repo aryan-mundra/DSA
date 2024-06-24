@@ -1,0 +1,44 @@
+//Brute force approach
+
+class Solution {
+    private static void rotate(int[] arr, int k) {
+        int n = arr.length;
+        int d = k % n;
+
+        // If d is 0, no need to rotate
+        if (d == 0) {
+            return;
+        }
+
+        // Calculate the number of elements to move to the temp array
+        int elementsToMove = n - d;
+
+        // Create a temporary array to store the first 'elementsToMove' elements
+        int[] temp = new int[elementsToMove];
+
+        // Transferring first 'elementsToMove' elements to the temp array
+        for (int i = 0; i < elementsToMove; i++) {
+            temp[i] = arr[i];
+        }
+
+        // Shifting the remaining elements to the left
+        for (int i = 0; i < d; i++) {
+            arr[i] = arr[elementsToMove + i];
+        }
+
+        // Attaching the temp array elements back into the array
+        for (int i = 0; i < elementsToMove; i++) {
+            arr[d + i] = temp[i];
+        }
+    }
+    
+    public static void main(String[] args){
+        int[] arr = {1,2,3,4,5,6,7};
+        int k = 3;
+        rotate(arr,k);
+        
+        for(int i=0;i<arr.length;i++){
+            System.out.print(arr[i]);
+        }
+    }
+}
