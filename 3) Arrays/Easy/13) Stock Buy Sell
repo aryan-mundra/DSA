@@ -1,0 +1,41 @@
+// Brute force
+
+class Solution {
+    public int maxProfit(int[] arr) {
+        int n = arr.length;
+        int maxProfit = 0;
+        int cost= 0;
+        for(int i=0;i<n;i++){
+            for(int j= i+1;j<n;j++){
+                if(arr[j]>arr[i]){
+                    cost = arr[j] - arr[i];
+                }
+                maxProfit = Math.max(maxProfit, cost);
+            }
+        }
+
+        return maxProfit;
+    }
+}
+
+
+
+
+
+// Optimized approach
+
+class Solution {
+    public int maxProfit(int[] arr) {
+        int n = arr.length;
+        int min = Integer.MAX_VALUE;
+        int maxProfit = 0;
+        for(int i=0;i<n;i++){
+            min = Math.min(arr[i],min);
+            int cost = arr[i] - min;
+            maxProfit = Math.max(maxProfit, cost);
+        }
+        return maxProfit;
+    }
+}
+
+

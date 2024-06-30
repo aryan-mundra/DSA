@@ -1,0 +1,93 @@
+// Brute force approach
+
+class Solution {
+    public int majorityElement(int[] arr) {
+        int n = arr.length;
+        for(int i=0;i<n;i++){
+            int cnt = 0;
+            for(int j=0;j<n;j++){
+                if(arr[i] == arr[j]){
+                    cnt++;
+                }
+                if(cnt > n/2){
+                    return arr[i];
+                }
+            }
+        }
+
+        return -1;
+        
+    }
+}
+
+
+
+
+
+
+// Better appraoch
+
+class Solution {
+    public int majorityElement(int[] arr) {
+        int n = arr.length;
+
+        //declaring a map:
+        HashMap<Integer, Integer> mpp = new HashMap<>();
+
+        //storing the elements with its occurnce:
+        for (int i = 0; i < n; i++) {
+            int value = mpp.getOrDefault(arr[i], 0);
+            mpp.put(arr[i], value + 1);
+        }
+
+        //searching for the majority element:
+        for (Map.Entry<Integer, Integer> it : mpp.entrySet()) {
+            if (it.getValue() > (n / 2)) {
+                return it.getKey();
+            }
+        }
+
+        return -1;
+    }
+}
+
+
+
+
+
+
+
+//Moore's voting algorithm 
+
+class Solution {
+    public int majorityElement(int[] arr) {
+        int n = arr.length;
+        int cnt = 0;
+        int ele = 0;
+
+        for(int i=0;i<n;i++){
+            if(cnt == 0){
+                ele = arr[i];
+            }
+
+            if(arr[i] == ele){
+                cnt++;
+            }else{
+                cnt--;
+            }
+        }
+
+        int count = 0;
+        for(int i=0;i<n;i++){
+            if(arr[i] == ele){
+                count++;
+            }
+        }
+
+        if(count > n/2){
+            return ele;
+        }
+
+        return -1;
+    }
+}
