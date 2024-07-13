@@ -1,0 +1,39 @@
+// Roman to integer
+
+import java.util.*;
+
+class Solution {
+    public int romanToInt(String s) {
+        // Create a HashMap to store Roman numeral characters and their corresponding integer values
+        Map<Character, Integer> m = new HashMap<>();
+        m.put('I', 1);
+        m.put('V', 5);
+        m.put('X', 10);
+        m.put('L', 50);
+        m.put('C', 100);
+        m.put('D', 500);
+        m.put('M', 1000);
+        
+        char[] ch = s.toCharArray();
+        
+        int ans = 0;
+        
+        for (int i = 0; i < ch.length; i++) {
+// If the current character represents a smaller value than the next character, subtract its value
+            if (i < ch.length - 1 && m.get(ch[i]) < m.get(ch[i + 1])) {
+                ans -= m.get(ch[i]);
+            } else {
+                // Otherwise, add its value
+                ans += m.get(ch[i]);
+            }
+        }
+        
+        return ans;
+    }
+}
+
+
+//Leetcode solving link : https://leetcode.com/problems/roman-to-integer/
+
+// Youtube link : https://youtu.be/pUV_4YeJzjM?si=BHa6s-YIoWMYLcAd
+//(Coding Sphere)

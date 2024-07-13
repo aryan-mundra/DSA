@@ -1,0 +1,39 @@
+// Inserting a Node in LinkedList
+// This is a gfg question for actual insertion logic refer LinkedList_basics.java
+
+
+// class Node{
+//     int data;
+//     Node next;
+
+//     Node(int x){
+//         data = x;
+//         next = null;
+//     }
+// }
+
+
+class Solution {
+    // Function to insert a node at the end of the linked list.
+    Node insertAtEnd(Node head, int x) {
+        // code here
+        Node newNode = new Node(x);
+        if(head == null){
+            return newNode;
+        }
+        
+        Node pointerNode = head;
+        while(pointerNode.next != null){
+            System.out.print(pointerNode.data + " ");
+            pointerNode = pointerNode.next;
+        }
+        
+        System.out.print(pointerNode.data + " ");
+        
+        pointerNode.next = newNode;
+        return newNode;
+    }
+}
+
+
+// GFG Link : https://www.geeksforgeeks.org/problems/linked-list-insertion-1587115620/0

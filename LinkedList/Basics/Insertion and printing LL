@@ -1,0 +1,77 @@
+// Addition and printing the list 
+
+import java.util.*;
+
+class LL {
+    class Node {
+        String data;  // Data stored in the node
+        Node next;    // Reference to the next node in the list
+        
+        Node() {
+            this.data = null; 
+            this.next = null;  
+        }
+
+        Node(String data) {
+            this.data = data;  
+            this.next = null;  
+        }
+
+        Node(String data, Node next) {
+            this.data = data;  
+            this.next = next;  
+        }
+    }
+
+    Node head; 
+
+    // Method to add a new node at the beginning of the linked list
+    public void addFirst(String data) {
+        Node newNode = new Node(data);  
+        newNode.next = head;            
+        head = newNode;                 
+    }
+
+    // Method to add a new node at the end of the linked list
+    public void addLast(String data) {
+        Node newNode = new Node(data);  
+
+        Node pointerNode = head;        
+        while (pointerNode.next != null) {  
+            pointerNode = pointerNode.next;  
+        }
+        pointerNode.next = newNode;     
+    }
+
+    // Method to print the linked list
+    public void printLL() {
+        Node pointerNode = head;  
+
+        while (pointerNode.next != null) {  // Traverse until the second last node
+            System.out.print(pointerNode.data + "-->");  // Print current node's data
+            pointerNode = pointerNode.next;  // Move to the next node
+        }
+        
+        System.out.print(pointerNode.data);  // Print data of the last node
+    }
+
+    public static void main(String[] args) {
+        LL list = new LL();
+
+        // Add elements to the LinkedList
+        list.addFirst("a");
+        list.addLast("b");
+        list.addLast("c");
+
+        // Print the LinkedList
+        list.printLL();  // Output should be: a-->b-->c
+    }
+}
+
+
+
+
+
+
+// Youtube link = https://youtu.be/oAja8-Ulz6o?si=8yQzgEu_K3aGgSRB
+// (Apna college)

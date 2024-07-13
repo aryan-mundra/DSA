@@ -1,0 +1,32 @@
+// Sort characters by frequency
+
+class Solution {
+    public String frequencySort(String s) {
+        // Step 1: Count character frequencies
+        HashMap<Character, Integer> map = new HashMap<>();
+        for (char c : s.toCharArray()) {
+            map.put(c, map.getOrDefault(c, 0) + 1);
+        }
+        
+        // Step 2: Convert HashMap entries to a list
+        List<Map.Entry<Character, Integer>> list = new ArrayList<>(map.entrySet());
+        
+        // Step 3: Sort the list by frequency (descending order)
+        Collections.sort(list, (a, b) -> b.getValue() - a.getValue());
+        
+        // Step 4: Construct the result string based on sorted frequencies
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<Character, Integer> entry : list) {
+            char c = entry.getKey();
+            int frequency = entry.getValue();
+            for (int i = 0; i < frequency; i++) {
+                sb.append(c);
+            }
+        }
+        
+        return sb.toString();
+    }
+}
+
+
+// Leetcode solving link : https://leetcode.com/problems/sort-characters-by-frequency/
