@@ -1,0 +1,86 @@
+//Question : Implement ATOI/STRSTR
+
+
+// Extreme brute force approach
+class Solution {
+    public int myAtoi(String s) {
+        return Integer.parseInt(s);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Own Solution
+class Solution {
+    public int myAtoi(String s) {
+        
+        s = s.trim();    // Trim leading and trailing spaces
+        if (s.isEmpty()) return 0;  // Edge case: empty string after trimming
+
+        Queue<Character> q = new LinkedList<>();
+        boolean sign = true;
+        int startIndex = 0;
+
+        // Check for sign at the beginning
+        if (s.charAt(startIndex) == '-') {
+            sign = false;
+            startIndex++;
+        } else if (s.charAt(startIndex) == '+') {
+            startIndex++;
+        }
+
+        for (int i = startIndex; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (Character.isDigit(c)) {
+                q.add(c);
+            } else {
+                break;  // Stop processing on encountering non-digit characters
+            }
+        }
+
+        if (q.isEmpty()) {
+            return 0;         // No digits found
+        }  
+
+        StringBuilder concatenated = new StringBuilder();
+        while (!q.isEmpty()) {
+            concatenated.append(q.poll());
+        }
+
+        // Convert the string to an integer
+        int result;
+        try {
+            result = Integer.parseInt(concatenated.toString());
+        } catch (NumberFormatException e) {
+            // Handle overflow cases if needed
+            return sign ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+        }
+
+        // Apply sign
+        return sign ? result : -result;
+    }
+}
+
+
+
+//LeetCode Link: https://leetcode.com/problems/string-to-integer-atoi/
+
+
+
+
+
+
+
+

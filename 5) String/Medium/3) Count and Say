@@ -1,0 +1,30 @@
+class Solution {
+    public String countAndSay(int n) {
+        // Initialize m to "1" for the base case
+        String m = "1";  
+
+        int n_counter = 1;  // Start with 1 to account for the initial "1"
+
+        while (n_counter < n) {
+            StringBuilder ans = new StringBuilder();
+            int i = 0;
+            int counter = 1;  // Initialize counter for counting occurrences
+            
+            while (i < m.length() - 1) {  
+                if (m.charAt(i) == m.charAt(i + 1)) {
+                    counter++;
+                } else {
+                    ans.append(counter).append(m.charAt(i));  // Append the count and the character
+                    counter = 1;  // Reset the counter
+                }
+                i++;
+            }
+            ans.append(counter).append(m.charAt(i)); // This is used to append the first as well as the last character group
+            m = ans.toString();  // Update m for the next iteration
+            n_counter++;
+        }
+        
+        System.out.print(m);  // Print the final result
+        return m;  // Return the result
+    }
+}

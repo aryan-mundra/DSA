@@ -1,0 +1,80 @@
+
+class Solution {
+    private int func(int index1, int index2,  char[] charArr1,  char[] charArr2){
+
+        //base case
+        if(index1 < 0 || index2 <0){
+            return 0;
+        }
+
+        if(charArr1[index1] == charArr2[index2]){
+            return 1 + func(index1 -1, index2 -1, charArr1, charArr2);
+        }
+        
+        return 0+  Math.max(func(index1 -1, index2, charArr1, charArr2), func(index1, index2 -1, charArr1, charArr2));
+    }
+    public int longestCommonSubsequence(String text1, String text2) {
+        char[] charArr1 = text1.toCharArray();
+        char[] charArr2 = text2.toCharArray();
+        return func(text1.length()-1,text2.length()-1,charArr1,charArr2 );
+    }
+}
+
+
+
+
+
+
+
+
+// Optimised approach (Using DP)
+import java.util.Arrays;
+
+class Solution {
+    private int func(int index1, int index2, char[] charArr1, char[] charArr2, int[][] dp) {
+        // Base case
+        if (index1 < 0 || index2 < 0) {
+            return 0;
+        }
+
+        // Check if result is already computed
+        if (dp[index1 + 1][index2 + 1] != -1) {
+            return dp[index1 + 1][index2 + 1];
+        }
+
+        // If characters match
+        if (charArr1[index1] == charArr2[index2]) {
+            return dp[index1 + 1][index2 + 1] = 1 + func(index1 - 1, index2 - 1, charArr1, charArr2, dp);
+        }
+
+        // If characters do not match
+        return dp[index1 + 1][index2 + 1] = Math.max(
+            func(index1 - 1, index2, charArr1, charArr2, dp),
+            func(index1, index2 - 1, charArr1, charArr2, dp)
+        );
+    }
+
+    public int longestCommonSubsequence(String text1, String text2) {
+        char[] charArr1 = text1.toCharArray();
+        char[] charArr2 = text2.toCharArray();
+
+        // Create a 2D array to store results of subproblems
+        int[][] dp = new int[text1.length() + 1][text2.length() + 1];
+
+        // Initialize the dp array with -1 to indicate that subproblems are not solved yet
+        for (int[] rows : dp) {
+            Arrays.fill(rows, -1);
+        }
+
+        // Call the function with the last indices of the arrays
+        return func(text1.length() - 1, text2.length() - 1, charArr1, charArr2, dp);
+    }
+}
+
+
+
+
+// LeetCode link: https://leetcode.com/problems/longest-common-subsequence/
+// Youtube link(Striver): https://youtu.be/NPZn9jBrX8U?si=sNwnT5S8fHp0dk3T
+
+
