@@ -1,3 +1,31 @@
+
+What is lower bound ?
+
+Lower bound means an index(i) which is greater than or equal to target X
+
+arr[i] >= x
+
+return i;
+
+
+
+
+what is upper bound ?
+
+Upper bound means an index(i) which is greater than x
+
+arr[i] > x
+
+return i;
+
+
+
+
+
+
+
+
+
 ## Brute force approach
 
 

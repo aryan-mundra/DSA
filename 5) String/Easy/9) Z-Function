@@ -11,6 +11,15 @@ class Solution {
 
 
 
+
+
+
+
+
+
+
+
+
 //Approach 2
 class Solution {
     public boolean compare(String haystack,String needle, int idx)
