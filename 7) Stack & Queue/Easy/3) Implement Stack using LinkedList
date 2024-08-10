@@ -1,0 +1,70 @@
+// Implement stack using LinkedList
+
+class Stack {
+    private class StackNode {
+        int data;
+        StackNode next;
+        
+        StackNode(int d) {
+            data = d;
+            next = null;
+        }
+    }
+    
+    private StackNode top;
+    private int size;
+
+    Stack() {
+        this.top = null;
+        this.size = 0;
+    }
+
+    public void push(int x) {
+        StackNode element = new StackNode(x);
+        element.next = top;
+        top = element;
+        size++;
+        System.out.println("Element pushed");
+    }
+
+    public int pop() {
+        if (top == null) {
+            System.out.println("Stack is empty");
+            return -1; // Or you might throw an exception
+        }
+        int topData = top.data;
+        top = top.next;
+        size--;
+        return topData;
+    }
+
+    public int size() {
+        return size;
+    }
+
+    public boolean isEmpty() {
+        return top == null;
+    }
+
+    public void printStack() {
+        StackNode current = top;
+        while (current != null) {
+            System.out.print(current.data + " ");
+            current = current.next;
+        }
+        System.out.println();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Stack s = new Stack();
+        s.push(10);
+        s.push(20);
+        s.printStack();
+        System.out.println("Element popped: " + s.pop());
+        System.out.println("Stack size: " + s.size());
+        System.out.println("Stack is empty or not: " + s.isEmpty());
+    }
+}
+

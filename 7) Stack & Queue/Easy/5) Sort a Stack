@@ -1,0 +1,20 @@
+class GfG {
+    public Stack<Integer> sort(Stack<Integer> s) {
+        ArrayList<Integer> ans = new ArrayList<>();
+        while(!s.isEmpty()){
+            ans.add(s.pop());
+        }
+        
+        Stack<Integer> finalAns = new Stack<>();
+        
+        Collections.sort(ans);
+        for(int i=0;i<ans.size();i++){
+           finalAns.push(ans.get(i)); 
+        }
+        
+        return finalAns;
+    }
+}
+
+
+//GFG Link: https://www.geeksforgeeks.org/problems/sort-a-stack/1
