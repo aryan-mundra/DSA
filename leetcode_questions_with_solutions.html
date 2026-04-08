@@ -683,17 +683,19 @@
     <div class="container">
         <header>
             <h1>LeetCode Questions - Interactive Guide</h1>
-            <p>149 Curated Problems with Animated Solutions & Visual Walkthroughs</p>
+            <p>163 Curated Problems with Animated Solutions & Visual Walkthroughs</p>
         </header>
         
         <div class="stats">
-            <div class="stat-box"><h3>149</h3><p>Total Questions</p></div>
-            <div class="stat-box"><h3>9</h3><p>Patterns Covered</p></div>
-            <div class="stat-box"><h3>30</h3><p>Animated Visuals</p></div>
+            <div class="stat-box"><h3>163</h3><p>Total Questions</p></div>
+            <div class="stat-box"><h3>11</h3><p>Topics Covered</p></div>
+            <div class="stat-box"><h3>45</h3><p>Animated Visuals</p></div>
         </div>
         
         <nav>
             <ul>
+                <li><a href="#sorting-algorithms" onclick="scrollToSection(event, 'sorting-algorithms')">Sorting Algorithms</a></li>
+                <li><a href="#pattern-printing" onclick="scrollToSection(event, 'pattern-printing')">Pattern Printing</a></li>
                 <li><a href="#sliding-window" onclick="scrollToSection(event, 'sliding-window')">Sliding Window</a></li>
                 <li><a href="#prefix-sum" onclick="scrollToSection(event, 'prefix-sum')">Prefix Sum</a></li>
                 <li><a href="#binary-search" onclick="scrollToSection(event, 'binary-search')">Binary Search</a></li>
@@ -707,6 +709,896 @@
         </nav>
         
         <div class="content">
+
+<!-- ==================== SORTING ALGORITHMS ==================== -->
+<section id="sorting-algorithms" class="section">
+    <div class="section-header">
+        <h2>0. Sorting Algorithms (5 Algorithms)</h2>
+        <p>Fundamental sorting techniques every programmer must master</p>
+    </div>
+
+    <!-- ===== SELECTION SORT ===== -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">1. Selection Sort</span>
+            <span class="difficulty easy">Easy</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given an unsorted array of integers, sort it in ascending order using Selection Sort. The algorithm repeatedly finds the minimum element from the unsorted portion and places it at the beginning.</p>
+            <ul>
+                <li>1 &le; nums.length &le; 10^4</li>
+                <li>-10^4 &le; nums[i] &le; 10^4</li>
+                <li>Time Complexity: O(n&sup2;) in all cases</li>
+                <li>Space Complexity: O(1) &mdash; in-place sorting</li>
+                <li>Not stable</li>
+            </ul>
+        </div>
+        <div class="test-cases">
+            <div class="test-case">
+                <h4>Test Case 1:</h4>
+                <pre>Input:  [64, 25, 12, 22, 11]
+Output: [11, 12, 22, 25, 64]
+Explanation: Each pass finds the minimum from the unsorted part and swaps it into position.</pre>
+            </div>
+        </div>
+
+        <!-- Animation -->
+        <div class="animation-box">
+            <h3>Step-by-Step Animation</h3>
+            <div class="controls">
+                <button class="btn-play" onclick="animSelSort('play')">&#9654; Play</button>
+                <button class="btn-step" onclick="animSelSort('step')">Step &raquo;</button>
+                <button class="btn-prev" onclick="animSelSort('prev')">&laquo; Prev</button>
+                <button class="btn-reset" onclick="animSelSort('reset')">&#8634; Reset</button>
+            </div>
+            <div class="step-info" id="selsort-info">Click Play or Step to start the animation</div>
+            <div class="legend">
+                <div class="legend-item"><div class="legend-color" style="background:#ebf4ff; border-color:#667eea;"></div> Current i</div>
+                <div class="legend-item"><div class="legend-color" style="background:#feebc8; border-color:#ed8936;"></div> Scanning j</div>
+                <div class="legend-item"><div class="legend-color" style="background:#fefcbf; border-color:#d69e2e;"></div> Current Min</div>
+                <div class="legend-item"><div class="legend-color" style="background:#c6f6d5; border-color:#38a169;"></div> Sorted</div>
+            </div>
+            <div class="array-container" id="selsort-array"></div>
+            <div class="result-box" id="selsort-result">Array: [64, 25, 12, 22, 11]</div>
+        </div>
+
+        <!-- Solution Code -->
+        <div class="solution">
+            <h3>Java Solution (with line-by-line highlighting)</h3>
+            <pre id="code-selsort">
+public static void selectionSort(int[] arr) {
+    int n = arr.length;
+    for (int i = 0; i < n - 1; i++) {
+        int minIdx = i;
+        for (int j = i + 1; j < n; j++) {
+            if (arr[j] < arr[minIdx]) {
+                minIdx = j;
+            }
+        }
+        int temp = arr[minIdx];
+        arr[minIdx] = arr[i];
+        arr[i] = temp;
+    }
+}</pre>
+            <div class="complexity">
+                <h4>Complexity Analysis</h4>
+                <p><strong>Time:</strong> O(n&sup2;) &mdash; always, regardless of input order</p>
+                <p><strong>Space:</strong> O(1) &mdash; sorts in-place</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== BUBBLE SORT ===== -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">2. Bubble Sort</span>
+            <span class="difficulty easy">Easy</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given an unsorted array of integers, sort it in ascending order using Bubble Sort. The algorithm repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order.</p>
+            <ul>
+                <li>1 &le; nums.length &le; 10^4</li>
+                <li>-10^4 &le; nums[i] &le; 10^4</li>
+                <li>Time Complexity: O(n&sup2;) worst/average, O(n) best (already sorted)</li>
+                <li>Space Complexity: O(1) &mdash; in-place sorting</li>
+                <li>Stable sort</li>
+            </ul>
+        </div>
+        <div class="test-cases">
+            <div class="test-case">
+                <h4>Test Case 1:</h4>
+                <pre>Input:  [64, 34, 25, 12, 22, 11, 90]
+Output: [11, 12, 22, 25, 34, 64, 90]
+Explanation: Largest elements "bubble up" to the end each pass.</pre>
+            </div>
+        </div>
+
+        <div class="animation-box">
+            <h3>Step-by-Step Animation</h3>
+            <div class="controls">
+                <button class="btn-play" onclick="animBubSort('play')">&#9654; Play</button>
+                <button class="btn-step" onclick="animBubSort('step')">Step &raquo;</button>
+                <button class="btn-prev" onclick="animBubSort('prev')">&laquo; Prev</button>
+                <button class="btn-reset" onclick="animBubSort('reset')">&#8634; Reset</button>
+            </div>
+            <div class="step-info" id="bubsort-info">Click Play or Step to start the animation</div>
+            <div class="legend">
+                <div class="legend-item"><div class="legend-color" style="background:#ebf4ff; border-color:#667eea;"></div> Comparing j</div>
+                <div class="legend-item"><div class="legend-color" style="background:#feebc8; border-color:#ed8936;"></div> Comparing j+1</div>
+                <div class="legend-item"><div class="legend-color" style="background:#fed7d7; border-color:#e53e3e;"></div> Swapped</div>
+                <div class="legend-item"><div class="legend-color" style="background:#c6f6d5; border-color:#38a169;"></div> Sorted</div>
+            </div>
+            <div class="array-container" id="bubsort-array"></div>
+            <div class="result-box" id="bubsort-result">Array: [5, 1, 4, 2, 8]</div>
+        </div>
+
+        <div class="solution">
+            <h3>Java Solution (with line-by-line highlighting)</h3>
+            <pre id="code-bubsort">
+public static void bubbleSort(int[] arr) {
+    int n = arr.length;
+    for (int i = 0; i < n - 1; i++) {
+        boolean swapped = false;
+        for (int j = 0; j < n - 1 - i; j++) {
+            if (arr[j] > arr[j + 1]) {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+                swapped = true;
+            }
+        }
+        if (!swapped) break;
+    }
+}</pre>
+            <div class="complexity">
+                <h4>Complexity Analysis</h4>
+                <p><strong>Time:</strong> O(n&sup2;) worst/average, O(n) best case with early termination</p>
+                <p><strong>Space:</strong> O(1) &mdash; sorts in-place</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== INSERTION SORT ===== -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">3. Insertion Sort</span>
+            <span class="difficulty easy">Easy</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given an unsorted array of integers, sort it in ascending order using Insertion Sort. The algorithm builds the sorted array one element at a time by picking each element and inserting it into its correct position among the previously sorted elements.</p>
+            <ul>
+                <li>1 &le; nums.length &le; 10^4</li>
+                <li>-10^4 &le; nums[i] &le; 10^4</li>
+                <li>Time Complexity: O(n&sup2;) worst/average, O(n) best</li>
+                <li>Space Complexity: O(1) &mdash; in-place sorting</li>
+                <li>Stable sort &mdash; excellent for nearly-sorted data</li>
+            </ul>
+        </div>
+        <div class="test-cases">
+            <div class="test-case">
+                <h4>Test Case 1:</h4>
+                <pre>Input:  [12, 11, 13, 5, 6]
+Output: [5, 6, 11, 12, 13]
+Explanation: Each element is "inserted" into the correct position in the sorted prefix.</pre>
+            </div>
+        </div>
+
+        <div class="animation-box">
+            <h3>Step-by-Step Animation</h3>
+            <div class="controls">
+                <button class="btn-play" onclick="animInsSrt('play')">&#9654; Play</button>
+                <button class="btn-step" onclick="animInsSrt('step')">Step &raquo;</button>
+                <button class="btn-prev" onclick="animInsSrt('prev')">&laquo; Prev</button>
+                <button class="btn-reset" onclick="animInsSrt('reset')">&#8634; Reset</button>
+            </div>
+            <div class="step-info" id="inssrt-info">Click Play or Step to start the animation</div>
+            <div class="legend">
+                <div class="legend-item"><div class="legend-color" style="background:#e9d8fd; border-color:#805ad5;"></div> Key Element</div>
+                <div class="legend-item"><div class="legend-color" style="background:#feebc8; border-color:#ed8936;"></div> Comparing / Shifting</div>
+                <div class="legend-item"><div class="legend-color" style="background:#ebf4ff; border-color:#667eea;"></div> Insertion Point</div>
+                <div class="legend-item"><div class="legend-color" style="background:#c6f6d5; border-color:#38a169;"></div> Sorted</div>
+            </div>
+            <div class="array-container" id="inssrt-array"></div>
+            <div class="result-box" id="inssrt-result">Array: [12, 11, 13, 5, 6]</div>
+        </div>
+
+        <div class="solution">
+            <h3>Java Solution (with line-by-line highlighting)</h3>
+            <pre id="code-inssrt">
+public static void insertionSort(int[] arr) {
+    int n = arr.length;
+    for (int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}</pre>
+            <div class="complexity">
+                <h4>Complexity Analysis</h4>
+                <p><strong>Time:</strong> O(n&sup2;) worst/average, O(n) best (nearly sorted input)</p>
+                <p><strong>Space:</strong> O(1) &mdash; sorts in-place</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MERGE SORT ===== -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">4. Merge Sort</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given an unsorted array of integers, sort it in ascending order using Merge Sort. This divide-and-conquer algorithm splits the array in half recursively, sorts each half, and merges the sorted halves back together.</p>
+            <ul>
+                <li>1 &le; nums.length &le; 10^5</li>
+                <li>-10^5 &le; nums[i] &le; 10^5</li>
+                <li>Time Complexity: O(n log n) in all cases</li>
+                <li>Space Complexity: O(n) &mdash; requires auxiliary array</li>
+                <li>Stable sort &mdash; used in Java&rsquo;s Arrays.sort for objects</li>
+            </ul>
+        </div>
+        <div class="test-cases">
+            <div class="test-case">
+                <h4>Test Case 1:</h4>
+                <pre>Input:  [38, 27, 43, 3, 9, 82, 10]
+Output: [3, 9, 10, 27, 38, 43, 82]
+Explanation: Recursively split → sort halves → merge sorted halves.</pre>
+            </div>
+        </div>
+
+        <div class="animation-box">
+            <h3>Step-by-Step Animation</h3>
+            <div class="controls">
+                <button class="btn-play" onclick="animMrgSrt('play')">&#9654; Play</button>
+                <button class="btn-step" onclick="animMrgSrt('step')">Step &raquo;</button>
+                <button class="btn-prev" onclick="animMrgSrt('prev')">&laquo; Prev</button>
+                <button class="btn-reset" onclick="animMrgSrt('reset')">&#8634; Reset</button>
+            </div>
+            <div class="step-info" id="mrgsrt-info">Click Play or Step to start the animation</div>
+            <div class="legend">
+                <div class="legend-item"><div class="legend-color" style="background:#ebf4ff; border-color:#667eea;"></div> Left Half</div>
+                <div class="legend-item"><div class="legend-color" style="background:#feebc8; border-color:#ed8936;"></div> Right Half</div>
+                <div class="legend-item"><div class="legend-color" style="background:#e9d8fd; border-color:#805ad5;"></div> Merging</div>
+                <div class="legend-item"><div class="legend-color" style="background:#c6f6d5; border-color:#38a169;"></div> Sorted</div>
+            </div>
+            <div class="array-container" id="mrgsrt-array"></div>
+            <div class="result-box" id="mrgsrt-result">Array: [38, 27, 43, 3, 9, 82, 10]</div>
+        </div>
+
+        <div class="solution">
+            <h3>Java Solution (with line-by-line highlighting)</h3>
+            <pre id="code-mrgsrt">
+public static void mergeSort(int[] arr, int l, int r) {
+    if (l < r) {
+        int mid = (l + r) / 2;
+        mergeSort(arr, l, mid);
+        mergeSort(arr, mid + 1, r);
+        merge(arr, l, mid, r);
+    }
+}
+public static void merge(int[] a, int l, int m, int r) {
+    int[] L = Arrays.copyOfRange(a, l, m + 1);
+    int[] R = Arrays.copyOfRange(a, m + 1, r + 1);
+    int i = 0, j = 0, k = l;
+    while (i < L.length && j < R.length) {
+        if (L[i] <= R[j]) { a[k++] = L[i++]; }
+        else               { a[k++] = R[j++]; }
+    }
+    while (i < L.length) a[k++] = L[i++];
+    while (j < R.length) a[k++] = R[j++];
+}</pre>
+            <div class="complexity">
+                <h4>Complexity Analysis</h4>
+                <p><strong>Time:</strong> O(n log n) &mdash; guaranteed in all cases</p>
+                <p><strong>Space:</strong> O(n) &mdash; temporary arrays for merging</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== QUICK SORT ===== -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">5. Quick Sort</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given an unsorted array of integers, sort it in ascending order using Quick Sort. This divide-and-conquer algorithm picks a pivot element and partitions the array so that elements smaller than the pivot are on the left and elements greater are on the right, then recursively sorts the partitions.</p>
+            <ul>
+                <li>1 &le; nums.length &le; 10^5</li>
+                <li>-10^5 &le; nums[i] &le; 10^5</li>
+                <li>Time Complexity: O(n log n) average, O(n&sup2;) worst case</li>
+                <li>Space Complexity: O(log n) &mdash; recursion stack</li>
+                <li>Not stable &mdash; but very fast in practice (cache friendly)</li>
+            </ul>
+        </div>
+        <div class="test-cases">
+            <div class="test-case">
+                <h4>Test Case 1:</h4>
+                <pre>Input:  [10, 7, 8, 9, 1, 5]
+Output: [1, 5, 7, 8, 9, 10]
+Explanation: Pivot partitions array, then recursively sorts each side.</pre>
+            </div>
+        </div>
+
+        <div class="animation-box">
+            <h3>Step-by-Step Animation</h3>
+            <div class="controls">
+                <button class="btn-play" onclick="animQkSrt('play')">&#9654; Play</button>
+                <button class="btn-step" onclick="animQkSrt('step')">Step &raquo;</button>
+                <button class="btn-prev" onclick="animQkSrt('prev')">&laquo; Prev</button>
+                <button class="btn-reset" onclick="animQkSrt('reset')">&#8634; Reset</button>
+            </div>
+            <div class="step-info" id="qksrt-info">Click Play or Step to start the animation</div>
+            <div class="legend">
+                <div class="legend-item"><div class="legend-color" style="background:#fefcbf; border-color:#d69e2e;"></div> Pivot</div>
+                <div class="legend-item"><div class="legend-color" style="background:#ebf4ff; border-color:#667eea;"></div> Pointer i</div>
+                <div class="legend-item"><div class="legend-color" style="background:#feebc8; border-color:#ed8936;"></div> Scanning j</div>
+                <div class="legend-item"><div class="legend-color" style="background:#fed7d7; border-color:#e53e3e;"></div> Swapped</div>
+                <div class="legend-item"><div class="legend-color" style="background:#c6f6d5; border-color:#38a169;"></div> In Final Position</div>
+            </div>
+            <div class="array-container" id="qksrt-array"></div>
+            <div class="result-box" id="qksrt-result">Array: [10, 7, 8, 9, 1, 5]</div>
+        </div>
+
+        <div class="solution">
+            <h3>Java Solution (with line-by-line highlighting)</h3>
+            <pre id="code-qksrt">
+public static void quickSort(int[] arr, int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+public static int partition(int[] a, int low, int high) {
+    int pivot = a[high];
+    int i = low - 1;
+    for (int j = low; j < high; j++) {
+        if (a[j] <= pivot) {
+            i++;
+            int temp = a[i]; a[i] = a[j]; a[j] = temp;
+        }
+    }
+    int temp = a[i+1]; a[i+1] = a[high]; a[high] = temp;
+    return i + 1;
+}</pre>
+            <div class="complexity">
+                <h4>Complexity Analysis</h4>
+                <p><strong>Time:</strong> O(n log n) average, O(n&sup2;) worst case (sorted input with bad pivot)</p>
+                <p><strong>Space:</strong> O(log n) &mdash; recursion stack depth</p>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!-- ==================== PATTERN PRINTING ==================== -->
+<section id="pattern-printing" class="section">
+    <div class="section-header">
+        <h2>0.5 Pattern Printing (9 Patterns)</h2>
+        <p>Classic loop-based pattern problems — master nested loops and output formatting</p>
+    </div>
+
+    <!-- ===== 1. RIGHT TRIANGLE ===== -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">1. Right Triangle (Star Pattern)</span>
+            <span class="difficulty easy">Easy</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given an integer <code>n</code>, print a right-angled triangle of stars with <code>n</code> rows. Row <code>i</code> (1-indexed) contains <code>i</code> stars.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case">
+                <h4>Expected Output (n = 5):</h4>
+                <pre>*
+* *
+* * *
+* * * *
+* * * * *</pre>
+            </div>
+        </div>
+        <div class="animation-box">
+            <h3>Line-by-Line Animation</h3>
+            <div class="controls">
+                <button class="btn-play" onclick="animPat('rt','play')">&#9654; Play</button>
+                <button class="btn-step" onclick="animPat('rt','step')">Step &raquo;</button>
+                <button class="btn-prev" onclick="animPat('rt','prev')">&laquo; Prev</button>
+                <button class="btn-reset" onclick="animPat('rt','reset')">&#8634; Reset</button>
+            </div>
+            <div class="step-info" id="pat-rt-info">Click Play or Step to start</div>
+            <pre id="pat-rt-output" style="background:#1e1e1e;color:#d4d4d4;padding:20px;border-radius:8px;font-size:1.1em;min-height:140px;line-height:1.7;"></pre>
+        </div>
+        <div class="solution">
+            <h3>Java Solution (with line-by-line highlighting)</h3>
+            <pre id="code-pat-rt">
+public static void rightTriangle(int n) {
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= i; j++) {
+            System.out.print("* ");
+        }
+        System.out.println();
+    }
+}</pre>
+            <div class="complexity">
+                <h4>Complexity</h4>
+                <p><strong>Time:</strong> O(n&sup2;) &mdash; <strong>Space:</strong> O(1)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 2. INVERTED RIGHT TRIANGLE ===== -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">2. Inverted Right Triangle</span>
+            <span class="difficulty easy">Easy</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given an integer <code>n</code>, print an inverted right-angled triangle. Row <code>i</code> (1-indexed) contains <code>n - i + 1</code> stars.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case">
+                <h4>Expected Output (n = 5):</h4>
+                <pre>* * * * *
+* * * *
+* * *
+* *
+*</pre>
+            </div>
+        </div>
+        <div class="animation-box">
+            <h3>Line-by-Line Animation</h3>
+            <div class="controls">
+                <button class="btn-play" onclick="animPat('irt','play')">&#9654; Play</button>
+                <button class="btn-step" onclick="animPat('irt','step')">Step &raquo;</button>
+                <button class="btn-prev" onclick="animPat('irt','prev')">&laquo; Prev</button>
+                <button class="btn-reset" onclick="animPat('irt','reset')">&#8634; Reset</button>
+            </div>
+            <div class="step-info" id="pat-irt-info">Click Play or Step to start</div>
+            <pre id="pat-irt-output" style="background:#1e1e1e;color:#d4d4d4;padding:20px;border-radius:8px;font-size:1.1em;min-height:140px;line-height:1.7;"></pre>
+        </div>
+        <div class="solution">
+            <h3>Java Solution (with line-by-line highlighting)</h3>
+            <pre id="code-pat-irt">
+public static void invertedRightTriangle(int n) {
+    for (int i = n; i >= 1; i--) {
+        for (int j = 1; j <= i; j++) {
+            System.out.print("* ");
+        }
+        System.out.println();
+    }
+}</pre>
+            <div class="complexity">
+                <h4>Complexity</h4>
+                <p><strong>Time:</strong> O(n&sup2;) &mdash; <strong>Space:</strong> O(1)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 3. PYRAMID ===== -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">3. Pyramid (Centered Triangle)</span>
+            <span class="difficulty easy">Easy</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given an integer <code>n</code>, print a centered pyramid of stars with <code>n</code> rows. Each row is centered using leading spaces.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case">
+                <h4>Expected Output (n = 5):</h4>
+                <pre>        *
+      * * *
+    * * * * *
+  * * * * * * *
+* * * * * * * * *</pre>
+            </div>
+        </div>
+        <div class="animation-box">
+            <h3>Line-by-Line Animation</h3>
+            <div class="controls">
+                <button class="btn-play" onclick="animPat('pyr','play')">&#9654; Play</button>
+                <button class="btn-step" onclick="animPat('pyr','step')">Step &raquo;</button>
+                <button class="btn-prev" onclick="animPat('pyr','prev')">&laquo; Prev</button>
+                <button class="btn-reset" onclick="animPat('pyr','reset')">&#8634; Reset</button>
+            </div>
+            <div class="step-info" id="pat-pyr-info">Click Play or Step to start</div>
+            <pre id="pat-pyr-output" style="background:#1e1e1e;color:#d4d4d4;padding:20px;border-radius:8px;font-size:1.1em;min-height:140px;line-height:1.7;font-family:'Courier New',monospace;"></pre>
+        </div>
+        <div class="solution">
+            <h3>Java Solution (with line-by-line highlighting)</h3>
+            <pre id="code-pat-pyr">
+public static void pyramid(int n) {
+    for (int i = 1; i <= n; i++) {
+        for (int s = 1; s <= n - i; s++) {
+            System.out.print("  ");
+        }
+        for (int j = 1; j <= 2 * i - 1; j++) {
+            System.out.print("* ");
+        }
+        System.out.println();
+    }
+}</pre>
+            <div class="complexity">
+                <h4>Complexity</h4>
+                <p><strong>Time:</strong> O(n&sup2;) &mdash; <strong>Space:</strong> O(1)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 4. INVERTED PYRAMID ===== -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">4. Inverted Pyramid</span>
+            <span class="difficulty easy">Easy</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given an integer <code>n</code>, print a centered inverted pyramid of stars with <code>n</code> rows.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case">
+                <h4>Expected Output (n = 5):</h4>
+                <pre>* * * * * * * * *
+  * * * * * * *
+    * * * * *
+      * * *
+        *</pre>
+            </div>
+        </div>
+        <div class="animation-box">
+            <h3>Line-by-Line Animation</h3>
+            <div class="controls">
+                <button class="btn-play" onclick="animPat('ipyr','play')">&#9654; Play</button>
+                <button class="btn-step" onclick="animPat('ipyr','step')">Step &raquo;</button>
+                <button class="btn-prev" onclick="animPat('ipyr','prev')">&laquo; Prev</button>
+                <button class="btn-reset" onclick="animPat('ipyr','reset')">&#8634; Reset</button>
+            </div>
+            <div class="step-info" id="pat-ipyr-info">Click Play or Step to start</div>
+            <pre id="pat-ipyr-output" style="background:#1e1e1e;color:#d4d4d4;padding:20px;border-radius:8px;font-size:1.1em;min-height:140px;line-height:1.7;font-family:'Courier New',monospace;"></pre>
+        </div>
+        <div class="solution">
+            <h3>Java Solution (with line-by-line highlighting)</h3>
+            <pre id="code-pat-ipyr">
+public static void invertedPyramid(int n) {
+    for (int i = n; i >= 1; i--) {
+        for (int s = 1; s <= n - i; s++) {
+            System.out.print("  ");
+        }
+        for (int j = 1; j <= 2 * i - 1; j++) {
+            System.out.print("* ");
+        }
+        System.out.println();
+    }
+}</pre>
+            <div class="complexity">
+                <h4>Complexity</h4>
+                <p><strong>Time:</strong> O(n&sup2;) &mdash; <strong>Space:</strong> O(1)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 5. DIAMOND ===== -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">5. Diamond Pattern</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given an integer <code>n</code>, print a diamond shape. The upper half is a pyramid of <code>n</code> rows and the lower half is an inverted pyramid of <code>n - 1</code> rows.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case">
+                <h4>Expected Output (n = 5):</h4>
+                <pre>        *
+      * * *
+    * * * * *
+  * * * * * * *
+* * * * * * * * *
+  * * * * * * *
+    * * * * *
+      * * *
+        *</pre>
+            </div>
+        </div>
+        <div class="animation-box">
+            <h3>Line-by-Line Animation</h3>
+            <div class="controls">
+                <button class="btn-play" onclick="animPat('dia','play')">&#9654; Play</button>
+                <button class="btn-step" onclick="animPat('dia','step')">Step &raquo;</button>
+                <button class="btn-prev" onclick="animPat('dia','prev')">&laquo; Prev</button>
+                <button class="btn-reset" onclick="animPat('dia','reset')">&#8634; Reset</button>
+            </div>
+            <div class="step-info" id="pat-dia-info">Click Play or Step to start</div>
+            <pre id="pat-dia-output" style="background:#1e1e1e;color:#d4d4d4;padding:20px;border-radius:8px;font-size:1.1em;min-height:200px;line-height:1.7;font-family:'Courier New',monospace;"></pre>
+        </div>
+        <div class="solution">
+            <h3>Java Solution (with line-by-line highlighting)</h3>
+            <pre id="code-pat-dia">
+public static void diamond(int n) {
+    // Upper half (pyramid)
+    for (int i = 1; i <= n; i++) {
+        for (int s = 1; s <= n - i; s++) System.out.print("  ");
+        for (int j = 1; j <= 2*i-1; j++) System.out.print("* ");
+        System.out.println();
+    }
+    // Lower half (inverted pyramid)
+    for (int i = n-1; i >= 1; i--) {
+        for (int s = 1; s <= n - i; s++) System.out.print("  ");
+        for (int j = 1; j <= 2*i-1; j++) System.out.print("* ");
+        System.out.println();
+    }
+}</pre>
+            <div class="complexity">
+                <h4>Complexity</h4>
+                <p><strong>Time:</strong> O(n&sup2;) &mdash; <strong>Space:</strong> O(1)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 6. HOURGLASS ===== -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">6. Hourglass Pattern</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given an integer <code>n</code>, print an hourglass shape. The upper half is an inverted pyramid of <code>n</code> rows and the lower half is a pyramid of <code>n - 1</code> rows (opposite of diamond).</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case">
+                <h4>Expected Output (n = 5):</h4>
+                <pre>* * * * * * * * *
+  * * * * * * *
+    * * * * *
+      * * *
+        *
+      * * *
+    * * * * *
+  * * * * * * *
+* * * * * * * * *</pre>
+            </div>
+        </div>
+        <div class="animation-box">
+            <h3>Line-by-Line Animation</h3>
+            <div class="controls">
+                <button class="btn-play" onclick="animPat('hg','play')">&#9654; Play</button>
+                <button class="btn-step" onclick="animPat('hg','step')">Step &raquo;</button>
+                <button class="btn-prev" onclick="animPat('hg','prev')">&laquo; Prev</button>
+                <button class="btn-reset" onclick="animPat('hg','reset')">&#8634; Reset</button>
+            </div>
+            <div class="step-info" id="pat-hg-info">Click Play or Step to start</div>
+            <pre id="pat-hg-output" style="background:#1e1e1e;color:#d4d4d4;padding:20px;border-radius:8px;font-size:1.1em;min-height:200px;line-height:1.7;font-family:'Courier New',monospace;"></pre>
+        </div>
+        <div class="solution">
+            <h3>Java Solution (with line-by-line highlighting)</h3>
+            <pre id="code-pat-hg">
+public static void hourglass(int n) {
+    // Upper half (inverted pyramid)
+    for (int i = n; i >= 1; i--) {
+        for (int s = 1; s <= n - i; s++) System.out.print("  ");
+        for (int j = 1; j <= 2*i-1; j++) System.out.print("* ");
+        System.out.println();
+    }
+    // Lower half (pyramid)
+    for (int i = 2; i <= n; i++) {
+        for (int s = 1; s <= n - i; s++) System.out.print("  ");
+        for (int j = 1; j <= 2*i-1; j++) System.out.print("* ");
+        System.out.println();
+    }
+}</pre>
+            <div class="complexity">
+                <h4>Complexity</h4>
+                <p><strong>Time:</strong> O(n&sup2;) &mdash; <strong>Space:</strong> O(1)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 7. NUMBER TRIANGLE ===== -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">7. Number Triangle</span>
+            <span class="difficulty easy">Easy</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given an integer <code>n</code>, print a right-angled triangle where row <code>i</code> contains numbers from <code>1</code> to <code>i</code>.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case">
+                <h4>Expected Output (n = 5):</h4>
+                <pre>1
+1 2
+1 2 3
+1 2 3 4
+1 2 3 4 5</pre>
+            </div>
+        </div>
+        <div class="animation-box">
+            <h3>Line-by-Line Animation</h3>
+            <div class="controls">
+                <button class="btn-play" onclick="animPat('nt','play')">&#9654; Play</button>
+                <button class="btn-step" onclick="animPat('nt','step')">Step &raquo;</button>
+                <button class="btn-prev" onclick="animPat('nt','prev')">&laquo; Prev</button>
+                <button class="btn-reset" onclick="animPat('nt','reset')">&#8634; Reset</button>
+            </div>
+            <div class="step-info" id="pat-nt-info">Click Play or Step to start</div>
+            <pre id="pat-nt-output" style="background:#1e1e1e;color:#d4d4d4;padding:20px;border-radius:8px;font-size:1.1em;min-height:140px;line-height:1.7;"></pre>
+        </div>
+        <div class="solution">
+            <h3>Java Solution (with line-by-line highlighting)</h3>
+            <pre id="code-pat-nt">
+public static void numberTriangle(int n) {
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= i; j++) {
+            System.out.print(j + " ");
+        }
+        System.out.println();
+    }
+}</pre>
+            <div class="complexity">
+                <h4>Complexity</h4>
+                <p><strong>Time:</strong> O(n&sup2;) &mdash; <strong>Space:</strong> O(1)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 8. FLOYD'S TRIANGLE ===== -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">8. Floyd's Triangle</span>
+            <span class="difficulty easy">Easy</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given an integer <code>n</code>, print Floyd's Triangle — a right-angled triangle of consecutive natural numbers starting from 1. Row <code>i</code> has <code>i</code> numbers.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case">
+                <h4>Expected Output (n = 5):</h4>
+                <pre>1
+2 3
+4 5 6
+7 8 9 10
+11 12 13 14 15</pre>
+            </div>
+        </div>
+        <div class="animation-box">
+            <h3>Line-by-Line Animation</h3>
+            <div class="controls">
+                <button class="btn-play" onclick="animPat('ft','play')">&#9654; Play</button>
+                <button class="btn-step" onclick="animPat('ft','step')">Step &raquo;</button>
+                <button class="btn-prev" onclick="animPat('ft','prev')">&laquo; Prev</button>
+                <button class="btn-reset" onclick="animPat('ft','reset')">&#8634; Reset</button>
+            </div>
+            <div class="step-info" id="pat-ft-info">Click Play or Step to start</div>
+            <pre id="pat-ft-output" style="background:#1e1e1e;color:#d4d4d4;padding:20px;border-radius:8px;font-size:1.1em;min-height:140px;line-height:1.7;"></pre>
+        </div>
+        <div class="solution">
+            <h3>Java Solution (with line-by-line highlighting)</h3>
+            <pre id="code-pat-ft">
+public static void floydsTriangle(int n) {
+    int num = 1;
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= i; j++) {
+            System.out.print(num + " ");
+            num++;
+        }
+        System.out.println();
+    }
+}</pre>
+            <div class="complexity">
+                <h4>Complexity</h4>
+                <p><strong>Time:</strong> O(n&sup2;) &mdash; <strong>Space:</strong> O(1)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 9. PASCAL'S TRIANGLE ===== -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">9. Pascal's Triangle</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given an integer <code>n</code>, print the first <code>n</code> rows of Pascal's Triangle. Each element is the sum of the two elements directly above it. The edges are always 1.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case">
+                <h4>Expected Output (n = 6):</h4>
+                <pre>               1
+            1     1
+         1     2     1
+      1     3     3     1
+   1     4     6     4     1
+1     5    10    10     5     1</pre>
+            </div>
+        </div>
+        <div class="animation-box">
+            <h3>Line-by-Line Animation</h3>
+            <div class="controls">
+                <button class="btn-play" onclick="animPat('pt','play')">&#9654; Play</button>
+                <button class="btn-step" onclick="animPat('pt','step')">Step &raquo;</button>
+                <button class="btn-prev" onclick="animPat('pt','prev')">&laquo; Prev</button>
+                <button class="btn-reset" onclick="animPat('pt','reset')">&#8634; Reset</button>
+            </div>
+            <div class="step-info" id="pat-pt-info">Click Play or Step to start</div>
+            <pre id="pat-pt-output" style="background:#1e1e1e;color:#d4d4d4;padding:20px;border-radius:8px;font-size:1.1em;min-height:160px;line-height:1.7;font-family:'Courier New',monospace;"></pre>
+        </div>
+        <div class="solution">
+            <h3>Java Solution (with line-by-line highlighting)</h3>
+            <pre id="code-pat-pt">
+public static void pascalsTriangle(int n) {
+    for (int i = 0; i < n; i++) {
+        int val = 1;
+        for (int s = 0; s < n - i - 1; s++) System.out.print("   ");
+        for (int j = 0; j <= i; j++) {
+            System.out.printf("%5d ", val);
+            val = val * (i - j) / (j + 1);
+        }
+        System.out.println();
+    }
+}</pre>
+            <div class="complexity">
+                <h4>Complexity</h4>
+                <p><strong>Time:</strong> O(n&sup2;) &mdash; <strong>Space:</strong> O(1) (computed on the fly using nCr formula)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 10. HOLLOW SQUARE ===== -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">10. Hollow Square</span>
+            <span class="difficulty easy">Easy</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given an integer <code>n</code>, print a hollow square of stars with side length <code>n</code>. Only the border cells contain stars; the interior is empty (spaces).</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case">
+                <h4>Expected Output (n = 5):</h4>
+                <pre>* * * * *
+*       *
+*       *
+*       *
+* * * * *</pre>
+            </div>
+        </div>
+        <div class="animation-box">
+            <h3>Line-by-Line Animation</h3>
+            <div class="controls">
+                <button class="btn-play" onclick="animPat('hs','play')">&#9654; Play</button>
+                <button class="btn-step" onclick="animPat('hs','step')">Step &raquo;</button>
+                <button class="btn-prev" onclick="animPat('hs','prev')">&laquo; Prev</button>
+                <button class="btn-reset" onclick="animPat('hs','reset')">&#8634; Reset</button>
+            </div>
+            <div class="step-info" id="pat-hs-info">Click Play or Step to start</div>
+            <pre id="pat-hs-output" style="background:#1e1e1e;color:#d4d4d4;padding:20px;border-radius:8px;font-size:1.1em;min-height:140px;line-height:1.7;"></pre>
+        </div>
+        <div class="solution">
+            <h3>Java Solution (with line-by-line highlighting)</h3>
+            <pre id="code-pat-hs">
+public static void hollowSquare(int n) {
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            if (i == 1 || i == n || j == 1 || j == n)
+                System.out.print("* ");
+            else
+                System.out.print("  ");
+        }
+        System.out.println();
+    }
+}</pre>
+            <div class="complexity">
+                <h4>Complexity</h4>
+                <p><strong>Time:</strong> O(n&sup2;) &mdash; <strong>Space:</strong> O(1)</p>
+            </div>
+        </div>
+    </div>
+
+</section>
 
 <!-- ==================== SLIDING WINDOW ==================== -->
 <section id="sliding-window" class="section">
@@ -9430,6 +10322,612 @@ function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 // Generic animation state manager
 function createAnimState() {
     return { step: -1, playing: false, timer: null, snapshots: [] };
+}
+
+// ===== PATTERN PRINTING ANIMATIONS =====
+const patStates = {};
+const patN = 5;
+const patPascalN = 6;
+
+function buildPatternLines(key) {
+    const lines = [];
+    const n = key === 'pt' ? patPascalN : patN;
+    if (key === 'rt') {
+        for (let i = 1; i <= n; i++) {
+            let row = '';
+            for (let j = 1; j <= i; j++) row += '* ';
+            lines.push({text: row, codeLines: [1,2,3], msg: `Row ${i}: inner loop j=1..${i} → print ${i} stars.`});
+        }
+    } else if (key === 'irt') {
+        for (let i = n; i >= 1; i--) {
+            let row = '';
+            for (let j = 1; j <= i; j++) row += '* ';
+            lines.push({text: row, codeLines: [1,2,3], msg: `Row ${n-i+1}: i=${i}, inner loop j=1..${i} → print ${i} stars.`});
+        }
+    } else if (key === 'pyr') {
+        for (let i = 1; i <= n; i++) {
+            let row = '';
+            for (let s = 1; s <= n - i; s++) row += '  ';
+            for (let j = 1; j <= 2*i-1; j++) row += '* ';
+            lines.push({text: row, codeLines: [1,2,3,4,5], msg: `Row ${i}: ${n-i} leading spaces, then ${2*i-1} stars.`});
+        }
+    } else if (key === 'ipyr') {
+        for (let i = n; i >= 1; i--) {
+            let row = '';
+            for (let s = 1; s <= n - i; s++) row += '  ';
+            for (let j = 1; j <= 2*i-1; j++) row += '* ';
+            lines.push({text: row, codeLines: [1,2,3,4,5], msg: `Row ${n-i+1}: i=${i}, ${n-i} leading spaces, then ${2*i-1} stars.`});
+        }
+    } else if (key === 'dia') {
+        for (let i = 1; i <= n; i++) {
+            let row = '';
+            for (let s = 1; s <= n - i; s++) row += '  ';
+            for (let j = 1; j <= 2*i-1; j++) row += '* ';
+            lines.push({text: row, codeLines: [2,3,4], msg: `Upper row ${i}: ${n-i} spaces, ${2*i-1} stars.`});
+        }
+        for (let i = n-1; i >= 1; i--) {
+            let row = '';
+            for (let s = 1; s <= n - i; s++) row += '  ';
+            for (let j = 1; j <= 2*i-1; j++) row += '* ';
+            lines.push({text: row, codeLines: [8,9,10], msg: `Lower row ${n-i}: i=${i}, ${n-i} spaces, ${2*i-1} stars.`});
+        }
+    } else if (key === 'hg') {
+        for (let i = n; i >= 1; i--) {
+            let row = '';
+            for (let s = 1; s <= n - i; s++) row += '  ';
+            for (let j = 1; j <= 2*i-1; j++) row += '* ';
+            lines.push({text: row, codeLines: [2,3,4], msg: `Upper row ${n-i+1}: i=${i}, ${n-i} spaces, ${2*i-1} stars.`});
+        }
+        for (let i = 2; i <= n; i++) {
+            let row = '';
+            for (let s = 1; s <= n - i; s++) row += '  ';
+            for (let j = 1; j <= 2*i-1; j++) row += '* ';
+            lines.push({text: row, codeLines: [8,9,10], msg: `Lower row ${i-1}: i=${i}, ${n-i} spaces, ${2*i-1} stars.`});
+        }
+    } else if (key === 'nt') {
+        for (let i = 1; i <= n; i++) {
+            let row = '';
+            for (let j = 1; j <= i; j++) row += j + ' ';
+            lines.push({text: row, codeLines: [1,2,3], msg: `Row ${i}: print numbers 1 to ${i}.`});
+        }
+    } else if (key === 'ft') {
+        let num = 1;
+        for (let i = 1; i <= n; i++) {
+            let row = '';
+            const startNum = num;
+            for (let j = 1; j <= i; j++) { row += num + ' '; num++; }
+            lines.push({text: row, codeLines: [2,3,4], msg: `Row ${i}: print ${i} consecutive numbers starting from ${startNum}.`});
+        }
+    } else if (key === 'pt') {
+        const pn = patPascalN;
+        for (let i = 0; i < pn; i++) {
+            let val = 1;
+            let row = '';
+            for (let s = 0; s < pn - i - 1; s++) row += '   ';
+            for (let j = 0; j <= i; j++) {
+                row += String(val).padStart(5) + ' ';
+                val = Math.round(val * (i - j) / (j + 1));
+            }
+            const vals = [];
+            let v2 = 1;
+            for (let j = 0; j <= i; j++) { vals.push(v2); v2 = Math.round(v2 * (i - j) / (j + 1)); }
+            lines.push({text: row, codeLines: [1,2,3,4,5], msg: `Row ${i+1}: [${vals.join(', ')}] — each val = prev*(i-j)/(j+1).`});
+        }
+    } else if (key === 'hs') {
+        for (let i = 1; i <= n; i++) {
+            let row = '';
+            for (let j = 1; j <= n; j++) {
+                if (i === 1 || i === n || j === 1 || j === n) row += '* ';
+                else row += '  ';
+            }
+            const desc = (i === 1 || i === n) ? 'border row → all stars' : 'middle row → star, spaces, star';
+            lines.push({text: row, codeLines: [1,2,3,4,5], msg: `Row ${i}: ${desc}.`});
+        }
+    }
+    return lines;
+}
+
+function initPat(key) {
+    const st = patStates[key];
+    st.step = -1;
+    st.snapshots = buildPatternLines(key);
+    document.getElementById('pat-' + key + '-output').innerHTML = '';
+    document.getElementById('pat-' + key + '-info').textContent = 'Click Play or Step to start';
+    highlightLines('code-pat-' + key, []);
+}
+
+function renderPat(key) {
+    const st = patStates[key];
+    if (st.step < 0) { initPat(key); return; }
+    const idx = Math.min(st.step, st.snapshots.length - 1);
+    const outEl = document.getElementById('pat-' + key + '-output');
+    let html = '';
+    for (let r = 0; r <= idx; r++) {
+        const line = st.snapshots[r].text;
+        const style = r === idx
+            ? 'background:#2a2d5e;color:#ffd700;font-weight:bold;display:inline-block;width:100%;'
+            : 'display:inline-block;width:100%;';
+        html += '<span style="' + style + '">' + line + '</span>\n';
+    }
+    outEl.innerHTML = html;
+    const snap = st.snapshots[idx];
+    document.getElementById('pat-' + key + '-info').innerHTML = snap.msg + '<span class="step-counter">Line ' + (idx+1) + '/' + st.snapshots.length + '</span>';
+    highlightLines('code-pat-' + key, snap.codeLines);
+}
+
+function animPat(key, action) {
+    const st = patStates[key];
+    if (action === 'reset') { clearInterval(st.timer); st.playing = false; initPat(key); return; }
+    if (action === 'prev') { st.step = Math.max(0, st.step - 1); renderPat(key); return; }
+    if (action === 'step') { st.step = Math.min(st.step + 1, st.snapshots.length - 1); renderPat(key); return; }
+    if (action === 'play') {
+        if (st.playing) { clearInterval(st.timer); st.playing = false; return; }
+        st.playing = true;
+        st.timer = setInterval(function() {
+            st.step++;
+            if (st.step >= st.snapshots.length) { clearInterval(st.timer); st.playing = false; return; }
+            renderPat(key);
+        }, 900);
+    }
+}
+
+function initAllPatterns() {
+    const keys = ['rt','irt','pyr','ipyr','dia','hg','nt','ft','pt','hs'];
+    keys.forEach(function(k) {
+        patStates[k] = createAnimState();
+        initPat(k);
+    });
+}
+
+// ===== SORTING: SELECTION SORT ANIMATION =====
+const selSortState = createAnimState();
+const selArr = [64, 25, 12, 22, 11];
+
+function getSelSortLines(snap) { return snap.lines || []; }
+
+function initSelSort() {
+    const cont = document.getElementById('selsort-array');
+    cont.innerHTML = selArr.map((v,i) => `<div class="array-cell" id="ss-${i}">${v}<span class="idx">${i}</span></div>`).join('');
+    selSortState.step = -1;
+    selSortState.snapshots = [];
+    buildSelSortSnapshots();
+    document.getElementById('selsort-info').textContent = 'Click Play or Step to start the animation';
+    document.getElementById('selsort-result').textContent = 'Array: [' + selArr.join(', ') + ']';
+    highlightLines('code-selsort', []);
+}
+
+function buildSelSortSnapshots() {
+    const s = selSortState.snapshots;
+    const a = [...selArr];
+    const n = a.length;
+    s.push({arr:[...a], i:-1, j:-1, minIdx:-1, sorted:0, swapped:false, lines:[0], msg:'Call <code>selectionSort(arr)</code>.'});
+    s.push({arr:[...a], i:-1, j:-1, minIdx:-1, sorted:0, swapped:false, lines:[1], msg:'<code>n = arr.length = ' + n + '</code>.'});
+    for (let i = 0; i < n - 1; i++) {
+        s.push({arr:[...a], i, j:-1, minIdx:i, sorted:i, swapped:false, lines:[2], msg:`Outer loop: <code>i = ${i}</code>.`});
+        s.push({arr:[...a], i, j:-1, minIdx:i, sorted:i, swapped:false, lines:[3], msg:`Set <code>minIdx = ${i}</code> (value ${a[i]}).`});
+        let minIdx = i;
+        for (let j = i + 1; j < n; j++) {
+            s.push({arr:[...a], i, j, minIdx, sorted:i, swapped:false, lines:[4], msg:`Inner loop: <code>j = ${j}</code>, compare arr[${j}]=${a[j]} with arr[${minIdx}]=${a[minIdx]}.`});
+            if (a[j] < a[minIdx]) {
+                minIdx = j;
+                s.push({arr:[...a], i, j, minIdx, sorted:i, swapped:false, lines:[5,6], msg:`arr[${j}]=${a[j]} < arr[${minIdx===j?i:minIdx}]=${a[minIdx===j?i:minIdx]} → <strong>new minIdx = ${j}</strong>.`});
+            } else {
+                s.push({arr:[...a], i, j, minIdx, sorted:i, swapped:false, lines:[5], msg:`arr[${j}]=${a[j]} &ge; arr[${minIdx}]=${a[minIdx]} → no change.`});
+            }
+        }
+        if (minIdx !== i) {
+            s.push({arr:[...a], i, j:-1, minIdx, sorted:i, swapped:true, lines:[9,10,11], msg:`Swap arr[${i}]=${a[i]} ↔ arr[${minIdx}]=${a[minIdx]}.`});
+            [a[i], a[minIdx]] = [a[minIdx], a[i]];
+        } else {
+            s.push({arr:[...a], i, j:-1, minIdx, sorted:i, swapped:false, lines:[9,10,11], msg:`minIdx == i = ${i} → already in position, no swap needed.`});
+        }
+        s.push({arr:[...a], i, j:-1, minIdx:-1, sorted:i+1, swapped:false, lines:[2], msg:`Position ${i} is now sorted (value ${a[i]}).`});
+    }
+    s.push({arr:[...a], i:-1, j:-1, minIdx:-1, sorted:n, swapped:false, lines:[13], msg:`Array fully sorted: [${a.join(', ')}]. Done!`});
+}
+
+function renderSelSort() {
+    const st = selSortState.step;
+    if (st < 0) { initSelSort(); return; }
+    const snap = selSortState.snapshots[Math.min(st, selSortState.snapshots.length-1)];
+    snap.arr.forEach((v,idx) => {
+        const el = document.getElementById(`ss-${idx}`);
+        el.textContent = v;
+        const idxSpan = document.createElement('span');
+        idxSpan.className = 'idx';
+        idxSpan.textContent = idx;
+        el.appendChild(idxSpan);
+        el.className = 'array-cell';
+        if (idx < snap.sorted) el.classList.add('found');
+        else if (idx === snap.i) el.classList.add('active');
+        else if (idx === snap.j) el.classList.add('highlight');
+        if (idx === snap.minIdx && snap.minIdx >= 0) el.classList.add('max-val');
+    });
+    document.getElementById('selsort-info').innerHTML = snap.msg + `<span class="step-counter">Step ${st+1}/${selSortState.snapshots.length}</span>`;
+    document.getElementById('selsort-result').textContent = 'Array: [' + snap.arr.join(', ') + ']';
+    highlightLines('code-selsort', getSelSortLines(snap));
+}
+
+function animSelSort(action) {
+    if (action === 'reset') { clearInterval(selSortState.timer); selSortState.playing=false; initSelSort(); return; }
+    if (action === 'prev') { selSortState.step = Math.max(0, selSortState.step - 1); renderSelSort(); return; }
+    if (action === 'step') { selSortState.step = Math.min(selSortState.step + 1, selSortState.snapshots.length - 1); renderSelSort(); return; }
+    if (action === 'play') {
+        if (selSortState.playing) { clearInterval(selSortState.timer); selSortState.playing=false; return; }
+        selSortState.playing = true;
+        selSortState.timer = setInterval(() => {
+            selSortState.step++;
+            if (selSortState.step >= selSortState.snapshots.length) { clearInterval(selSortState.timer); selSortState.playing=false; return; }
+            renderSelSort();
+        }, 1200);
+    }
+}
+
+// ===== SORTING: BUBBLE SORT ANIMATION =====
+const bubSortState = createAnimState();
+const bubArr = [5, 1, 4, 2, 8];
+
+function getBubSortLines(snap) { return snap.lines || []; }
+
+function initBubSort() {
+    const cont = document.getElementById('bubsort-array');
+    cont.innerHTML = bubArr.map((v,i) => `<div class="array-cell" id="bs-${i}">${v}<span class="idx">${i}</span></div>`).join('');
+    bubSortState.step = -1;
+    bubSortState.snapshots = [];
+    buildBubSortSnapshots();
+    document.getElementById('bubsort-info').textContent = 'Click Play or Step to start the animation';
+    document.getElementById('bubsort-result').textContent = 'Array: [' + bubArr.join(', ') + ']';
+    highlightLines('code-bubsort', []);
+}
+
+function buildBubSortSnapshots() {
+    const s = bubSortState.snapshots;
+    const a = [...bubArr];
+    const n = a.length;
+    s.push({arr:[...a], j:-1, j1:-1, sorted:0, swapHappened:false, lines:[0], msg:'Call <code>bubbleSort(arr)</code>.'});
+    s.push({arr:[...a], j:-1, j1:-1, sorted:0, swapHappened:false, lines:[1], msg:'<code>n = arr.length = ' + n + '</code>.'});
+    for (let i = 0; i < n - 1; i++) {
+        let swapped = false;
+        s.push({arr:[...a], j:-1, j1:-1, sorted:i, swapHappened:false, lines:[2], msg:`Pass ${i+1}: <code>i = ${i}</code>.`});
+        s.push({arr:[...a], j:-1, j1:-1, sorted:i, swapHappened:false, lines:[3], msg:`<code>swapped = false</code>.`});
+        for (let j = 0; j < n - 1 - i; j++) {
+            s.push({arr:[...a], j, j1:j+1, sorted:i, swapHappened:false, lines:[4,5], msg:`Compare arr[${j}]=${a[j]} and arr[${j+1}]=${a[j+1]}.`});
+            if (a[j] > a[j + 1]) {
+                s.push({arr:[...a], j, j1:j+1, sorted:i, swapHappened:true, lines:[6,7,8,9], msg:`${a[j]} > ${a[j+1]} → <strong>Swap!</strong>`});
+                [a[j], a[j + 1]] = [a[j + 1], a[j]];
+                swapped = true;
+                s.push({arr:[...a], j, j1:j+1, sorted:i, swapHappened:false, lines:[9], msg:`After swap: arr = [${a.join(', ')}].`});
+            } else {
+                s.push({arr:[...a], j, j1:j+1, sorted:i, swapHappened:false, lines:[5], msg:`${a[j]} &le; ${a[j+1]} → no swap.`});
+            }
+        }
+        s.push({arr:[...a], j:-1, j1:-1, sorted:i+1, swapHappened:false, lines:[2], msg:`End of pass ${i+1}. Position ${n-1-i} is sorted (value ${a[n-1-i]}).`});
+        if (!swapped) {
+            s.push({arr:[...a], j:-1, j1:-1, sorted:n, swapHappened:false, lines:[12], msg:`No swaps in this pass → array is sorted! <code>break</code>.`});
+            break;
+        }
+    }
+    s.push({arr:[...a], j:-1, j1:-1, sorted:n, swapHappened:false, lines:[14], msg:`Array fully sorted: [${a.join(', ')}]. Done!`});
+}
+
+function renderBubSort() {
+    const st = bubSortState.step;
+    if (st < 0) { initBubSort(); return; }
+    const snap = bubSortState.snapshots[Math.min(st, bubSortState.snapshots.length-1)];
+    const n = snap.arr.length;
+    snap.arr.forEach((v,idx) => {
+        const el = document.getElementById(`bs-${idx}`);
+        el.textContent = v;
+        const idxSpan = document.createElement('span');
+        idxSpan.className = 'idx';
+        idxSpan.textContent = idx;
+        el.appendChild(idxSpan);
+        el.className = 'array-cell';
+        if (idx >= n - snap.sorted) el.classList.add('found');
+        else if (idx === snap.j) { el.classList.add('active'); if (snap.swapHappened) el.classList.add('left-ptr'); }
+        else if (idx === snap.j1) { el.classList.add('highlight'); if (snap.swapHappened) el.classList.add('left-ptr'); }
+    });
+    document.getElementById('bubsort-info').innerHTML = snap.msg + `<span class="step-counter">Step ${st+1}/${bubSortState.snapshots.length}</span>`;
+    document.getElementById('bubsort-result').textContent = 'Array: [' + snap.arr.join(', ') + ']';
+    highlightLines('code-bubsort', getBubSortLines(snap));
+}
+
+function animBubSort(action) {
+    if (action === 'reset') { clearInterval(bubSortState.timer); bubSortState.playing=false; initBubSort(); return; }
+    if (action === 'prev') { bubSortState.step = Math.max(0, bubSortState.step - 1); renderBubSort(); return; }
+    if (action === 'step') { bubSortState.step = Math.min(bubSortState.step + 1, bubSortState.snapshots.length - 1); renderBubSort(); return; }
+    if (action === 'play') {
+        if (bubSortState.playing) { clearInterval(bubSortState.timer); bubSortState.playing=false; return; }
+        bubSortState.playing = true;
+        bubSortState.timer = setInterval(() => {
+            bubSortState.step++;
+            if (bubSortState.step >= bubSortState.snapshots.length) { clearInterval(bubSortState.timer); bubSortState.playing=false; return; }
+            renderBubSort();
+        }, 1200);
+    }
+}
+
+// ===== SORTING: INSERTION SORT ANIMATION =====
+const insSrtState = createAnimState();
+const insArr = [12, 11, 13, 5, 6];
+
+function getInsSrtLines(snap) { return snap.lines || []; }
+
+function initInsSrt() {
+    const cont = document.getElementById('inssrt-array');
+    cont.innerHTML = insArr.map((v,i) => `<div class="array-cell" id="is-${i}">${v}<span class="idx">${i}</span></div>`).join('');
+    insSrtState.step = -1;
+    insSrtState.snapshots = [];
+    buildInsSrtSnapshots();
+    document.getElementById('inssrt-info').textContent = 'Click Play or Step to start the animation';
+    document.getElementById('inssrt-result').textContent = 'Array: [' + insArr.join(', ') + ']';
+    highlightLines('code-inssrt', []);
+}
+
+function buildInsSrtSnapshots() {
+    const s = insSrtState.snapshots;
+    const a = [...insArr];
+    const n = a.length;
+    s.push({arr:[...a], i:-1, j:-1, key:-1, keyIdx:-1, insertAt:-1, sorted:1, lines:[0], msg:'Call <code>insertionSort(arr)</code>.'});
+    s.push({arr:[...a], i:-1, j:-1, key:-1, keyIdx:-1, insertAt:-1, sorted:1, lines:[1], msg:'<code>n = arr.length = ' + n + '</code>.'});
+    for (let i = 1; i < n; i++) {
+        const key = a[i];
+        s.push({arr:[...a], i, j:-1, key, keyIdx:i, insertAt:-1, sorted:i, lines:[2], msg:`Outer loop: <code>i = ${i}</code>.`});
+        s.push({arr:[...a], i, j:-1, key, keyIdx:i, insertAt:-1, sorted:i, lines:[3], msg:`<code>key = arr[${i}] = ${key}</code>.`});
+        let j = i - 1;
+        s.push({arr:[...a], i, j, key, keyIdx:i, insertAt:-1, sorted:i, lines:[4], msg:`<code>j = ${j}</code>.`});
+        while (j >= 0 && a[j] > key) {
+            s.push({arr:[...a], i, j, key, keyIdx:i, insertAt:-1, sorted:i, lines:[5], msg:`<code>j=${j} &ge; 0</code> and <code>arr[${j}]=${a[j]} > key=${key}</code> → shift right.`});
+            a[j + 1] = a[j];
+            s.push({arr:[...a], i, j, key, keyIdx:i, insertAt:-1, sorted:i, lines:[6], msg:`Shift: <code>arr[${j+1}] = arr[${j}] = ${a[j]}</code>.`});
+            j--;
+            s.push({arr:[...a], i, j, key, keyIdx:i, insertAt:-1, sorted:i, lines:[7], msg:`<code>j-- → j = ${j}</code>.`});
+        }
+        if (j >= 0) {
+            s.push({arr:[...a], i, j, key, keyIdx:i, insertAt:j+1, sorted:i, lines:[5], msg:`<code>arr[${j}]=${a[j]} &le; key=${key}</code> → stop shifting.`});
+        } else {
+            s.push({arr:[...a], i, j, key, keyIdx:i, insertAt:0, sorted:i, lines:[5], msg:`<code>j = ${j} < 0</code> → insert at beginning.`});
+        }
+        a[j + 1] = key;
+        s.push({arr:[...a], i, j, key, keyIdx:i, insertAt:j+1, sorted:i+1, lines:[8], msg:`Insert: <code>arr[${j+1}] = key = ${key}</code>. Array: [${a.join(', ')}].`});
+    }
+    s.push({arr:[...a], i:-1, j:-1, key:-1, keyIdx:-1, insertAt:-1, sorted:n, lines:[10], msg:`Array fully sorted: [${a.join(', ')}]. Done!`});
+}
+
+function renderInsSrt() {
+    const st = insSrtState.step;
+    if (st < 0) { initInsSrt(); return; }
+    const snap = insSrtState.snapshots[Math.min(st, insSrtState.snapshots.length-1)];
+    snap.arr.forEach((v,idx) => {
+        const el = document.getElementById(`is-${idx}`);
+        el.textContent = v;
+        const idxSpan = document.createElement('span');
+        idxSpan.className = 'idx';
+        idxSpan.textContent = idx;
+        el.appendChild(idxSpan);
+        el.className = 'array-cell';
+        if (idx < snap.sorted) el.classList.add('found');
+        if (idx === snap.keyIdx) el.classList.add('mid-ptr');
+        if (idx === snap.j && snap.j >= 0) el.classList.add('highlight');
+        if (idx === snap.insertAt && snap.insertAt >= 0) el.classList.add('active');
+    });
+    document.getElementById('inssrt-info').innerHTML = snap.msg + `<span class="step-counter">Step ${st+1}/${insSrtState.snapshots.length}</span>`;
+    document.getElementById('inssrt-result').textContent = 'Array: [' + snap.arr.join(', ') + ']';
+    highlightLines('code-inssrt', getInsSrtLines(snap));
+}
+
+function animInsSrt(action) {
+    if (action === 'reset') { clearInterval(insSrtState.timer); insSrtState.playing=false; initInsSrt(); return; }
+    if (action === 'prev') { insSrtState.step = Math.max(0, insSrtState.step - 1); renderInsSrt(); return; }
+    if (action === 'step') { insSrtState.step = Math.min(insSrtState.step + 1, insSrtState.snapshots.length - 1); renderInsSrt(); return; }
+    if (action === 'play') {
+        if (insSrtState.playing) { clearInterval(insSrtState.timer); insSrtState.playing=false; return; }
+        insSrtState.playing = true;
+        insSrtState.timer = setInterval(() => {
+            insSrtState.step++;
+            if (insSrtState.step >= insSrtState.snapshots.length) { clearInterval(insSrtState.timer); insSrtState.playing=false; return; }
+            renderInsSrt();
+        }, 1200);
+    }
+}
+
+// ===== SORTING: MERGE SORT ANIMATION =====
+const mrgSrtState = createAnimState();
+const mrgArr = [38, 27, 43, 3, 9, 82, 10];
+
+function getMrgSrtLines(snap) { return snap.lines || []; }
+
+function initMrgSrt() {
+    const cont = document.getElementById('mrgsrt-array');
+    cont.innerHTML = mrgArr.map((v,i) => `<div class="array-cell" id="mg-${i}">${v}<span class="idx">${i}</span></div>`).join('');
+    mrgSrtState.step = -1;
+    mrgSrtState.snapshots = [];
+    buildMrgSrtSnapshots();
+    document.getElementById('mrgsrt-info').textContent = 'Click Play or Step to start the animation';
+    document.getElementById('mrgsrt-result').textContent = 'Array: [' + mrgArr.join(', ') + ']';
+    highlightLines('code-mrgsrt', []);
+}
+
+function buildMrgSrtSnapshots() {
+    const s = mrgSrtState.snapshots;
+    const a = [...mrgArr];
+    s.push({arr:[...a], left:-1, right:-1, mid:-1, merging:[], phase:'init', lines:[0], msg:'Call <code>mergeSort(arr, 0, ' + (a.length-1) + ')</code>.'});
+    function msRec(arr, l, r, depth) {
+        if (l >= r) {
+            s.push({arr:[...arr], left:l, right:r, mid:-1, merging:[], phase:'base', lines:[1], msg:`Base case: mergeSort(${l}, ${r}) — single element [${arr[l]}].`});
+            return;
+        }
+        const mid = Math.floor((l + r) / 2);
+        s.push({arr:[...arr], left:l, right:r, mid, merging:[], phase:'split', lines:[1,2], msg:`Split [${l}..${r}] at mid=${mid}: Left=[${l}..${mid}], Right=[${mid+1}..${r}].`});
+        msRec(arr, l, mid, depth+1);
+        msRec(arr, mid+1, r, depth+1);
+        const L = arr.slice(l, mid+1);
+        const R = arr.slice(mid+1, r+1);
+        s.push({arr:[...arr], left:l, right:r, mid, merging:Array.from({length:r-l+1},(_,k)=>l+k), phase:'merge-start', lines:[5,8,9], msg:`Merge L=[${L.join(',')}] and R=[${R.join(',')}] into positions [${l}..${r}].`});
+        let i = 0, j = 0, k = l;
+        while (i < L.length && j < R.length) {
+            if (L[i] <= R[j]) {
+                arr[k] = L[i];
+                s.push({arr:[...arr], left:l, right:r, mid, merging:[k], phase:'merge-pick', lines:[12,13], msg:`Compare L[${i}]=${L[i]} &le; R[${j}]=${R[j]} → pick ${L[i]} into position ${k}.`});
+                i++;
+            } else {
+                arr[k] = R[j];
+                s.push({arr:[...arr], left:l, right:r, mid, merging:[k], phase:'merge-pick', lines:[14,15], msg:`Compare L[${i}]=${L[i]} > R[${j}]=${R[j]} → pick ${R[j]} into position ${k}.`});
+                j++;
+            }
+            k++;
+        }
+        while (i < L.length) {
+            arr[k] = L[i];
+            s.push({arr:[...arr], left:l, right:r, mid, merging:[k], phase:'merge-copy', lines:[16], msg:`Copy remaining L[${i}]=${L[i]} into position ${k}.`});
+            i++; k++;
+        }
+        while (j < R.length) {
+            arr[k] = R[j];
+            s.push({arr:[...arr], left:l, right:r, mid, merging:[k], phase:'merge-copy', lines:[17], msg:`Copy remaining R[${j}]=${R[j]} into position ${k}.`});
+            j++; k++;
+        }
+        s.push({arr:[...arr], left:l, right:r, mid, merging:Array.from({length:r-l+1},(_,k)=>l+k), phase:'merge-done', lines:[5], msg:`Merged [${l}..${r}] = [${arr.slice(l,r+1).join(', ')}].`});
+    }
+    msRec(a, 0, a.length - 1, 0);
+    s.push({arr:[...a], left:-1, right:-1, mid:-1, merging:Array.from({length:a.length},(_,k)=>k), phase:'done', lines:[0], msg:`Array fully sorted: [${a.join(', ')}]. Done!`});
+}
+
+function renderMrgSrt() {
+    const st = mrgSrtState.step;
+    if (st < 0) { initMrgSrt(); return; }
+    const snap = mrgSrtState.snapshots[Math.min(st, mrgSrtState.snapshots.length-1)];
+    snap.arr.forEach((v,idx) => {
+        const el = document.getElementById(`mg-${idx}`);
+        el.textContent = v;
+        const idxSpan = document.createElement('span');
+        idxSpan.className = 'idx';
+        idxSpan.textContent = idx;
+        el.appendChild(idxSpan);
+        el.className = 'array-cell';
+        if (snap.phase === 'done') { el.classList.add('found'); return; }
+        if (snap.merging.includes(idx)) el.classList.add('mid-ptr');
+        if (idx >= snap.left && idx <= snap.mid && snap.mid >= 0) el.classList.add('active');
+        if (idx > snap.mid && idx <= snap.right && snap.mid >= 0) el.classList.add('highlight');
+        if (snap.phase === 'merge-done' && idx >= snap.left && idx <= snap.right) { el.className = 'array-cell found'; }
+    });
+    document.getElementById('mrgsrt-info').innerHTML = snap.msg + `<span class="step-counter">Step ${st+1}/${mrgSrtState.snapshots.length}</span>`;
+    document.getElementById('mrgsrt-result').textContent = 'Array: [' + snap.arr.join(', ') + ']';
+    highlightLines('code-mrgsrt', getMrgSrtLines(snap));
+}
+
+function animMrgSrt(action) {
+    if (action === 'reset') { clearInterval(mrgSrtState.timer); mrgSrtState.playing=false; initMrgSrt(); return; }
+    if (action === 'prev') { mrgSrtState.step = Math.max(0, mrgSrtState.step - 1); renderMrgSrt(); return; }
+    if (action === 'step') { mrgSrtState.step = Math.min(mrgSrtState.step + 1, mrgSrtState.snapshots.length - 1); renderMrgSrt(); return; }
+    if (action === 'play') {
+        if (mrgSrtState.playing) { clearInterval(mrgSrtState.timer); mrgSrtState.playing=false; return; }
+        mrgSrtState.playing = true;
+        mrgSrtState.timer = setInterval(() => {
+            mrgSrtState.step++;
+            if (mrgSrtState.step >= mrgSrtState.snapshots.length) { clearInterval(mrgSrtState.timer); mrgSrtState.playing=false; return; }
+            renderMrgSrt();
+        }, 1400);
+    }
+}
+
+// ===== SORTING: QUICK SORT ANIMATION =====
+const qkSrtState = createAnimState();
+const qkArr = [10, 7, 8, 9, 1, 5];
+
+function getQkSrtLines(snap) { return snap.lines || []; }
+
+function initQkSrt() {
+    const cont = document.getElementById('qksrt-array');
+    cont.innerHTML = qkArr.map((v,i) => `<div class="array-cell" id="qs-${i}">${v}<span class="idx">${i}</span></div>`).join('');
+    qkSrtState.step = -1;
+    qkSrtState.snapshots = [];
+    buildQkSrtSnapshots();
+    document.getElementById('qksrt-info').textContent = 'Click Play or Step to start the animation';
+    document.getElementById('qksrt-result').textContent = 'Array: [' + qkArr.join(', ') + ']';
+    highlightLines('code-qksrt', []);
+}
+
+function buildQkSrtSnapshots() {
+    const s = qkSrtState.snapshots;
+    const a = [...qkArr];
+    const placed = new Set();
+    s.push({arr:[...a], low:-1, high:-1, pivotIdx:-1, i:-1, j:-1, placed:new Set(), swapped:false, lines:[0], msg:'Call <code>quickSort(arr, 0, ' + (a.length-1) + ')</code>.'});
+    function qsRec(arr, low, high) {
+        if (low >= high) {
+            if (low >= 0 && low < arr.length) placed.add(low);
+            if (low === high) {
+                s.push({arr:[...arr], low, high, pivotIdx:-1, i:-1, j:-1, placed:new Set(placed), swapped:false, lines:[1], msg:`Base case: single element arr[${low}]=${arr[low]} is in place.`});
+            }
+            return;
+        }
+        s.push({arr:[...arr], low, high, pivotIdx:high, i:low-1, j:low, placed:new Set(placed), swapped:false, lines:[1,2], msg:`quickSort(${low}, ${high}): pivot = arr[${high}] = ${arr[high]}.`});
+        const pivot = arr[high];
+        let i = low - 1;
+        s.push({arr:[...arr], low, high, pivotIdx:high, i, j:low, placed:new Set(placed), swapped:false, lines:[8,9], msg:`Partition: pivot=${pivot}, <code>i = ${i}</code>.`});
+        for (let j = low; j < high; j++) {
+            s.push({arr:[...arr], low, high, pivotIdx:high, i, j, placed:new Set(placed), swapped:false, lines:[10,11], msg:`<code>j=${j}</code>: arr[${j}]=${arr[j]} ${arr[j] <= pivot ? '&le;' : '>'} pivot=${pivot}?`});
+            if (arr[j] <= pivot) {
+                i++;
+                if (i !== j) {
+                    s.push({arr:[...arr], low, high, pivotIdx:high, i, j, placed:new Set(placed), swapped:true, lines:[12,13], msg:`Yes → <code>i++=${i}</code>, swap arr[${i}]=${arr[i]} ↔ arr[${j}]=${arr[j]}.`});
+                    [arr[i], arr[j]] = [arr[j], arr[i]];
+                    s.push({arr:[...arr], low, high, pivotIdx:high, i, j, placed:new Set(placed), swapped:false, lines:[13], msg:`After swap: [${arr.slice(low, high+1).join(', ')}].`});
+                } else {
+                    s.push({arr:[...arr], low, high, pivotIdx:high, i, j, placed:new Set(placed), swapped:false, lines:[12,13], msg:`Yes → <code>i++=${i}</code>, i==j so no swap needed.`});
+                }
+            } else {
+                s.push({arr:[...arr], low, high, pivotIdx:high, i, j, placed:new Set(placed), swapped:false, lines:[11], msg:`No → skip, move j forward.`});
+            }
+        }
+        const pi = i + 1;
+        s.push({arr:[...arr], low, high, pivotIdx:high, i:pi, j:-1, placed:new Set(placed), swapped:true, lines:[15], msg:`Place pivot: swap arr[${pi}]=${arr[pi]} ↔ arr[${high}]=${arr[high]}.`});
+        [arr[pi], arr[high]] = [arr[high], arr[pi]];
+        placed.add(pi);
+        s.push({arr:[...arr], low, high, pivotIdx:pi, i:pi, j:-1, placed:new Set(placed), swapped:false, lines:[16], msg:`Pivot ${pivot} is now at index ${pi} (final position). Array: [${arr.join(', ')}].`});
+        qsRec(arr, low, pi - 1);
+        qsRec(arr, pi + 1, high);
+    }
+    qsRec(a, 0, a.length - 1);
+    s.push({arr:[...a], low:-1, high:-1, pivotIdx:-1, i:-1, j:-1, placed:new Set(Array.from({length:a.length},(_,k)=>k)), swapped:false, lines:[0], msg:`Array fully sorted: [${a.join(', ')}]. Done!`});
+}
+
+function renderQkSrt() {
+    const st = qkSrtState.step;
+    if (st < 0) { initQkSrt(); return; }
+    const snap = qkSrtState.snapshots[Math.min(st, qkSrtState.snapshots.length-1)];
+    snap.arr.forEach((v,idx) => {
+        const el = document.getElementById(`qs-${idx}`);
+        el.textContent = v;
+        const idxSpan = document.createElement('span');
+        idxSpan.className = 'idx';
+        idxSpan.textContent = idx;
+        el.appendChild(idxSpan);
+        el.className = 'array-cell';
+        if (snap.placed && snap.placed.has(idx)) el.classList.add('found');
+        if (idx === snap.pivotIdx) el.classList.add('max-val');
+        if (idx === snap.i && snap.i >= 0 && idx !== snap.pivotIdx) el.classList.add('active');
+        if (idx === snap.j && snap.j >= 0) el.classList.add('highlight');
+        if (snap.swapped && (idx === snap.i || idx === snap.j)) el.classList.add('left-ptr');
+    });
+    document.getElementById('qksrt-info').innerHTML = snap.msg + `<span class="step-counter">Step ${st+1}/${qkSrtState.snapshots.length}</span>`;
+    document.getElementById('qksrt-result').textContent = 'Array: [' + snap.arr.join(', ') + ']';
+    highlightLines('code-qksrt', getQkSrtLines(snap));
+}
+
+function animQkSrt(action) {
+    if (action === 'reset') { clearInterval(qkSrtState.timer); qkSrtState.playing=false; initQkSrt(); return; }
+    if (action === 'prev') { qkSrtState.step = Math.max(0, qkSrtState.step - 1); renderQkSrt(); return; }
+    if (action === 'step') { qkSrtState.step = Math.min(qkSrtState.step + 1, qkSrtState.snapshots.length - 1); renderQkSrt(); return; }
+    if (action === 'play') {
+        if (qkSrtState.playing) { clearInterval(qkSrtState.timer); qkSrtState.playing=false; return; }
+        qkSrtState.playing = true;
+        qkSrtState.timer = setInterval(() => {
+            qkSrtState.step++;
+            if (qkSrtState.step >= qkSrtState.snapshots.length) { clearInterval(qkSrtState.timer); qkSrtState.playing=false; return; }
+            renderQkSrt();
+        }, 1400);
+    }
 }
 
 // ===== 1. MAX SUM SUBARRAY ANIMATION =====
@@ -18663,6 +20161,12 @@ function animKthLargest(action) {
 // ===== INIT ALL ON PAGE LOAD =====
 document.addEventListener('DOMContentLoaded', function() {
     formatCodeComments();
+    initAllPatterns();
+    initSelSort();
+    initBubSort();
+    initInsSrt();
+    initMrgSrt();
+    initQkSrt();
     initMaxSum();
     initMaxAvg();
     initSwMax();

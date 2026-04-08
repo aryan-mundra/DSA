@@ -1,0 +1,4094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java DSA — Syntax &amp; Patterns Reference</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;--surface:#181a24;--surface2:#1e2130;--border:#2a2d3e;
+  --text:#e2e4ed;--text2:#9ca0b0;--accent:#6c8cff;--accent2:#4ecdc4;
+  --green:#4ecdc4;--orange:#ffb86c;--pink:#ff79c6;--yellow:#f1fa8c;
+  --red:#ff5555;--purple:#bd93f9;--cyan:#8be9fd;
+  --code-bg:#12131e;--code-border:#262840;
+  --sidebar-w:280px;--header-h:60px;
+}
+[data-theme="light"]{
+  --bg:#f5f6fa;--surface:#ffffff;--surface2:#eef0f6;--border:#d8dbe6;
+  --text:#1e2030;--text2:#5c6070;--accent:#4361ee;--accent2:#0d9488;
+  --green:#0d9488;--orange:#d97706;--pink:#db2777;--yellow:#a16207;
+  --red:#dc2626;--purple:#7c3aed;--cyan:#0891b2;
+  --code-bg:#f0f1f8;--code-border:#d8dbe6;
+}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font-family:'Inter','Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;overflow-x:hidden}
+
+/* HEADER */
+.header{position:fixed;top:0;left:0;right:0;height:var(--header-h);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;z-index:1000;gap:16px;backdrop-filter:blur(12px)}
+.header h1{font-size:1.15rem;font-weight:700;white-space:nowrap;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.search-box{flex:1;max-width:420px;position:relative}
+.search-box input{width:100%;padding:8px 14px 8px 36px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.875rem;outline:none;transition:.2s}
+.search-box input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(108,140,255,.15)}
+.search-box svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--text2)}
+.search-count{font-size:.75rem;color:var(--text2);white-space:nowrap}
+.theme-btn{background:none;border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:1.1rem;transition:.2s}
+.theme-btn:hover{border-color:var(--accent);background:var(--surface2)}
+.menu-btn{display:none;background:none;border:none;color:var(--text);font-size:1.4rem;cursor:pointer}
+
+/* SIDEBAR */
+.sidebar{position:fixed;top:var(--header-h);left:0;width:var(--sidebar-w);height:calc(100vh - var(--header-h));overflow-y:auto;background:var(--surface);border-right:1px solid var(--border);padding:16px 0;z-index:900;transition:transform .3s}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.nav-group{margin-bottom:4px}
+.nav-group-title{padding:8px 20px 4px;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text2)}
+.nav-link{display:block;padding:6px 20px;font-size:.8rem;color:var(--text2);text-decoration:none;transition:.15s;border-left:2px solid transparent}
+.nav-link:hover,.nav-link.active{color:var(--accent);background:rgba(108,140,255,.06);border-left-color:var(--accent)}
+
+/* MAIN */
+.main{margin-left:var(--sidebar-w);padding:calc(var(--header-h) + 24px) 40px 80px;max-width:920px}
+
+/* CARDS */
+.category{margin-bottom:48px}
+.category-header{position:sticky;top:var(--header-h);background:var(--bg);padding:16px 0 12px;z-index:100;display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--accent);margin-bottom:20px}
+.category-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;flex-shrink:0}
+.category-title{font-size:1.35rem;font-weight:700}
+.category-count{font-size:.75rem;color:var(--text2);background:var(--surface2);padding:2px 8px;border-radius:20px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:16px;overflow:hidden;transition:.2s}
+.card.hidden{display:none}
+.card:hover{border-color:var(--accent);box-shadow:0 0 0 1px rgba(108,140,255,.1)}
+.card-header{padding:14px 20px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;user-select:none}
+.card-header:hover{background:var(--surface2)}
+.card-q{font-size:.95rem;font-weight:600;flex:1}
+.card-q code{background:var(--code-bg);padding:1px 6px;border-radius:4px;font-size:.85em;color:var(--cyan)}
+.card-arrow{color:var(--text2);transition:transform .2s;font-size:.8rem;flex-shrink:0}
+.card.open .card-arrow{transform:rotate(180deg)}
+.card-body{display:none;padding:0 20px 20px;border-top:1px solid var(--border)}
+.card.open .card-body{display:block}
+
+/* CODE BLOCKS */
+pre{background:var(--code-bg);border:1px solid var(--code-border);border-radius:8px;padding:14px 18px;overflow-x:auto;margin:10px 0;font-size:.82rem;line-height:1.7;position:relative}
+pre code{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;color:var(--text)}
+.copy-btn{position:absolute;top:6px;right:6px;background:var(--surface2);border:1px solid var(--border);color:var(--text2);padding:3px 8px;border-radius:4px;font-size:.7rem;cursor:pointer;opacity:0;transition:.2s}
+pre:hover .copy-btn{opacity:1}
+.copy-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+.method-tag{display:inline-block;background:rgba(108,140,255,.12);color:var(--accent);padding:2px 10px;border-radius:20px;font-size:.75rem;font-weight:600;margin:4px 4px 4px 0}
+h4{color:var(--accent2);font-size:.9rem;margin:16px 0 6px;font-weight:600}
+h5{color:var(--orange);font-size:.82rem;margin:12px 0 4px;font-weight:600}
+.note{background:rgba(78,205,196,.08);border-left:3px solid var(--green);padding:10px 14px;border-radius:0 6px 6px 0;margin:10px 0;font-size:.82rem;color:var(--text2)}
+.warn{background:rgba(255,85,85,.08);border-left:3px solid var(--red);padding:10px 14px;border-radius:0 6px 6px 0;margin:10px 0;font-size:.82rem}
+.comparison{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
+.comparison>div{border-radius:8px;padding:2px}
+.comp-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;padding:4px 10px;border-radius:4px}
+.comp-bad .comp-label{color:var(--red);background:rgba(255,85,85,.08)}
+.comp-good .comp-label{color:var(--green);background:rgba(78,205,196,.08)}
+.complexity{display:inline-block;background:var(--surface2);padding:3px 10px;border-radius:4px;font-size:.75rem;font-weight:600;margin:4px 4px 0 0;color:var(--purple)}
+
+/* PROGRESS */
+.progress-bar{position:fixed;top:var(--header-h);left:var(--sidebar-w);right:0;height:3px;z-index:999;background:transparent}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .1s}
+
+/* BACK TO TOP */
+.back-top{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;border:none;cursor:pointer;font-size:1.2rem;display:none;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(108,140,255,.3);z-index:900;transition:.2s}
+.back-top:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(108,140,255,.4)}
+.back-top.show{display:flex}
+
+/* STATS */
+.stats{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:32px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 20px;flex:1;min-width:140px}
+.stat-num{font-size:1.6rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{font-size:.75rem;color:var(--text2);margin-top:2px}
+
+/* KEYBOARD SHORTCUT */
+kbd{background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-size:.75rem;font-family:inherit;color:var(--text2)}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0;padding:calc(var(--header-h) + 16px) 16px 80px}
+  .menu-btn{display:block}
+  .progress-bar{left:0}
+  .comparison{grid-template-columns:1fr}
+}
+
+/* SYNTAX HIGHLIGHTING (CSS-only) */
+.kw{color:var(--pink)}
+.type{color:var(--cyan)}
+.str{color:var(--yellow)}
+.num{color:var(--purple)}
+.cmt{color:var(--text2);font-style:italic}
+.fn{color:var(--green)}
+.op{color:var(--pink)}
+
+/* EXPAND/COLLAPSE ALL */
+.expand-controls{display:flex;gap:8px;margin-bottom:16px}
+.expand-controls button{background:var(--surface);border:1px solid var(--border);color:var(--text2);padding:6px 14px;border-radius:6px;font-size:.78rem;cursor:pointer;transition:.2s}
+.expand-controls button:hover{border-color:var(--accent);color:var(--accent)}
+
+/* =================== ANIMATION ENGINE =================== */
+.anim-box{background:var(--code-bg);border:1px solid var(--code-border);border-radius:10px;padding:18px;margin:12px 0 18px;overflow:hidden}
+.anim-title{font-size:.85rem;font-weight:700;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.anim-title .anim-badge{background:var(--accent);color:#fff;font-size:.6rem;padding:2px 7px;border-radius:10px;font-weight:700;letter-spacing:.5px}
+
+/* Pipeline code display */
+.anim-pipeline{padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin:0 0 14px;font-family:'JetBrains Mono','Fira Code',monospace;font-size:.78rem;line-height:2}
+.anim-pipeline .pipe-line{color:var(--text2);padding:1px 6px;border-radius:4px;transition:all .3s;display:inline}
+.anim-pipeline .pipe-line.active{color:var(--accent);font-weight:700;background:rgba(108,140,255,.1);box-shadow:inset 3px 0 0 var(--accent)}
+.anim-pipeline .pipe-line.done{color:var(--green);text-decoration:none}
+
+/* Array cells */
+.anim-row{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0;min-height:40px;align-items:center}
+.anim-cell{display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:40px;padding:0 11px;border-radius:8px;font-family:'JetBrains Mono','Fira Code',monospace;font-size:.82rem;font-weight:600;border:2px solid var(--border);background:var(--surface2);color:var(--text);transition:all .4s cubic-bezier(.4,0,.2,1);position:relative}
+.anim-cell.str-cell{min-width:auto;padding:0 12px}
+.anim-cell.waiting{opacity:.5}
+.anim-cell.highlight{border-color:var(--accent);background:rgba(108,140,255,.18);color:var(--accent);transform:scale(1.15);box-shadow:0 0 16px rgba(108,140,255,.3)}
+.anim-cell.pass{border-color:var(--green);background:rgba(78,205,196,.14);color:var(--green)}
+.anim-cell.fail{border-color:var(--red);background:rgba(255,85,85,.1);color:var(--red);opacity:.35;transform:scale(.8)}
+.anim-cell.transformed{border-color:var(--purple);background:rgba(189,147,249,.14);color:var(--purple);transform:scale(1.08)}
+.anim-cell.swap-a{border-color:var(--orange);background:rgba(255,184,108,.14);color:var(--orange);transform:translateY(-6px);box-shadow:0 4px 12px rgba(255,184,108,.25)}
+.anim-cell.swap-b{border-color:var(--cyan);background:rgba(139,233,253,.14);color:var(--cyan);transform:translateY(6px);box-shadow:0 4px 12px rgba(139,233,253,.25)}
+.anim-cell.sorted{border-color:var(--green);background:rgba(78,205,196,.14);color:var(--green)}
+.anim-cell.accum{border-color:var(--orange);background:rgba(255,184,108,.18);color:var(--orange);min-width:52px;font-size:.9rem}
+
+/* Labels & arrows */
+.anim-label{font-size:.68rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1.2px;margin:12px 0 4px;display:flex;align-items:center;gap:6px}
+.anim-label .op-tag{color:var(--accent);background:rgba(108,140,255,.12);padding:2px 9px;border-radius:4px;font-size:.7rem;text-transform:none}
+.anim-arrow{color:var(--accent2);font-size:1.1rem;margin:2px 0;text-align:center;opacity:.6}
+.anim-result-tag{display:inline-block;font-size:.7rem;color:#fff;background:var(--green);padding:2px 10px;border-radius:4px;font-weight:700;letter-spacing:.5px;margin:8px 0 4px}
+
+/* Explanation log */
+.anim-log{font-size:.76rem;color:var(--text2);margin:10px 0 4px;padding:10px 14px;background:var(--surface);border-radius:6px;border-left:3px solid var(--accent);min-height:36px;line-height:1.6;transition:opacity .2s}
+.anim-log code{color:var(--cyan);font-family:'JetBrains Mono',monospace;font-size:.74rem;background:var(--code-bg);padding:1px 5px;border-radius:3px}
+.anim-log .v{color:var(--purple);font-weight:700}
+.anim-log .ok{color:var(--green);font-weight:600}
+.anim-log .no{color:var(--red);font-weight:600}
+
+/* Controls */
+.anim-controls{display:flex;gap:6px;margin-top:14px;flex-wrap:wrap;align-items:center}
+.anim-btn{padding:6px 15px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:.75rem;cursor:pointer;transition:.2s;font-weight:600;display:inline-flex;align-items:center;gap:4px}
+.anim-btn:hover{border-color:var(--accent);color:var(--accent)}
+.anim-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.anim-btn.primary:hover{background:var(--accent2);border-color:var(--accent2)}
+.anim-btn:disabled{opacity:.35;cursor:not-allowed;pointer-events:none}
+.anim-step-info{font-size:.72rem;color:var(--text2);margin-left:8px;font-family:'JetBrains Mono',monospace}
+.anim-speed{font-size:.72rem;color:var(--text2);margin-left:auto;display:flex;align-items:center;gap:4px}
+.anim-speed input[type=range]{width:70px;accent-color:var(--accent)}
+
+/* Problem tabs */
+.anim-problem-tabs{display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap}
+.anim-problem-tab{padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:.72rem;cursor:pointer;transition:.2s;font-weight:600}
+.anim-problem-tab:hover{border-color:var(--accent);color:var(--accent)}
+.anim-problem-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* Output row animation */
+.anim-output-row{min-height:40px;padding:4px 0}
+.anim-output-row .anim-cell{animation:popIn .3s ease}
+@keyframes popIn{0%{opacity:0;transform:scale(.5) translateY(8px)}100%{opacity:1;transform:scale(1) translateY(0)}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <button class="menu-btn" onclick="document.querySelector('.sidebar').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+  <h1>Java DSA Reference</h1>
+  <div class="search-box">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input type="text" id="search" placeholder="Search topics... (Ctrl+K)" autocomplete="off">
+  </div>
+  <span class="search-count" id="searchCount"></span>
+  <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">&#127763;</button>
+</header>
+
+<!-- PROGRESS -->
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="nav-group"><div class="nav-group-title">Conversions</div>
+    <a class="nav-link" href="#conversions">Type Conversions</a>
+  </div>
+  <div class="nav-group"><div class="nav-group-title">Core Data Structures</div>
+    <a class="nav-link" href="#strings">Strings</a>
+    <a class="nav-link" href="#arrays">Arrays</a>
+    <a class="nav-link" href="#arraylist">ArrayList</a>
+    <a class="nav-link" href="#linkedlist">LinkedList</a>
+    <a class="nav-link" href="#stack">Stack</a>
+    <a class="nav-link" href="#queue">Queue</a>
+    <a class="nav-link" href="#set">Set</a>
+    <a class="nav-link" href="#hashmap">HashMap</a>
+  </div>
+  <div class="nav-group"><div class="nav-group-title">2D Arrays &amp; Matrix</div>
+    <a class="nav-link" href="#matrix">2D Arrays</a>
+  </div>
+  <div class="nav-group"><div class="nav-group-title">Math &amp; Logic</div>
+    <a class="nav-link" href="#math">Math &amp; Operators</a>
+    <a class="nav-link" href="#circular">Circular Arrays</a>
+  </div>
+  <div class="nav-group"><div class="nav-group-title">Functional Java</div>
+    <a class="nav-link" href="#lambda">Lambda Expressions</a>
+    <a class="nav-link" href="#streams">Streams</a>
+    <a class="nav-link" href="#comparator">Comparator</a>
+  </div>
+  <div class="nav-group"><div class="nav-group-title">Modern Java</div>
+    <a class="nav-link" href="#modern-java">Java 8 to 21+ Features</a>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="stat-num">80+</div><div class="stat-label">Quick References</div></div>
+  <div class="stat"><div class="stat-num">10</div><div class="stat-label">Categories</div></div>
+  <div class="stat"><div class="stat-num">Java 21</div><div class="stat-label">Latest Features</div></div>
+</div>
+
+<div class="expand-controls">
+  <button onclick="toggleAll(true)">&#9660; Expand All</button>
+  <button onclick="toggleAll(false)">&#9650; Collapse All</button>
+</div>
+
+<!-- ======================= CONVERSIONS ======================= -->
+<section class="category" id="conversions">
+<div class="category-header">
+  <div class="category-icon">&#8644;</div>
+  <span class="category-title">Type Conversions</span>
+  <span class="category-count">4 topics</span>
+</div>
+
+<div class="card" data-tags="int string convert valueOf toString">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to convert an <code>int</code> to a <code>String</code>?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<span class="method-tag">String.valueOf()</span><span class="method-tag">Integer.toString()</span><span class="method-tag">Concatenation</span><span class="method-tag">String.format()</span>
+<pre><code>int num = 123;
+
+<span class="cmt">// Method 1: String.valueOf() — most common</span>
+String str = String.valueOf(num);
+
+<span class="cmt">// Method 2: Integer.toString()</span>
+String str = Integer.toString(num);
+
+<span class="cmt">// Method 3: String concatenation</span>
+String str = "" + num;
+
+<span class="cmt">// Method 4: String.format()</span>
+String str = String.format("%d", num);</code></pre>
+</div></div>
+
+<div class="card" data-tags="string int convert parseInt valueOf">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to convert a <code>String</code> to an <code>int</code>?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<span class="method-tag">Integer.parseInt()</span><span class="method-tag">Integer.valueOf()</span>
+<pre><code><span class="cmt">// Method 1: Integer.parseInt() — most common</span>
+String str = "123";
+int num = Integer.parseInt(str);
+
+<span class="cmt">// Method 2: Integer.valueOf() — returns Integer, auto-unboxed</span>
+int num = Integer.valueOf(str);</code></pre>
+<div class="warn">&#9888;&#65039; Handle <code>NumberFormatException</code> for invalid input:
+<pre><code>try {
+    int num = Integer.parseInt("abc");
+} catch (NumberFormatException e) {
+    System.out.println("Invalid number format");
+}</code></pre></div>
+</div></div>
+
+<div class="card" data-tags="char int convert ascii digit">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to convert <code>char</code> to <code>int</code> and vice versa?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>Char &rarr; Int (digit value)</h4>
+<pre><code>char ch = '5';
+int num = ch - '0';  <span class="cmt">// Result: 5</span></code></pre>
+<h4>Char &rarr; Int (ASCII value)</h4>
+<pre><code>char ch = 'A';
+int ascii = (int) ch;  <span class="cmt">// Result: 65</span></code></pre>
+<h4>Int &rarr; Char (digit to char)</h4>
+<pre><code>int num = 5;
+char ch = (char) (num + '0');  <span class="cmt">// Result: '5'</span></code></pre>
+<h4>Int &rarr; Char (ASCII to letter)</h4>
+<pre><code>int ascii = 65;
+char ch = (char) ascii;  <span class="cmt">// Result: 'A'</span></code></pre>
+<h4>Using Character class</h4>
+<pre><code>int num = Character.getNumericValue('5');  <span class="cmt">// 5</span>
+char ch = Character.forDigit(5, 10);      <span class="cmt">// '5'</span></code></pre>
+</div></div>
+
+<div class="card" data-tags="string list split format convert">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to convert a formatted <code>String</code> to a <code>List&lt;String&gt;</code>?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">Example: <code>"1.092.002.001.05"</code> &rarr; <code>["1", "092", "002", "001", "05"]</code></div>
+<pre><code><span class="cmt">// Method 1: split() + Arrays.asList()</span>
+String str = "1.092.002.001.05";
+List&lt;String&gt; list = Arrays.asList(str.split("\\."));
+
+<span class="cmt">// Method 2: split() + ArrayList (modifiable)</span>
+List&lt;String&gt; list = new ArrayList&lt;&gt;(Arrays.asList(str.split("\\.")));
+
+<span class="cmt">// Method 3: Stream</span>
+List&lt;String&gt; list = Arrays.stream(str.split("\\."))
+    .collect(Collectors.toList());</code></pre>
+</div></div>
+
+</section>
+
+<!-- ======================= STRINGS ======================= -->
+<section class="category" id="strings">
+<div class="category-header">
+  <div class="category-icon">Aa</div>
+  <span class="category-title">Strings</span>
+  <span class="category-count">6 topics</span>
+</div>
+
+<div class="card" data-tags="string functions methods builtin length charAt substring">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">Basic built-in <code>String</code> functions</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>String s = "Hello World";
+
+s.length()                     <span class="cmt">// 11</span>
+s.charAt(0)                    <span class="cmt">// 'H'</span>
+s.substring(0, 5)              <span class="cmt">// "Hello"</span>
+s.substring(6)                 <span class="cmt">// "World"</span>
+s.toUpperCase()                <span class="cmt">// "HELLO WORLD"</span>
+s.toLowerCase()                <span class="cmt">// "hello world"</span>
+s.trim()                       <span class="cmt">// removes leading/trailing spaces</span>
+s.replace("World", "Java")    <span class="cmt">// "Hello Java"</span>
+s.replaceAll("\\d+", "")      <span class="cmt">// remove all digits</span>
+s.split(",")                   <span class="cmt">// split by delimiter</span>
+s.contains("World")            <span class="cmt">// true</span>
+s.startsWith("Hello")          <span class="cmt">// true</span>
+s.endsWith("World")            <span class="cmt">// true</span>
+s.indexOf("World")             <span class="cmt">// 6</span>
+s.lastIndexOf("World")         <span class="cmt">// last occurrence index</span>
+s.equals("Hello World")        <span class="cmt">// true (case-sensitive)</span>
+s.equalsIgnoreCase("hello world") <span class="cmt">// true</span>
+s.isEmpty()                    <span class="cmt">// false</span>
+s.toCharArray()                <span class="cmt">// char array</span>
+String.valueOf(123)            <span class="cmt">// "123"</span>
+"Hello".concat(" World")      <span class="cmt">// "Hello World"</span>
+String.join(", ", "a", "b")   <span class="cmt">// "a, b"</span></code></pre>
+</div></div>
+
+<div class="card" data-tags="stringbuilder append insert delete reverse">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to use <code>StringBuilder</code> (append, insert, delete, reverse)?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>StringBuilder sb = new StringBuilder();
+
+<span class="cmt">// Chaining appends</span>
+sb.append("Hello").append(" ").append("World").append(123);
+String result = sb.toString();  <span class="cmt">// "Hello World123"</span>
+
+<span class="cmt">// Other operations</span>
+sb.insert(2, "XX");     <span class="cmt">// insert at index</span>
+sb.delete(1, 3);        <span class="cmt">// delete range</span>
+sb.reverse();           <span class="cmt">// reverse in place</span>
+sb.setCharAt(0, 'A');   <span class="cmt">// set char at index</span></code></pre>
+</div></div>
+
+<div class="card" data-tags="string iterate loop charAt toCharArray">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to iterate over a <code>String</code> character by character?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>String s = "541892";
+
+<span class="cmt">// Method 1: for loop + charAt()</span>
+for (int i = 0; i &lt; s.length(); i++) {
+    char ch = s.charAt(i);
+}
+
+<span class="cmt">// Method 2: for-each + toCharArray()</span>
+for (char ch : s.toCharArray()) {
+    System.out.println(ch);
+}
+
+<span class="cmt">// Extract digits as integers</span>
+for (char ch : s.toCharArray()) {
+    int digit = ch - '0';
+}</code></pre>
+</div></div>
+
+<div class="card" data-tags="string reverse stringbuilder">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to reverse a <code>String</code>?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>String s = "abcdefg";
+
+<span class="cmt">// Method 1: StringBuilder (simplest)</span>
+String reversed = new StringBuilder(s).reverse().toString();
+
+<span class="cmt">// Method 2: Two-pointer swap</span>
+char[] arr = s.toCharArray();
+int left = 0, right = arr.length - 1;
+while (left &lt; right) {
+    char temp = arr[left];
+    arr[left] = arr[right];
+    arr[right] = temp;
+    left++;
+    right--;
+}
+String reversed = new String(arr);</code></pre>
+</div></div>
+
+<div class="card" data-tags="string extract character charAt substring">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to extract a character from a <code>String</code>?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>String s = "Hello World";
+
+char first = s.charAt(0);              <span class="cmt">// 'H'</span>
+char last  = s.charAt(s.length() - 1); <span class="cmt">// 'd'</span>
+String sub = s.substring(0, 1);        <span class="cmt">// "H" (as String)</span>
+
+<span class="cmt">// Find character position</span>
+for (int i = 0; i &lt; s.length(); i++) {
+    if (s.charAt(i) == 'l') {
+        System.out.println("Found 'l' at index " + i);
+    }
+}</code></pre>
+</div></div>
+
+<div class="card" data-tags="string split delimiter extract first part">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to extract the first part of a string before a delimiter?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">Example: <code>"123456|78990"</code> &rarr; <code>"123456"</code></div>
+<pre><code><span class="cmt">// Using split()</span>
+String firstPart = s.split("\\|")[0];
+
+<span class="cmt">// Using substring + indexOf</span>
+String firstPart = s.substring(0, s.indexOf("|"));
+
+<span class="cmt">// Other delimiters</span>
+"apple,banana".split(",")[0]   <span class="cmt">// "apple"</span>
+"2024-01-15".split("-")[0]     <span class="cmt">// "2024"</span>
+"Hello World".split(" ")[0]    <span class="cmt">// "Hello"</span></code></pre>
+</div></div>
+
+</section>
+
+<!-- ======================= ARRAYS ======================= -->
+<section class="category" id="arrays">
+<div class="category-header">
+  <div class="category-icon">[ ]</div>
+  <span class="category-title">Arrays</span>
+  <span class="category-count">4 topics</span>
+</div>
+
+<div class="card" data-tags="array create declare initialize int string">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to declare and initialize an array?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code><span class="cmt">// Integer arrays</span>
+int[] arr = {1, 2, 3, 4, 5};
+int[] arr = new int[5];
+int[] arr = new int[]{1, 2, 3, 4, 5};
+
+<span class="cmt">// String arrays</span>
+String[] names = {"Alice", "Bob", "Charlie"};
+String[] names = new String[3];</code></pre>
+</div></div>
+
+<div class="card" data-tags="array empty size default values">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to create an empty array of size N? (default values)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>int[]     arr = new int[9];     <span class="cmt">// [0, 0, 0, ...]</span>
+String[]  arr = new String[9];  <span class="cmt">// [null, null, ...]</span>
+double[]  arr = new double[9];  <span class="cmt">// [0.0, 0.0, ...]</span>
+boolean[] arr = new boolean[9]; <span class="cmt">// [false, false, ...]</span></code></pre>
+</div></div>
+
+<div class="card" data-tags="array fill value Arrays.fill">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to fill an array with a specific value?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code><span class="cmt">// Fill entire array</span>
+int[] arr = new int[9];
+Arrays.fill(arr, -1);  <span class="cmt">// [-1, -1, -1, ...]</span>
+
+<span class="cmt">// Fill specific range (fromIndex inclusive, toIndex exclusive)</span>
+Arrays.fill(arr, 2, 7, -1);
+
+<span class="cmt">// Fill 2D array</span>
+int[][] matrix = new int[3][3];
+for (int[] row : matrix) {
+    Arrays.fill(row, -1);
+}</code></pre>
+</div></div>
+
+<div class="card" data-tags="array sort descending order selection bubble insertion">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to sort an array in descending order without built-in functions?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>Selection Sort (Descending)</h4>
+<pre><code>for (int i = 0; i &lt; arr.length - 1; i++) {
+    int maxIndex = i;
+    for (int j = i + 1; j &lt; arr.length; j++) {
+        if (arr[j] &gt; arr[maxIndex]) maxIndex = j;
+    }
+    int temp = arr[i];
+    arr[i] = arr[maxIndex];
+    arr[maxIndex] = temp;
+}</code></pre>
+<h4>Bubble Sort (Descending)</h4>
+<pre><code>for (int i = 0; i &lt; arr.length - 1; i++) {
+    for (int j = 0; j &lt; arr.length - i - 1; j++) {
+        if (arr[j] &lt; arr[j + 1]) {
+            int temp = arr[j];
+            arr[j] = arr[j + 1];
+            arr[j + 1] = temp;
+        }
+    }
+}</code></pre>
+</div></div>
+
+</section>
+
+<!-- ======================= ARRAYLIST ======================= -->
+<section class="category" id="arraylist">
+<div class="category-header">
+  <div class="category-icon">&#9776;</div>
+  <span class="category-title">ArrayList</span>
+  <span class="category-count">6 topics</span>
+</div>
+
+<div class="card" data-tags="arraylist sort ascending Collections.sort">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to sort an <code>ArrayList</code> in ascending order?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>ArrayList&lt;Integer&gt; list = new ArrayList&lt;&gt;(Arrays.asList(5, 2, 8, 1, 9));
+
+<span class="cmt">// Method 1: Collections.sort()</span>
+Collections.sort(list);
+
+<span class="cmt">// Method 2: list.sort()</span>
+list.sort(Comparator.naturalOrder());
+
+<span class="cmt">// Method 3: Stream (returns new list)</span>
+List&lt;Integer&gt; sorted = list.stream()
+    .sorted().collect(Collectors.toList());</code></pre>
+</div></div>
+
+<div class="card" data-tags="arraylist sort descending reverse order">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to sort an <code>ArrayList</code> in descending order?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code><span class="cmt">// Method 1: reverseOrder()</span>
+Collections.sort(list, Collections.reverseOrder());
+
+<span class="cmt">// Method 2: list.sort()</span>
+list.sort(Comparator.reverseOrder());
+
+<span class="cmt">// Method 3: Sort ascending then reverse</span>
+Collections.sort(list);
+Collections.reverse(list);</code></pre>
+</div></div>
+
+<div class="card" data-tags="arraylist length size isEmpty">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to find the length of an <code>ArrayList</code> and check if empty?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>int size = list.size();      <span class="cmt">// get size</span>
+boolean e = list.isEmpty();  <span class="cmt">// true if empty</span>
+
+if (!list.isEmpty()) {
+    System.out.println("List has " + list.size() + " elements");
+}</code></pre>
+</div></div>
+
+<div class="card" data-tags="arraylist array convert toArray stream">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to convert between <code>ArrayList</code> and array?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>Array &rarr; ArrayList</h4>
+<pre><code>String[] array = {"A", "B", "C"};
+
+<span class="cmt">// Fixed-size list (cannot add/remove)</span>
+List&lt;String&gt; list = Arrays.asList(array);
+
+<span class="cmt">// Modifiable list</span>
+ArrayList&lt;String&gt; list = new ArrayList&lt;&gt;(Arrays.asList(array));
+
+<span class="cmt">// For primitive arrays</span>
+int[] arr = {1, 2, 3};
+ArrayList&lt;Integer&gt; list = Arrays.stream(arr)
+    .boxed()
+    .collect(Collectors.toCollection(ArrayList::new));</code></pre>
+<h4>ArrayList &rarr; Array</h4>
+<pre><code>String[] array = list.toArray(new String[0]);
+
+<span class="cmt">// For primitive int array</span>
+int[] array = list.stream().mapToInt(i -&gt; i).toArray();</code></pre>
+</div></div>
+
+<div class="card" data-tags="arraylist print display forEach stream">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to print the contents of a <code>List</code>?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>List&lt;Integer&gt; list = Arrays.asList(1, 2, 3, 4, 5);
+
+System.out.println(list);                     <span class="cmt">// [1, 2, 3, 4, 5]</span>
+list.forEach(num -&gt; System.out.println(num)); <span class="cmt">// each on new line</span>
+list.stream().forEach(System.out::println);   <span class="cmt">// method reference</span></code></pre>
+</div></div>
+
+<div class="card" data-tags="list empty check isEmpty size">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to check if a <code>List</code> is empty?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>if (list.isEmpty()) {
+    System.out.println("List is empty");
+}
+
+if (list.size() == 0) {
+    System.out.println("List is empty");
+}</code></pre>
+</div></div>
+
+</section>
+
+<!-- ======================= LINKEDLIST ======================= -->
+<section class="category" id="linkedlist">
+<div class="category-header">
+  <div class="category-icon">&#8594;</div>
+  <span class="category-title">LinkedList</span>
+  <span class="category-count">3 topics</span>
+</div>
+
+<div class="card" data-tags="linkedlist iterate foreach iterator stream">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to iterate through a <code>LinkedList</code>?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>LinkedList&lt;Integer&gt; list = new LinkedList&lt;&gt;(Arrays.asList(10, 20, 30));
+
+<span class="cmt">// for-each (Best)</span>
+for (Integer num : list) { System.out.println(num); }
+
+<span class="cmt">// Iterator</span>
+Iterator&lt;Integer&gt; it = list.iterator();
+while (it.hasNext()) { System.out.println(it.next()); }
+
+<span class="cmt">// Reverse with ListIterator</span>
+ListIterator&lt;Integer&gt; lit = list.listIterator(list.size());
+while (lit.hasPrevious()) { System.out.println(lit.previous()); }</code></pre>
+<div class="warn">&#9888;&#65039; Avoid <code>list.get(i)</code> in a for-loop — it's O(n&sup2;) for LinkedList.</div>
+</div></div>
+
+<div class="card" data-tags="linkedlist add node start end middle position">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">LinkedList — Add element (custom implementation)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>class Node {
+    int data;
+    Node next;
+    Node(int data) { this.data = data; this.next = null; }
+}</code></pre>
+<h4>Add at Start</h4>
+<pre><code>public void addAtStart(int data) {
+    Node newNode = new Node(data);
+    newNode.next = head;
+    head = newNode;
+}</code></pre>
+<h4>Add at End</h4>
+<pre><code>public void addAtEnd(int data) {
+    Node newNode = new Node(data);
+    if (head == null) { head = newNode; return; }
+    Node current = head;
+    while (current.next != null) current = current.next;
+    current.next = newNode;
+}</code></pre>
+<h4>Add at Position</h4>
+<pre><code>public void addAtPosition(int data, int pos) {
+    Node newNode = new Node(data);
+    if (pos == 0) { newNode.next = head; head = newNode; return; }
+    Node current = head;
+    for (int i = 0; i &lt; pos - 1 && current != null; i++)
+        current = current.next;
+    if (current != null) {
+        newNode.next = current.next;
+        current.next = newNode;
+    }
+}</code></pre>
+</div></div>
+
+<div class="card" data-tags="linkedlist delete remove node start end value">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">LinkedList — Delete element (custom implementation)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>Delete at Start</h4>
+<pre><code>if (head != null) head = head.next;</code></pre>
+<h4>Delete at End</h4>
+<pre><code>if (head == null || head.next == null) { head = null; return; }
+Node current = head;
+while (current.next.next != null) current = current.next;
+current.next = null;</code></pre>
+<h4>Delete by Value</h4>
+<pre><code>public void deleteByValue(int value) {
+    if (head == null) return;
+    if (head.data == value) { head = head.next; return; }
+    Node current = head;
+    while (current.next != null && current.next.data != value)
+        current = current.next;
+    if (current.next != null)
+        current.next = current.next.next;
+}</code></pre>
+</div></div>
+
+</section>
+
+<!-- ======================= STACK ======================= -->
+<section class="category" id="stack">
+<div class="category-header">
+  <div class="category-icon">&#9881;</div>
+  <span class="category-title">Stack</span>
+  <span class="category-count">4 topics</span>
+</div>
+
+<div class="card" data-tags="stack create new declare Deque ArrayDeque">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to create a new <code>Stack</code>?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code><span class="cmt">// Using Stack class</span>
+Stack&lt;Integer&gt; stack = new Stack&lt;&gt;();
+
+<span class="cmt">// Using Deque (Recommended)</span>
+Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();</code></pre>
+</div></div>
+
+<div class="card" data-tags="stack operations push pop peek isEmpty search size">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">What are the common <code>Stack</code> operations?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>Stack&lt;Integer&gt; stack = new Stack&lt;&gt;();
+
+stack.push(10);          <span class="cmt">// add to top</span>
+stack.push(20);
+stack.push(30);
+
+int top = stack.pop();   <span class="cmt">// remove & return top → 30</span>
+int peek = stack.peek(); <span class="cmt">// view top without removing → 20</span>
+boolean e = stack.isEmpty();
+int pos = stack.search(10); <span class="cmt">// 1-based distance from top</span>
+int size = stack.size();
+stack.clear();</code></pre>
+</div></div>
+
+<div class="card" data-tags="stack empty check isEmpty">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to check if a <code>Stack</code> is empty?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>if (stack.isEmpty()) {
+    System.out.println("Stack is empty");
+}</code></pre>
+</div></div>
+
+<div class="card" data-tags="stack print display toString string convert">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to print / convert <code>Stack</code> elements to String?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>System.out.println(stack);  <span class="cmt">// [10, 20, 30] (bottom→top)</span>
+
+<span class="cmt">// Join with delimiter</span>
+String str = stack.stream()
+    .map(String::valueOf)
+    .collect(Collectors.joining(", "));
+
+<span class="cmt">// Pop all (destructive, top→bottom)</span>
+while (!stack.isEmpty()) {
+    System.out.println(stack.pop());
+}</code></pre>
+</div></div>
+
+</section>
+
+<!-- ======================= QUEUE ======================= -->
+<section class="category" id="queue">
+<div class="category-header">
+  <div class="category-icon">&#10132;</div>
+  <span class="category-title">Queue</span>
+  <span class="category-count">3 topics</span>
+</div>
+
+<div class="card" data-tags="queue create declare LinkedList ArrayDeque PriorityQueue">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to declare and initialize a <code>Queue</code>?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code><span class="cmt">// LinkedList (most common)</span>
+Queue&lt;Integer&gt; queue = new LinkedList&lt;&gt;();
+
+<span class="cmt">// ArrayDeque (better performance)</span>
+Queue&lt;Integer&gt; queue = new ArrayDeque&lt;&gt;();
+
+<span class="cmt">// PriorityQueue (priority-based)</span>
+Queue&lt;Integer&gt; queue = new PriorityQueue&lt;&gt;();
+
+<span class="cmt">// Initialize with elements</span>
+Queue&lt;Integer&gt; queue = new LinkedList&lt;&gt;(Arrays.asList(1, 2, 3));</code></pre>
+</div></div>
+
+<div class="card" data-tags="queue operations add offer remove poll peek element">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">What are the common <code>Queue</code> operations?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>Queue&lt;Integer&gt; queue = new LinkedList&lt;&gt;();
+
+<span class="cmt">// Add to rear</span>
+queue.add(10);    <span class="cmt">// throws exception if fails</span>
+queue.offer(20);  <span class="cmt">// returns false if fails (safer)</span>
+
+<span class="cmt">// Remove from front</span>
+int f = queue.remove(); <span class="cmt">// throws exception if empty</span>
+int f = queue.poll();   <span class="cmt">// returns null if empty (safer)</span>
+
+<span class="cmt">// View front element</span>
+int h = queue.element(); <span class="cmt">// throws if empty</span>
+int h = queue.peek();    <span class="cmt">// returns null if empty (safer)</span>
+
+queue.isEmpty();
+queue.size();</code></pre>
+<div class="note">Best practice: Use <code>offer()</code>, <code>poll()</code>, <code>peek()</code> — they don't throw exceptions.</div>
+</div></div>
+
+<div class="card" data-tags="queue print display forEach">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to print <code>Queue</code> contents?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>System.out.println(queue);  <span class="cmt">// [10, 20, 30]</span>
+
+<span class="cmt">// for-each</span>
+for (Integer item : queue) System.out.println(item);
+
+<span class="cmt">// Poll all (destructive)</span>
+while (!queue.isEmpty()) System.out.println(queue.poll());</code></pre>
+</div></div>
+
+</section>
+
+<!-- ======================= SET ======================= -->
+<section class="category" id="set">
+<div class="category-header">
+  <div class="category-icon">{ }</div>
+  <span class="category-title">Set</span>
+  <span class="category-count">3 topics</span>
+</div>
+
+<div class="card" data-tags="set contains check element exists">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to check if a <code>Set</code> contains an element?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>Set&lt;Integer&gt; set = new HashSet&lt;&gt;(Arrays.asList(10, 20, 30));
+
+if (set.contains(20)) {
+    System.out.println("Found");
+}</code></pre>
+</div></div>
+
+<div class="card" data-tags="set array convert toArray stream">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to convert a <code>Set</code> to an array?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>Set&lt;String&gt; set = new HashSet&lt;&gt;(Arrays.asList("A", "B", "C"));
+
+String[] array = set.toArray(new String[0]);
+
+<span class="cmt">// Using Stream</span>
+String[] array = set.stream().toArray(String[]::new);</code></pre>
+</div></div>
+
+<div class="card" data-tags="set consecutive sequence longest streak">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to find the longest consecutive sequence in a <code>Set</code>?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">Example: <code>{100, 4, 200, 1, 3, 2}</code> &rarr; Sequences: [1,2,3,4] &rarr; Answer: 4</div>
+<pre><code>Set&lt;Integer&gt; set = new HashSet&lt;&gt;(Arrays.asList(100, 4, 200, 1, 3, 2));
+int longestStreak = 0;
+
+for (int num : set) {
+    <span class="cmt">// Only start counting from the beginning of a sequence</span>
+    if (!set.contains(num - 1)) {
+        int currentNum = num;
+        int currentStreak = 1;
+        while (set.contains(currentNum + 1)) {
+            currentNum++;
+            currentStreak++;
+        }
+        longestStreak = Math.max(longestStreak, currentStreak);
+    }
+}
+<span class="cmt">// longestStreak = 4</span></code></pre>
+<span class="complexity">Time: O(n)</span><span class="complexity">Space: O(n)</span>
+</div></div>
+
+</section>
+
+<!-- ======================= HASHMAP ======================= -->
+<section class="category" id="hashmap">
+<div class="category-header">
+  <div class="category-icon">#</div>
+  <span class="category-title">HashMap</span>
+  <span class="category-count">7 topics</span>
+</div>
+
+<div class="card" data-tags="hashmap create new put initialize">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to create a <code>HashMap</code>?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>HashMap&lt;String, Integer&gt; map = new HashMap&lt;&gt;();
+map.put("Apple", 5);
+map.put("Banana", 3);
+
+<span class="cmt">// Java 9+ immutable map</span>
+Map&lt;String, Integer&gt; map = Map.of("Apple", 5, "Banana", 3);</code></pre>
+</div></div>
+
+<div class="card" data-tags="hashmap iterate entrySet forEach keySet values">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to iterate over a <code>HashMap</code> (keys + values)?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code><span class="cmt">// Method 1: entrySet() — most common</span>
+for (Map.Entry&lt;String, Integer&gt; entry : map.entrySet()) {
+    System.out.println(entry.getKey() + " = " + entry.getValue());
+}
+
+<span class="cmt">// Method 2: forEach (Java 8+)</span>
+map.forEach((key, value) -&gt; {
+    System.out.println(key + " = " + value);
+});
+
+<span class="cmt">// Method 3: keySet()</span>
+for (String key : map.keySet()) {
+    System.out.println(key + " = " + map.get(key));
+}</code></pre>
+</div></div>
+
+<div class="card" data-tags="hashmap keys iterate keySet only">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to iterate over only the keys of a <code>HashMap</code>?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>for (String key : map.keySet()) {
+    System.out.println(key);
+}
+
+<span class="cmt">// Stream</span>
+map.keySet().stream().forEach(System.out::println);</code></pre>
+</div></div>
+
+<div class="card" data-tags="hashmap values iterate only">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to iterate over only the values of a <code>HashMap</code>?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>for (Integer value : map.values()) {
+    System.out.println(value);
+}
+
+<span class="cmt">// Stream</span>
+map.values().stream().forEach(System.out::println);</code></pre>
+</div></div>
+
+<div class="card" data-tags="hashmap getOrDefault frequency count character">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to use <code>getOrDefault</code> in a HashMap?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>int val = map.getOrDefault("Grape", 0); <span class="cmt">// returns 0 if key missing</span></code></pre>
+<h4>Frequency Count Pattern</h4>
+<pre><code>String[] words = {"apple", "banana", "apple", "orange", "banana", "apple"};
+HashMap&lt;String, Integer&gt; freq = new HashMap&lt;&gt;();
+for (String word : words) {
+    freq.put(word, freq.getOrDefault(word, 0) + 1);
+}
+<span class="cmt">// {apple=3, banana=2, orange=1}</span></code></pre>
+<h4>Character Count Pattern</h4>
+<pre><code>String s = "hello";
+HashMap&lt;Character, Integer&gt; count = new HashMap&lt;&gt;();
+for (char c : s.toCharArray()) {
+    count.put(c, count.getOrDefault(c, 0) + 1);
+}
+<span class="cmt">// {h=1, e=1, l=2, o=1}</span></code></pre>
+</div></div>
+
+<div class="card" data-tags="hashmap containsKey containsValue check exists">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to check if a <code>Map</code> contains a specific key or value?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>if (map.containsKey("Apple")) {
+    System.out.println("Key exists");
+}
+
+if (map.containsValue(5)) {
+    System.out.println("Value exists");
+}</code></pre>
+</div></div>
+
+<div class="card" data-tags="hashmap array store index value key">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to store array values as keys and indices as values?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>int[] arr = {10, 20, 30, 40, 50};
+HashMap&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+for (int i = 0; i &lt; arr.length; i++) {
+    map.put(arr[i], i);
+}
+<span class="cmt">// {10=0, 20=1, 30=2, 40=3, 50=4}</span>
+
+<span class="cmt">// Using Stream</span>
+Map&lt;Integer, Integer&gt; map = IntStream.range(0, arr.length)
+    .boxed()
+    .collect(Collectors.toMap(i -&gt; arr[i], i -&gt; i));</code></pre>
+</div></div>
+
+</section>
+
+<!-- ======================= 2D ARRAYS / MATRIX ======================= -->
+<section class="category" id="matrix">
+<div class="category-header">
+  <div class="category-icon">&#9638;</div>
+  <span class="category-title">2D Arrays / Matrix</span>
+  <span class="category-count">3 topics</span>
+</div>
+
+<div class="card" data-tags="2d array print matrix nested loop deepToString">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to print a 2D array?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>int[][] matrix = {{1,2,3},{4,5,6},{7,8,9}};
+
+<span class="cmt">// Nested loops</span>
+for (int i = 0; i &lt; matrix.length; i++) {
+    for (int j = 0; j &lt; matrix[i].length; j++) {
+        System.out.print(matrix[i][j] + " ");
+    }
+    System.out.println();
+}
+
+<span class="cmt">// Using Arrays.toString per row</span>
+for (int[] row : matrix)
+    System.out.println(Arrays.toString(row));
+
+<span class="cmt">// One-liner</span>
+System.out.println(Arrays.deepToString(matrix));</code></pre>
+</div></div>
+
+<div class="card" data-tags="2d array transpose matrix swap row column">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to transpose a 2D array?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>General (new array)</h4>
+<pre><code>int rows = matrix.length, cols = matrix[0].length;
+int[][] transposed = new int[cols][rows];
+for (int i = 0; i &lt; rows; i++)
+    for (int j = 0; j &lt; cols; j++)
+        transposed[j][i] = matrix[i][j];</code></pre>
+<h4>Square matrix (in-place)</h4>
+<pre><code>int n = matrix.length;
+for (int i = 0; i &lt; n; i++)
+    for (int j = i + 1; j &lt; n; j++) {
+        int temp = matrix[i][j];
+        matrix[i][j] = matrix[j][i];
+        matrix[j][i] = temp;
+    }</code></pre>
+</div></div>
+
+<div class="card" data-tags="2d array row column length index access">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to access rows, columns, and understand <code>matrix[i][j]</code>?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>int[][] matrix = {{1,2,3},{4,5,6},{7,8,9}};
+
+int rows = matrix.length;      <span class="cmt">// 3 (number of rows)</span>
+int cols = matrix[0].length;   <span class="cmt">// 3 (number of columns)</span>
+
+<span class="cmt">// matrix[i][0] → first column     → {1, 4, 7}</span>
+<span class="cmt">// matrix[0][i] → first row         → {1, 2, 3}</span>
+<span class="cmt">// matrix[i][1] → second column     → {2, 5, 8}</span>
+<span class="cmt">// matrix[1][i] → second row        → {4, 5, 6}</span>
+<span class="cmt">// matrix[1]    → entire second row → [4, 5, 6]</span></code></pre>
+<h4>List of int arrays</h4>
+<pre><code>List&lt;int[]&gt; list = new ArrayList&lt;&gt;();
+list.add(new int[]{1, 2, 3});
+list.add(new int[]{4, 5, 6});
+
+list.get(0)     <span class="cmt">// → [1, 2, 3]</span>
+list.get(0)[0]  <span class="cmt">// → 1</span>
+list.get(1)[2]  <span class="cmt">// → 6</span></code></pre>
+</div></div>
+
+</section>
+
+<!-- ======================= MATH & OPERATORS ======================= -->
+<section class="category" id="math">
+<div class="category-header">
+  <div class="category-icon">&#177;</div>
+  <span class="category-title">Math &amp; Operators</span>
+  <span class="category-count">3 topics</span>
+</div>
+
+<div class="card" data-tags="modulo division remainder quotient percent slash">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">What is the difference between <code>%</code> and <code>/</code>?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code><span class="cmt">// / → quotient (result of division)</span>
+10 / 3  = 3     <span class="cmt">// integer division</span>
+15 / 4  = 3
+
+<span class="cmt">// % → remainder (modulo)</span>
+10 % 3  = 1     <span class="cmt">// 10 = 3*3 + 1</span>
+15 % 4  = 3
+20 % 5  = 0</code></pre>
+<h4>Common Uses of %</h4>
+<pre><code><span class="cmt">// Even/Odd check</span>
+if (num % 2 == 0) { <span class="cmt">/* even */</span> }
+
+<span class="cmt">// Get last digit</span>
+int lastDigit = 12345 % 10;   <span class="cmt">// 5</span>
+
+<span class="cmt">// Circular array index</span>
+int index = i % arr.length;</code></pre>
+</div></div>
+
+<div class="card" data-tags="Math.abs absolute value distance difference">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">What is the use of <code>Math.abs()</code>?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>Math.abs(-5)     <span class="cmt">// 5</span>
+Math.abs(5)      <span class="cmt">// 5</span>
+Math.abs(-3.14)  <span class="cmt">// 3.14</span>
+
+<span class="cmt">// Distance between two numbers</span>
+int distance = Math.abs(num1 - num2);
+
+<span class="cmt">// Check if within threshold</span>
+if (Math.abs(a - b) &lt;= 10) {
+    System.out.println("Numbers are close");
+}</code></pre>
+</div></div>
+
+<div class="card" data-tags="even odd check modulo array">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to check if array elements are odd or even?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>int[] arr = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+int evenCount = 0, oddCount = 0;
+
+for (int num : arr) {
+    if (num % 2 == 0) evenCount++;
+    else oddCount++;
+}
+
+<span class="cmt">// Filter even numbers</span>
+List&lt;Integer&gt; evens = new ArrayList&lt;&gt;();
+for (int num : arr)
+    if (num % 2 == 0) evens.add(num);</code></pre>
+</div></div>
+
+</section>
+
+<!-- ======================= CIRCULAR ARRAYS ======================= -->
+<section class="category" id="circular">
+<div class="category-header">
+  <div class="category-icon">&#8634;</div>
+  <span class="category-title">Circular Arrays</span>
+  <span class="category-count">2 topics</span>
+</div>
+
+<div class="card" data-tags="circular array modulo wrap index traverse">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How does circular array indexing work?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>int[] arr = {1, 2, 3, 4, 5};
+int n = arr.length;  <span class="cmt">// 5</span>
+
+<span class="cmt">// Circular index formula</span>
+int index = i % n;
+
+<span class="cmt">// Examples:</span>
+<span class="cmt">// i=5 → 5%5 = 0 (wraps to start)</span>
+<span class="cmt">// i=7 → 7%5 = 2</span>
+
+<span class="cmt">// Move forward by k steps</span>
+int next = (current + k) % n;
+
+<span class="cmt">// Move backward by k steps</span>
+int prev = (current - k + n) % n;</code></pre>
+</div></div>
+
+<div class="card" data-tags="circular array iterate traverse rotate next greater">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to iterate over a circular array? (rotate, next greater)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>Traverse N times from an index</h4>
+<pre><code>int start = 2;
+for (int i = 0; i &lt; n; i++) {
+    int index = (start + i) % n;
+    System.out.println(arr[index]);
+}
+<span class="cmt">// Output: 3, 4, 5, 1, 2</span></code></pre>
+<h4>Rotate Array Right by K</h4>
+<pre><code>int k = 2;
+int[] result = new int[n];
+for (int i = 0; i &lt; n; i++) {
+    result[(i + k) % n] = arr[i];
+}
+<span class="cmt">// [1,2,3,4,5] → [4,5,1,2,3]</span></code></pre>
+<h4>Next Greater Element (Circular)</h4>
+<pre><code>for (int i = 0; i &lt; n; i++) {
+    int next = -1;
+    for (int j = 1; j &lt; n; j++) {
+        int idx = (i + j) % n;
+        if (arr[idx] &gt; arr[i]) { next = arr[idx]; break; }
+    }
+}</code></pre>
+</div></div>
+
+</section>
+
+<!-- ======================= LAMBDA ======================= -->
+<section class="category" id="lambda">
+<div class="category-header">
+  <div class="category-icon">&lambda;</div>
+  <span class="category-title">Lambda Expressions — Learn from Scratch</span>
+  <span class="category-count">6 topics</span>
+</div>
+
+<div class="card" data-tags="lambda what is basics introduction beginner start">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#128161; WHAT IS A LAMBDA? (Start here if confused)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note"><strong>Lambda = Shortcut for writing small anonymous functions</strong></div>
+<h4>The Problem Lambdas Solve</h4>
+<pre><code><span class="cmt">// OLD WAY: Too much code for a simple task</span>
+List&lt;Integer&gt; nums = Arrays.asList(1, 2, 3, 4, 5);
+for (int num : nums) {
+    System.out.println(num * 2);
+}
+
+<span class="cmt">// WITH LAMBDA: Clean and concise</span>
+nums.forEach(num -&gt; System.out.println(num * 2));</code></pre>
+
+<h4>Before Lambda (Java 7 and earlier)</h4>
+<pre><code><span class="cmt">// To sort by length, you had to write this mess:</span>
+Collections.sort(words, new Comparator&lt;String&gt;() {
+    public int compare(String a, String b) {
+        return a.length() - b.length();
+    }
+});
+
+<span class="cmt">// With Lambda (Java 8+): Much cleaner!</span>
+words.sort((a, b) -&gt; a.length() - b.length());</code></pre>
+
+<h4>Lambda Syntax Breakdown</h4>
+<pre><code><span class="cmt">// Format: (parameters) -&gt; expression</span>
+(x, y) -&gt; x + y
+
+<span class="cmt">// Read it as: "takes x and y, returns x plus y"</span>
+
+<span class="cmt">// One parameter? Drop the parentheses</span>
+x -&gt; x * 2
+
+<span class="cmt">// No parameters? Use empty ()</span>
+() -&gt; System.out.println("Hello")
+
+<span class="cmt">// Multiple lines? Use braces and return</span>
+(x, y) -&gt; {
+    int sum = x + y;
+    return sum * 2;
+}</code></pre>
+</div></div>
+
+<div class="card" data-tags="lambda syntax write how to create basic simple">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#9997;&#65039; HOW TO WRITE YOUR FIRST LAMBDA (Step-by-step)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>Step 1: Start with a regular method</h4>
+<pre><code>public int double(int x) {
+    return x * 2;
+}</code></pre>
+
+<h4>Step 2: Remove method name and return type</h4>
+<pre><code>(int x) {
+    return x * 2;
+}</code></pre>
+
+<h4>Step 3: Add the arrow -&gt;</h4>
+<pre><code>(int x) -&gt; {
+    return x * 2;
+}</code></pre>
+
+<h4>Step 4: If single expression, remove braces and return</h4>
+<pre><code>(int x) -&gt; x * 2</code></pre>
+
+<h4>Step 5: Java infers types, so remove if you want</h4>
+<pre><code>(x) -&gt; x * 2</code></pre>
+
+<h4>Step 6: Single parameter? Remove parentheses too!</h4>
+<pre><code>x -&gt; x * 2   <span class="cmt">// ✅ DONE!</span></code></pre>
+
+<h4>Practice: Convert these methods to lambdas</h4>
+<pre><code><span class="cmt">// Method 1</span>
+public boolean isEven(int n) { return n % 2 == 0; }
+<span class="cmt">// Lambda:</span>
+n -&gt; n % 2 == 0
+
+<span class="cmt">// Method 2</span>
+public int add(int a, int b) { return a + b; }
+<span class="cmt">// Lambda:</span>
+(a, b) -&gt; a + b
+
+<span class="cmt">// Method 3</span>
+public String greet(String name) { return "Hello " + name; }
+<span class="cmt">// Lambda:</span>
+name -&gt; "Hello " + name
+
+<span class="cmt">// Method 4 (multi-line)</span>
+public int calculate(int x) {
+    int doubled = x * 2;
+    int added = doubled + 10;
+    return added;
+}
+<span class="cmt">// Lambda:</span>
+x -&gt; {
+    int doubled = x * 2;
+    int added = doubled + 10;
+    return added;
+}</code></pre>
+</div></div>
+
+<div class="card" data-tags="lambda common mistakes errors wrong syntax">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#10060; COMMON MISTAKES (and how to fix them)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>Mistake 1: Forgetting parentheses with multiple parameters</h4>
+<div class="comparison">
+<div class="comp-bad"><div class="comp-label">WRONG</div>
+<pre><code>a, b -&gt; a + b  <span class="cmt">// ❌ Won't compile</span></code></pre></div>
+<div class="comp-good"><div class="comp-label">RIGHT</div>
+<pre><code>(a, b) -&gt; a + b  <span class="cmt">// ✅ Correct</span></code></pre></div>
+</div>
+
+<h4>Mistake 2: Using braces but forgetting return</h4>
+<div class="comparison">
+<div class="comp-bad"><div class="comp-label">WRONG</div>
+<pre><code>x -&gt; { x * 2 }  <span class="cmt">// ❌ Missing return</span></code></pre></div>
+<div class="comp-good"><div class="comp-label">RIGHT</div>
+<pre><code>x -&gt; { return x * 2; }  <span class="cmt">// ✅ With return</span>
+x -&gt; x * 2              <span class="cmt">// ✅ Or remove braces</span></code></pre></div>
+</div>
+
+<h4>Mistake 3: Adding return without braces</h4>
+<div class="comparison">
+<div class="comp-bad"><div class="comp-label">WRONG</div>
+<pre><code>x -&gt; return x * 2;  <span class="cmt">// ❌ Can't use return without {}</span></code></pre></div>
+<div class="comp-good"><div class="comp-label">RIGHT</div>
+<pre><code>x -&gt; x * 2  <span class="cmt">// ✅ No return needed</span></code></pre></div>
+</div>
+
+<h4>Mistake 4: Modifying variables from outside</h4>
+<pre><code>int count = 0;
+list.forEach(item -&gt; count++);  <span class="cmt">// ❌ Can't modify outside variables</span>
+
+<span class="cmt">// ✅ Solution: Use array or AtomicInteger</span>
+int[] count = {0};
+list.forEach(item -&gt; count[0]++);
+
+<span class="cmt">// Or better: use proper stream operations</span>
+long count = list.stream().count();</code></pre>
+
+<h4>Remember: 3 Simple Rules</h4>
+<pre><code>1. Multiple params? → Need ( )
+   (a, b) -&gt; a + b  ✅
+   
+2. Multiple lines? → Need { } and return
+   x -&gt; { return x * 2; }  ✅
+   
+3. Both single? → No ( ) or { }
+   x -&gt; x * 2  ✅</code></pre>
+</div></div>
+
+<div class="card" data-tags="lambda real examples practical use cases when">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#128736; REAL-WORLD EXAMPLES (Copy-paste ready)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>Sorting a List</h4>
+<pre><code>List&lt;String&gt; names = Arrays.asList("John", "Alice", "Bob");
+
+<span class="cmt">// Sort alphabetically</span>
+names.sort((a, b) -&gt; a.compareTo(b));
+
+<span class="cmt">// Sort by length</span>
+names.sort((a, b) -&gt; a.length() - b.length());
+
+<span class="cmt">// Sort by length descending</span>
+names.sort((a, b) -&gt; b.length() - a.length());</code></pre>
+
+<h4>Filtering a List</h4>
+<pre><code>List&lt;Integer&gt; nums = Arrays.asList(1, 2, 3, 4, 5, 6);
+
+<span class="cmt">// Get only even numbers</span>
+List&lt;Integer&gt; evens = nums.stream()
+    .filter(n -&gt; n % 2 == 0)
+    .collect(Collectors.toList());  <span class="cmt">// [2, 4, 6]</span>
+
+<span class="cmt">// Get numbers greater than 3</span>
+List&lt;Integer&gt; big = nums.stream()
+    .filter(n -&gt; n &gt; 3)
+    .collect(Collectors.toList());  <span class="cmt">// [4, 5, 6]</span></code></pre>
+
+<h4>Transforming a List</h4>
+<pre><code>List&lt;Integer&gt; nums = Arrays.asList(1, 2, 3, 4, 5);
+
+<span class="cmt">// Double each number</span>
+List&lt;Integer&gt; doubled = nums.stream()
+    .map(n -&gt; n * 2)
+    .collect(Collectors.toList());  <span class="cmt">// [2, 4, 6, 8, 10]</span>
+
+<span class="cmt">// Convert to strings</span>
+List&lt;String&gt; strings = nums.stream()
+    .map(n -&gt; "Number: " + n)
+    .collect(Collectors.toList());  <span class="cmt">// ["Number: 1", "Number: 2", ...]</span></code></pre>
+
+<h4>forEach Loop Replacement</h4>
+<pre><code>List&lt;String&gt; words = Arrays.asList("hello", "world", "java");
+
+<span class="cmt">// OLD WAY</span>
+for (String word : words) {
+    System.out.println(word.toUpperCase());
+}
+
+<span class="cmt">// WITH LAMBDA</span>
+words.forEach(word -&gt; System.out.println(word.toUpperCase()));</code></pre>
+
+<h4>PriorityQueue Custom Order</h4>
+<pre><code><span class="cmt">// Max heap (largest first)</span>
+PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;((a, b) -&gt; b - a);
+
+<span class="cmt">// Sort by absolute value</span>
+PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;(
+    (a, b) -&gt; Math.abs(a) - Math.abs(b)
+);</code></pre>
+
+<h4>Thread / Runnable</h4>
+<pre><code><span class="cmt">// OLD WAY</span>
+new Thread(new Runnable() {
+    public void run() {
+        System.out.println("Running");
+    }
+}).start();
+
+<span class="cmt">// WITH LAMBDA</span>
+new Thread(() -&gt; System.out.println("Running")).start();</code></pre>
+</div></div>
+
+<div class="card" data-tags="lambda functional interface predicate function consumer supplier">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#128220; Where can you use Lambdas? (Functional Interfaces)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">Lambdas work with <strong>functional interfaces</strong> — interfaces with exactly ONE abstract method</div>
+
+<h4>Built-in Functional Interfaces You'll Use</h4>
+<pre><code><span class="cmt">// 1. Predicate&lt;T&gt; — Test if something is true/false</span>
+Predicate&lt;Integer&gt; isEven = n -&gt; n % 2 == 0;
+System.out.println(isEven.test(4));  <span class="cmt">// true</span>
+
+<span class="cmt">// 2. Function&lt;T, R&gt; — Transform input to output</span>
+Function&lt;String, Integer&gt; getLength = s -&gt; s.length();
+System.out.println(getLength.apply("hello"));  <span class="cmt">// 5</span>
+
+<span class="cmt">// 3. Consumer&lt;T&gt; — Do something with input (no return)</span>
+Consumer&lt;String&gt; printer = s -&gt; System.out.println(s);
+printer.accept("hello");  <span class="cmt">// prints "hello"</span>
+
+<span class="cmt">// 4. Supplier&lt;T&gt; — Generate a value (no input)</span>
+Supplier&lt;Double&gt; random = () -&gt; Math.random();
+System.out.println(random.get());  <span class="cmt">// random number</span>
+
+<span class="cmt">// 5. Comparator&lt;T&gt; — Compare two things</span>
+Comparator&lt;String&gt; byLength = (a, b) -&gt; a.length() - b.length();
+Collections.sort(words, byLength);</code></pre>
+
+<h4>Making Your Own</h4>
+<pre><code><span class="cmt">// Define an interface with ONE abstract method</span>
+@FunctionalInterface
+interface Calculator {
+    int calculate(int a, int b);
+}
+
+<span class="cmt">// Use it with lambda</span>
+Calculator add = (a, b) -&gt; a + b;
+Calculator multiply = (a, b) -&gt; a * b;
+
+System.out.println(add.calculate(5, 3));       <span class="cmt">// 8</span>
+System.out.println(multiply.calculate(5, 3));  <span class="cmt">// 15</span></code></pre>
+
+<h4>Quick Reference</h4>
+<pre><code>Predicate&lt;T&gt;     → test(T)           → boolean
+Function&lt;T,R&gt;    → apply(T)          → R
+Consumer&lt;T&gt;      → accept(T)         → void
+Supplier&lt;T&gt;      → get()             → T
+Comparator&lt;T&gt;    → compare(T, T)     → int</code></pre>
+</div></div>
+
+<div class="card" data-tags="lambda practice exercises learn hands-on animated">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#127891; ANIMATED PRACTICE — Watch Lambda pipelines step-by-step</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="anim-problem-tabs" id="lambdaTabs"></div>
+<div id="lambdaAnimContainer"></div>
+</div></div>
+
+</section>
+
+<!-- ======================= STREAMS ======================= -->
+<section class="category" id="streams">
+<div class="category-header">
+  <div class="category-icon">&#8594;</div>
+  <span class="category-title">Streams — Master the Basics</span>
+  <span class="category-count">8 topics</span>
+</div>
+
+<div class="card" data-tags="stream what is why use introduction beginner">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#128161; WHAT ARE STREAMS? Why should I care?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note"><strong>Streams = A better way to process collections (filter, transform, collect)</strong></div>
+
+<h4>The Old Way (Painful)</h4>
+<pre><code>List&lt;Integer&gt; numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+<span class="cmt">// Get even numbers, double them, collect results</span>
+List&lt;Integer&gt; result = new ArrayList&lt;&gt;();
+for (int num : numbers) {
+    if (num % 2 == 0) {               <span class="cmt">// filter</span>
+        int doubled = num * 2;         <span class="cmt">// transform</span>
+        result.add(doubled);           <span class="cmt">// collect</span>
+    }
+}
+<span class="cmt">// result = [4, 8, 12, 16, 20]</span></code></pre>
+
+<h4>The Stream Way (Beautiful)</h4>
+<pre><code>List&lt;Integer&gt; result = numbers.stream()
+    .filter(num -&gt; num % 2 == 0)      <span class="cmt">// keep evens</span>
+    .map(num -&gt; num * 2)              <span class="cmt">// double them</span>
+    .collect(Collectors.toList());    <span class="cmt">// collect</span>
+<span class="cmt">// result = [4, 8, 12, 16, 20]</span></code></pre>
+
+<h4>Why Streams Are Better</h4>
+<pre><code>1. ✅ More readable — operations are clearly named
+2. ✅ Less code — no manual loops or temp variables
+3. ✅ Chainable — combine operations smoothly
+4. ✅ Lazy — only processes what's needed
+5. ✅ Safer — no index errors, cleaner logic</code></pre>
+
+<h4>Basic Stream Pattern (Memorize This!)</h4>
+<pre><code>collection
+    .stream()                    <span class="cmt">// 1. Create stream</span>
+    .filter(...)                 <span class="cmt">// 2. Filter (optional)</span>
+    .map(...)                    <span class="cmt">// 3. Transform (optional)</span>
+    .collect(Collectors.toList()) <span class="cmt">// 4. Collect results</span></code></pre>
+
+<div class="warn">&#9888;&#65039; <strong>Important:</strong> Streams are single-use! Once you collect or count, you need a new stream for another operation.</div>
+</div></div>
+
+<div class="card" data-tags="stream create from list array collection how">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#128640; How to CREATE a stream (from List, Array, etc.)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>From a List</h4>
+<pre><code>List&lt;Integer&gt; nums = Arrays.asList(1, 2, 3, 4, 5);
+Stream&lt;Integer&gt; stream = nums.stream();</code></pre>
+
+<h4>From an Array</h4>
+<pre><code>String[] words = {"hello", "world", "java"};
+Stream&lt;String&gt; stream = Arrays.stream(words);
+
+<span class="cmt">// For primitive arrays</span>
+int[] arr = {1, 2, 3, 4, 5};
+IntStream stream = Arrays.stream(arr);</code></pre>
+
+<h4>From individual values</h4>
+<pre><code>Stream&lt;String&gt; stream = Stream.of("a", "b", "c");</code></pre>
+
+<h4>From a range of numbers</h4>
+<pre><code><span class="cmt">// Range: 1 to 9 (exclusive end)</span>
+IntStream.range(1, 10)  <span class="cmt">// 1,2,3,4,5,6,7,8,9</span>
+
+<span class="cmt">// Closed range: 1 to 10 (inclusive end)</span>
+IntStream.rangeClosed(1, 10)  <span class="cmt">// 1,2,3,4,5,6,7,8,9,10</span></code></pre>
+
+<h4>From a Set or any Collection</h4>
+<pre><code>Set&lt;String&gt; set = new HashSet&lt;&gt;(Arrays.asList("a", "b", "c"));
+Stream&lt;String&gt; stream = set.stream();</code></pre>
+
+<div class="note">Most common: <code>.stream()</code> from any Collection (List, Set, etc.)</div>
+</div></div>
+
+<div class="card" data-tags="stream filter keep remove condition select">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#128269; FILTER — Keep only what you want</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note"><strong>filter()</strong> = Keep elements that match a condition (returns true)</div>
+
+<h4>Think of it as: "Which elements do I want to KEEP?"</h4>
+<pre><code><span class="cmt">// Keep evens</span>
+.filter(n -&gt; n % 2 == 0)
+
+<span class="cmt">// Keep odds</span>
+.filter(n -&gt; n % 2 != 0)
+
+<span class="cmt">// Keep numbers &gt; 5</span>
+.filter(n -&gt; n &gt; 5)
+
+<span class="cmt">// Keep strings starting with "A"</span>
+.filter(s -&gt; s.startsWith("A"))
+
+<span class="cmt">// Keep non-empty strings</span>
+.filter(s -&gt; !s.isEmpty())
+
+<span class="cmt">// Keep non-null values</span>
+.filter(obj -&gt; obj != null)</code></pre>
+
+<h4>Complete Examples</h4>
+<pre><code>List&lt;Integer&gt; nums = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+<span class="cmt">// Get all even numbers</span>
+List&lt;Integer&gt; evens = nums.stream()
+    .filter(n -&gt; n % 2 == 0)
+    .collect(Collectors.toList());
+<span class="cmt">// [2, 4, 6, 8, 10]</span>
+
+<span class="cmt">// Get numbers between 3 and 7</span>
+List&lt;Integer&gt; range = nums.stream()
+    .filter(n -&gt; n &gt;= 3 && n &lt;= 7)
+    .collect(Collectors.toList());
+<span class="cmt">// [3, 4, 5, 6, 7]</span>
+
+<span class="cmt">// Get strings longer than 3 characters</span>
+List&lt;String&gt; words = Arrays.asList("hi", "hello", "hey", "world");
+List&lt;String&gt; longWords = words.stream()
+    .filter(w -&gt; w.length() &gt; 3)
+    .collect(Collectors.toList());
+<span class="cmt">// ["hello", "world"]</span></code></pre>
+
+<h4>Multiple Filters (They combine with AND)</h4>
+<pre><code><span class="cmt">// Get even numbers greater than 5</span>
+nums.stream()
+    .filter(n -&gt; n % 2 == 0)  <span class="cmt">// must be even</span>
+    .filter(n -&gt; n &gt; 5)       <span class="cmt">// AND greater than 5</span>
+    .collect(Collectors.toList());
+<span class="cmt">// [6, 8, 10]</span>
+
+<span class="cmt">// Same as:</span>
+nums.stream()
+    .filter(n -&gt; n % 2 == 0 && n &gt; 5)
+    .collect(Collectors.toList());</code></pre>
+
+<div class="note">&#128681; <strong>Key point:</strong> filter() NEVER changes values, it only keeps or removes them</div>
+</div></div>
+
+<div class="card" data-tags="stream map transform convert change modify">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#128260; MAP — Transform each element</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note"><strong>map()</strong> = Transform each element into something else (one-to-one)</div>
+
+<h4>Think of it as: "What do I want to DO to each element?"</h4>
+<pre><code><span class="cmt">// Double each number</span>
+.map(n -&gt; n * 2)
+
+<span class="cmt">// Square each number</span>
+.map(n -&gt; n * n)
+
+<span class="cmt">// Convert to uppercase</span>
+.map(s -&gt; s.toUpperCase())
+
+<span class="cmt">// Get length of each string</span>
+.map(s -&gt; s.length())
+
+<span class="cmt">// Extract first character</span>
+.map(s -&gt; s.charAt(0))
+
+<span class="cmt">// Add prefix to each string</span>
+.map(s -&gt; "Mr. " + s)</code></pre>
+
+<h4>Complete Examples</h4>
+<pre><code>List&lt;Integer&gt; nums = Arrays.asList(1, 2, 3, 4, 5);
+
+<span class="cmt">// Double all numbers</span>
+List&lt;Integer&gt; doubled = nums.stream()
+    .map(n -&gt; n * 2)
+    .collect(Collectors.toList());
+<span class="cmt">// [2, 4, 6, 8, 10]</span>
+
+<span class="cmt">// Convert numbers to strings</span>
+List&lt;String&gt; strings = nums.stream()
+    .map(n -&gt; "Number: " + n)
+    .collect(Collectors.toList());
+<span class="cmt">// ["Number: 1", "Number: 2", ...]</span>
+
+<span class="cmt">// Get lengths of words</span>
+List&lt;String&gt; words = Arrays.asList("hi", "hello", "world");
+List&lt;Integer&gt; lengths = words.stream()
+    .map(w -&gt; w.length())
+    .collect(Collectors.toList());
+<span class="cmt">// [2, 5, 5]</span>
+
+<span class="cmt">// Convert to uppercase</span>
+List&lt;String&gt; upper = words.stream()
+    .map(w -&gt; w.toUpperCase())
+    .collect(Collectors.toList());
+<span class="cmt">// ["HI", "HELLO", "WORLD"]</span></code></pre>
+
+<h4>Combining Filter and Map</h4>
+<pre><code><span class="cmt">// Get squares of even numbers</span>
+List&lt;Integer&gt; result = nums.stream()
+    .filter(n -&gt; n % 2 == 0)  <span class="cmt">// keep evens: [2, 4]</span>
+    .map(n -&gt; n * n)          <span class="cmt">// square them: [4, 16]</span>
+    .collect(Collectors.toList());
+
+<span class="cmt">// Filter words, then uppercase them</span>
+List&lt;String&gt; result = words.stream()
+    .filter(w -&gt; w.length() &gt; 2)
+    .map(w -&gt; w.toUpperCase())
+    .collect(Collectors.toList());</code></pre>
+
+<div class="note">&#128681; <strong>Remember:</strong> map() ALWAYS produces the same number of outputs as inputs (one-to-one)</div>
+</div></div>
+
+<div class="card" data-tags="stream collect toList toSet gathering results">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#128230; COLLECT — Gather results into a Collection</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note"><strong>collect()</strong> = Take stream results and put them in a List, Set, Map, or String</div>
+
+<h4>Most Common: Collect to List</h4>
+<pre><code>List&lt;Integer&gt; result = nums.stream()
+    .filter(...)
+    .map(...)
+    .collect(Collectors.toList());  <span class="cmt">// ← Standard way</span></code></pre>
+
+<h4>Collect to Set (removes duplicates)</h4>
+<pre><code>List&lt;Integer&gt; nums = Arrays.asList(1, 2, 2, 3, 3, 3, 4);
+
+Set&lt;Integer&gt; unique = nums.stream()
+    .collect(Collectors.toSet());
+<span class="cmt">// {1, 2, 3, 4} — no duplicates</span></code></pre>
+
+<h4>Join strings with delimiter</h4>
+<pre><code>List&lt;String&gt; words = Arrays.asList("apple", "banana", "cherry");
+
+String result = words.stream()
+    .collect(Collectors.joining(", "));
+<span class="cmt">// "apple, banana, cherry"</span>
+
+<span class="cmt">// With prefix and suffix</span>
+String result = words.stream()
+    .collect(Collectors.joining(", ", "[", "]"));
+<span class="cmt">// "[apple, banana, cherry]"</span></code></pre>
+
+<h4>Collect to Map</h4>
+<pre><code>List&lt;String&gt; words = Arrays.asList("apple", "banana", "cherry");
+
+<span class="cmt">// Map: word → its length</span>
+Map&lt;String, Integer&gt; map = words.stream()
+    .collect(Collectors.toMap(
+        w -&gt; w,           <span class="cmt">// key</span>
+        w -&gt; w.length()   <span class="cmt">// value</span>
+    ));
+<span class="cmt">// {apple=5, banana=6, cherry=6}</span></code></pre>
+
+<h4>Count elements</h4>
+<pre><code>long count = nums.stream()
+    .filter(n -&gt; n &gt; 5)
+    .count();  <span class="cmt">// How many elements?</span></code></pre>
+
+<h4>Quick Reference</h4>
+<pre><code>Collectors.toList()              <span class="cmt">// → List&lt;T&gt;</span>
+Collectors.toSet()               <span class="cmt">// → Set&lt;T&gt; (unique)</span>
+Collectors.joining(", ")         <span class="cmt">// → String</span>
+Collectors.toMap(k, v)           <span class="cmt">// → Map&lt;K,V&gt;</span>
+.count()                         <span class="cmt">// → long</span></code></pre>
+</div></div>
+
+<div class="card" data-tags="stream sorted sort order ascending descending">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#128200; SORTED — Order the elements</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>Sort naturally (ascending)</h4>
+<pre><code>List&lt;Integer&gt; nums = Arrays.asList(5, 2, 8, 1, 9);
+
+List&lt;Integer&gt; sorted = nums.stream()
+    .sorted()
+    .collect(Collectors.toList());
+<span class="cmt">// [1, 2, 5, 8, 9]</span></code></pre>
+
+<h4>Sort in reverse (descending)</h4>
+<pre><code>List&lt;Integer&gt; sorted = nums.stream()
+    .sorted(Comparator.reverseOrder())
+    .collect(Collectors.toList());
+<span class="cmt">// [9, 8, 5, 2, 1]</span></code></pre>
+
+<h4>Sort strings by length</h4>
+<pre><code>List&lt;String&gt; words = Arrays.asList("apple", "pie", "banana", "cat");
+
+List&lt;String&gt; sorted = words.stream()
+    .sorted((a, b) -&gt; a.length() - b.length())
+    .collect(Collectors.toList());
+<span class="cmt">// ["pie", "cat", "apple", "banana"]</span></code></pre>
+
+<h4>Sort + Filter + Map combo</h4>
+<pre><code><span class="cmt">// Get top 3 even numbers, doubled</span>
+List&lt;Integer&gt; result = nums.stream()
+    .filter(n -&gt; n % 2 == 0)
+    .sorted(Comparator.reverseOrder())
+    .limit(3)
+    .map(n -&gt; n * 2)
+    .collect(Collectors.toList());</code></pre>
+</div></div>
+
+<div class="card" data-tags="stream reduce sum max min aggregate combine">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#128202; REDUCE — Combine all elements into ONE value</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note"><strong>reduce()</strong> = Combine all elements into a single result (sum, product, max, etc.)</div>
+
+<h4>Pattern: reduce(identity, how to combine)</h4>
+<pre><code>.reduce(starting_value, (accumulated, current) -&gt; combination_logic)</code></pre>
+
+<h4>Sum of all numbers</h4>
+<pre><code>List&lt;Integer&gt; nums = Arrays.asList(1, 2, 3, 4, 5);
+
+int sum = nums.stream()
+    .reduce(0, (total, num) -&gt; total + num);
+<span class="cmt">// 0 + 1 = 1, then 1 + 2 = 3, then 3 + 3 = 6, then 6 + 4 = 10, then 10 + 5 = 15</span>
+
+<span class="cmt">// Shorter using Integer::sum</span>
+int sum = nums.stream().reduce(0, Integer::sum);
+<span class="cmt">// Result: 15</span></code></pre>
+
+<h4>Product of all numbers</h4>
+<pre><code>int product = nums.stream()
+    .reduce(1, (result, num) -&gt; result * num);
+<span class="cmt">// 1 * 1 = 1, then 1 * 2 = 2, then 2 * 3 = 6, then 6 * 4 = 24, then 24 * 5 = 120</span>
+<span class="cmt">// Result: 120</span></code></pre>
+
+<h4>Find maximum value</h4>
+<pre><code>Optional&lt;Integer&gt; max = nums.stream()
+    .reduce((a, b) -&gt; a &gt; b ? a : b);
+
+if (max.isPresent()) {
+    System.out.println(max.get());  <span class="cmt">// 5</span>
+}
+
+<span class="cmt">// Or simpler:</span>
+Optional&lt;Integer&gt; max = nums.stream().max(Integer::compareTo);</code></pre>
+
+<h4>Concatenate strings</h4>
+<pre><code>List&lt;String&gt; words = Arrays.asList("Hello", " ", "World");
+
+String result = words.stream()
+    .reduce("", (combined, word) -&gt; combined + word);
+<span class="cmt">// Result: "Hello World"</span></code></pre>
+
+<h4>Sum of even numbers only</h4>
+<pre><code>int sumOfEvens = nums.stream()
+    .filter(n -&gt; n % 2 == 0)
+    .reduce(0, Integer::sum);
+<span class="cmt">// Filter to [2, 4], then sum = 6</span></code></pre>
+
+<div class="note">&#128681; <strong>Identity values:</strong> Sum→0, Product→1, String concat→"", Max→Integer.MIN_VALUE</div>
+</div></div>
+
+<div class="card" data-tags="stream common mistakes errors wrong avoid">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#10060; COMMON STREAM MISTAKES (Avoid these!)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>Mistake 1: Reusing a stream</h4>
+<div class="comparison">
+<div class="comp-bad"><div class="comp-label">WRONG</div>
+<pre><code>Stream&lt;Integer&gt; stream = nums.stream();
+stream.forEach(System.out::println);
+stream.count();  <span class="cmt">// ❌ ERROR! Stream already used</span></code></pre></div>
+<div class="comp-good"><div class="comp-label">RIGHT</div>
+<pre><code><span class="cmt">// Create new stream for each operation</span>
+nums.stream().forEach(System.out::println);
+long count = nums.stream().count();  <span class="cmt">// ✅</span></code></pre></div>
+</div>
+
+<h4>Mistake 2: Forgetting to collect()</h4>
+<div class="comparison">
+<div class="comp-bad"><div class="comp-label">WRONG</div>
+<pre><code>List&lt;Integer&gt; result = nums.stream()
+    .filter(n -&gt; n % 2 == 0);  <span class="cmt">// ❌ Returns Stream, not List!</span></code></pre></div>
+<div class="comp-good"><div class="comp-label">RIGHT</div>
+<pre><code>List&lt;Integer&gt; result = nums.stream()
+    .filter(n -&gt; n % 2 == 0)
+    .collect(Collectors.toList());  <span class="cmt">// ✅ Collects to List</span></code></pre></div>
+</div>
+
+<h4>Mistake 3: Using filter when you need map</h4>
+<div class="comparison">
+<div class="comp-bad"><div class="comp-label">WRONG</div>
+<pre><code><span class="cmt">// Trying to double numbers with filter</span>
+nums.stream()
+    .filter(n -&gt; n * 2)  <span class="cmt">// ❌ filter needs boolean!</span></code></pre></div>
+<div class="comp-good"><div class="comp-label">RIGHT</div>
+<pre><code><span class="cmt">// Use map to transform</span>
+nums.stream()
+    .map(n -&gt; n * 2)  <span class="cmt">// ✅ map transforms values</span></code></pre></div>
+</div>
+
+<h4>Mistake 4: Wrong order of operations</h4>
+<pre><code><span class="cmt">// ❌ BAD: Filtering after collecting</span>
+List&lt;Integer&gt; result = nums.stream()
+    .collect(Collectors.toList())
+    .filter(n -&gt; n &gt; 5);  <span class="cmt">// Can't call filter on List!</span>
+
+<span class="cmt">// ✅ GOOD: Filter before collecting</span>
+List&lt;Integer&gt; result = nums.stream()
+    .filter(n -&gt; n &gt; 5)
+    .collect(Collectors.toList());</code></pre>
+
+<h4>Remember:</h4>
+<pre><code>1. Stream → Filter/Map → Collect (in that order!)
+2. Can't reuse streams
+3. filter() = boolean, map() = transformation
+4. Always end with collect() if you want a collection</code></pre>
+</div></div>
+
+<div class="card" data-tags="stream practice exercises animated step-by-step">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#127891; ANIMATED PRACTICE — Watch Stream pipelines step-by-step</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="anim-problem-tabs" id="streamTabs"></div>
+<div id="streamAnimContainer"></div>
+</div></div>
+
+</section>
+
+<!-- ======================= COMPARATOR ======================= -->
+<section class="category" id="comparator">
+<div class="category-header">
+  <div class="category-icon">&#8660;</div>
+  <span class="category-title">Comparator — Learn to Sort Anything</span>
+  <span class="category-count">6 topics</span>
+</div>
+
+<div class="card" data-tags="comparator what is introduction beginner basics">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#128161; WHAT IS A COMPARATOR? (The simple explanation)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note"><strong>Comparator = A tool to tell Java how to sort things</strong></div>
+
+<h4>The Problem It Solves</h4>
+<pre><code><span class="cmt">// Java knows how to sort numbers and strings:</span>
+List&lt;Integer&gt; nums = Arrays.asList(5, 2, 8, 1);
+Collections.sort(nums);  <span class="cmt">// [1, 2, 5, 8] ✅</span>
+
+<span class="cmt">// But what if you want to sort by custom rules?</span>
+<span class="cmt">// - Sort by absolute value?</span>
+<span class="cmt">// - Sort strings by length?</span>
+<span class="cmt">// - Sort objects by age, then by name?</span>
+
+<span class="cmt">// That's where Comparator comes in!</span></code></pre>
+
+<h4>Basic Concept: Compare Two Things</h4>
+<pre><code><span class="cmt">// A Comparator answers: "Which comes first, A or B?"</span>
+
+(a, b) -&gt; ...
+
+<span class="cmt">// Return negative → a comes BEFORE b</span>
+<span class="cmt">// Return zero     → a equals b (same position)</span>
+<span class="cmt">// Return positive → a comes AFTER b</span></code></pre>
+
+<h4>Simple Example: Sort by Length</h4>
+<pre><code>List&lt;String&gt; words = Arrays.asList("apple", "pie", "banana", "cat");
+
+<span class="cmt">// Sort by length (shorter words first)</span>
+words.sort((a, b) -&gt; a.length() - b.length());
+<span class="cmt">// Result: ["pie", "cat", "apple", "banana"]</span>
+
+<span class="cmt">// How it works:</span>
+<span class="cmt">// "apple".length() - "pie".length() = 5 - 3 = 2 (positive → "pie" comes first)</span>
+<span class="cmt">// "cat".length() - "banana".length() = 3 - 6 = -3 (negative → "cat" comes first)</span></code></pre>
+
+<h4>The Magic Formula</h4>
+<pre><code><span class="cmt">// Ascending (small to big)</span>
+(a, b) -&gt; a - b
+
+<span class="cmt">// Descending (big to small)</span>
+(a, b) -&gt; b - a
+
+<span class="cmt">// That's it! Everything else builds on this.</span></code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator write how to create basic sort ascending descending">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#9997;&#65039; HOW TO WRITE YOUR FIRST COMPARATOR (Step-by-step)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>Step 1: Understand what you're comparing</h4>
+<pre><code><span class="cmt">// Task: Sort numbers from smallest to largest</span>
+
+<span class="cmt">// Ask yourself: Given two numbers a and b,</span>
+<span class="cmt">// which should come first?</span></code></pre>
+
+<h4>Step 2: Write the logic</h4>
+<pre><code><span class="cmt">// If a &lt; b → a should come first → return negative</span>
+<span class="cmt">// If a == b → same position → return 0</span>
+<span class="cmt">// If a &gt; b → b should come first → return positive</span>
+
+<span class="cmt">// Shortcut: Just subtract!</span>
+(a, b) -&gt; a - b</code></pre>
+
+<h4>Step 3: Use it to sort</h4>
+<pre><code>List&lt;Integer&gt; nums = Arrays.asList(5, 2, 8, 1, 9);
+nums.sort((a, b) -&gt; a - b);
+<span class="cmt">// Result: [1, 2, 5, 8, 9]</span></code></pre>
+
+<h4>Common Patterns (Copy these!)</h4>
+<pre><code><span class="cmt">// 1. Sort integers ascending</span>
+nums.sort((a, b) -&gt; a - b);
+
+<span class="cmt">// 2. Sort integers descending</span>
+nums.sort((a, b) -&gt; b - a);
+
+<span class="cmt">// 3. Sort strings alphabetically</span>
+words.sort((a, b) -&gt; a.compareTo(b));
+
+<span class="cmt">// 4. Sort strings by length</span>
+words.sort((a, b) -&gt; a.length() - b.length());
+
+<span class="cmt">// 5. Sort by absolute value</span>
+nums.sort((a, b) -&gt; Math.abs(a) - Math.abs(b));</code></pre>
+
+<h4>Practice: Write comparators for these</h4>
+<pre><code><span class="cmt">// Task 1: Sort strings by length (longest first)</span>
+words.sort((a, b) -&gt; b.length() - a.length());
+
+<span class="cmt">// Task 2: Sort numbers, evens before odds</span>
+nums.sort((a, b) -&gt; (a % 2) - (b % 2));
+
+<span class="cmt">// Task 3: Sort strings case-insensitive</span>
+words.sort((a, b) -&gt; a.toLowerCase().compareTo(b.toLowerCase()));</code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator advanced multi-level secondary sort then">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#128295; ADVANCED: Sort by Multiple Criteria</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">Sometimes you need: "Sort by X, and if X is the same, then sort by Y"</div>
+
+<h4>Method 1: Manual Comparison</h4>
+<pre><code>List&lt;String&gt; words = Arrays.asList("apple", "pie", "banana", "cat", "dog");
+
+<span class="cmt">// Sort by length, then alphabetically if same length</span>
+words.sort((a, b) -&gt; {
+    if (a.length() != b.length()) {
+        return a.length() - b.length();  <span class="cmt">// primary: by length</span>
+    }
+    return a.compareTo(b);               <span class="cmt">// secondary: alphabetically</span>
+});
+<span class="cmt">// Result: ["cat", "dog", "pie", "apple", "banana"]</span></code></pre>
+
+<h4>Method 2: Using Comparator.comparing() + thenComparing()</h4>
+<pre><code><span class="cmt">// Same result, cleaner code</span>
+words.sort(
+    Comparator.comparing(s -&gt; s.length())
+        .thenComparing(s -&gt; s)
+);
+
+<span class="cmt">// Or even simpler with method references:</span>
+words.sort(
+    Comparator.comparingInt(String::length)
+        .thenComparing(Comparator.naturalOrder())
+);</code></pre>
+
+<h4>Real Example: Sort People</h4>
+<pre><code>class Person {
+    String name;
+    int age;
+    Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+}
+
+List&lt;Person&gt; people = Arrays.asList(
+    new Person("Alice", 25),
+    new Person("Bob", 25),
+    new Person("Charlie", 30)
+);
+
+<span class="cmt">// Sort by age, then by name if same age</span>
+people.sort((p1, p2) -&gt; {
+    if (p1.age != p2.age) {
+        return p1.age - p2.age;
+    }
+    return p1.name.compareTo(p2.name);
+});
+
+<span class="cmt">// Result: Alice(25), Bob(25), Charlie(30)</span></code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator comparing helpers utility methods">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#128736; BUILT-IN HELPERS (Make life easier)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>Comparator.reverseOrder() — Reverse sort</h4>
+<pre><code>List&lt;Integer&gt; nums = Arrays.asList(5, 2, 8, 1, 9);
+
+<span class="cmt">// Sort descending (largest first)</span>
+nums.sort(Comparator.reverseOrder());
+<span class="cmt">// Result: [9, 8, 5, 2, 1]</span></code></pre>
+
+<h4>Comparator.naturalOrder() — Normal sort</h4>
+<pre><code><span class="cmt">// Sort ascending (smallest first)</span>
+nums.sort(Comparator.naturalOrder());
+<span class="cmt">// Result: [1, 2, 5, 8, 9]</span></code></pre>
+
+<h4>Comparator.comparing() — Sort by property</h4>
+<pre><code><span class="cmt">// Sort strings by length</span>
+words.sort(Comparator.comparing(s -&gt; s.length()));
+
+<span class="cmt">// Sort people by age</span>
+people.sort(Comparator.comparing(p -&gt; p.age));
+
+<span class="cmt">// Sort people by name</span>
+people.sort(Comparator.comparing(p -&gt; p.name));</code></pre>
+
+<h4>Comparator.comparingInt/Double/Long — For primitives</h4>
+<pre><code><span class="cmt">// More efficient than comparing()</span>
+words.sort(Comparator.comparingInt(s -&gt; s.length()));
+people.sort(Comparator.comparingInt(p -&gt; p.age));</code></pre>
+
+<h4>.reversed() — Flip the order</h4>
+<pre><code><span class="cmt">// Sort by length descending</span>
+words.sort(Comparator.comparingInt(String::length).reversed());
+
+<span class="cmt">// Sort by age descending</span>
+people.sort(Comparator.comparingInt(p -&gt; p.age).reversed());</code></pre>
+
+<h4>.thenComparing() — Secondary sort</h4>
+<pre><code><span class="cmt">// Sort by age, then by name</span>
+people.sort(
+    Comparator.comparingInt(p -&gt; p.age)
+        .thenComparing(p -&gt; p.name)
+);
+
+<span class="cmt">// Can chain multiple times</span>
+people.sort(
+    Comparator.comparingInt(p -&gt; p.age)
+        .thenComparing(p -&gt; p.name)
+        .thenComparing(p -&gt; p.address)
+);</code></pre>
+
+<h4>Quick Reference</h4>
+<pre><code>Comparator.naturalOrder()           <span class="cmt">// ascending</span>
+Comparator.reverseOrder()           <span class="cmt">// descending</span>
+Comparator.comparing(p -&gt; p.field)  <span class="cmt">// by property</span>
+Comparator.comparingInt(...)        <span class="cmt">// by int (efficient)</span>
+.reversed()                         <span class="cmt">// flip order</span>
+.thenComparing(...)                 <span class="cmt">// secondary sort</span></code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator real examples use cases practical">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#128200; REAL-WORLD EXAMPLES (Interview favorites)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>1. Sort by frequency, then by value</h4>
+<pre><code>List&lt;Integer&gt; nums = Arrays.asList(1, 1, 1, 2, 2, 3);
+
+<span class="cmt">// Count frequencies</span>
+Map&lt;Integer, Long&gt; freq = nums.stream()
+    .collect(Collectors.groupingBy(n -&gt; n, Collectors.counting()));
+
+<span class="cmt">// Sort: most frequent first, if same frequency then smaller value first</span>
+nums.sort((a, b) -&gt; {
+    long freqA = freq.get(a);
+    long freqB = freq.get(b);
+    if (freqA != freqB) {
+        return Long.compare(freqB, freqA);  <span class="cmt">// desc frequency</span>
+    }
+    return a - b;  <span class="cmt">// asc value</span>
+});
+<span class="cmt">// Result: [1, 1, 1, 2, 2, 3]</span></code></pre>
+
+<h4>2. PriorityQueue with custom order</h4>
+<pre><code><span class="cmt">// Min heap (default)</span>
+PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+
+<span class="cmt">// Max heap (reverse order)</span>
+PriorityQueue&lt;Integer&gt; maxHeap = new PriorityQueue&lt;&gt;(
+    (a, b) -&gt; b - a
+);
+
+<span class="cmt">// By absolute value</span>
+PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;(
+    (a, b) -&gt; Math.abs(a) - Math.abs(b)
+);</code></pre>
+
+<h4>3. Sort 2D array by first element</h4>
+<pre><code>int[][] intervals = {{5,10}, {1,3}, {8,12}};
+
+<span class="cmt">// Sort by start time</span>
+Arrays.sort(intervals, (a, b) -&gt; a[0] - b[0]);
+<span class="cmt">// Result: [[1,3], [5,10], [8,12]]</span>
+
+<span class="cmt">// Sort by end time</span>
+Arrays.sort(intervals, (a, b) -&gt; a[1] - b[1]);
+
+<span class="cmt">// Sort by start, then by end</span>
+Arrays.sort(intervals, (a, b) -&gt; {
+    if (a[0] != b[0]) return a[0] - b[0];
+    return a[1] - b[1];
+});</code></pre>
+
+<h4>4. Find top K elements with Stream</h4>
+<pre><code>List&lt;Integer&gt; nums = Arrays.asList(5, 2, 8, 1, 9, 3, 7);
+
+<span class="cmt">// Get top 3 largest</span>
+List&lt;Integer&gt; top3 = nums.stream()
+    .sorted(Comparator.reverseOrder())
+    .limit(3)
+    .collect(Collectors.toList());
+<span class="cmt">// [9, 8, 7]</span></code></pre>
+
+<h4>5. Custom object sorting</h4>
+<pre><code>class Student {
+    String name;
+    int grade;
+    double gpa;
+}
+
+List&lt;Student&gt; students = ...;
+
+<span class="cmt">// Sort by grade (desc), then GPA (desc), then name (asc)</span>
+students.sort(
+    Comparator.comparingInt((Student s) -&gt; s.grade).reversed()
+        .thenComparingDouble((Student s) -&gt; s.gpa).reversed()
+        .thenComparing(s -&gt; s.name)
+);</code></pre>
+
+<h4>6. Sort map entries by value</h4>
+<pre><code>Map&lt;String, Integer&gt; scores = new HashMap&lt;&gt;();
+scores.put("Alice", 85);
+scores.put("Bob", 92);
+scores.put("Charlie", 78);
+
+<span class="cmt">// Sort by score descending</span>
+List&lt;Map.Entry&lt;String, Integer&gt;&gt; sorted = scores.entrySet().stream()
+    .sorted((e1, e2) -&gt; e2.getValue() - e1.getValue())
+    .collect(Collectors.toList());
+<span class="cmt">// Bob=92, Alice=85, Charlie=78</span></code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator mistakes errors common wrong avoid">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#10060; COMMON MISTAKES (Don't make these!)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>Mistake 1: Subtracting doubles/floats</h4>
+<div class="comparison">
+<div class="comp-bad"><div class="comp-label">WRONG</div>
+<pre><code><span class="cmt">// ❌ Casting loses precision!</span>
+(a, b) -&gt; (int)(a - b)</code></pre></div>
+<div class="comp-good"><div class="comp-label">RIGHT</div>
+<pre><code><span class="cmt">// ✅ Use Double.compare()</span>
+(a, b) -&gt; Double.compare(a, b)</code></pre></div>
+</div>
+
+<h4>Mistake 2: Wrong subtraction order</h4>
+<div class="comparison">
+<div class="comp-bad"><div class="comp-label">WRONG</div>
+<pre><code><span class="cmt">// Wanted ascending, wrote descending</span>
+(a, b) -&gt; b - a  <span class="cmt">// ❌ This is DESC!</span></code></pre></div>
+<div class="comp-good"><div class="comp-label">RIGHT</div>
+<pre><code><span class="cmt">// Ascending order</span>
+(a, b) -&gt; a - b  <span class="cmt">// ✅ a-b = ASC</span></code></pre></div>
+</div>
+
+<h4>Mistake 3: Forgetting to return in multi-line</h4>
+<div class="comparison">
+<div class="comp-bad"><div class="comp-label">WRONG</div>
+<pre><code>(a, b) -&gt; {
+    a.length() - b.length()  <span class="cmt">// ❌ No return!</span>
+}</code></pre></div>
+<div class="comp-good"><div class="comp-label">RIGHT</div>
+<pre><code>(a, b) -&gt; {
+    return a.length() - b.length();  <span class="cmt">// ✅</span>
+}</code></pre></div>
+</div>
+
+<h4>Mistake 4: Integer overflow with subtraction</h4>
+<pre><code><span class="cmt">// ❌ If numbers are large, a - b might overflow!</span>
+(a, b) -&gt; a - b
+
+<span class="cmt">// ✅ Use Integer.compare() for safety</span>
+(a, b) -&gt; Integer.compare(a, b)</code></pre>
+
+<h4>Remember:</h4>
+<pre><code>1. (a, b) → a - b = ascending (small to big)
+2. (a, b) → b - a = descending (big to small)
+3. Use .compare() for doubles/floats
+4. Use .compareTo() for Strings
+5. Always return a value in the lambda!</code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator practice exercises problems animated">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#127891; ANIMATED PRACTICE — Watch Comparator sorting step-by-step</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="anim-problem-tabs" id="compTabs"></div>
+<div id="compAnimContainer"></div>
+</div></div>
+
+</section>
+
+<!-- ======================= MODERN JAVA FEATURES ======================= -->
+<section class="category" id="modern-java">
+<div class="category-header">
+  <div class="category-icon">&#128640;</div>
+  <span class="category-title">Modern Java Features (Java 8 → 21+)</span>
+  <span class="category-count">14 versions covered</span>
+</div>
+
+<div class="card" data-tags="java 8 features lambda streams optional date time">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#128293; JAVA 8 (2014) — The Game Changer</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note"><strong>Java 8 = The biggest change in Java history!</strong> This is where modern Java begins.</div>
+
+<h4>1. Lambda Expressions (Already covered above!)</h4>
+<pre><code><span class="cmt">// Replace anonymous classes with clean syntax</span>
+list.forEach(item -&gt; System.out.println(item));</code></pre>
+
+<h4>2. Streams API (Already covered above!)</h4>
+<pre><code><span class="cmt">// Process collections functionally</span>
+List&lt;Integer&gt; evens = nums.stream()
+    .filter(n -&gt; n % 2 == 0)
+    .collect(Collectors.toList());</code></pre>
+
+<h4>3. Optional — Handle null safely</h4>
+<pre><code><span class="cmt">// PROBLEM: NullPointerException nightmares</span>
+String name = getName();  <span class="cmt">// might be null!</span>
+int length = name.length();  <span class="cmt">// CRASH if null</span>
+
+<span class="cmt">// SOLUTION: Optional wraps possibly-null values</span>
+Optional&lt;String&gt; maybeName = Optional.ofNullable(getName());
+
+<span class="cmt">// Safe way 1: Provide default</span>
+String name = maybeName.orElse("Unknown");
+
+<span class="cmt">// Safe way 2: Check before using</span>
+if (maybeName.isPresent()) {
+    System.out.println(maybeName.get());
+}
+
+<span class="cmt">// Safe way 3: Use ifPresent</span>
+maybeName.ifPresent(n -&gt; System.out.println(n));
+
+<span class="cmt">// Real example: Finding in a list</span>
+Optional&lt;Integer&gt; first = nums.stream()
+    .filter(n -&gt; n &gt; 10)
+    .findFirst();
+
+int result = first.orElse(0);  <span class="cmt">// default to 0 if not found</span></code></pre>
+
+<h4>4. New Date/Time API (java.time)</h4>
+<pre><code><span class="cmt">// OLD: Date and Calendar were terrible</span>
+<span class="cmt">// NEW: LocalDate, LocalTime, LocalDateTime</span>
+
+LocalDate today = LocalDate.now();
+LocalDate birthday = LocalDate.of(1995, 5, 15);
+
+<span class="cmt">// Easy calculations</span>
+LocalDate nextWeek = today.plusDays(7);
+LocalDate lastMonth = today.minusMonths(1);
+
+<span class="cmt">// Check relationships</span>
+if (today.isAfter(birthday)) { ... }
+
+<span class="cmt">// Time operations</span>
+LocalTime now = LocalTime.now();  <span class="cmt">// 14:30:15</span>
+LocalDateTime dateTime = LocalDateTime.now();
+
+<span class="cmt">// Format dates</span>
+String formatted = today.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));</code></pre>
+
+<h4>5. Default Methods in Interfaces</h4>
+<pre><code><span class="cmt">// Interfaces can now have method implementations!</span>
+interface Greeting {
+    default void sayHello() {
+        System.out.println("Hello!");
+    }
+}
+
+class MyClass implements Greeting {
+    <span class="cmt">// No need to implement sayHello, it's default!</span>
+}</code></pre>
+
+<h4>6. Method References</h4>
+<pre><code><span class="cmt">// Shortcut for lambdas that just call one method</span>
+
+<span class="cmt">// Instead of: x -> System.out.println(x)</span>
+list.forEach(System.out::println);
+
+<span class="cmt">// Instead of: x -> x.length()</span>
+list.stream().map(String::length);
+
+<span class="cmt">// Instead of: (a,b) -> Integer.compare(a,b)</span>
+list.sort(Integer::compare);</code></pre>
+
+<div class="note">&#128161; Java 8 is the MINIMUM you should know. Everything modern builds on this!</div>
+</div></div>
+
+<div class="card" data-tags="java 9 features modules jshell private interface">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">JAVA 9 (2017) — Better Collections &amp; Modules</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>1. Factory Methods for Collections (Super useful!)</h4>
+<pre><code><span class="cmt">// OLD WAY: Verbose</span>
+List&lt;String&gt; list = new ArrayList&lt;&gt;();
+list.add("A");
+list.add("B");
+list.add("C");
+
+<span class="cmt">// NEW WAY: One line!</span>
+List&lt;String&gt; list = List.of("A", "B", "C");
+Set&lt;Integer&gt; set = Set.of(1, 2, 3);
+Map&lt;String, Integer&gt; map = Map.of("a", 1, "b", 2, "c", 3);
+
+<span class="cmt">// ⚠️ These are IMMUTABLE (can't add/remove)</span>
+list.add("D");  <span class="cmt">// ERROR!</span></code></pre>
+
+<h4>2. Stream Improvements</h4>
+<pre><code><span class="cmt">// takeWhile: Take elements until condition is false</span>
+List&lt;Integer&gt; nums = List.of(1, 2, 3, 4, 5, 1, 2);
+List&lt;Integer&gt; result = nums.stream()
+    .takeWhile(n -&gt; n &lt; 4)
+    .collect(Collectors.toList());
+<span class="cmt">// [1, 2, 3] — stops at 4</span>
+
+<span class="cmt">// dropWhile: Skip elements until condition is false</span>
+List&lt;Integer&gt; result = nums.stream()
+    .dropWhile(n -&gt; n &lt; 4)
+    .collect(Collectors.toList());
+<span class="cmt">// [4, 5, 1, 2] — starts from 4</span>
+
+<span class="cmt">// ofNullable: Handle null gracefully</span>
+Stream.ofNullable(null).count();  <span class="cmt">// 0 (no error!)</span></code></pre>
+
+<h4>3. Private Methods in Interfaces</h4>
+<pre><code>interface MyInterface {
+    default void publicMethod() {
+        helperMethod();  <span class="cmt">// can call private!</span>
+    }
+    
+    private void helperMethod() {
+        <span class="cmt">// Shared logic for default methods</span>
+    }
+}</code></pre>
+
+<h4>4. Try-with-resources Improvement</h4>
+<pre><code><span class="cmt">// OLD: Must declare inside try</span>
+try (BufferedReader br = new BufferedReader(...)) {
+    ...
+}
+
+<span class="cmt">// NEW: Can use existing variable</span>
+BufferedReader br = new BufferedReader(...);
+try (br) {  <span class="cmt">// cleaner!</span>
+    ...
+}</code></pre>
+</div></div>
+
+<div class="card" data-tags="java 10 features var local variable type inference">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">JAVA 10 (2018) — 'var' keyword</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>Local Variable Type Inference (var)</h4>
+<pre><code><span class="cmt">// Type inference: Java figures out the type!</span>
+
+<span class="cmt">// OLD WAY: Repetitive</span>
+ArrayList&lt;String&gt; list = new ArrayList&lt;String&gt;();
+HashMap&lt;String, Integer&gt; map = new HashMap&lt;String, Integer&gt;();
+
+<span class="cmt">// NEW WAY: Use 'var'</span>
+var list = new ArrayList&lt;String&gt;();  <span class="cmt">// Java knows it's ArrayList&lt;String&gt;</span>
+var map = new HashMap&lt;String, Integer&gt;();
+var name = "John";  <span class="cmt">// String</span>
+var age = 25;       <span class="cmt">// int</span>
+
+<span class="cmt">// Great for loops</span>
+for (var item : list) {
+    System.out.println(item);
+}
+
+<span class="cmt">// ⚠️ RULES:</span>
+<span class="cmt">// 1. Only for local variables (not fields, parameters, return types)</span>
+<span class="cmt">// 2. Must initialize immediately</span>
+var x;  <span class="cmt">// ERROR! What type?</span>
+var y = null;  <span class="cmt">// ERROR! What type?</span>
+
+<span class="cmt">// ✅ WHEN TO USE:</span>
+<span class="cmt">// - When type is obvious: var list = new ArrayList&lt;String&gt;()</span>
+<span class="cmt">// - For long generic types</span>
+<span class="cmt">// - In for-each loops</span>
+
+<span class="cmt">// ❌ WHEN NOT TO USE:</span>
+<span class="cmt">// - When it makes code less readable</span>
+<span class="cmt">// - For simple types: int x = 5; (not var x = 5;)</span></code></pre>
+</div></div>
+
+<div class="card" data-tags="java 11 features string methods files">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">JAVA 11 (2018) — LTS Release, String &amp; File Enhancements</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">&#11088; LTS = Long Term Support (use this in production!)</div>
+
+<h4>1. New String Methods</h4>
+<pre><code>String text = "  Hello World  ";
+
+<span class="cmt">// isBlank: Check if string is empty or whitespace</span>
+"".isBlank();      <span class="cmt">// true</span>
+"  ".isBlank();    <span class="cmt">// true</span>
+" a ".isBlank();   <span class="cmt">// false</span>
+
+<span class="cmt">// strip: Better trim (handles Unicode)</span>
+text.strip();      <span class="cmt">// "Hello World"</span>
+text.stripLeading();   <span class="cmt">// "Hello World  "</span>
+text.stripTrailing();  <span class="cmt">// "  Hello World"</span>
+
+<span class="cmt">// repeat: Repeat string N times</span>
+"Ha".repeat(3);    <span class="cmt">// "HaHaHa"</span>
+"*".repeat(5);     <span class="cmt">// "*****"</span>
+
+<span class="cmt">// lines: Split by line breaks</span>
+String multiline = "Line1\nLine2\nLine3";
+multiline.lines().forEach(System.out::println);</code></pre>
+
+<h4>2. File Methods (Easy file operations!)</h4>
+<pre><code><span class="cmt">// Read entire file to String</span>
+String content = Files.readString(Path.of("file.txt"));
+
+<span class="cmt">// Write String to file</span>
+Files.writeString(Path.of("output.txt"), "Hello World");</code></pre>
+
+<h4>3. Collection.toArray() Enhancement</h4>
+<pre><code>List&lt;String&gt; list = List.of("a", "b", "c");
+
+<span class="cmt">// OLD WAY:</span>
+String[] arr = list.toArray(new String[0]);
+
+<span class="cmt">// NEW WAY: Simpler!</span>
+String[] arr = list.toArray(String[]::new);</code></pre>
+
+<h4>4. Lambda Parameter 'var'</h4>
+<pre><code><span class="cmt">// Can use var in lambda parameters</span>
+list.stream()
+    .map((var s) -&gt; s.toUpperCase())
+    .collect(Collectors.toList());</code></pre>
+</div></div>
+
+<div class="card" data-tags="java 12 13 14 features switch expressions text blocks">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">JAVA 12-14 (2019-2020) — Switch Expressions &amp; Text Blocks</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>Switch Expressions (Java 12-14)</h4>
+<pre><code><span class="cmt">// OLD SWITCH: Statement (verbose, error-prone)</span>
+String result;
+switch (day) {
+    case MONDAY:
+    case FRIDAY:
+        result = "Work";
+        break;
+    case SATURDAY:
+    case SUNDAY:
+        result = "Weekend";
+        break;
+    default:
+        result = "Other";
+        break;
+}
+
+<span class="cmt">// NEW SWITCH: Expression (returns value!)</span>
+String result = switch (day) {
+    case MONDAY, FRIDAY -&gt; "Work";
+    case SATURDAY, SUNDAY -&gt; "Weekend";
+    default -&gt; "Other";
+};
+
+<span class="cmt">// With calculations</span>
+int numLetters = switch (day) {
+    case MONDAY, FRIDAY, SUNDAY -&gt; 6;
+    case TUESDAY -&gt; 7;
+    case THURSDAY, SATURDAY -&gt; 8;
+    case WEDNESDAY -&gt; 9;
+    default -&gt; 0;
+};
+
+<span class="cmt">// Multi-line blocks with yield</span>
+int result = switch (score) {
+    case 10 -&gt; {
+        System.out.println("Perfect!");
+        yield 100;  <span class="cmt">// like return for switch</span>
+    }
+    case 8, 9 -&gt; 80;
+    default -&gt; 0;
+};</code></pre>
+
+<h4>Text Blocks (Java 13-15)</h4>
+<pre><code><span class="cmt">// PROBLEM: Multi-line strings are painful</span>
+String json = "{\n" +
+              "  \"name\": \"John\",\n" +
+              "  \"age\": 30\n" +
+              "}";
+
+<span class="cmt">// SOLUTION: Text blocks with """</span>
+String json = """
+    {
+      "name": "John",
+      "age": 30
+    }
+    """;
+
+<span class="cmt">// HTML example</span>
+String html = """
+    &lt;html&gt;
+        &lt;body&gt;
+            &lt;h1&gt;Hello World&lt;/h1&gt;
+        &lt;/body&gt;
+    &lt;/html&gt;
+    """;
+
+<span class="cmt">// SQL example</span>
+String query = """
+    SELECT id, name, age
+    FROM users
+    WHERE age &gt; 18
+    ORDER BY name
+    """;
+
+<span class="cmt">// ✅ Benefits:</span>
+<span class="cmt">// - No more \n or \" escaping</span>
+<span class="cmt">// - What you see is what you get</span>
+<span class="cmt">// - Perfect for JSON, HTML, SQL</span></code></pre>
+</div></div>
+
+<div class="card" data-tags="java 15 16 features records pattern matching instanceof">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">JAVA 15-16 (2020-2021) — Records &amp; Pattern Matching</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>Records (Java 16) — Data Classes Made Easy!</h4>
+<pre><code><span class="cmt">// PROBLEM: Creating simple data classes is tedious</span>
+class Person {
+    private final String name;
+    private final int age;
+    
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+    
+    public String getName() { return name; }
+    public int getAge() { return age; }
+    
+    @Override
+    public boolean equals(Object o) { /* 10 lines */ }
+    @Override
+    public int hashCode() { /* 5 lines */ }
+    @Override
+    public String toString() { /* 3 lines */ }
+}
+
+<span class="cmt">// SOLUTION: Record = automatic getters, equals, hashCode, toString!</span>
+record Person(String name, int age) {}
+
+<span class="cmt">// That's it! Java generates everything!</span>
+
+<span class="cmt">// Usage</span>
+Person p = new Person("Alice", 25);
+String name = p.name();  <span class="cmt">// getter is just name()</span>
+int age = p.age();
+
+<span class="cmt">// Automatic equals and hashCode</span>
+Person p1 = new Person("Bob", 30);
+Person p2 = new Person("Bob", 30);
+p1.equals(p2);  <span class="cmt">// true!</span>
+
+<span class="cmt">// Automatic toString</span>
+System.out.println(p1);  <span class="cmt">// Person[name=Bob, age=30]</span>
+
+<span class="cmt">// Custom methods allowed</span>
+record Point(int x, int y) {
+    double distance() {
+        return Math.sqrt(x * x + y * y);
+    }
+}
+
+<span class="cmt">// ✅ USE FOR: DTOs, API responses, immutable data</span>
+<span class="cmt">// ❌ NOT FOR: Mutable objects, entities with behavior</span></code></pre>
+
+<h4>Pattern Matching for instanceof (Java 16)</h4>
+<pre><code><span class="cmt">// OLD WAY: Cast after checking</span>
+if (obj instanceof String) {
+    String s = (String) obj;  <span class="cmt">// redundant cast</span>
+    System.out.println(s.length());
+}
+
+<span class="cmt">// NEW WAY: Cast automatically!</span>
+if (obj instanceof String s) {  <span class="cmt">// 's' is now String</span>
+    System.out.println(s.length());  <span class="cmt">// no cast needed!</span>
+}
+
+<span class="cmt">// Works with negation</span>
+if (!(obj instanceof String s)) {
+    return;
+}
+System.out.println(s.length());  <span class="cmt">// s is available here!</span>
+
+<span class="cmt">// Complex example</span>
+if (obj instanceof Person p && p.age() &gt; 18) {
+    System.out.println(p.name() + " is an adult");
+}</code></pre>
+
+<h4>Stream.toList() (Java 16)</h4>
+<pre><code><span class="cmt">// OLD WAY:</span>
+List&lt;Integer&gt; evens = nums.stream()
+    .filter(n -&gt; n % 2 == 0)
+    .collect(Collectors.toList());
+
+<span class="cmt">// NEW WAY: Simpler!</span>
+List&lt;Integer&gt; evens = nums.stream()
+    .filter(n -&gt; n % 2 == 0)
+    .toList();  <span class="cmt">// shorter! (but immutable)</span></code></pre>
+</div></div>
+
+<div class="card" data-tags="java 17 features lts sealed classes">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#11088; JAVA 17 (2021) — LTS Release, Sealed Classes</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">&#11088; LTS = Use this version in production! (like Java 11)</div>
+
+<h4>Sealed Classes — Control Inheritance</h4>
+<pre><code><span class="cmt">// PROBLEM: Sometimes you want to control who can extend your class</span>
+
+<span class="cmt">// Define allowed subclasses with 'sealed' and 'permits'</span>
+public sealed class Shape permits Circle, Rectangle, Triangle {
+    <span class="cmt">// Only Circle, Rectangle, Triangle can extend Shape!</span>
+}
+
+<span class="cmt">// Subclasses must be final, sealed, or non-sealed</span>
+public final class Circle extends Shape {
+    <span class="cmt">// final = no one can extend Circle</span>
+}
+
+public sealed class Rectangle extends Shape permits Square {
+    <span class="cmt">// sealed = only Square can extend Rectangle</span>
+}
+
+public non-sealed class Triangle extends Shape {
+    <span class="cmt">// non-sealed = anyone can extend Triangle</span>
+}
+
+<span class="cmt">// This is NOT allowed:</span>
+public class Hexagon extends Shape {}  <span class="cmt">// ERROR! Not in permits</span>
+
+<span class="cmt">// ✅ USE FOR:</span>
+<span class="cmt">// - Limited set of known types (like Result&lt;Success, Error&gt;)</span>
+<span class="cmt">// - Pattern matching with switch (coming in Java 21)</span>
+<span class="cmt">// - API design where you control all implementations</span>
+
+<span class="cmt">// Example: Result type</span>
+public sealed interface Result&lt;T&gt; permits Success, Error {
+}
+
+record Success&lt;T&gt;(T value) implements Result&lt;T&gt; {}
+record Error&lt;T&gt;(String message) implements Result&lt;T&gt; {}</code></pre>
+
+<h4>Pattern Matching for switch (Preview)</h4>
+<pre><code><span class="cmt">// Started as preview in Java 17</span>
+Object obj = ...;
+
+String result = switch (obj) {
+    case Integer i -&gt; "Integer: " + i;
+    case String s -&gt; "String: " + s;
+    case null -&gt; "It's null";
+    default -&gt; "Unknown";
+};</code></pre>
+</div></div>
+
+<div class="card" data-tags="java 18 19 20 features virtual threads">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">JAVA 18-20 (2022-2023) — Previews &amp; Improvements</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>UTF-8 by Default (Java 18)</h4>
+<pre><code><span class="cmt">// File operations now use UTF-8 by default (not system encoding)</span>
+<span class="cmt">// Fixes cross-platform encoding issues!</span></code></pre>
+
+<h4>Simple Web Server (Java 18)</h4>
+<pre><code><span class="cmt">// Start a simple HTTP server from command line!</span>
+jwebserver
+
+<span class="cmt">// Serves files from current directory on http://localhost:8000</span>
+<span class="cmt">// Great for quick testing!</span></code></pre>
+
+<h4>Virtual Threads (Java 19-21 Preview → Final)</h4>
+<pre><code><span class="cmt">// PROBLEM: Regular threads are expensive (OS threads)</span>
+<span class="cmt">// Creating 10,000 threads = your system crashes</span>
+
+<span class="cmt">// SOLUTION: Virtual threads = lightweight, millions possible!</span>
+
+<span class="cmt">// OLD WAY: Regular thread</span>
+Thread thread = new Thread(() -&gt; {
+    System.out.println("Running in thread");
+});
+thread.start();
+
+<span class="cmt">// NEW WAY: Virtual thread</span>
+Thread vThread = Thread.startVirtualThread(() -&gt; {
+    System.out.println("Running in virtual thread");
+});
+
+<span class="cmt">// Create millions without crashing!</span>
+for (int i = 0; i &lt; 100_000; i++) {
+    Thread.startVirtualThread(() -&gt; {
+        // Handle request
+    });
+}
+
+<span class="cmt">// With ExecutorService</span>
+try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+    executor.submit(() -&gt; {
+        // Task 1
+    });
+    executor.submit(() -&gt; {
+        // Task 2
+    });
+}
+
+<span class="cmt">// ✅ PERFECT FOR: I/O operations, web servers, microservices</span>
+<span class="cmt">// ❌ NOT FOR: CPU-intensive tasks</span></code></pre>
+
+<h4>Structured Concurrency (Java 19-21 Preview)</h4>
+<pre><code><span class="cmt">// Better way to handle multiple concurrent tasks</span>
+<span class="cmt">// (Still preview, but coming soon!)</span></code></pre>
+</div></div>
+
+<div class="card" data-tags="java 21 features lts pattern matching string templates">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#128293; JAVA 21 (2023) — LTS Release, Major Features!</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">&#11088; LTS Release! This is the NEW production-ready Java to learn!</div>
+
+<h4>1. Pattern Matching for switch (FINAL!)</h4>
+<pre><code><span class="cmt">// Match and extract in one step!</span>
+
+Object obj = ...;
+
+String result = switch (obj) {
+    case Integer i -&gt; "Integer: " + i;
+    case String s -&gt; "String of length " + s.length();
+    case Person p -&gt; "Person: " + p.name();
+    case null -&gt; "It's null";
+    default -&gt; "Unknown type";
+};
+
+<span class="cmt">// With guards (conditions)</span>
+String result = switch (obj) {
+    case String s when s.length() &gt; 5 -&gt; "Long string";
+    case String s -&gt; "Short string";
+    case Integer i when i &gt; 0 -&gt; "Positive number";
+    case Integer i -&gt; "Non-positive number";
+    default -&gt; "Other";
+};
+
+<span class="cmt">// Sealed types + pattern matching = POWERFUL!</span>
+sealed interface Result&lt;T&gt; permits Success, Error {}
+record Success&lt;T&gt;(T value) implements Result&lt;T&gt; {}
+record Error&lt;T&gt;(String msg) implements Result&lt;T&gt; {}
+
+String output = switch (result) {
+    case Success&lt;String&gt; s -&gt; "Got: " + s.value();
+    case Error&lt;String&gt; e -&gt; "Error: " + e.msg();
+};
+<span class="cmt">// No default needed! Compiler knows all cases covered!</span></code></pre>
+
+<h4>2. Record Patterns</h4>
+<pre><code><span class="cmt">// Destructure records in pattern matching!</span>
+
+record Point(int x, int y) {}
+
+Object obj = new Point(3, 4);
+
+<span class="cmt">// Extract fields directly</span>
+if (obj instanceof Point(int x, int y)) {
+    System.out.println("x=" + x + ", y=" + y);  <span class="cmt">// x and y are available!</span>
+}
+
+<span class="cmt">// In switch</span>
+String result = switch (obj) {
+    case Point(int x, int y) when x == 0 -&gt; "On Y-axis";
+    case Point(int x, int y) when y == 0 -&gt; "On X-axis";
+    case Point(int x, int y) -&gt; "At (" + x + "," + y + ")";
+    default -&gt; "Not a point";
+};
+
+<span class="cmt">// Nested records!</span>
+record Person(String name, Address address) {}
+record Address(String city, String country) {}
+
+if (person instanceof Person(var name, Address(var city, var country))) {
+    System.out.println(name + " lives in " + city + ", " + country);
+}</code></pre>
+
+<h4>3. Virtual Threads (FINAL!)</h4>
+<pre><code><span class="cmt">// Now stable and production-ready!</span>
+Thread.startVirtualThread(() -&gt; {
+    // Your task here
+});</code></pre>
+
+<h4>4. Sequenced Collections</h4>
+<pre><code><span class="cmt">// NEW: Common interface for collections with order</span>
+
+List&lt;String&gt; list = List.of("a", "b", "c");
+
+<span class="cmt">// Get first/last easily</span>
+String first = list.getFirst();  <span class="cmt">// "a"</span>
+String last = list.getLast();    <span class="cmt">// "c"</span>
+
+<span class="cmt">// Reverse the collection</span>
+List&lt;String&gt; reversed = list.reversed();  <span class="cmt">// ["c", "b", "a"]</span>
+
+<span class="cmt">// Works with List, Deque, LinkedHashSet, etc.</span>
+Deque&lt;Integer&gt; deque = new ArrayDeque&lt;&gt;();
+deque.addFirst(1);
+deque.addLast(2);
+Integer first = deque.getFirst();</code></pre>
+
+<h4>5. String Templates (Preview)</h4>
+<pre><code><span class="cmt">// Better string formatting (still preview, but coming!)</span>
+
+String name = "Alice";
+int age = 25;
+
+<span class="cmt">// OLD WAY:</span>
+String msg = "Name: " + name + ", Age: " + age;
+String msg = String.format("Name: %s, Age: %d", name, age);
+
+<span class="cmt">// NEW WAY: String template</span>
+String msg = STR."Name: \{name}, Age: \{age}";
+<span class="cmt">// Cleaner! Safer! Type-checked!</span></code></pre>
+
+<h4>6. Unnamed Patterns and Variables</h4>
+<pre><code><span class="cmt">// Use _ for values you don't need</span>
+
+<span class="cmt">// In switch</span>
+switch (obj) {
+    case Point(int x, _) -&gt; System.out.println("x = " + x);
+    <span class="cmt">// Don't care about y!</span>
+}
+
+<span class="cmt">// In catch</span>
+try {
+    ...
+} catch (Exception _) {
+    <span class="cmt">// Don't need exception details</span>
+    System.out.println("Error occurred");
+}</code></pre>
+
+<div class="note">&#128293; Java 21 is HUGE! Learn this for modern Java development.</div>
+</div></div>
+
+<div class="card" data-tags="java version summary upgrade path">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#128202; SUMMARY: What Should You Learn?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>&#11088; Must Know (Production Ready)</h4>
+<pre><code><span class="cmt">// Java 8 (2014) — THE FOUNDATION</span>
+✅ Lambda expressions
+✅ Streams API
+✅ Optional
+✅ Date/Time API (LocalDate, LocalDateTime)
+✅ Method references
+
+<span class="cmt">// Java 11 (2018) — LTS</span>
+✅ var keyword
+✅ New String methods (isBlank, strip, repeat, lines)
+✅ Files.readString / writeString
+✅ Collection.toArray improvements
+
+<span class="cmt">// Java 17 (2021) — LTS</span>
+✅ Records (data classes)
+✅ Sealed classes
+✅ Pattern matching for instanceof
+✅ Text blocks (multi-line strings)
+✅ Switch expressions
+
+<span class="cmt">// Java 21 (2023) — LATEST LTS ⭐</span>
+✅ Pattern matching for switch (FINAL)
+✅ Record patterns
+✅ Virtual threads (FINAL)
+✅ Sequenced Collections (.getFirst, .getLast, .reversed)</code></pre>
+
+<h4>&#128161; Learning Path Recommendation</h4>
+<pre><code>1. START HERE: Java 8
+   - Lambda, Streams, Optional
+   - This is the BASE of modern Java
+   
+2. JUMP TO: Java 11
+   - var, String methods
+   - Current minimum for many companies
+   
+3. LEARN: Java 17
+   - Records, Sealed classes
+   - LTS, widely adopted
+   
+4. MASTER: Java 21
+   - Pattern matching, Virtual threads
+   - LATEST LTS, the future!</code></pre>
+
+<h4>&#128187; Version Usage in Industry (2024)</h4>
+<pre><code>Java 8:  Still used, but OLD (don't start new projects!)
+Java 11: Common in production (LTS)
+Java 17: Growing adoption (LTS) ← GOOD CHOICE
+Java 21: Cutting edge (LTS) ← BEST CHOICE FOR NEW PROJECTS
+
+<span class="cmt">// Rule: Always use LTS versions in production!</span>
+<span class="cmt">// LTS = 8, 11, 17, 21 (next: 25 in 2025)</span></code></pre>
+
+<h4>&#9889; Quick Feature Reference</h4>
+<pre><code>var x = ...              <span class="cmt">// Java 10+</span>
+List.of(1,2,3)           <span class="cmt">// Java 9+</span>
+"""multiline"""          <span class="cmt">// Java 15+</span>
+record Person(...)       <span class="cmt">// Java 16+</span>
+if (x instanceof S s)    <span class="cmt">// Java 16+</span>
+sealed class             <span class="cmt">// Java 17+</span>
+switch with patterns     <span class="cmt">// Java 21+</span>
+Virtual threads          <span class="cmt">// Java 21+</span>
+.getFirst() .getLast()   <span class="cmt">// Java 21+</span></code></pre>
+
+<h4>&#128736; Migration Tips</h4>
+<pre><code><span class="cmt">// From Java 8 → 11:</span>
+1. Replace anonymous classes with lambdas
+2. Use var for local variables
+3. Use new String methods
+4. Switch Date/Calendar to java.time
+
+<span class="cmt">// From Java 11 → 17:</span>
+1. Convert data classes to records
+2. Use text blocks for multi-line strings
+3. Use switch expressions
+4. Add pattern matching for instanceof
+
+<span class="cmt">// From Java 17 → 21:</span>
+1. Use pattern matching for switch
+2. Consider virtual threads for I/O
+3. Use sequenced collections methods
+4. Explore record patterns</code></pre>
+
+<div class="note">&#127919; Don't panic! You don't need to know EVERYTHING. Focus on Java 8, 11, 17 first. Then explore Java 21 when ready.</div>
+</div></div>
+
+</section>
+
+<!-- QUICK DECISION GUIDE -->
+<section class="category" id="decision-guide">
+<div class="category-header">
+  <div class="category-icon">&#9889;</div>
+  <span class="category-title">Quick Decision Guide</span>
+</div>
+
+<div class="card open" data-tags="decision guide when use map filter flatMap collect reduce">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">When to use map vs filter vs flatMap vs collect vs reduce?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code><span class="cmt">// You wrote a for loop transforming values? → map()</span>
+for (x : list) { result.add(transform(x)); }
+→ list.stream().map(x -&gt; transform(x)).collect(...)
+
+<span class="cmt">// You wrote an if inside a loop? → filter()</span>
+for (x : list) { if (condition(x)) result.add(x); }
+→ list.stream().filter(x -&gt; condition(x)).collect(...)
+
+<span class="cmt">// You have nested loops flattening? → flatMap()</span>
+for (list : lists) { for (x : list) result.add(x); }
+→ lists.stream().flatMap(l -&gt; l.stream()).collect(...)
+
+<span class="cmt">// You need a Collection/Map at the end? → collect()</span>
+<span class="cmt">// You need one final value (sum, max)? → reduce()</span></code></pre>
+</div></div>
+
+</section>
+
+</main>
+
+<!-- BACK TO TOP -->
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">&#8593;</button>
+
+<script>
+// Theme toggle
+function toggleTheme() {
+  const d = document.documentElement;
+  d.dataset.theme = d.dataset.theme === 'light' ? '' : 'light';
+  localStorage.setItem('theme', d.dataset.theme);
+}
+(function() {
+  const t = localStorage.getItem('theme');
+  if (t) document.documentElement.dataset.theme = t;
+})();
+
+// Card toggle
+function toggleCard(header) {
+  header.parentElement.classList.toggle('open');
+}
+
+// Expand/collapse all
+function toggleAll(open) {
+  document.querySelectorAll('.card').forEach(c => {
+    if (open) c.classList.add('open');
+    else c.classList.remove('open');
+  });
+}
+
+// Search
+const searchInput = document.getElementById('search');
+const searchCount = document.getElementById('searchCount');
+
+searchInput.addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim();
+  const cards = document.querySelectorAll('.card');
+  let visible = 0, total = cards.length;
+  cards.forEach(card => {
+    const text = card.textContent.toLowerCase();
+    const tags = (card.dataset.tags || '').toLowerCase();
+    const match = !q || text.includes(q) || tags.includes(q);
+    card.classList.toggle('hidden', !match);
+    if (match) {
+      visible++;
+      if (q) card.classList.add('open');
+    }
+  });
+  // hide empty categories
+  document.querySelectorAll('.category').forEach(cat => {
+    const visCards = cat.querySelectorAll('.card:not(.hidden)');
+    cat.style.display = visCards.length === 0 ? 'none' : '';
+  });
+  searchCount.textContent = q ? `${visible}/${total}` : '';
+});
+
+// Ctrl+K shortcut
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    searchInput.focus();
+    searchInput.select();
+  }
+  if (e.key === 'Escape') {
+    searchInput.value = '';
+    searchInput.dispatchEvent(new Event('input'));
+    searchInput.blur();
+  }
+});
+
+// Progress bar
+const progressFill = document.getElementById('progressFill');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  progressFill.style.width = pct + '%';
+
+  // Back to top
+  document.getElementById('backTop').classList.toggle('show', h.scrollTop > 400);
+});
+
+// Active nav link
+const sections = document.querySelectorAll('.category');
+const navLinks = document.querySelectorAll('.nav-link');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const link = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-80px 0px -60% 0px' });
+sections.forEach(s => observer.observe(s));
+
+// Close sidebar on mobile nav click
+navLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    if (window.innerWidth <= 900) {
+      document.getElementById('sidebar').classList.remove('open');
+    }
+  });
+});
+
+// Copy code buttons
+document.querySelectorAll('pre').forEach(pre => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = 'Copy';
+  btn.onclick = function() {
+    const code = pre.querySelector('code') || pre;
+    navigator.clipboard.writeText(code.textContent).then(() => {
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 1500);
+    });
+  };
+  pre.appendChild(btn);
+});
+
+/* ================================================================
+   ANIMATION ENGINE v2 — Operation-by-operation pipeline animation
+   ================================================================ */
+(function(){
+function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
+function cell(v,cls){const c=el('span','anim-cell '+(typeof v==='string'&&v.length>2?'str-cell ':'')+( cls||''),v);return c;}
+function display(v){if(Array.isArray(v))return'['+v+']';if(v&&typeof v==='object'){const keys=Object.keys(v);return keys.map(k=>k+':'+v[k]).join(', ');}return v;}
+
+/* ── Pipeline Animator (Step-by-Step) ── */
+class PipeAnimator{
+  constructor(box,prob){
+    this.box=box;this.prob=prob;this.opIdx=-1;this.speed=1500;this.timers=[];this.playing=false;
+    this.snapshots=[prob.input.slice()];
+    this.stepFn=null;
+    this.build();
+  }
+  clearTimers(){this.timers.forEach(t=>clearTimeout(t));this.timers=[];}
+  build(){
+    this.box.innerHTML='';
+    this.box.appendChild(el('div','anim-title',this.prob.title+' <span class="anim-badge">STEP-BY-STEP</span>'));
+    this.pipeEl=el('div','anim-pipeline');
+    this.pipeLines=this.prob.ops.map((op,i)=>{
+      const ln=el('span','pipe-line',op.code);
+      this.pipeEl.appendChild(ln);
+      if(i<this.prob.ops.length-1)this.pipeEl.appendChild(document.createTextNode('\n'));
+      return ln;
+    });
+    this.box.appendChild(this.pipeEl);
+    this.vizEl=el('div','');this.box.appendChild(this.vizEl);
+    this.logEl=el('div','anim-log','Click <b>Next Step</b> to walk through each element one by one.');
+    this.box.appendChild(this.logEl);
+    const ctrl=el('div','anim-controls');
+    this.playBtn=el('button','anim-btn primary','&#9654; Auto Play');
+    this.nextBtn=el('button','anim-btn','Next Step &#8594;');
+    this.resetBtn=el('button','anim-btn','&#8634; Reset');
+    this.stepInfo=el('span','anim-step-info','');
+    const sp=el('span','anim-speed','Speed ');
+    this.slider=document.createElement('input');this.slider.type='range';this.slider.min='500';this.slider.max='3000';this.slider.value='1500';
+    sp.appendChild(this.slider);
+    [this.playBtn,this.nextBtn,this.resetBtn].forEach(b=>ctrl.appendChild(b));
+    ctrl.appendChild(this.stepInfo);ctrl.appendChild(sp);
+    this.box.appendChild(ctrl);
+    this.playBtn.onclick=()=>this.togglePlay();
+    this.nextBtn.onclick=()=>{this.stopPlay();this.nextStep();};
+    this.resetBtn.onclick=()=>this.reset();
+    this.slider.oninput=()=>{this.speed=+this.slider.value;};
+    this.renderIdle();
+  }
+  renderIdle(){
+    this.vizEl.innerHTML='';
+    this.vizEl.appendChild(el('div','anim-label','Input'));
+    const row=el('div','anim-row');
+    this.prob.input.forEach(v=>row.appendChild(cell(display(v))));
+    this.vizEl.appendChild(row);
+    this.stepInfo.textContent='0 / '+this.prob.ops.length+' operations';
+    this.pipeLines.forEach(l=>{l.classList.remove('active','done');});
+    this.nextBtn.disabled=false;
+    this.opIdx=-1;
+    this.snapshots=[this.prob.input.slice()];
+    this.stepFn=null;
+  }
+  reset(){this.stopPlay();this.clearTimers();this.renderIdle();this.logEl.innerHTML='Click <b>Next Step</b> to start.';}
+
+  nextStep(){
+    this.clearTimers();
+    if(this.stepFn){this.stepFn();}
+    else{this.startNextOp();}
+  }
+
+  startNextOp(){
+    this.opIdx++;
+    if(this.opIdx>=this.prob.ops.length){this.renderDone();this.stopPlay();return;}
+    const op=this.prob.ops[this.opIdx];
+    const input=this.snapshots[this.snapshots.length-1].slice();
+    this.pipeLines.forEach((l,i)=>{l.classList.remove('active');if(i<this.opIdx)l.classList.add('done');});
+    this.pipeLines[this.opIdx].classList.add('active');
+    this.stepInfo.textContent='Op '+(this.opIdx+1)+' / '+this.prob.ops.length;
+
+    if(op.type==='filter')this.setupFilter(op,input);
+    else if(op.type==='map')this.setupMap(op,input);
+    else if(op.type==='reduce')this.setupReduce(op,input);
+    else if(op.type==='collect')this.setupCollect(op,input);
+    else if(op.type==='count')this.setupCount(op,input);
+    else if(op.type==='joining')this.setupJoining(op,input);
+    else if(op.type==='findFirst')this.setupFindFirst(op,input);
+    else if(op.type==='max')this.setupMax(op,input);
+    else if(op.type==='sorted')this.setupSorted(op,input);
+    else{this.snapshots.push(input);this.finishOp();}
+  }
+
+  finishOp(){
+    this.stepFn=null;
+    this.nextBtn.disabled=false;
+    if(this.playing)this.timers.push(setTimeout(()=>this.nextStep(),this.speed));
+  }
+
+  scheduleAutoNext(){
+    if(this.playing)this.timers.push(setTimeout(()=>this.nextStep(),this.speed*0.5));
+  }
+
+  /* ──── FILTER (step-by-step) ──── */
+  setupFilter(op,input){
+    this.vizEl.innerHTML='';
+    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
+    this.vizEl.appendChild(el('div','anim-label','Input to this operation'));
+    const inRow=el('div','anim-row');
+    const inCells=input.map(v=>{const c=cell(display(v),'waiting');inRow.appendChild(c);return c;});
+    this.vizEl.appendChild(inRow);
+    this.vizEl.appendChild(el('div','anim-arrow','&#8595;'));
+    this.vizEl.appendChild(el('div','anim-label','Output (elements that pass)'));
+    const outRow=el('div','anim-row anim-output-row');
+    this.vizEl.appendChild(outRow);
+    const output=[];let i=0;const self=this;
+    this.stepFn=()=>{
+      if(i>=input.length){self.snapshots.push(output);self.logEl.innerHTML=`<b>✓ .filter() done!</b> — Kept <span class="v">${output.length}</span> of ${input.length} → <span class="ok">[${output.map(display).join(', ')}]</span>`;self.finishOp();return;}
+      self.nextBtn.disabled=true;
+      const v=input[i];const pass=op.test(v);
+      inCells.forEach(c=>c.classList.remove('highlight'));
+      inCells[i].classList.remove('waiting');inCells[i].classList.add('highlight');
+      self.logEl.innerHTML=op.explain(v,pass);
+      self.timers.push(setTimeout(()=>{
+        if(pass){inCells[i].classList.remove('highlight');inCells[i].classList.add('pass');output.push(v);outRow.appendChild(cell(display(v),'pass'));}
+        else{inCells[i].classList.remove('highlight');inCells[i].classList.add('fail');}
+        i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
+        self.nextBtn.disabled=false;
+        self.scheduleAutoNext();
+      },self.speed*0.4));
+    };
+    this.stepFn();
+  }
+
+  /* ──── MAP (step-by-step) ──── */
+  setupMap(op,input){
+    this.vizEl.innerHTML='';
+    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
+    this.vizEl.appendChild(el('div','anim-label','Input to this operation'));
+    const inRow=el('div','anim-row');
+    const inCells=input.map(v=>{const c=cell(display(v),'waiting');inRow.appendChild(c);return c;});
+    this.vizEl.appendChild(inRow);
+    this.vizEl.appendChild(el('div','anim-arrow','&#8595; transforms to &#8595;'));
+    this.vizEl.appendChild(el('div','anim-label','Output (transformed elements)'));
+    const outRow=el('div','anim-row anim-output-row');
+    this.vizEl.appendChild(outRow);
+    const output=[];let i=0;const self=this;
+    this.stepFn=()=>{
+      if(i>=input.length){self.snapshots.push(output);self.logEl.innerHTML=`<b>✓ .map() done!</b> — Transformed ${input.length} elements → <span class="ok">[${output.map(display).join(', ')}]</span>`;self.finishOp();return;}
+      self.nextBtn.disabled=true;
+      const v=input[i];const result=op.transform(v);
+      inCells.forEach(c=>c.classList.remove('highlight'));
+      inCells[i].classList.remove('waiting');inCells[i].classList.add('highlight');
+      self.logEl.innerHTML=op.explain(v,result);
+      self.timers.push(setTimeout(()=>{
+        inCells[i].classList.remove('highlight');inCells[i].classList.add('transformed');
+        inCells[i].innerHTML=display(result);
+        output.push(result);outRow.appendChild(cell(display(result),'transformed'));
+        i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
+        self.nextBtn.disabled=false;
+        self.scheduleAutoNext();
+      },self.speed*0.4));
+    };
+    this.stepFn();
+  }
+
+  /* ──── REDUCE (step-by-step) ──── */
+  setupReduce(op,input){
+    this.vizEl.innerHTML='';
+    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
+    this.vizEl.appendChild(el('div','anim-label','Input to this operation'));
+    const inRow=el('div','anim-row');
+    const inCells=input.map(v=>{const c=cell(display(v),'waiting');inRow.appendChild(c);return c;});
+    this.vizEl.appendChild(inRow);
+    this.vizEl.appendChild(el('div','anim-arrow','&#8595; accumulates &#8595;'));
+    this.vizEl.appendChild(el('div','anim-label','Accumulator'));
+    const accRow=el('div','anim-row');
+    const accCell=cell(op.identity,'accum');accRow.appendChild(accCell);
+    this.vizEl.appendChild(accRow);
+    let acc=op.identity;let i=0;const self=this;
+    this.stepFn=()=>{
+      if(i>=input.length){self.snapshots.push([acc]);self.logEl.innerHTML=`<b>✓ .reduce() done!</b> — Final value = <span class="v">${display(acc)}</span>`;self.finishOp();return;}
+      self.nextBtn.disabled=true;
+      const v=input[i];const prev=acc;
+      inCells.forEach(c=>c.classList.remove('highlight'));
+      inCells[i].classList.remove('waiting');inCells[i].classList.add('highlight');
+      self.logEl.innerHTML=op.explain(prev,v);
+      self.timers.push(setTimeout(()=>{
+        acc=op.combine(acc,v);
+        accCell.innerHTML=display(acc);accCell.classList.add('highlight');
+        inCells[i].classList.remove('highlight');inCells[i].classList.add('pass');
+        self.timers.push(setTimeout(()=>{
+          accCell.classList.remove('highlight');
+          i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
+          self.nextBtn.disabled=false;
+          self.scheduleAutoNext();
+        },self.speed*0.3));
+      },self.speed*0.4));
+    };
+    this.stepFn();
+  }
+
+  /* ──── COLLECT (step-by-step) ──── */
+  setupCollect(op,input){
+    this.vizEl.innerHTML='';
+    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
+    this.vizEl.appendChild(el('div','anim-label','Gathering elements into result'));
+    const inRow=el('div','anim-row');
+    input.forEach(v=>inRow.appendChild(cell(display(v),'waiting')));
+    this.vizEl.appendChild(inRow);
+    this.vizEl.appendChild(el('div','anim-arrow','&#8595;'));
+    const resultTag=el('div','anim-result-tag','✓ RESULT');
+    this.vizEl.appendChild(resultTag);
+    const outRow=el('div','anim-row anim-output-row');
+    this.vizEl.appendChild(outRow);
+    let i=0;const self=this;
+    this.stepFn=()=>{
+      if(i>=input.length){
+        self.snapshots.push(input);
+        self.logEl.innerHTML=`<b>✓ .collect() done!</b> → <span class="ok">[${input.map(display).join(', ')}]</span>`;
+        inRow.querySelectorAll('.anim-cell').forEach(c=>{c.classList.remove('waiting');c.classList.add('sorted');});
+        self.finishOp();return;
+      }
+      const cells=inRow.querySelectorAll('.anim-cell');
+      cells[i].classList.remove('waiting');cells[i].classList.add('sorted');
+      outRow.appendChild(cell(display(input[i]),'sorted'));
+      self.logEl.innerHTML=`Collecting element <span class="v">${display(input[i])}</span> (${i+1}/${input.length})`;
+      i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
+      self.scheduleAutoNext();
+    };
+    this.stepFn();
+  }
+
+  /* ──── COUNT (step-by-step) ──── */
+  setupCount(op,input){
+    this.vizEl.innerHTML='';
+    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">.count()</span>'));
+    this.vizEl.appendChild(el('div','anim-label','Counting elements'));
+    const inRow=el('div','anim-row');
+    input.forEach(v=>inRow.appendChild(cell(display(v),'waiting')));
+    this.vizEl.appendChild(inRow);
+    this.vizEl.appendChild(el('div','anim-arrow','&#8595;'));
+    const cntCell=cell('0','accum');
+    const cntRow=el('div','anim-row');cntRow.appendChild(cntCell);
+    this.vizEl.appendChild(cntRow);
+    let count=0;let i=0;const self=this;
+    this.stepFn=()=>{
+      if(i>=input.length){self.snapshots.push([count]);self.logEl.innerHTML=`<b>✓ .count() done!</b> → <span class="v">${count}</span>`;self.finishOp();return;}
+      self.nextBtn.disabled=true;
+      count++;const cells=inRow.querySelectorAll('.anim-cell');
+      cells[i].classList.remove('waiting');cells[i].classList.add('pass');
+      cntCell.innerHTML=count;cntCell.classList.add('highlight');
+      self.logEl.innerHTML=`Counting... element <span class="v">${display(input[i])}</span> → count = <span class="v">${count}</span>`;
+      self.timers.push(setTimeout(()=>{
+        cntCell.classList.remove('highlight');
+        i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
+        self.nextBtn.disabled=false;
+        self.scheduleAutoNext();
+      },self.speed*0.4));
+    };
+    this.stepFn();
+  }
+
+  /* ──── JOINING (step-by-step) ──── */
+  setupJoining(op,input){
+    this.vizEl.innerHTML='';
+    const delim=op.delimiter||', ';
+    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">.collect(Collectors.joining("'+delim+'"))</span>'));
+    this.vizEl.appendChild(el('div','anim-label','Input strings'));
+    const inRow=el('div','anim-row');
+    input.forEach(v=>inRow.appendChild(cell(display(v),'waiting')));
+    this.vizEl.appendChild(inRow);
+    this.vizEl.appendChild(el('div','anim-arrow','&#8595; joining &#8595;'));
+    const resultCell=cell('""','accum');
+    const rRow=el('div','anim-row');rRow.appendChild(resultCell);
+    this.vizEl.appendChild(rRow);
+    let built='';let i=0;const self=this;
+    this.stepFn=()=>{
+      if(i>=input.length){self.snapshots.push([built]);self.logEl.innerHTML=`<b>✓ .joining() done!</b> → <span class="ok">"${built}"</span>`;self.finishOp();return;}
+      self.nextBtn.disabled=true;
+      const cells=inRow.querySelectorAll('.anim-cell');
+      cells[i].classList.remove('waiting');cells[i].classList.add('highlight');
+      built+=(i>0?delim:'')+input[i];
+      resultCell.innerHTML='"'+built+'"';resultCell.classList.add('highlight');
+      self.logEl.innerHTML=`Appending <span class="v">"${input[i]}"</span>${i>0?' with delimiter "'+delim+'"':''} → <span class="v">"${built}"</span>`;
+      self.timers.push(setTimeout(()=>{
+        cells[i].classList.remove('highlight');cells[i].classList.add('pass');
+        resultCell.classList.remove('highlight');
+        i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
+        self.nextBtn.disabled=false;
+        self.scheduleAutoNext();
+      },self.speed*0.5));
+    };
+    this.stepFn();
+  }
+
+  /* ──── FIND FIRST (step-by-step) ──── */
+  setupFindFirst(op,input){
+    this.vizEl.innerHTML='';
+    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">.findFirst()</span>'));
+    const inRow=el('div','anim-row');
+    input.forEach(v=>inRow.appendChild(cell(display(v),'waiting')));
+    this.vizEl.appendChild(inRow);
+    this.vizEl.appendChild(el('div','anim-arrow','&#8595;'));
+    const rRow=el('div','anim-row anim-output-row');this.vizEl.appendChild(rRow);
+    const self=this;
+    this.stepFn=()=>{
+      self.nextBtn.disabled=true;
+      if(input.length>0){
+        const cells=inRow.querySelectorAll('.anim-cell');
+        cells[0].classList.remove('waiting');cells[0].classList.add('highlight');
+        self.logEl.innerHTML=`Checking element: <span class="v">${display(input[0])}</span>`;
+        self.timers.push(setTimeout(()=>{
+          cells[0].classList.remove('highlight');cells[0].classList.add('sorted');
+          rRow.appendChild(cell(display(input[0]),'sorted'));
+          self.snapshots.push([input[0]]);
+          self.logEl.innerHTML=`<b>✓ Found first!</b> → <span class="ok">${display(input[0])}</span>`;
+          self.nextBtn.disabled=false;
+          self.finishOp();
+        },self.speed*0.4));
+      } else {
+        self.snapshots.push([]);
+        self.logEl.innerHTML='<b>✓ findFirst()</b> — Empty stream, no element found';
+        self.finishOp();
+      }
+    };
+    this.stepFn();
+  }
+
+  /* ──── MAX (step-by-step) ──── */
+  setupMax(op,input){
+    this.vizEl.innerHTML='';
+    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
+    const inRow=el('div','anim-row');
+    input.forEach(v=>inRow.appendChild(cell(display(v),'waiting')));
+    this.vizEl.appendChild(inRow);
+    this.vizEl.appendChild(el('div','anim-arrow','&#8595;'));
+    const maxCell=cell('?','accum');
+    const rRow=el('div','anim-row');rRow.appendChild(maxCell);this.vizEl.appendChild(rRow);
+    let curMax=null;let i=0;const self=this;
+    this.stepFn=()=>{
+      if(i>=input.length){self.snapshots.push([curMax]);self.logEl.innerHTML=`<b>✓ .max() done!</b> → <span class="v">${display(curMax)}</span>`;self.finishOp();return;}
+      self.nextBtn.disabled=true;
+      const cells=inRow.querySelectorAll('.anim-cell');
+      cells[i].classList.remove('waiting');cells[i].classList.add('highlight');
+      const v=input[i];
+      const isNew=curMax===null||(op.compareFn?op.compareFn(v,curMax)>0:v>curMax);
+      if(isNew)curMax=v;
+      maxCell.innerHTML=display(curMax);if(isNew)maxCell.classList.add('highlight');
+      self.logEl.innerHTML=`Checking <span class="v">${display(v)}</span> — ${isNew?'<span class="ok">New max!</span>':'not bigger'} — current max = <span class="v">${display(curMax)}</span>`;
+      self.timers.push(setTimeout(()=>{
+        cells[i].classList.remove('highlight');cells[i].classList.add(isNew?'sorted':'pass');
+        maxCell.classList.remove('highlight');
+        i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
+        self.nextBtn.disabled=false;
+        self.scheduleAutoNext();
+      },self.speed*0.4));
+    };
+    this.stepFn();
+  }
+
+  /* ──── SORTED / comparator (step-by-step per comparison) ──── */
+  setupSorted(op,input){
+    const arr=input.slice();const n=arr.length;
+    this.vizEl.innerHTML='';
+    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
+    const row=el('div','anim-row');
+    arr.forEach(v=>row.appendChild(cell(display(v))));
+    this.vizEl.appendChild(row);
+    let i=0,j=0;const self=this;
+    const totalComps=(n*(n-1))/2;let compsDone=0;
+    this.stepFn=()=>{
+      if(i>=n-1){
+        self.snapshots.push(arr.slice());
+        row.querySelectorAll('.anim-cell').forEach(c=>{c.classList.remove('highlight','swap-a','swap-b','pass');c.classList.add('sorted');});
+        self.logEl.innerHTML=`<b>✓ .sorted() done!</b> → <span class="ok">[${arr.map(display).join(', ')}]</span>`;
+        self.finishOp();return;
+      }
+      if(j>=n-i-1){i++;j=0;if(i>=n-1){self.stepFn();return;}}
+      self.nextBtn.disabled=true;
+      const cells=row.querySelectorAll('.anim-cell');
+      cells.forEach(c=>c.classList.remove('highlight','swap-a','swap-b','pass'));
+      const cmpVal=op.compareFn(arr[j],arr[j+1]);
+      const willSwap=cmpVal>0;
+      self.logEl.innerHTML=op.explain(arr[j],arr[j+1],cmpVal,willSwap);
+      cells[j].classList.add('swap-a');cells[j+1].classList.add('swap-b');
+      self.timers.push(setTimeout(()=>{
+        if(willSwap){
+          const tmp=arr[j];arr[j]=arr[j+1];arr[j+1]=tmp;
+          cells[j].innerHTML=display(arr[j]);cells[j+1].innerHTML=display(arr[j+1]);
+        }
+        cells[j].classList.remove('swap-a','swap-b');cells[j+1].classList.remove('swap-a','swap-b');
+        if(willSwap){cells[j].classList.add('pass');cells[j+1].classList.add('pass');}
+        self.timers.push(setTimeout(()=>{
+          cells[j].classList.remove('pass');cells[j+1].classList.remove('pass');
+          j++;compsDone++;
+          self.stepInfo.textContent='Op '+(self.opIdx+1)+' — cmp '+compsDone+'/~'+totalComps;
+          self.nextBtn.disabled=false;
+          self.scheduleAutoNext();
+        },self.speed*0.2));
+      },self.speed*0.5));
+    };
+    this.stepFn();
+  }
+
+  renderDone(){
+    this.pipeLines.forEach(l=>{l.classList.remove('active');l.classList.add('done');});
+    this.stepInfo.textContent='Done!';this.nextBtn.disabled=true;
+    this.vizEl.innerHTML='';
+    const last=this.snapshots[this.snapshots.length-1];
+    this.vizEl.appendChild(el('div','anim-result-tag','✓ FINAL RESULT'));
+    const row=el('div','anim-row');
+    last.forEach(v=>row.appendChild(cell(display(v),'sorted')));
+    this.vizEl.appendChild(row);
+    this.logEl.innerHTML='<span class="ok">Pipeline complete!</span> All operations executed.';
+  }
+  togglePlay(){if(this.playing)this.stopPlay();else{this.playing=true;this.playBtn.innerHTML='&#9646;&#9646; Pause';if(this.opIdx>=this.prob.ops.length-1&&!this.stepFn)this.reset();this.nextStep();}}
+  stopPlay(){this.playing=false;this.playBtn.innerHTML='&#9654; Auto Play';}
+}
+
+/* ── Tab builder ── */
+function buildTabs(tabsEl,containerEl,problems){
+  problems.forEach((p,i)=>{
+    const tab=el('button','anim-problem-tab'+(i===0?' active':''),p.tabName);
+    tab.onclick=()=>{
+      tabsEl.querySelectorAll('.anim-problem-tab').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      containerEl.innerHTML='';const box=el('div','anim-box');containerEl.appendChild(box);
+      new PipeAnimator(box,p);
+    };
+    tabsEl.appendChild(tab);
+  });
+  const box=el('div','anim-box');containerEl.appendChild(box);
+  new PipeAnimator(box,problems[0]);
+}
+
+/* ================================================================
+   PROBLEM DEFINITIONS
+   ================================================================ */
+
+/* ── LAMBDA PROBLEMS ── */
+const lambdaProblems=[
+  {tabName:'Ex 1: Squares of Evens',title:'Squares of even numbers',input:[1,2,3,4,5,6,7,8,9,10],ops:[
+    {code:'.filter(n → n % 2 == 0)',type:'filter',test:n=>n%2===0,explain:(n,p)=>`Checking <span class="v">${n}</span>: ${n} % 2 = ${n%2} → ${p?'<span class="ok">KEEP ✓ (even)</span>':'<span class="no">REMOVE ✗ (odd)</span>'}`},
+    {code:'.map(n → n * n)',type:'map',transform:n=>n*n,explain:(n,r)=>`Transform <span class="v">${n}</span> → ${n} × ${n} = <span class="v">${r}</span>`},
+    {code:'.collect(Collectors.toList())',type:'collect'}
+  ]},
+  {tabName:'Ex 2: Count names with A',title:'Count names starting with "A"',input:["Alice","Bob","Alex","Charlie","Anna"],ops:[
+    {code:'.filter(n → n.startsWith("A"))',type:'filter',test:n=>n.startsWith("A"),explain:(n,p)=>`Checking <span class="v">"${n}"</span>: starts with A? → ${p?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`},
+    {code:'.count()',type:'count'}
+  ]},
+  {tabName:'Ex 3: Filter + Uppercase',title:'Words length > 3, uppercased',input:["hi","hello","hey","world","java"],ops:[
+    {code:'.filter(w → w.length() > 3)',type:'filter',test:w=>w.length>3,explain:(w,p)=>`Checking <span class="v">"${w}"</span>: length = ${w.length} > 3? → ${p?'<span class="ok">KEEP ✓</span>':'<span class="no">REMOVE ✗</span>'}`},
+    {code:'.map(w → w.toUpperCase())',type:'map',transform:w=>w.toUpperCase(),explain:(w,r)=>`Transform <span class="v">"${w}"</span> → <span class="v">"${r}"</span>`},
+    {code:'.collect(Collectors.toList())',type:'collect'}
+  ]}
+];
+
+/* ── STREAM PROBLEMS ── */
+const streamProblems=[
+  {tabName:'P1: Divisible by 10',title:'Filter numbers divisible by 10',input:[10,15,20,25,30,35,40],ops:[
+    {code:'.filter(n → n % 10 == 0)',type:'filter',test:n=>n%10===0,explain:(n,p)=>`<span class="v">${n}</span> % 10 = ${n%10} → ${p?'<span class="ok">KEEP ✓</span>':'<span class="no">REMOVE ✗</span>'}`},
+    {code:'.collect(Collectors.toList())',type:'collect'}
+  ]},
+  {tabName:'P2: Filter + Uppercase',title:'Uppercase words with length > 3',input:["cat","elephant","dog","giraffe"],ops:[
+    {code:'.filter(w → w.length() > 3)',type:'filter',test:w=>w.length>3,explain:(w,p)=>`<span class="v">"${w}"</span> length=${w.length} > 3? → ${p?'<span class="ok">KEEP ✓</span>':'<span class="no">REMOVE ✗</span>'}`},
+    {code:'.map(w → w.toUpperCase())',type:'map',transform:w=>w.toUpperCase(),explain:(w,r)=>`<span class="v">"${w}"</span> → <span class="v">"${r}"</span>`},
+    {code:'.collect(Collectors.toList())',type:'collect'}
+  ]},
+  {tabName:'P3: Sum prices > 100',title:'Sum of prices greater than 100',input:[100,50,200,75,150],ops:[
+    {code:'.filter(p → p > 100)',type:'filter',test:p=>p>100,explain:(p,pass)=>`<span class="v">${p}</span> > 100? → ${pass?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`},
+    {code:'.reduce(0, Integer::sum)',type:'reduce',identity:0,combine:(a,b)=>a+b,explain:(acc,v)=>`Accumulator: <span class="v">${acc}</span> + <span class="v">${v}</span> = <span class="v">${acc+v}</span>`}
+  ]},
+  {tabName:'P4: Sum squares of evens',title:'Sum of squares of even numbers',input:[1,2,3,4,5,6,7,8,9,10],ops:[
+    {code:'.filter(n → n % 2 == 0)',type:'filter',test:n=>n%2===0,explain:(n,p)=>`<span class="v">${n}</span> % 2 = ${n%2} → ${p?'<span class="ok">EVEN ✓</span>':'<span class="no">ODD ✗</span>'}`},
+    {code:'.map(n → n * n)',type:'map',transform:n=>n*n,explain:(n,r)=>`<span class="v">${n}</span> × ${n} = <span class="v">${r}</span>`},
+    {code:'.reduce(0, Integer::sum)',type:'reduce',identity:0,combine:(a,b)=>a+b,explain:(acc,v)=>`<span class="v">${acc}</span> + <span class="v">${v}</span> = <span class="v">${acc+v}</span>`}
+  ]},
+  {tabName:'P5: String joining',title:'Join names starting with A or B',input:["Alice","Bob","Charlie","David"],ops:[
+    {code:'.filter(n → n.startsWith("A") || n.startsWith("B"))',type:'filter',test:n=>n.startsWith("A")||n.startsWith("B"),explain:(n,p)=>`<span class="v">"${n}"</span> starts with A or B? → ${p?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`},
+    {code:'.collect(Collectors.joining(", "))',type:'joining',delimiter:', '}
+  ]},
+
+  /* ── COMPLEX PROBLEMS ── */
+
+  {tabName:'P6: Sort + Map + Reduce',title:'Sort descending, double each, find total',input:[5,12,3,18,7,25,1,9],ops:[
+    {code:'.sorted(Comparator.reverseOrder())',type:'sorted',compareFn:(a,b)=>b-a,
+     explain:(a,b,r,sw)=>`Descending: <span class="v">${b}</span> vs <span class="v">${a}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`},
+    {code:'.map(n → n * 2)',type:'map',transform:n=>n*2,explain:(n,r)=>`<span class="v">${n}</span> × 2 = <span class="v">${r}</span>`},
+    {code:'.reduce(0, Integer::sum)',type:'reduce',identity:0,combine:(a,b)=>a+b,explain:(acc,v)=>`<span class="v">${acc}</span> + <span class="v">${v}</span> = <span class="v">${acc+v}</span>`}
+  ]},
+
+  {tabName:'P7: Multi-filter chain',title:'Even numbers > 5 and < 50, squared',input:[2,8,3,15,42,60,7,24,11,36],ops:[
+    {code:'.filter(n → n % 2 == 0)',type:'filter',test:n=>n%2===0,explain:(n,p)=>`<span class="v">${n}</span> % 2 = ${n%2} → ${p?'<span class="ok">EVEN ✓</span>':'<span class="no">ODD ✗</span>'}`},
+    {code:'.filter(n → n > 5)',type:'filter',test:n=>n>5,explain:(n,p)=>`<span class="v">${n}</span> > 5? → ${p?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`},
+    {code:'.filter(n → n < 50)',type:'filter',test:n=>n<50,explain:(n,p)=>`<span class="v">${n}</span> < 50? → ${p?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`},
+    {code:'.map(n → n * n)',type:'map',transform:n=>n*n,explain:(n,r)=>`<span class="v">${n}</span> × ${n} = <span class="v">${r}</span>`},
+    {code:'.collect(Collectors.toList())',type:'collect'}
+  ]},
+
+  {tabName:'P8: Product via reduce',title:'Product of all elements after filtering',input:[2,5,0,3,4,1,6],ops:[
+    {code:'.filter(n → n > 0)',type:'filter',test:n=>n>0,explain:(n,p)=>`<span class="v">${n}</span> > 0? → ${p?'<span class="ok">KEEP ✓</span>':'<span class="no">REMOVE ✗ (zero!)</span>'}`},
+    {code:'.filter(n → n <= 4)',type:'filter',test:n=>n<=4,explain:(n,p)=>`<span class="v">${n}</span> ≤ 4? → ${p?'<span class="ok">KEEP ✓</span>':'<span class="no">REMOVE ✗ (too big)</span>'}`},
+    {code:'.reduce(1, (a,b) → a * b)',type:'reduce',identity:1,combine:(a,b)=>a*b,explain:(acc,v)=>`Accumulator: <span class="v">${acc}</span> × <span class="v">${v}</span> = <span class="v">${acc*v}</span>`}
+  ]},
+
+  {tabName:'P9: String pipeline',title:'Process names: filter → map → sort → join',input:["Alice","bob","CHARLIE","dave","Eve","frank","Grace"],ops:[
+    {code:'.filter(s → s.length() >= 4)',type:'filter',test:s=>s.length>=4,explain:(s,p)=>`<span class="v">"${s}"</span> length=${s.length} ≥ 4? → ${p?'<span class="ok">KEEP ✓</span>':'<span class="no">REMOVE ✗</span>'}`},
+    {code:'.map(s → s.toLowerCase())',type:'map',transform:s=>s.toLowerCase(),explain:(s,r)=>`<span class="v">"${s}"</span> → <span class="v">"${r}"</span>`},
+    {code:'.sorted()',type:'sorted',compareFn:(a,b)=>a.localeCompare(b),
+     explain:(a,b,r,sw)=>`"<span class="v">${a}</span>" vs "<span class="v">${b}</span>": compareTo = <span class="v">${r>0?'+':''}${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`},
+    {code:'.collect(Collectors.joining(" | "))',type:'joining',delimiter:' | '}
+  ]},
+
+  {tabName:'P10: Max after transform',title:'Find longest word length after filtering',input:["hi","strawberry","cat","watermelon","go","blueberry","pineapple"],ops:[
+    {code:'.filter(w → w.length() > 3)',type:'filter',test:w=>w.length>3,explain:(w,p)=>`<span class="v">"${w}"</span> length=${w.length} > 3? → ${p?'<span class="ok">KEEP ✓</span>':'<span class="no">REMOVE ✗</span>'}`},
+    {code:'.map(w → w.length())',type:'map',transform:w=>w.length,explain:(w,r)=>`<span class="v">"${w}"</span> → length = <span class="v">${r}</span>`},
+    {code:'.max(Integer::compareTo)',type:'max',compareFn:(a,b)=>a-b}
+  ]},
+
+  {tabName:'P11: FlatMap concept',title:'Distinct chars from filtered words, sorted',input:["apple","ant","ball","bat","cat"],ops:[
+    {code:'.filter(w → w.startsWith("a"))',type:'filter',test:w=>w.startsWith("a"),explain:(w,p)=>`<span class="v">"${w}"</span> starts with "a"? → ${p?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`},
+    {code:'.map(w → w.charAt(w.length()-1))',type:'map',transform:w=>w.charAt(w.length-1),explain:(w,r)=>`<span class="v">"${w}"</span> → last char = <span class="v">"${r}"</span>`},
+    {code:'.sorted()',type:'sorted',compareFn:(a,b)=>a.localeCompare(b),
+     explain:(a,b,r,sw)=>`"<span class="v">${a}</span>" vs "<span class="v">${b}</span>": <span class="v">${r>0?'+':''}${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`},
+    {code:'.collect(Collectors.joining(""))',type:'joining',delimiter:''}
+  ]},
+
+  {tabName:'P12: Salary pipeline',title:'Avg salary of high-earners (filter → map → reduce)',input:[45000,72000,38000,91000,55000,120000,63000,87000],ops:[
+    {code:'.filter(s → s >= 60000)',type:'filter',test:s=>s>=60000,explain:(s,p)=>`<span class="v">$${s.toLocaleString()}</span> ≥ $60,000? → ${p?'<span class="ok">HIGH EARNER ✓</span>':'<span class="no">BELOW THRESHOLD ✗</span>'}`},
+    {code:'.map(s → s / 1000)',type:'map',transform:s=>s/1000,explain:(s,r)=>`<span class="v">$${s.toLocaleString()}</span> → <span class="v">${r}K</span> (in thousands)`},
+    {code:'.reduce(0, Integer::sum)',type:'reduce',identity:0,combine:(a,b)=>a+b,explain:(acc,v)=>`Running total: <span class="v">${acc}K</span> + <span class="v">${v}K</span> = <span class="v">${acc+v}K</span>`}
+  ]},
+
+  {tabName:'P13: Chained transforms',title:'Triple pipeline: filter → map → map → filter → count',input:[1,2,3,4,5,6,7,8,9,10,11,12],ops:[
+    {code:'.filter(n → n % 3 == 0)',type:'filter',test:n=>n%3===0,explain:(n,p)=>`<span class="v">${n}</span> % 3 = ${n%3} → ${p?'<span class="ok">DIVISIBLE ✓</span>':'<span class="no">NOT DIVISIBLE ✗</span>'}`},
+    {code:'.map(n → n * n)',type:'map',transform:n=>n*n,explain:(n,r)=>`<span class="v">${n}</span>² = <span class="v">${r}</span>`},
+    {code:'.map(n → n + 1)',type:'map',transform:n=>n+1,explain:(n,r)=>`<span class="v">${n}</span> + 1 = <span class="v">${r}</span>`},
+    {code:'.filter(n → n > 30)',type:'filter',test:n=>n>30,explain:(n,p)=>`<span class="v">${n}</span> > 30? → ${p?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`},
+    {code:'.count()',type:'count'}
+  ]},
+
+  {tabName:'P14: Word frequency',title:'Filter words → lengths → sort descending → findFirst (longest)',input:["java","python","go","javascript","c","typescript","rust"],ops:[
+    {code:'.filter(w → w.length() > 2)',type:'filter',test:w=>w.length>2,explain:(w,p)=>`<span class="v">"${w}"</span> length=${w.length} > 2? → ${p?'<span class="ok">KEEP ✓</span>':'<span class="no">TOO SHORT ✗</span>'}`},
+    {code:'.map(w → w.toUpperCase())',type:'map',transform:w=>w.toUpperCase(),explain:(w,r)=>`<span class="v">"${w}"</span> → <span class="v">"${r}"</span>`},
+    {code:'.sorted((a,b) → b.length() - a.length())',type:'sorted',compareFn:(a,b)=>b.length-a.length,
+     explain:(a,b,r,sw)=>`"<span class="v">${a}</span>"(${a.length}) vs "<span class="v">${b}</span>"(${b.length}): ${sw?'<span class="no">SWAP (shorter first)</span>':'<span class="ok">OK (already desc)</span>'}`},
+    {code:'.findFirst()',type:'findFirst'}
+  ]},
+
+  {tabName:'P15: E-commerce',title:'Discounted prices of expensive items, total savings',input:[{name:"Laptop",price:999},{name:"Mouse",price:29},{name:"Monitor",price:450},{name:"Keyboard",price:75},{name:"Headset",price:199},{name:"Webcam",price:89}],ops:[
+    {code:'.filter(p → p.price > 100)',type:'filter',test:p=>p.price>100,explain:(p,pass)=>`<span class="v">${p.name} ($${p.price})</span> > $100? → ${pass?'<span class="ok">EXPENSIVE ✓</span>':'<span class="no">CHEAP ✗</span>'}`},
+    {code:'.map(p → p.price * 0.2)',type:'map',transform:p=>Math.round(p.price*0.2),explain:(p,r)=>`<span class="v">${typeof p==='object'?p.name:p}</span>: 20% of $${typeof p==='object'?p.price:p} = <span class="v">$${r}</span> saved`},
+    {code:'.reduce(0, Integer::sum)',type:'reduce',identity:0,combine:(a,b)=>a+b,explain:(acc,v)=>`Total savings: <span class="v">$${acc}</span> + <span class="v">$${v}</span> = <span class="v">$${acc+v}</span>`}
+  ]}
+];
+
+/* ── COMPARATOR PROBLEMS ── */
+const compProblems=[
+  {tabName:'P1: Sort by length',title:'Sort strings by length (ascending)',input:["apple","pie","banana","cat"],ops:[
+    {code:'.sort((a,b) → a.length() - b.length())',type:'sorted',compareFn:(a,b)=>a.length-b.length,
+     explain:(a,b,r,sw)=>`Comparing <span class="v">"${a}"</span>(len ${a.length}) vs <span class="v">"${b}"</span>(len ${b.length}): ${a.length}-${b.length} = <span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`}
+  ]},
+  {tabName:'P2: Sort descending',title:'Sort numbers descending (b - a)',input:[5,2,8,1,9,3],ops:[
+    {code:'.sort((a,b) → b - a)',type:'sorted',compareFn:(a,b)=>b-a,
+     explain:(a,b,r,sw)=>`Comparing: <span class="v">${b}</span> - <span class="v">${a}</span> = <span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`}
+  ]},
+  {tabName:'P3: Evens first',title:'Sort evens before odds, then ascending',input:[1,2,3,4,5,6],ops:[
+    {code:'.sort(evens first, then a - b)',type:'sorted',compareFn:(a,b)=>{if(a%2===0&&b%2!==0)return-1;if(a%2!==0&&b%2===0)return 1;return a-b;},
+     explain:(a,b,r,sw)=>{const aE=a%2===0,bE=b%2===0;let why='';if(aE&&!bE)why=`${a}(even) vs ${b}(odd) → even first`;else if(!aE&&bE)why=`${a}(odd) vs ${b}(even) → even first`;else why=`both ${aE?'even':'odd'}: ${a}-${b}=${a-b}`;return `${why} → <span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;}}
+  ]},
+  {tabName:'P4: Sort by last char',title:'Sort strings by last character',input:["apple","dog","cat","elephant"],ops:[
+    {code:'.sort((a,b) → lastChar(a) - lastChar(b))',type:'sorted',compareFn:(a,b)=>a.charCodeAt(a.length-1)-b.charCodeAt(b.length-1),
+     explain:(a,b,r,sw)=>{const la=a[a.length-1],lb=b[b.length-1];return `<span class="v">"${a}"</span> last='${la}' vs <span class="v">"${b}"</span> last='${lb}': '${la}'-'${lb}'=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;}}
+  ]},
+  {tabName:'P5: 2D by sum',title:'Sort 2D array by sum of elements',input:[[1,2],[5,1],[3,3],[4,0]],ops:[
+    {code:'.sort((a,b) → sum(a) - sum(b))',type:'sorted',compareFn:(a,b)=>(a[0]+a[1])-(b[0]+b[1]),
+     explain:(a,b,r,sw)=>{const sa=a[0]+a[1],sb=b[0]+b[1];return `[${a}] sum=<span class="v">${sa}</span> vs [${b}] sum=<span class="v">${sb}</span>: ${sa}-${sb}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;}}
+  ]},
+
+  /* ── COMPLEX COMPARATOR PROBLEMS ── */
+
+  {tabName:'P6: Intervals by start→end',title:'Sort intervals: by start time, if equal then by end time (Interval Scheduling)',input:[[1,4],[2,3],[1,2],[3,5],[2,6],[3,4]],ops:[
+    {code:'.sort((a,b) → a[0]!=b[0] ? a[0]-b[0] : a[1]-b[1])',type:'sorted',
+     compareFn:(a,b)=>a[0]!==b[0]?a[0]-b[0]:a[1]-b[1],
+     explain:(a,b,r,sw)=>{
+       const sa=`[${a[0]},${a[1]}]`,sb=`[${b[0]},${b[1]}]`;
+       if(a[0]!==b[0])return `<span class="v">${sa}</span> vs <span class="v">${sb}</span>: start ${a[0]}≠${b[0]} → ${a[0]}-${b[0]}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
+       return `<span class="v">${sa}</span> vs <span class="v">${sb}</span>: start equal(${a[0]}), compare end: ${a[1]}-${b[1]}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
+     }}
+  ]},
+
+  {tabName:'P7: Merge intervals prep',title:'Sort intervals by end time (Greedy Activity Selection)',input:[[1,5],[3,4],[2,8],[5,7],[4,6],[6,9]],ops:[
+    {code:'.sort((a,b) → a[1] - b[1])',type:'sorted',
+     compareFn:(a,b)=>a[1]-b[1],
+     explain:(a,b,r,sw)=>{
+       return `<span class="v">[${a[0]},${a[1]}]</span> vs <span class="v">[${b[0]},${b[1]}]</span>: end ${a[1]}-${b[1]}=<span class="v">${r}</span> → pick earlier finish first → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
+     }}
+  ]},
+
+  {tabName:'P8: Frequency sort',title:'Sort by frequency (desc), if tie then by value (asc)',input:[4,2,2,8,3,3,3,1,4,4],ops:[
+    {code:'.sort(freq desc, then val asc)',type:'sorted',
+     compareFn:(function(){const freq={};[4,2,2,8,3,3,3,1,4,4].forEach(n=>freq[n]=(freq[n]||0)+1);return(a,b)=>freq[b]!==freq[a]?freq[b]-freq[a]:a-b;})(),
+     explain:(function(){const freq={};[4,2,2,8,3,3,3,1,4,4].forEach(n=>freq[n]=(freq[n]||0)+1);return(a,b,r,sw)=>{
+       if(freq[a]!==freq[b])return `<span class="v">${a}</span>(freq=${freq[a]}) vs <span class="v">${b}</span>(freq=${freq[b]}): freq ${freq[b]}-${freq[a]}=<span class="v">${r}</span> → higher freq first → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
+       return `<span class="v">${a}</span> vs <span class="v">${b}</span>: same freq(${freq[a]}), compare val: ${a}-${b}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
+     };})()}
+  ]},
+
+  {tabName:'P9: Closest to target',title:'Sort by absolute distance from target=50',input:[10,45,90,55,30,48,72,51],ops:[
+    {code:'.sort((a,b) → |a-50| - |b-50|)',type:'sorted',
+     compareFn:(a,b)=>Math.abs(a-50)-Math.abs(b-50),
+     explain:(a,b,r,sw)=>{
+       const da=Math.abs(a-50),db=Math.abs(b-50);
+       return `<span class="v">${a}</span> dist=|${a}-50|=<span class="v">${da}</span> vs <span class="v">${b}</span> dist=|${b}-50|=<span class="v">${db}</span>: ${da}-${db}=<span class="v">${r}</span> → closer first → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
+     }}
+  ]},
+
+  {tabName:'P10: Points by distance',title:'Sort 2D points by distance from origin (0,0)',input:[[3,4],[1,1],[5,0],[2,3],[0,2],[4,3]],ops:[
+    {code:'.sort((a,b) → dist(a) - dist(b))',type:'sorted',
+     compareFn:(a,b)=>(a[0]*a[0]+a[1]*a[1])-(b[0]*b[0]+b[1]*b[1]),
+     explain:(a,b,r,sw)=>{
+       const da=a[0]*a[0]+a[1]*a[1],db=b[0]*b[0]+b[1]*b[1];
+       return `<span class="v">(${a[0]},${a[1]})</span> dist²=${a[0]}²+${a[1]}²=<span class="v">${da}</span> vs <span class="v">(${b[0]},${b[1]})</span> dist²=${b[0]}²+${b[1]}²=<span class="v">${db}</span>: ${da}-${db}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
+     }}
+  ]},
+
+  {tabName:'P11: 2D col1 asc, col0 desc',title:'Sort 2D: by column[1] ascending, tie-break column[0] descending',input:[[5,2],[3,1],[7,2],[1,3],[4,1],[6,3]],ops:[
+    {code:'.sort(col[1] asc, then col[0] desc)',type:'sorted',
+     compareFn:(a,b)=>a[1]!==b[1]?a[1]-b[1]:b[0]-a[0],
+     explain:(a,b,r,sw)=>{
+       const sa=`[${a[0]},${a[1]}]`,sb=`[${b[0]},${b[1]}]`;
+       if(a[1]!==b[1])return `<span class="v">${sa}</span> vs <span class="v">${sb}</span>: col[1] ${a[1]}≠${b[1]} → ${a[1]}-${b[1]}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
+       return `<span class="v">${sa}</span> vs <span class="v">${sb}</span>: col[1] tie(${a[1]}), col[0] desc: ${b[0]}-${a[0]}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
+     }}
+  ]},
+
+  {tabName:'P12: Employees multi-sort',title:'Sort employees: by dept (alpha), then salary (desc)',
+   input:[{n:"Alice",d:"Eng",s:90},{n:"Bob",d:"Sales",s:70},{n:"Charlie",d:"Eng",s:85},{n:"Diana",d:"Sales",s:95},{n:"Eve",d:"Eng",s:110},{n:"Frank",d:"HR",s:60}],ops:[
+    {code:'.sort(dept asc, then salary desc)',type:'sorted',
+     compareFn:(a,b)=>{const dc=a.d.localeCompare(b.d);return dc!==0?dc:b.s-a.s;},
+     explain:(a,b,r,sw)=>{
+       const dc=a.d.localeCompare(b.d);
+       if(dc!==0)return `<span class="v">${a.n}(${a.d})</span> vs <span class="v">${b.n}(${b.d})</span>: dept "${a.d}" vs "${b.d}" → <span class="v">${dc>0?'+':''}${dc}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
+       return `<span class="v">${a.n}(${a.d},$${a.s}K)</span> vs <span class="v">${b.n}(${b.d},$${b.s}K)</span>: same dept, salary desc: ${b.s}-${a.s}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
+     }}
+  ]},
+
+  {tabName:'P13: Matrix row sort',title:'Sort rows of matrix by max element in each row',input:[[3,1,7],[9,2,4],[5,8,1],[6,0,3]],ops:[
+    {code:'.sort((a,b) → max(a) - max(b))',type:'sorted',
+     compareFn:(a,b)=>Math.max(...a)-Math.max(...b),
+     explain:(a,b,r,sw)=>{
+       const ma=Math.max(...a),mb=Math.max(...b);
+       return `<span class="v">[${a}]</span> max=<span class="v">${ma}</span> vs <span class="v">[${b}]</span> max=<span class="v">${mb}</span>: ${ma}-${mb}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
+     }}
+  ]},
+
+  {tabName:'P14: Diagonal sort',title:'Sort 2D points by diagonal value (x+y), then by x',input:[[0,3],[2,1],[1,1],[3,0],[1,2],[2,2]],ops:[
+    {code:'.sort(x+y asc, then x asc)',type:'sorted',
+     compareFn:(a,b)=>{const d=(a[0]+a[1])-(b[0]+b[1]);return d!==0?d:a[0]-b[0];},
+     explain:(a,b,r,sw)=>{
+       const da=a[0]+a[1],db=b[0]+b[1];
+       if(da!==db)return `<span class="v">(${a[0]},${a[1]})</span> diag=${a[0]}+${a[1]}=<span class="v">${da}</span> vs <span class="v">(${b[0]},${b[1]})</span> diag=${b[0]}+${b[1]}=<span class="v">${db}</span>: ${da}-${db}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
+       return `<span class="v">(${a[0]},${a[1]})</span> vs <span class="v">(${b[0]},${b[1]})</span>: diag tie(${da}), by x: ${a[0]}-${b[0]}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
+     }}
+  ]},
+
+  {tabName:'P15: Custom priority',title:'Priority queue: sort tasks by priority (high→low), then by deadline (earliest first)',
+   input:[[3,10],[1,5],[2,8],[3,4],[1,12],[2,3]],ops:[
+    {code:'.sort(priority desc, then deadline asc)',type:'sorted',
+     compareFn:(a,b)=>a[0]!==b[0]?b[0]-a[0]:a[1]-b[1],
+     explain:(a,b,r,sw)=>{
+       const pLbl={3:'HIGH',2:'MED',1:'LOW'};
+       const sa=`[P${a[0]}(${pLbl[a[0]]||a[0]}),d=${a[1]}]`,sb=`[P${b[0]}(${pLbl[b[0]]||b[0]}),d=${b[1]}]`;
+       if(a[0]!==b[0])return `<span class="v">${sa}</span> vs <span class="v">${sb}</span>: priority ${b[0]}-${a[0]}=<span class="v">${b[0]-a[0]}</span> → higher priority first → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
+       return `<span class="v">${sa}</span> vs <span class="v">${sb}</span>: same priority(${pLbl[a[0]]}), deadline: ${a[1]}-${b[1]}=<span class="v">${r}</span> → earlier deadline first → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
+     }}
+  ]}
+];
+
+/* ── Init sections ── */
+const pairs=[['lambdaTabs','lambdaAnimContainer',lambdaProblems],['streamTabs','streamAnimContainer',streamProblems],['compTabs','compAnimContainer',compProblems]];
+pairs.forEach(([tId,cId,probs])=>{const t=document.getElementById(tId),c=document.getElementById(cId);if(t&&c)buildTabs(t,c,probs);});
+})();
+</script>
+</body>
+</html>
