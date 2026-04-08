@@ -187,6 +187,41 @@ kbd{background:var(--surface2);border:1px solid var(--border);border-radius:4px;
 .anim-output-row{min-height:40px;padding:4px 0}
 .anim-output-row .anim-cell{animation:popIn .3s ease}
 @keyframes popIn{0%{opacity:0;transform:scale(.5) translateY(8px)}100%{opacity:1;transform:scale(1) translateY(0)}}
+
+/* ──── MOBILE RESPONSIVE FOR ANIMATIONS ──── */
+@media(max-width:900px){
+  .anim-box{padding:10px;overflow-x:auto;overflow-y:visible}
+  .anim-title{font-size:.78rem;flex-wrap:wrap}
+  .anim-pipeline{font-size:.65rem;line-height:1.8;padding:8px 10px;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch}
+  .anim-cell{min-width:32px;height:32px;padding:0 7px;font-size:.7rem;border-radius:6px}
+  .anim-cell.accum{min-width:42px;font-size:.76rem}
+  .anim-row{gap:4px;margin:4px 0;min-height:32px;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+  .anim-label{font-size:.6rem;letter-spacing:1px;margin:8px 0 2px}
+  .anim-label .op-tag{font-size:.6rem;padding:1px 6px}
+  .anim-arrow{font-size:.9rem}
+  .anim-log{font-size:.68rem;padding:8px 10px;line-height:1.5}
+  .anim-log .v{font-size:.68rem}
+  .anim-controls{gap:4px;margin-top:10px}
+  .anim-btn{padding:8px 12px;font-size:.7rem;min-height:36px}
+  .anim-step-info{font-size:.64rem;margin-left:4px}
+  .anim-speed{font-size:.64rem;margin-left:auto}
+  .anim-speed input[type=range]{width:55px}
+  .anim-problem-tabs{gap:3px;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:8px}
+  .anim-problem-tab{padding:6px 10px;font-size:.65rem;white-space:nowrap;min-height:32px}
+  .anim-result-tag{font-size:.6rem;padding:2px 8px}
+  .card-header{padding:12px 14px;-webkit-tap-highlight-color:rgba(108,140,255,.2);touch-action:manipulation}
+  .card-q{font-size:.85rem}
+}
+@media(max-width:480px){
+  .anim-box{padding:8px}
+  .anim-pipeline{font-size:.58rem;padding:6px 8px}
+  .anim-cell{min-width:28px;height:28px;padding:0 5px;font-size:.62rem;border-width:1.5px}
+  .anim-cell.accum{min-width:36px;font-size:.68rem}
+  .anim-btn{padding:7px 10px;font-size:.65rem}
+  .anim-problem-tab{padding:5px 8px;font-size:.6rem}
+  .anim-controls{justify-content:center}
+  .anim-log{font-size:.62rem;padding:6px 8px}
+}
 </style>
 </head>
 <body>
