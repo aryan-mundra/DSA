@@ -3341,10 +3341,18 @@ function toggleTheme() {
   if (t) document.documentElement.dataset.theme = t;
 })();
 
-// Card toggle
+// Card toggle (with event delegation fallback for mobile)
+let _lastToggle=0;
 function toggleCard(header) {
+  const now=Date.now();if(now-_lastToggle<100)return;_lastToggle=now;
   header.parentElement.classList.toggle('open');
 }
+document.addEventListener('click',function(e){
+  const header=e.target.closest('.card-header');
+  if(!header)return;
+  const now=Date.now();if(now-_lastToggle<100)return;_lastToggle=now;
+  header.parentElement.classList.toggle('open');
+});
 
 // Expand/collapse all
 function toggleAll(open) {
@@ -3530,6 +3538,13 @@ class PipeAnimator{
     else if(op.type==='findFirst')this.setupFindFirst(op,input);
     else if(op.type==='max')this.setupMax(op,input);
     else if(op.type==='sorted')this.setupSorted(op,input);
+    else if(op.type==='distinct')this.setupDistinct(op,input);
+    else if(op.type==='duplicatesOnly')this.setupDuplicatesOnly(op,input);
+    else if(op.type==='limit')this.setupLimit(op,input);
+    else if(op.type==='skip')this.setupSkip(op,input);
+    else if(op.type==='allMatch')this.setupAllMatch(op,input);
+    else if(op.type==='anyMatch')this.setupAnyMatch(op,input);
+    else if(op.type==='flatMap')this.setupFlatMap(op,input);
     else{this.snapshots.push(input);this.finishOp();}
   }
 
@@ -3845,6 +3860,257 @@ class PipeAnimator{
     this.stepFn();
   }
 
+  /* ──── DISTINCT (step-by-step) ──── */
+  setupDistinct(op,input){
+    this.vizEl.innerHTML='';
+    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
+    this.vizEl.appendChild(el('div','anim-label','Input to this operation'));
+    const inRow=el('div','anim-row');
+    const inCells=input.map(v=>{const c=cell(display(v),'waiting');inRow.appendChild(c);return c;});
+    this.vizEl.appendChild(inRow);
+    this.vizEl.appendChild(el('div','anim-arrow','&#8595;'));
+    this.vizEl.appendChild(el('div','anim-label','Output (unique elements)'));
+    const outRow=el('div','anim-row anim-output-row');
+    this.vizEl.appendChild(outRow);
+    const output=[];const seen=new Set();let i=0;const self=this;
+    this.stepFn=()=>{
+      if(i>=input.length){self.snapshots.push(output);self.logEl.innerHTML=`<b>✓ done!</b> — Kept <span class="v">${output.length}</span> unique of ${input.length} → <span class="ok">[${output.map(display).join(', ')}]</span>`;self.finishOp();return;}
+      self.nextBtn.disabled=true;
+      const v=input[i];const key=JSON.stringify(v);const pass=!seen.has(key);
+      if(pass)seen.add(key);
+      inCells.forEach(c=>c.classList.remove('highlight'));
+      inCells[i].classList.remove('waiting');inCells[i].classList.add('highlight');
+      self.logEl.innerHTML=op.explain?op.explain(v,pass):`<span class="v">${display(v)}</span> → ${pass?'<span class="ok">first time → KEEP ✓</span>':'<span class="no">duplicate → REMOVE ✗</span>'}`;
+      self.timers.push(setTimeout(()=>{
+        if(pass){inCells[i].classList.remove('highlight');inCells[i].classList.add('pass');output.push(v);outRow.appendChild(cell(display(v),'pass'));}
+        else{inCells[i].classList.remove('highlight');inCells[i].classList.add('fail');}
+        i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
+        self.nextBtn.disabled=false;
+        self.scheduleAutoNext();
+      },self.speed*0.4));
+    };
+    this.stepFn();
+  }
+
+  /* ──── DUPLICATES ONLY (step-by-step) ──── */
+  setupDuplicatesOnly(op,input){
+    this.vizEl.innerHTML='';
+    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
+    this.vizEl.appendChild(el('div','anim-label','Input to this operation'));
+    const inRow=el('div','anim-row');
+    const inCells=input.map(v=>{const c=cell(display(v),'waiting');inRow.appendChild(c);return c;});
+    this.vizEl.appendChild(inRow);
+    this.vizEl.appendChild(el('div','anim-arrow','&#8595;'));
+    this.vizEl.appendChild(el('div','anim-label','Output (only duplicates)'));
+    const outRow=el('div','anim-row anim-output-row');
+    this.vizEl.appendChild(outRow);
+    const output=[];const seen=new Set();let i=0;const self=this;
+    this.stepFn=()=>{
+      if(i>=input.length){self.snapshots.push(output);self.logEl.innerHTML=`<b>✓ done!</b> — Found <span class="v">${output.length}</span> duplicates → <span class="ok">[${output.map(display).join(', ')}]</span>`;self.finishOp();return;}
+      self.nextBtn.disabled=true;
+      const v=input[i];const key=JSON.stringify(v);const isDup=seen.has(key);
+      seen.add(key);
+      inCells.forEach(c=>c.classList.remove('highlight'));
+      inCells[i].classList.remove('waiting');inCells[i].classList.add('highlight');
+      self.logEl.innerHTML=op.explain?op.explain(v,isDup):`<span class="v">${display(v)}</span> → ${isDup?'<span class="ok">duplicate → KEEP ✓</span>':'<span class="no">first time → REMOVE ✗</span>'}`;
+      self.timers.push(setTimeout(()=>{
+        if(isDup){inCells[i].classList.remove('highlight');inCells[i].classList.add('pass');output.push(v);outRow.appendChild(cell(display(v),'pass'));}
+        else{inCells[i].classList.remove('highlight');inCells[i].classList.add('fail');}
+        i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
+        self.nextBtn.disabled=false;
+        self.scheduleAutoNext();
+      },self.speed*0.4));
+    };
+    this.stepFn();
+  }
+
+  /* ──── LIMIT (step-by-step) ──── */
+  setupLimit(op,input){
+    this.vizEl.innerHTML='';
+    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
+    this.vizEl.appendChild(el('div','anim-label','Taking first '+op.n+' elements'));
+    const inRow=el('div','anim-row');
+    const inCells=input.map(v=>{const c=cell(display(v),'waiting');inRow.appendChild(c);return c;});
+    this.vizEl.appendChild(inRow);
+    this.vizEl.appendChild(el('div','anim-arrow','&#8595;'));
+    this.vizEl.appendChild(el('div','anim-label','Output (first '+op.n+')'));
+    const outRow=el('div','anim-row anim-output-row');
+    this.vizEl.appendChild(outRow);
+    const output=[];let i=0;const self=this;
+    this.stepFn=()=>{
+      if(i>=input.length||output.length>=op.n){
+        self.snapshots.push(output);
+        self.logEl.innerHTML=`<b>✓ .limit(${op.n}) done!</b> — Took <span class="v">${output.length}</span> elements → <span class="ok">[${output.map(display).join(', ')}]</span>`;
+        self.finishOp();return;
+      }
+      self.nextBtn.disabled=true;
+      const v=input[i];
+      inCells.forEach(c=>c.classList.remove('highlight'));
+      inCells[i].classList.remove('waiting');inCells[i].classList.add('highlight');
+      self.logEl.innerHTML=`Element <span class="v">${display(v)}</span> — taken ${output.length+1}/${op.n} → <span class="ok">TAKE ✓</span>`;
+      self.timers.push(setTimeout(()=>{
+        inCells[i].classList.remove('highlight');inCells[i].classList.add('pass');
+        output.push(v);outRow.appendChild(cell(display(v),'pass'));
+        i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
+        self.nextBtn.disabled=false;
+        self.scheduleAutoNext();
+      },self.speed*0.4));
+    };
+    this.stepFn();
+  }
+
+  /* ──── SKIP (step-by-step) ──── */
+  setupSkip(op,input){
+    this.vizEl.innerHTML='';
+    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
+    this.vizEl.appendChild(el('div','anim-label','Skipping first '+op.n+' elements'));
+    const inRow=el('div','anim-row');
+    const inCells=input.map(v=>{const c=cell(display(v),'waiting');inRow.appendChild(c);return c;});
+    this.vizEl.appendChild(inRow);
+    this.vizEl.appendChild(el('div','anim-arrow','&#8595;'));
+    this.vizEl.appendChild(el('div','anim-label','Output (after skipping '+op.n+')'));
+    const outRow=el('div','anim-row anim-output-row');
+    this.vizEl.appendChild(outRow);
+    const output=[];let i=0;const self=this;
+    this.stepFn=()=>{
+      if(i>=input.length){
+        self.snapshots.push(output);
+        self.logEl.innerHTML=`<b>✓ .skip(${op.n}) done!</b> — Skipped ${Math.min(op.n,input.length)}, kept <span class="v">${output.length}</span> → <span class="ok">[${output.map(display).join(', ')}]</span>`;
+        self.finishOp();return;
+      }
+      self.nextBtn.disabled=true;
+      const v=input[i];const skip=i<op.n;
+      inCells.forEach(c=>c.classList.remove('highlight'));
+      inCells[i].classList.remove('waiting');inCells[i].classList.add('highlight');
+      self.logEl.innerHTML=`Element <span class="v">${display(v)}</span> at index ${i} — ${skip?'<span class="no">SKIP ✗ (index '+i+' < '+op.n+')</span>':'<span class="ok">KEEP ✓ (past skip zone)</span>'}`;
+      self.timers.push(setTimeout(()=>{
+        if(!skip){inCells[i].classList.remove('highlight');inCells[i].classList.add('pass');output.push(v);outRow.appendChild(cell(display(v),'pass'));}
+        else{inCells[i].classList.remove('highlight');inCells[i].classList.add('fail');}
+        i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
+        self.nextBtn.disabled=false;
+        self.scheduleAutoNext();
+      },self.speed*0.4));
+    };
+    this.stepFn();
+  }
+
+  /* ──── ALL MATCH (step-by-step) ──── */
+  setupAllMatch(op,input){
+    this.vizEl.innerHTML='';
+    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
+    this.vizEl.appendChild(el('div','anim-label','Testing every element'));
+    const inRow=el('div','anim-row');
+    const inCells=input.map(v=>{const c=cell(display(v),'waiting');inRow.appendChild(c);return c;});
+    this.vizEl.appendChild(inRow);
+    this.vizEl.appendChild(el('div','anim-arrow','&#8595;'));
+    const resultCell=cell('?','accum');
+    const rRow=el('div','anim-row');rRow.appendChild(resultCell);
+    this.vizEl.appendChild(rRow);
+    let i=0;const self=this;
+    this.stepFn=()=>{
+      if(i>=input.length){
+        self.snapshots.push([true]);
+        resultCell.innerHTML='TRUE';resultCell.classList.remove('accum');resultCell.classList.add('pass');
+        self.logEl.innerHTML=`<b>✓ allMatch() done!</b> → <span class="ok">true</span> — All elements matched!`;
+        self.finishOp();return;
+      }
+      self.nextBtn.disabled=true;
+      const v=input[i];const pass=op.test(v);
+      inCells.forEach(c=>c.classList.remove('highlight'));
+      inCells[i].classList.remove('waiting');inCells[i].classList.add('highlight');
+      self.logEl.innerHTML=op.explain(v,pass);
+      self.timers.push(setTimeout(()=>{
+        inCells[i].classList.remove('highlight');inCells[i].classList.add(pass?'pass':'fail');
+        i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
+        if(!pass){
+          self.snapshots.push([false]);
+          resultCell.innerHTML='FALSE';resultCell.classList.remove('accum');resultCell.classList.add('fail');
+          self.logEl.innerHTML=`<b>✓ allMatch() → FALSE</b> — Short-circuited! <span class="v">${display(v)}</span> failed.`;
+          self.nextBtn.disabled=false;
+          self.finishOp();
+        } else {
+          self.nextBtn.disabled=false;
+          self.scheduleAutoNext();
+        }
+      },self.speed*0.4));
+    };
+    this.stepFn();
+  }
+
+  /* ──── ANY MATCH (step-by-step) ──── */
+  setupAnyMatch(op,input){
+    this.vizEl.innerHTML='';
+    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
+    this.vizEl.appendChild(el('div','anim-label','Testing elements for any match'));
+    const inRow=el('div','anim-row');
+    const inCells=input.map(v=>{const c=cell(display(v),'waiting');inRow.appendChild(c);return c;});
+    this.vizEl.appendChild(inRow);
+    this.vizEl.appendChild(el('div','anim-arrow','&#8595;'));
+    const resultCell=cell('?','accum');
+    const rRow=el('div','anim-row');rRow.appendChild(resultCell);
+    this.vizEl.appendChild(rRow);
+    let i=0;const self=this;
+    this.stepFn=()=>{
+      if(i>=input.length){
+        self.snapshots.push([false]);
+        resultCell.innerHTML='FALSE';resultCell.classList.remove('accum');resultCell.classList.add('fail');
+        self.logEl.innerHTML=`<b>✓ anyMatch() done!</b> → <span class="no">false</span> — No elements matched.`;
+        self.finishOp();return;
+      }
+      self.nextBtn.disabled=true;
+      const v=input[i];const pass=op.test(v);
+      inCells.forEach(c=>c.classList.remove('highlight'));
+      inCells[i].classList.remove('waiting');inCells[i].classList.add('highlight');
+      self.logEl.innerHTML=op.explain(v,pass);
+      self.timers.push(setTimeout(()=>{
+        inCells[i].classList.remove('highlight');inCells[i].classList.add(pass?'pass':'fail');
+        i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
+        if(pass){
+          self.snapshots.push([true]);
+          resultCell.innerHTML='TRUE';resultCell.classList.remove('accum');resultCell.classList.add('pass');
+          self.logEl.innerHTML=`<b>✓ anyMatch() → TRUE</b> — Short-circuited! <span class="v">${display(v)}</span> matched.`;
+          self.nextBtn.disabled=false;
+          self.finishOp();
+        } else {
+          self.nextBtn.disabled=false;
+          self.scheduleAutoNext();
+        }
+      },self.speed*0.4));
+    };
+    this.stepFn();
+  }
+
+  /* ──── FLAT MAP (step-by-step) ──── */
+  setupFlatMap(op,input){
+    this.vizEl.innerHTML='';
+    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
+    this.vizEl.appendChild(el('div','anim-label','Input to this operation'));
+    const inRow=el('div','anim-row');
+    const inCells=input.map(v=>{const c=cell(display(v),'waiting');inRow.appendChild(c);return c;});
+    this.vizEl.appendChild(inRow);
+    this.vizEl.appendChild(el('div','anim-arrow','&#8595; flattens to &#8595;'));
+    this.vizEl.appendChild(el('div','anim-label','Output (flattened elements)'));
+    const outRow=el('div','anim-row anim-output-row');
+    this.vizEl.appendChild(outRow);
+    const output=[];let i=0;const self=this;
+    this.stepFn=()=>{
+      if(i>=input.length){self.snapshots.push(output);self.logEl.innerHTML=`<b>✓ .flatMap() done!</b> — ${input.length} elements → <span class="v">${output.length}</span> flattened → <span class="ok">[${output.map(display).join(', ')}]</span>`;self.finishOp();return;}
+      self.nextBtn.disabled=true;
+      const v=input[i];const items=op.transform(v);
+      inCells.forEach(c=>c.classList.remove('highlight'));
+      inCells[i].classList.remove('waiting');inCells[i].classList.add('highlight');
+      self.logEl.innerHTML=op.explain(v,items);
+      self.timers.push(setTimeout(()=>{
+        inCells[i].classList.remove('highlight');inCells[i].classList.add('transformed');
+        items.forEach(item=>{output.push(item);outRow.appendChild(cell(display(item),'pass'));});
+        i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
+        self.nextBtn.disabled=false;
+        self.scheduleAutoNext();
+      },self.speed*0.4));
+    };
+    this.stepFn();
+  }
+
   renderDone(){
     this.pipeLines.forEach(l=>{l.classList.remove('active');l.classList.add('done');});
     this.stepInfo.textContent='Done!';this.nextBtn.disabled=true;
@@ -3994,6 +4260,167 @@ const streamProblems=[
     {code:'.filter(p → p.price > 100)',type:'filter',test:p=>p.price>100,explain:(p,pass)=>`<span class="v">${p.name} ($${p.price})</span> > $100? → ${pass?'<span class="ok">EXPENSIVE ✓</span>':'<span class="no">CHEAP ✗</span>'}`},
     {code:'.map(p → p.price * 0.2)',type:'map',transform:p=>Math.round(p.price*0.2),explain:(p,r)=>`<span class="v">${typeof p==='object'?p.name:p}</span>: 20% of $${typeof p==='object'?p.price:p} = <span class="v">$${r}</span> saved`},
     {code:'.reduce(0, Integer::sum)',type:'reduce',identity:0,combine:(a,b)=>a+b,explain:(acc,v)=>`Total savings: <span class="v">$${acc}</span> + <span class="v">$${v}</span> = <span class="v">$${acc+v}</span>`}
+  ]},
+
+  /* ── STREAMS PROGRAMMING & SCENARIOS ── */
+
+  {tabName:'P16: Remove dupes (Set)',title:'Remove duplicates using filter + HashSet.add()',input:[1,2,3,2,4,3,5,1],ops:[
+    {code:'.filter(i → seen.add(i))',type:'distinct',explain:(v,pass)=>`<span class="v">${v}</span> → seen.add(${v}) returns ${pass?'<span class="ok">true (first time) → KEEP ✓</span>':'<span class="no">false (already seen) → REMOVE ✗</span>'}`},
+    {code:'.collect(Collectors.toList())',type:'collect'}
+  ]},
+
+  {tabName:'P17: Get duplicates',title:'Get only duplicate elements using !seen.add()',input:[1,2,3,2,4,3,5,1],ops:[
+    {code:'.filter(i → !seen.add(i))',type:'duplicatesOnly',explain:(v,isDup)=>`<span class="v">${v}</span> → !seen.add(${v}) = ${isDup?'<span class="ok">true (was seen before) → KEEP ✓</span>':'<span class="no">false (first time) → REMOVE ✗</span>'}`},
+    {code:'.collect(Collectors.toList())',type:'collect'}
+  ]},
+
+  {tabName:'P18: Distinct + Sort desc',title:'Remove duplicates then sort descending',input:[11,11,1,3,5,6,5],ops:[
+    {code:'.distinct()',type:'distinct',explain:(v,pass)=>`<span class="v">${v}</span> → ${pass?'<span class="ok">first occurrence → KEEP ✓</span>':'<span class="no">duplicate → REMOVE ✗</span>'}`},
+    {code:'.sorted(Comparator.reverseOrder())',type:'sorted',compareFn:(a,b)=>b-a,
+     explain:(a,b,r,sw)=>`Descending: <span class="v">${b}</span> vs <span class="v">${a}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`},
+    {code:'.toList()',type:'collect'}
+  ]},
+
+  {tabName:'P19: Sort by length',title:'Sort strings by increasing order of their length',input:["Java","Python","C#","HTML","Kotlin","C++","COBOL","C"],ops:[
+    {code:'.sorted(Comparator.comparing(s → s.length()))',type:'sorted',compareFn:(a,b)=>a.length-b.length,
+     explain:(a,b,r,sw)=>`<span class="v">"${a}"</span>(len ${a.length}) vs <span class="v">"${b}"</span>(len ${b.length}): ${a.length}-${b.length}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`},
+    {code:'.collect(Collectors.toList())',type:'collect'}
+  ]},
+
+  {tabName:'P20: Find max',title:'Find maximum number in a list',input:[1,2,4,41,4],ops:[
+    {code:'.max(Comparator.naturalOrder())',type:'max',compareFn:(a,b)=>a-b}
+  ]},
+
+  {tabName:'P21: allMatch (even)',title:'Check if all numbers are even using allMatch',input:[2,4,6,8,10],ops:[
+    {code:'.allMatch(i → i % 2 == 0)',type:'allMatch',test:n=>n%2===0,
+     explain:(n,p)=>`<span class="v">${n}</span> % 2 = ${n%2} → ${p?'<span class="ok">EVEN ✓</span>':'<span class="no">ODD ✗ — FAILS!</span>'}`}
+  ]},
+
+  {tabName:'P22: anyMatch',title:'Check if any string starts with "A"',input:["Banana","Apple","Cat","Andrew"],ops:[
+    {code:'.anyMatch(s → s.startsWith("A"))',type:'anyMatch',test:s=>s.startsWith('A'),
+     explain:(s,p)=>`<span class="v">"${s}"</span>.startsWith("A")? → ${p?'<span class="ok">YES ✓ — MATCH FOUND!</span>':'<span class="no">NO ✗</span>'}`}
+  ]},
+
+  {tabName:'P23: Starts with 1',title:'Find numbers starting with digit 1',input:[10,12,20,19,30],ops:[
+    {code:'.filter(i → String.valueOf(i).startsWith("1"))',type:'filter',test:n=>String(n).startsWith('1'),
+     explain:(n,p)=>`<span class="v">${n}</span> → "${n}".startsWith("1")? → ${p?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`},
+    {code:'.toList()',type:'collect'}
+  ]},
+
+  {tabName:'P24: Palindromes',title:'Find palindrome strings from a list',input:["Telugu","Tamil","Malayalam"],ops:[
+    {code:'.filter(s → s.equalsIgnoreCase(reverse(s)))',type:'filter',
+     test:s=>s.toLowerCase()===s.toLowerCase().split('').reverse().join(''),
+     explain:(s,p)=>{const rev=s.toLowerCase().split('').reverse().join('');return `<span class="v">"${s}"</span> → lower="${s.toLowerCase()}" reverse="${rev}" → ${p?'<span class="ok">PALINDROME ✓</span>':'<span class="no">NOT palindrome ✗</span>'}`;}},
+    {code:'.toList()',type:'collect'}
+  ]},
+
+  {tabName:'P25: Longest word',title:'Find the longest word in a list',input:["cat","elephant","dog","giraffe","zebra"],ops:[
+    {code:'.max((o1, o2) → o1.length() - o2.length())',type:'max',compareFn:(a,b)=>a.length-b.length}
+  ]},
+
+  {tabName:'P26: Cube > 50',title:'Cube list elements and filter numbers greater than 50',input:[1,2,3,4,5],ops:[
+    {code:'.map(n → n * n * n)',type:'map',transform:n=>n*n*n,explain:(n,r)=>`<span class="v">${n}</span>³ = <span class="v">${r}</span>`},
+    {code:'.filter(n → n > 50)',type:'filter',test:n=>n>50,explain:(n,p)=>`<span class="v">${n}</span> > 50? → ${p?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`},
+    {code:'.collect(Collectors.toList())',type:'collect'}
+  ]},
+
+  {tabName:'P27: Merge + sort',title:'Merge [4,2,7,1] and [8,3,9,5] into single sorted array',input:[4,2,7,1,8,3,9,5],ops:[
+    {code:'.sorted()',type:'sorted',compareFn:(a,b)=>a-b,
+     explain:(a,b,r,sw)=>`<span class="v">${a}</span> vs <span class="v">${b}</span>: ${a}-${b}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`},
+    {code:'.toArray()',type:'collect'}
+  ]},
+
+  {tabName:'P28: Top 3 elements',title:'Get top 3 elements from a list',input:[71,18,42,21,67,32,95,14,56,87],ops:[
+    {code:'.sorted(Comparator.reverseOrder())',type:'sorted',compareFn:(a,b)=>b-a,
+     explain:(a,b,r,sw)=>`Desc: <span class="v">${b}</span> vs <span class="v">${a}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`},
+    {code:'.limit(3)',type:'limit',n:3},
+    {code:'.toList()',type:'collect'}
+  ]},
+
+  {tabName:'P29: 3rd highest',title:'Get 3rd highest element from a list',input:[71,18,42,21,67,32,95,14,56,87],ops:[
+    {code:'.sorted(Comparator.reverseOrder())',type:'sorted',compareFn:(a,b)=>b-a,
+     explain:(a,b,r,sw)=>`Desc: <span class="v">${b}</span> vs <span class="v">${a}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`},
+    {code:'.skip(2)',type:'skip',n:2},
+    {code:'.findFirst().orElse(-1)',type:'findFirst'}
+  ]},
+
+  {tabName:'P30: Anagram check',title:'Check anagram: sort chars of "RaceCar" → compare with "CarRace"',input:["R","a","c","e","C","a","r"],ops:[
+    {code:'.map(c → c.toUpperCase())',type:'map',transform:s=>s.toUpperCase(),explain:(s,r)=>`<span class="v">"${s}"</span> → <span class="v">"${r}"</span>`},
+    {code:'.sorted()',type:'sorted',compareFn:(a,b)=>a.localeCompare(b),
+     explain:(a,b,r,sw)=>`"<span class="v">${a}</span>" vs "<span class="v">${b}</span>" → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`},
+    {code:'.collect(Collectors.joining())',type:'joining',delimiter:''}
+  ]},
+
+  {tabName:'P31: Sum of digits',title:'Sum of all digits in number 15623',input:["1","5","6","2","3"],ops:[
+    {code:'.map(s → Integer.parseInt(s))',type:'map',transform:s=>parseInt(s),explain:(s,r)=>`<span class="v">"${s}"</span> → parseInt → <span class="v">${r}</span>`},
+    {code:'.reduce(0, (a,b) → a + b)',type:'reduce',identity:0,combine:(a,b)=>a+b,explain:(acc,v)=>`<span class="v">${acc}</span> + <span class="v">${v}</span> = <span class="v">${acc+v}</span>`}
+  ]},
+
+  {tabName:'P32: Common elements',title:'Find common elements between two arrays',input:[71,21,34,89,56,28],ops:[
+    {code:'.filter(i → list2.contains(i))',type:'filter',
+     test:(function(){const l2=[12,56,17,21,94,34];return n=>l2.includes(n);})(),
+     explain:(function(){const l2=[12,56,17,21,94,34];return(n,p)=>`<span class="v">${n}</span> in [12,56,17,21,94,34]? → ${p?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`;})()},
+    {code:'.collect(Collectors.toList())',type:'collect'}
+  ]},
+
+  {tabName:'P33: Reverse words',title:'Reverse each word of "Java Concept Of The Day"',input:["Java","Concept","Of","The","Day"],ops:[
+    {code:'.map(s → new StringBuilder(s).reverse())',type:'map',transform:s=>s.split('').reverse().join(''),
+     explain:(s,r)=>`<span class="v">"${s}"</span> → reversed → <span class="v">"${r}"</span>`},
+    {code:'.collect(Collectors.joining(" "))',type:'joining',delimiter:' '}
+  ]},
+
+  {tabName:'P34: Count "java"',title:'Count occurrences of "java" using flatMap',input:["java scala ruby","java react spring java"],ops:[
+    {code:'.flatMap(s → Arrays.stream(s.split(" ")))',type:'flatMap',transform:s=>s.split(' '),
+     explain:(s,items)=>`<span class="v">"${s}"</span> → split → [${items.map(w=>'"'+w+'"').join(', ')}]`},
+    {code:'.filter(w → w.equals("java"))',type:'filter',test:w=>w==='java',
+     explain:(w,p)=>`<span class="v">"${w}"</span> equals "java"? → ${p?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`},
+    {code:'.count()',type:'count'}
+  ]},
+
+  {tabName:'P35: Unique words',title:'Convert sentences into unique words using flatMap + distinct',input:["java is cool","cool code in java"],ops:[
+    {code:'.flatMap(s → Arrays.stream(s.split(" ")))',type:'flatMap',transform:s=>s.split(' '),
+     explain:(s,items)=>`<span class="v">"${s}"</span> → split → [${items.map(w=>'"'+w+'"').join(', ')}]`},
+    {code:'.distinct()',type:'distinct',explain:(v,pass)=>`<span class="v">"${v}"</span> → ${pass?'<span class="ok">first time → KEEP ✓</span>':'<span class="no">duplicate → REMOVE ✗</span>'}`},
+    {code:'.collect(Collectors.toSet())',type:'collect'}
+  ]},
+
+  {tabName:'P36: Flatten lists',title:'Flatten List<List<Integer>> into single list',input:[[1,2],[3,4]],ops:[
+    {code:'.flatMap(list → list.stream())',type:'flatMap',transform:arr=>Array.from(arr),
+     explain:(arr,items)=>`<span class="v">[${arr}]</span> → stream → [${items.join(', ')}]`},
+    {code:'.collect(Collectors.toList())',type:'collect'}
+  ]},
+
+  {tabName:'P37: All longest words',title:'Find all longest words (maxLength=9)',input:["apple","banana","orange","pineapple","blueberry"],ops:[
+    {code:'.filter(s → s.length() == maxLength)',type:'filter',test:s=>s.length===9,
+     explain:(s,p)=>`<span class="v">"${s}"</span> length=${s.length} == 9 (maxLength)? → ${p?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`},
+    {code:'.toList()',type:'collect'}
+  ]},
+
+  {tabName:'P38: Sum (reduce)',title:'Sum of numbers using reduce',input:[5,10,15,20],ops:[
+    {code:'.reduce(0, (a,b) → a + b)',type:'reduce',identity:0,combine:(a,b)=>a+b,
+     explain:(acc,v)=>`<span class="v">${acc}</span> + <span class="v">${v}</span> = <span class="v">${acc+v}</span>`}
+  ]},
+
+  {tabName:'P39: Common prefix',title:'Find longest common prefix of ["flower","flow","flight"]',input:["flow","flight"],ops:[
+    {code:'.reduce((s1, s2) → commonPrefix(s1, s2))',type:'reduce',identity:"flower",
+     combine:(a,b)=>{const len=Math.min(a.length,b.length);let i=0;while(i<len&&a[i]===b[i])i++;return a.substring(0,i);},
+     explain:(acc,v)=>{const len=Math.min(acc.length,v.length);let i=0;while(i<len&&acc[i]===v[i])i++;const pfx=acc.substring(0,i);return `Compare "<span class="v">${acc}</span>" with "<span class="v">${v}</span>" char by char → common prefix = "<span class="v">${pfx}</span>"`;}}
+  ]},
+
+  {tabName:'P40: First non-repeat',title:'First non-repeating character in "aabbcdeffg"',
+   input:[{c:"a",n:2},{c:"b",n:2},{c:"c",n:1},{c:"d",n:1},{c:"e",n:1},{c:"f",n:2},{c:"g",n:1}],ops:[
+    {code:'.filter(entry → entry.getValue() == 1)',type:'filter',test:e=>e.n===1,
+     explain:(e,p)=>`<span class="v">"${e.c}"</span> count=${e.n} == 1? → ${p?'<span class="ok">NON-REPEATING ✓</span>':'<span class="no">REPEATING ✗</span>'}`},
+    {code:'.map(entry → entry.getKey())',type:'map',transform:e=>e.c,
+     explain:(e,r)=>`Entry {<span class="v">${typeof e==='object'?'"'+e.c+'": count '+e.n:e}</span>} → key = <span class="v">"${r}"</span>`},
+    {code:'.findFirst()',type:'findFirst'}
+  ]},
+
+  {tabName:'P41: Most repeated',title:'Find most repeated number in [10,20,5,8,30,25,30]',
+   input:[{k:10,v:1},{k:20,v:1},{k:5,v:1},{k:8,v:1},{k:30,v:2},{k:25,v:1}],ops:[
+    {code:'.max(Map.Entry.comparingByValue())',type:'max',compareFn:(a,b)=>a.v-b.v},
+    {code:'.map(entry → entry.getKey())',type:'map',transform:e=>e.k,
+     explain:(e,r)=>`Entry {<span class="v">${typeof e==='object'?e.k+': count '+e.v:e}</span>} → key = <span class="v">${r}</span>`}
   ]}
 ];
 
