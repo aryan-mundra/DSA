@@ -506,6 +506,8 @@
 
             .animation-box { padding: 14px; margin: 14px 0; }
             .animation-box h3 { font-size: 1em; flex-wrap: wrap; }
+            .brute-force-section { padding: 14px; margin: 10px 0; }
+            .brute-force-section pre { font-size: 0.82em; padding: 12px; }
 
             .controls { gap: 6px; }
             .controls button { padding: 7px 12px; font-size: 0.82em; }
@@ -531,6 +533,8 @@
             .solution pre .code-line { padding: 0 12px; }
             .solution pre .code-line.highlight-line { padding-left: 8px; }
             .solution { padding: 14px; }
+
+            .collapsible-toggle { padding: 12px 14px; font-size: 0.9em; }
 
             .complexity { padding: 10px; }
             .result-box { font-size: 0.9em; padding: 8px 12px; }
@@ -572,6 +576,9 @@
 
             .animation-box { padding: 10px; margin: 10px 0; border-radius: 8px; }
             .animation-box h3 { font-size: 0.9em; }
+            .brute-force-section { padding: 10px; margin: 8px 0; border-radius: 6px; }
+            .brute-force-section pre { font-size: 0.75em; padding: 8px; }
+            .brute-force-section h3 { font-size: 0.9em; }
 
             .controls { gap: 5px; }
             .controls button { padding: 6px 10px; font-size: 0.78em; flex: 1 1 auto; min-width: 0; }
@@ -600,6 +607,10 @@
             .solution pre .code-line { padding: 0 8px; min-height: 1.5em; line-height: 1.5; }
             .solution pre .code-line.highlight-line { padding-left: 4px; border-left-width: 3px; }
             .solution { padding: 10px; border-radius: 6px; }
+
+            .collapsible-toggle { padding: 10px 12px; font-size: 0.85em; border-radius: 8px; }
+            .collapsible-toggle.active { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+            .collapsible-content { border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
 
             .complexity { padding: 8px; font-size: 0.85em; }
             .result-box { font-size: 0.82em; padding: 6px 10px; display: block; word-break: break-word; }
@@ -650,10 +661,120 @@
             }
         }
 
+        /* ===== BRUTE FORCE SECTION ===== */
+        .brute-force-section {
+            background: #fff5f5;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #e53e3e;
+            margin: 15px 0;
+        }
+        .brute-force-section h3 {
+            color: #c53030;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        .brute-force-section pre {
+            background: #f5f5f5;
+            color: #000;
+            padding: 15px 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            border: 1px solid #e0e0e0;
+            white-space: pre-wrap;
+            font-size: 0.92em;
+        }
+        .brute-force-section .complexity {
+            background: #fee2e2;
+            border-left-color: #e53e3e;
+        }
+        .brute-force-section .complexity h4 { color: #c53030; }
+
+        /* ===== COLLAPSIBLE SECTION TOGGLE ===== */
+        .collapsible-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 14px 20px;
+            margin-top: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #edf2f7 100%);
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            color: #2d3748;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+        .collapsible-toggle:hover {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #ebf4ff 0%, #e9d8fd 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.15);
+        }
+        .collapsible-toggle.active {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #ebf4ff 0%, #f0f4ff 100%);
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            margin-bottom: 0;
+        }
+        .collapsible-toggle .toggle-icon {
+            font-size: 0.8em;
+            transition: transform 0.3s ease;
+            color: #667eea;
+        }
+        .collapsible-toggle.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+        .collapsible-toggle .toggle-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .collapsible-toggle .toggle-emoji {
+            font-size: 1.2em;
+        }
+        .collapsible-content {
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.5s ease, opacity 0.3s ease, padding 0.3s ease;
+            border: 2px solid #667eea;
+            border-top: none;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            padding: 0 0;
+        }
+        .collapsible-content.expanded {
+            max-height: 5000px;
+            opacity: 1;
+            padding: 5px 0;
+        }
+        .collapsible-content > .animation-box {
+            margin-top: 0;
+            border: none;
+            border-radius: 0;
+        }
+        .collapsible-content > .solution {
+            border-radius: 0;
+            border-left: none;
+        }
+        .collapsible-content > .brute-force-section {
+            margin: 0;
+            border-radius: 0;
+            border-left: none;
+        }
+
         /* Touch-friendly tap targets */
         @media (hover: none) and (pointer: coarse) {
             .controls button { min-height: 40px; }
             nav a { min-height: 36px; display: inline-flex; align-items: center; }
+            .collapsible-toggle { min-height: 48px; }
         }
 
         /* Reduce side-by-side layout gaps on mobile */
@@ -4007,12 +4128,15 @@ int[] dailyTemperatures(int[] temps) {
             int prevIdx = stack.pop();
             answer[prevIdx] = i - prevIdx;
         }
-        stack.push(i);
+        stack.push(i); // push INDEX i, not temps[i]
     }
     
     return answer;
 }
             </pre>
+            <div style="background: #ebf4ff; padding: 12px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #667eea;">
+                <p style="margin: 5px 0; color: #2d3748;"><strong>Note:</strong> The stack stores <strong>indices</strong> (0, 1, 2, ...), not temperature values. The animation shows <code>0(73)</code> which means "index 0 with temperature 73" for clarity. In the actual code, we push <code>i</code> (the index), not <code>temps[i]</code> (the value).</p>
+            </div>
             <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
         </div>
     </div>
@@ -4185,6 +4309,7 @@ int largestRectangleArea(int[] heights) {
             </pre>
             <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
         </div>
+
     </div>
 
     <!-- Maximal Rectangle (LC 85) -->
@@ -4879,6 +5004,65 @@ int[][] merge(int[][] intervals) {
         </div>
     </div>
 
+    <!-- Intuition: Sort by Start vs Sort by End -->
+    <div class="question-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
+        <div class="question-header" style="background: transparent;">
+            <span class="question-title" style="color: white; font-size: 1.2em;">💡 Key Intuition: When to Sort by START vs END?</span>
+            <span class="difficulty medium" style="background: rgba(255,255,255,0.3); color: white; border: 1px solid white;">Important Concept</span>
+        </div>
+        <div class="question-description" style="background: white; margin: 15px; border-radius: 8px; padding: 20px;">
+            <h3 style="color: #667eea; margin-top: 0;">Understanding Interval Sorting Strategy</h3>
+            
+            <div style="background: #ebf4ff; padding: 15px; border-radius: 8px; margin: 15px 0; border: 2px solid #667eea;">
+                <h4 style="color: #667eea; margin-top: 0;">❓ The Question:</h4>
+                <p style="font-style: italic; line-height: 1.6;">
+                    "I was studying the greedy approach and noticed something confusing: In the <strong>Non-Overlapping Intervals</strong> problem, we sort the array by the END time (sorting by intervals[i][1]). However, in problems like <strong>Meeting Rooms</strong> and <strong>Merge Intervals</strong>, we sort by the START time (sorting by intervals[i][0]). How do I develop the intuition to know which problems require sorting by END versus sorting by START?"
+                </p>
+            </div>
+            
+            <div style="background: #f7fafc; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #667eea;">
+                <h4 style="color: #667eea; margin-top: 0;">✅ Sort by END Time → When SELECTING/MAXIMIZING</h4>
+                <p><strong>Use Case:</strong> When you want to <strong>maximize the number of non-overlapping intervals</strong> you can choose (Activity Selection)</p>
+                <p><strong>Why?</strong> Finishing activities as early as possible leaves maximum room for future activities. The earliest ending interval conflicts with the fewest future intervals.</p>
+                <div style="background: white; padding: 10px; border-radius: 5px; margin-top: 10px;">
+                    <strong>Example:</strong> Intervals: [[1,10], [2,3], [4,5]]<br>
+                    Sort by END: [[2,3], [4,5], [1,10]] → Pick [2,3] and [4,5] = <span style="color: #38a169; font-weight: bold;">2 intervals ✓</span><br>
+                    Sort by START: [[1,10], [2,3], [4,5]] → Pick [1,10] only = <span style="color: #e53e3e; font-weight: bold;">1 interval ✗</span>
+                </div>
+            </div>
+
+            <div style="background: #f7fafc; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #38a169;">
+                <h4 style="color: #38a169; margin-top: 0;">✅ Sort by START Time → When PROCESSING ALL</h4>
+                <p><strong>Use Case:</strong> When you need to <strong>process or merge ALL intervals</strong> in chronological order</p>
+                <p><strong>Why?</strong> You must check each interval against the previous one(s) in time order. You're not selecting - you're processing everything.</p>
+                <div style="background: white; padding: 10px; border-radius: 5px; margin-top: 10px;">
+                    <strong>Example:</strong> Intervals: [[1,3], [8,10], [2,6]]<br>
+                    Sort by START: [[1,3], [2,6], [8,10]] → Compare consecutive pairs easily<br>
+                    Process: [1,3] merges with [2,6] → [1,6], then [8,10] stays separate<br>
+                    Result: <span style="color: #38a169; font-weight: bold;">[[1,6], [8,10]] ✓</span>
+                </div>
+            </div>
+
+            <div style="background: #fed7d7; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #e53e3e;">
+                <h4 style="color: #e53e3e; margin-top: 0;">🎯 Quick Decision Rule</h4>
+                <p style="margin: 10px 0; font-size: 1.1em;"><strong>Ask yourself:</strong></p>
+                <ol style="line-height: 1.8;">
+                    <li><strong>Am I SELECTING a subset?</strong> → Sort by <strong style="color: #667eea;">END</strong></li>
+                    <li><strong>Am I PROCESSING all intervals?</strong> → Sort by <strong style="color: #38a169;">START</strong></li>
+                    <li><strong>Am I CHECKING conflicts?</strong> → Sort by <strong style="color: #38a169;">START</strong></li>
+                </ol>
+            </div>
+
+            <div style="background: #fefcbf; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #d69e2e;">
+                <h4 style="color: #d69e2e; margin-top: 0;">💭 Remember This:</h4>
+                <p style="font-size: 1.15em; font-weight: 600; color: #744210; text-align: center; margin: 10px 0;">
+                    "If you're CHOOSING/MAXIMIZING → sort by END<br>
+                    If you're MERGING/PROCESSING ALL → sort by START"
+                </p>
+            </div>
+        </div>
+    </div>
+
     <!-- 4. Meeting Rooms II -->
     <div class="question-card">
         <div class="question-header">
@@ -4939,6 +5123,108 @@ int minMeetingRooms(int[][] intervals) {
 }
             </pre>
             <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n log n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <!-- Intuition: Meeting Rooms II vs Meeting Rooms I Approach -->
+    <div class="question-card" style="background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); border: none;">
+        <div class="question-header" style="background: transparent;">
+            <span class="question-title" style="color: white; font-size: 1.2em;">💡 Key Intuition: Why Different Approaches for Meeting Rooms I vs II?</span>
+            <span class="difficulty medium" style="background: rgba(255,255,255,0.3); color: white; border: 1px solid white;">Important Concept</span>
+        </div>
+        <div class="question-description" style="background: white; margin: 15px; border-radius: 8px; padding: 20px;">
+            <h3 style="color: #38a169; margin-top: 0;">Understanding Different Counting Strategies</h3>
+            
+            <div style="background: #ebf4ff; padding: 15px; border-radius: 8px; margin: 15px 0; border: 2px solid #667eea;">
+                <h4 style="color: #667eea; margin-top: 0;">❓ The Question:</h4>
+                <p style="font-style: italic; line-height: 1.6;">
+                    "We solve <strong>Meeting Rooms I (LC 252)</strong> using the 'sort by start' method with simple consecutive comparison. However, <strong>Meeting Rooms II (LC 253)</strong> uses a completely different approach - the two-pointer technique with separate start/end arrays, which is similar to <strong>Minimum Platforms Required</strong>. Can I solve Meeting Rooms II with the approach of Meeting Rooms I? And how do I know when to use which strategy?"
+                </p>
+            </div>
+            
+            <div style="background: #f7fafc; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #667eea;">
+                <h4 style="color: #667eea; margin-top: 0;">🔍 Meeting Rooms I - Simple Overlap Detection</h4>
+                <p><strong>Goal:</strong> Check if ANY two meetings overlap (Yes/No answer)</p>
+                <p><strong>Approach:</strong> Sort by start time, compare consecutive intervals</p>
+                <div style="background: white; padding: 10px; border-radius: 5px; margin-top: 10px; font-family: monospace; font-size: 0.9em;">
+Arrays.sort(intervals, (a,b) -> a[0] - b[0]);<br>
+for (int i = 1; i < intervals.length; i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (intervals[i][0] < intervals[i-1][1]) return false;<br>
+}
+                </div>
+                <p style="margin-top: 10px;"><strong>Why this works:</strong> Only need to detect if conflicts exist, not count them</p>
+            </div>
+
+            <div style="background: #f7fafc; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #38a169;">
+                <h4 style="color: #38a169; margin-top: 0;">🔢 Meeting Rooms II - Count Maximum Simultaneous Overlaps</h4>
+                <p><strong>Goal:</strong> Find the MAXIMUM number of meetings happening at the same time</p>
+                <p><strong>Approach:</strong> Two-pointer with separate start/end arrays OR Priority Queue</p>
+                
+                <div style="background: #e6fffa; padding: 12px; border-radius: 5px; margin: 10px 0;">
+                    <p style="margin: 5px 0; font-weight: bold; color: #2c7a7b;">Method 1: Two-Pointer (Similar to Minimum Platforms)</p>
+                    <div style="background: white; padding: 10px; border-radius: 5px; margin-top: 8px; font-family: monospace; font-size: 0.9em;">
+int[] starts = intervals.map(i -> i[0]).sorted();<br>
+int[] ends = intervals.map(i -> i[1]).sorted();<br>
+int rooms = 0, maxRooms = 0, endPtr = 0;<br>
+for (int start : starts) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (start >= ends[endPtr]) endPtr++; // meeting ended<br>
+&nbsp;&nbsp;&nbsp;&nbsp;else rooms++; // need new room<br>
+&nbsp;&nbsp;&nbsp;&nbsp;maxRooms = Math.max(maxRooms, rooms);<br>
+}
+                    </div>
+                    <p style="margin: 10px 0 5px 0;"><strong>Why separate arrays?</strong> We need to track starts and ends independently to count simultaneous events</p>
+                </div>
+
+                <div style="background: #fef5e7; padding: 12px; border-radius: 5px; margin: 10px 0;">
+                    <p style="margin: 5px 0; font-weight: bold; color: #b7791f;">Method 2: Sort by Start + Priority Queue (Similar to Meeting Rooms I style)</p>
+                    <div style="background: white; padding: 10px; border-radius: 5px; margin-top: 8px; font-family: monospace; font-size: 0.9em;">
+Arrays.sort(intervals, (a,b) -> a[0] - b[0]);<br>
+PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;();<br>
+for (int[] interval : intervals) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (!pq.isEmpty() && pq.peek() <= interval[0])<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pq.poll(); // reuse room<br>
+&nbsp;&nbsp;&nbsp;&nbsp;pq.add(interval[1]); // track end time<br>
+}<br>
+return pq.size(); // number of rooms needed
+                    </div>
+                    <p style="margin: 10px 0 5px 0;"><strong>Yes, you CAN use a Meeting Rooms I-like approach!</strong> But need a heap to track active meetings</p>
+                </div>
+            </div>
+
+            <div style="background: #fed7d7; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #e53e3e;">
+                <h4 style="color: #e53e3e; margin-top: 0;">🎯 When to Use Which Strategy?</h4>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                    <tr style="background: #fff5f5;">
+                        <th style="padding: 10px; text-align: left; border: 1px solid #fc8181;">Problem Type</th>
+                        <th style="padding: 10px; text-align: left; border: 1px solid #fc8181;">Approach</th>
+                        <th style="padding: 10px; text-align: left; border: 1px solid #fc8181;">Key Signal</th>
+                    </tr>
+                    <tr style="background: white;">
+                        <td style="padding: 10px; border: 1px solid #fc8181;"><strong>Check if conflicts exist</strong><br>(Meeting Rooms I)</td>
+                        <td style="padding: 10px; border: 1px solid #fc8181;">Sort by start,<br>compare consecutive</td>
+                        <td style="padding: 10px; border: 1px solid #fc8181;">Return <code>true/false</code></td>
+                    </tr>
+                    <tr style="background: #fffaf0;">
+                        <td style="padding: 10px; border: 1px solid #fc8181;"><strong>Count max simultaneous events</strong><br>(Meeting Rooms II,<br>Minimum Platforms)</td>
+                        <td style="padding: 10px; border: 1px solid #fc8181;">Two-pointer with<br>separate start/end arrays<br>OR<br>Sort + Priority Queue</td>
+                        <td style="padding: 10px; border: 1px solid #fc8181;">Return <code>count/number</code><br>Track <strong>maximum overlap</strong></td>
+                    </tr>
+                    <tr style="background: white;">
+                        <td style="padding: 10px; border: 1px solid #fc8181;"><strong>Merge overlapping intervals</strong><br>(Merge Intervals)</td>
+                        <td style="padding: 10px; border: 1px solid #fc8181;">Sort by start,<br>merge as you go</td>
+                        <td style="padding: 10px; border: 1px solid #fc8181;">Return <code>merged list</code></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div style="background: #fefcbf; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #d69e2e;">
+                <h4 style="color: #d69e2e; margin-top: 0;">💭 Remember This:</h4>
+                <p style="font-size: 1.15em; font-weight: 600; color: #744210; margin: 10px 0;">
+                    <strong>Simple Check (yes/no):</strong> Sort by start, compare pairs<br>
+                    <strong>Count Maximum Overlap:</strong> Use two-pointer (separate arrays) OR heap<br>
+                    <strong>Merge All:</strong> Sort by start, merge consecutively
+                </p>
+            </div>
         </div>
     </div>
 
@@ -7362,6 +7648,62 @@ int[][] kClosest(int[][] points, int k) {
         </div>
     </div>
 
+    <!-- Intuition: Understanding Distance Calculation -->
+    <div class="question-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border: none;">
+        <div class="question-header" style="background: transparent;">
+            <span class="question-title" style="color: white; font-size: 1.2em;">💡 Understanding Distance Calculation: How is d² calculated?</span>
+            <span class="difficulty medium" style="background: rgba(255,255,255,0.3); color: white; border: 1px solid white;">Important Concept</span>
+        </div>
+        <div class="question-description" style="background: white; margin: 15px; border-radius: 8px; padding: 20px;">
+            
+            <div style="background: #ebf4ff; padding: 15px; border-radius: 8px; margin: 15px 0; border: 2px solid #667eea;">
+                <h4 style="color: #667eea; margin-top: 0;">❓ The Question:</h4>
+                <p style="font-style: italic; line-height: 1.6;">
+                    "In the K Closest Points to Origin problem, I see values like <code>[3,3]</code> has d² = 18. I don't understand the math behind it. How is this calculated?"
+                </p>
+            </div>
+            
+            <div style="background: #f7fafc; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #e53e3e;">
+                <h4 style="color: #e53e3e; margin-top: 0;">📐 The Formula: d² = x² + y²</h4>
+                <p>Distance from point (x, y) to origin (0, 0) = √(x² + y²). We use <strong>d² = x² + y²</strong> (skip √) because we only need to compare distances.</p>
+                
+                <div style="background: white; padding: 12px; border-radius: 5px; margin-top: 10px;">
+                    <table style="width: 100%; border-collapse: collapse; font-family: monospace;">
+                        <tr style="background: #fed7d7; font-weight: bold;">
+                            <td style="padding: 8px; border: 1px solid #fc8181;">Point [x, y]</td>
+                            <td style="padding: 8px; border: 1px solid #fc8181;">Calculation</td>
+                            <td style="padding: 8px; border: 1px solid #fc8181; text-align: center;">d²</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #fc8181;"><strong>[3, 3]</strong></td>
+                            <td style="padding: 8px; border: 1px solid #fc8181;">3² + 3² = 9 + 9</td>
+                            <td style="padding: 8px; border: 1px solid #fc8181; text-align: center; font-weight: bold; color: #e53e3e;">18</td>
+                        </tr>
+                        <tr style="background: #fff5f5;">
+                            <td style="padding: 8px; border: 1px solid #fc8181;"><strong>[5, -1]</strong></td>
+                            <td style="padding: 8px; border: 1px solid #fc8181;">5² + (-1)² = 25 + 1</td>
+                            <td style="padding: 8px; border: 1px solid #fc8181; text-align: center; font-weight: bold; color: #e53e3e;">26</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #fc8181;"><strong>[-2, 4]</strong></td>
+                            <td style="padding: 8px; border: 1px solid #fc8181;">(-2)² + 4² = 4 + 16</td>
+                            <td style="padding: 8px; border: 1px solid #fc8181; text-align: center; font-weight: bold; color: #e53e3e;">20</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div style="background: #fefcbf; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #d69e2e;">
+                <h4 style="color: #d69e2e; margin-top: 0;">💭 Key Points:</h4>
+                <ul style="line-height: 1.8; margin: 10px 0;">
+                    <li><strong>Formula:</strong> d² = x² + y²</li>
+                    <li><strong>Negative values:</strong> Squaring makes them positive → (-2)² = 4</li>
+                    <li><strong>Why skip √?</strong> Only comparing distances, not calculating exact values</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <!-- Merge K Sorted Lists -->
     <div class="question-card">
         <div class="question-header">
@@ -7518,6 +7860,98 @@ int kthSmallest(int[][] arrays, int k) {
             <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(k log M) | <strong>Space:</strong> O(M)</p></div>
         </div>
     </div>
+
+    <!-- Intuition: Why Process One Element at a Time? -->
+    <div class="question-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); border: none;">
+        <div class="question-header" style="background: transparent;">
+            <span class="question-title" style="color: white; font-size: 1.2em;">💡 Why Not Dump Entire Arrays into Heap?</span>
+            <span class="difficulty medium" style="background: rgba(255,255,255,0.3); color: white; border: 1px solid white;">Important Concept</span>
+        </div>
+        <div class="question-description" style="background: white; margin: 15px; border-radius: 8px; padding: 20px;">
+            
+            <div style="background: #ebf4ff; padding: 15px; border-radius: 8px; margin: 15px 0; border: 2px solid #667eea;">
+                <h4 style="color: #667eea; margin-top: 0;">❓ The Question:</h4>
+                <p style="font-style: italic; line-height: 1.6;">
+                    "For problems like <strong>Merge K Sorted Lists (LC 23)</strong> and <strong>Kth Smallest in M Sorted Arrays</strong>, can we not take one whole array at once, empty all its elements into the min-heap, then take the next array and do the same?"
+                </p>
+            </div>
+            
+            <div style="background: #fed7d7; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #e53e3e;">
+                <h4 style="color: #e53e3e; margin-top: 0;">❌ Why This Doesn't Work</h4>
+                <p><strong>If you dump ALL elements from ALL arrays into heap:</strong></p>
+                <ul style="margin: 10px 0; line-height: 1.8;">
+                    <li><strong>Huge heap size:</strong> O(n×m) space (n = arrays, m = avg size) instead of O(k)</li>
+                    <li><strong>Lose sorted advantage:</strong> Not using the fact each array is already sorted</li>
+                    <li><strong>Inefficient:</strong> O(n×m log(n×m)) time instead of O(n×m log k)</li>
+                    <li><strong>Defeats the purpose:</strong> You're essentially sorting everything from scratch!</li>
+                </ul>
+            </div>
+
+            <div style="background: #c6f6d5; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #38a169;">
+                <h4 style="color: #38a169; margin-top: 0;">✓ The Smart Approach: One Element Per Array</h4>
+                <p><strong>Key Insight:</strong> Since each array is already sorted, the global minimum can ONLY be among the current "front" elements of each array.</p>
+                
+                <div style="background: white; padding: 12px; border-radius: 5px; margin: 10px 0; font-family: monospace; font-size: 0.9em;">
+Arrays:<br>
+Array 1: [1, 4, 7, 10]  → Currently at: <strong style="color: #e53e3e;">1</strong><br>
+Array 2: [2, 5, 8]      → Currently at: <strong style="color: #e53e3e;">2</strong><br>
+Array 3: [3, 6, 9]      → Currently at: <strong style="color: #e53e3e;">3</strong><br>
+<br>
+Min-Heap: [<strong style="color: #38a169;">1, 2, 3</strong>] ← Only 3 elements!<br>
+<br>
+Process:<br>
+1. Pop <strong>1</strong> → Add next from Array 1: <strong>4</strong><br>
+&nbsp;&nbsp;&nbsp;Heap: [2, 3, 4]<br>
+2. Pop <strong>2</strong> → Add next from Array 2: <strong>5</strong><br>
+&nbsp;&nbsp;&nbsp;Heap: [3, 4, 5]<br>
+3. Pop <strong>3</strong> → Add next from Array 3: <strong>6</strong><br>
+&nbsp;&nbsp;&nbsp;Heap: [4, 5, 6]<br>
+...continues...
+                </div>
+                
+                <p style="margin-top: 10px;"><strong>Why this works:</strong></p>
+                <ul style="margin: 10px 0; line-height: 1.8;">
+                    <li>Heap size stays at <strong>O(k)</strong> where k = number of arrays</li>
+                    <li>We use the sorted property - next min is always at a "front"</li>
+                    <li>Time: O(n×m log k) - much better!</li>
+                </ul>
+            </div>
+
+            <div style="background: #fefcbf; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #d69e2e;">
+                <h4 style="color: #d69e2e; margin-top: 0;">📊 Comparison</h4>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                    <tr style="background: #fffaf0; font-weight: bold;">
+                        <th style="padding: 10px; border: 1px solid #d69e2e; text-align: left;">Approach</th>
+                        <th style="padding: 10px; border: 1px solid #d69e2e;">Space</th>
+                        <th style="padding: 10px; border: 1px solid #d69e2e;">Time</th>
+                    </tr>
+                    <tr style="background: #fed7d7;">
+                        <td style="padding: 10px; border: 1px solid #d69e2e;"><strong>❌ Dump all elements</strong></td>
+                        <td style="padding: 10px; border: 1px solid #d69e2e;">O(n×m)</td>
+                        <td style="padding: 10px; border: 1px solid #d69e2e;">O(n×m log(n×m))</td>
+                    </tr>
+                    <tr style="background: #c6f6d5;">
+                        <td style="padding: 10px; border: 1px solid #d69e2e;"><strong>✓ One element per array</strong></td>
+                        <td style="padding: 10px; border: 1px solid #d69e2e;">O(k)</td>
+                        <td style="padding: 10px; border: 1px solid #d69e2e;">O(n×m log k)</td>
+                    </tr>
+                </table>
+                <p style="margin: 10px 0; color: #744210;"><strong>Example:</strong> 100 arrays, each with 1000 elements</p>
+                <ul style="margin: 5px 0; color: #744210;">
+                    <li>Bad approach: Heap of 100,000 elements</li>
+                    <li>Smart approach: Heap of 100 elements (max)</li>
+                </ul>
+            </div>
+
+            <div style="background: #e6fffa; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #319795;">
+                <h4 style="color: #319795; margin-top: 0;">💭 Remember:</h4>
+                <p style="font-weight: 600; color: #234e52; line-height: 1.8;">
+                    The arrays are <strong>already sorted</strong> → Use that! Track only the "front" of each array in the heap, not all elements.
+                </p>
+            </div>
+        </div>
+    </div>
+
 </section>
 
 
@@ -20158,9 +20592,55 @@ function animKthLargest(action) {
     }
 }
 
+// ===== COLLAPSIBLE SECTIONS =====
+function setupCollapsibleSections() {
+    document.querySelectorAll('.question-card').forEach(card => {
+        const bruteForce = card.querySelector('.brute-force-section');
+        const animBox = card.querySelector('.animation-box');
+        const solution = card.querySelector('.solution');
+
+        if (bruteForce) {
+            wrapInCollapsible(bruteForce, '\uD83D\uDCA1 Brute Force Approach', 'brute-force');
+        }
+        if (animBox) {
+            wrapInCollapsible(animBox, '\u25B6\uFE0F Step-by-Step Animation', 'animation');
+        }
+        if (solution) {
+            wrapInCollapsible(solution, '\uD83D\uDCBB Optimised Solution / Pseudocode', 'solution');
+        }
+    });
+}
+
+function wrapInCollapsible(element, label, type) {
+    const toggle = document.createElement('button');
+    toggle.className = 'collapsible-toggle';
+    toggle.innerHTML =
+        '<span class="toggle-label">' + label + '</span>' +
+        '<span class="toggle-icon">\u25BC</span>';
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'collapsible-content';
+
+    element.parentNode.insertBefore(toggle, element);
+    element.parentNode.insertBefore(wrapper, element);
+    wrapper.appendChild(element);
+
+    toggle.addEventListener('click', function() {
+        const isExpanded = wrapper.classList.contains('expanded');
+        if (isExpanded) {
+            wrapper.classList.remove('expanded');
+            toggle.classList.remove('active');
+        } else {
+            wrapper.classList.add('expanded');
+            toggle.classList.add('active');
+        }
+    });
+}
+
 // ===== INIT ALL ON PAGE LOAD =====
 document.addEventListener('DOMContentLoaded', function() {
     formatCodeComments();
+    setupCollapsibleSections();
     initAllPatterns();
     initSelSort();
     initBubSort();

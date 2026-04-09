@@ -1,0 +1,2570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Quick Revision - Rules &amp; Templates</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6; color: #333;
+            background: #f0f2f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1100px; margin: 0 auto;
+            background: #fff; border-radius: 15px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        header {
+            background: #f8fafc;
+            color: #1a1a1a; padding: 40px; text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        header h1 { font-size: 2.4em; margin-bottom: 8px; color: #1e293b; }
+        header p { font-size: 1.15em; color: #64748b; }
+
+        nav {
+            background: #ffffff; padding: 16px 20px;
+            position: sticky; top: 0; z-index: 100;
+            display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+        nav a {
+            color: #475569; text-decoration: none; padding: 7px 14px;
+            border-radius: 6px; background: #f1f5f9;
+            font-size: 0.88em; font-weight: 600; transition: all 0.3s;
+            white-space: nowrap;
+        }
+        nav a:hover { background: #e0e7ff; color: #3730a3; transform: translateY(-1px); }
+
+        .content { padding: 35px; }
+
+        .topic {
+            margin-bottom: 50px;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .topic-header {
+            padding: 20px 25px; cursor: pointer; user-select: none;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: all 0.3s;
+        }
+        .topic-header:hover { filter: brightness(0.97); }
+        .topic-header h2 { font-size: 1.5em; color: #1a1a1a; }
+        .topic-header .arrow {
+            font-size: 1.2em; color: #1a1a1a; transition: transform 0.3s;
+        }
+        .topic-header.open .arrow { transform: rotate(180deg); }
+        .topic-body { display: none; padding: 25px; }
+        .topic-body.open { display: block; }
+
+        .rule-card {
+            background: #f8f9fa; border: 1px solid #e2e8f0;
+            border-radius: 10px; padding: 22px; margin-bottom: 30px;
+        }
+        .rule-card h3 {
+            font-size: 1.2em; margin-bottom: 12px; padding-bottom: 8px;
+            border-bottom: 2px solid;
+        }
+        .rule-card .when-to-use {
+            background: #e8f5e9; padding: 12px 16px; border-radius: 8px;
+            margin-bottom: 14px; border-left: 4px solid #4caf50;
+            font-size: 0.92em;
+        }
+        .rule-card .when-to-use p { margin: 3px 0; }
+
+        pre {
+            background: #f5f5f5; color: #333;
+            padding: 16px 20px; border-radius: 8px;
+            overflow-x: auto; font-family: 'Courier New', Consolas, monospace;
+            font-size: 0.88em; line-height: 1.65; margin: 12px 0;
+            border: 1px solid #e0e0e0;
+        }
+        pre .kw { color: #0550ae; }
+        pre .cm { color: #6a737d; font-style: italic; }
+        pre .str { color: #a31515; }
+        pre .num { color: #098658; }
+
+        .complexity-box {
+            background: #fff3e0; padding: 10px 14px; border-radius: 6px;
+            border-left: 4px solid #ff9800; margin-top: 10px; font-size: 0.92em;
+        }
+
+        .key-problems {
+            background: #e3f2fd; padding: 12px 16px; border-radius: 8px;
+            margin-top: 12px; border-left: 4px solid #2196f3;
+        }
+        .key-problems h4 { color: #1565c0; margin-bottom: 6px; }
+        .key-problems p { margin: 3px 0; font-size: 0.92em; }
+
+        .summary-box {
+            background: #fafbfc;
+            padding: 20px; border-radius: 10px; margin-top: 20px;
+            border: 1px solid #d1d5db;
+        }
+        .summary-box h3 { color: #374151; margin-bottom: 12px; }
+        .summary-box p { margin: 6px 0; font-size: 0.95em; }
+
+        .cheat-table {
+            width: 100%; border-collapse: collapse; margin: 12px 0;
+            font-size: 0.9em;
+        }
+        .cheat-table th {
+            background: #f1f5f9; color: #1e293b; padding: 10px 14px;
+            text-align: left; border-bottom: 2px solid #cbd5e1;
+        }
+        .cheat-table td {
+            padding: 9px 14px; border-bottom: 1px solid #e0e0e0;
+        }
+        .cheat-table tr:nth-child(even) { background: #f5f5f5; }
+        .cheat-table tr:hover { background: #e3f2fd; }
+
+        .mistakes-box {
+            background: #fce4ec; padding: 14px 18px; border-radius: 8px;
+            border-left: 4px solid #e53935; margin-top: 15px;
+        }
+        .mistakes-box h4 { color: #c62828; margin-bottom: 8px; }
+        .mistakes-box p { margin: 5px 0; font-size: 0.92em; }
+
+        .intro-box {
+            background: #e8eaf6; padding: 16px 20px; border-radius: 8px;
+            margin-bottom: 20px; border-left: 4px solid #3f51b5;
+        }
+        .intro-box p { margin: 4px 0; }
+
+        .guide-box { display: none; }
+        .guide-heading {
+            color: #e65100; font-size: 1.25em; margin-bottom: 18px;
+            padding-bottom: 10px; border-bottom: 2px solid #ffe0b2;
+        }
+        .guide-item {
+            background: #fffde7; padding: 16px 20px; border-radius: 10px;
+            margin-bottom: 6px; border: 1px solid #e8e0b0;
+            border-left: 5px solid #f9a825;
+        }
+        .guide-item .guide-rule { font-weight: 700; color: #1a1a1a; font-size: 0.95em; margin-bottom: 4px; }
+        .guide-item .guide-explain { color: #444; font-size: 0.92em; line-height: 1.55; margin-bottom: 6px; }
+        .guide-example {
+            background: #f9f9f4; padding: 10px 14px; border-radius: 6px;
+            font-size: 0.88em; color: #555; border: 1px solid #eee8c8;
+        }
+        .guide-example strong { color: #333; }
+
+        footer {
+            background: #f8fafc; color: #94a3b8; text-align: center; padding: 25px;
+            font-size: 0.9em; border-top: 1px solid #e2e8f0;
+        }
+
+        .scroll-top {
+            position: fixed; bottom: 25px; right: 25px;
+            background: #6366f1; color: white;
+            width: 48px; height: 48px; border-radius: 50%;
+            display: none; align-items: center; justify-content: center;
+            cursor: pointer; box-shadow: 0 4px 12px rgba(99,102,241,0.3);
+            font-size: 1.4em; text-decoration: none; transition: all 0.3s;
+            border: none;
+        }
+        .scroll-top:hover { background: #4f46e5; transform: translateY(-4px); }
+
+        @media (max-width: 768px) {
+            body { padding: 8px; }
+            header { padding: 24px 16px; }
+            header h1 { font-size: 1.5em; }
+            nav { padding: 10px; gap: 6px; }
+            nav a { padding: 5px 10px; font-size: 0.78em; }
+            .content { padding: 16px; }
+            .topic-header h2 { font-size: 1.15em; }
+            .rule-card { padding: 14px; }
+            .guide-item { padding: 12px 14px; }
+            .guide-item .guide-explain { font-size: 0.88em; }
+            .guide-example { font-size: 0.82em; padding: 8px 10px; }
+            pre { font-size: 0.78em; padding: 12px; }
+            .cheat-table { font-size: 0.8em; }
+            .cheat-table th, .cheat-table td { padding: 6px 8px; }
+        }
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .container { border-radius: 0; }
+            header h1 { font-size: 1.2em; }
+            .content { padding: 10px; }
+            .topic-header { padding: 14px 16px; }
+            .topic-header h2 { font-size: 1em; }
+            .topic-body { padding: 14px; }
+            pre { font-size: 0.72em; padding: 10px; }
+        }
+        /* ===== Animation System ===== */
+        .anim-btn{display:block;margin:14px auto 0;padding:10px 22px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700;font-size:.88em;transition:all .3s;letter-spacing:.3px;text-align:center}
+        .anim-btn:hover{transform:translateY(-2px);box-shadow:0 4px 15px rgba(102,126,234,.4)}
+        .anim-btn.active{background:linear-gradient(135deg,#e53935 0%,#c62828 100%)}
+        .anim-panel{display:none;margin-top:14px;background:#1e1e2e;border-radius:10px;overflow:hidden;color:#cdd6f4;border:1px solid #313244}
+        .anim-panel.open{display:block;animation:apSlide .3s ease}
+        @keyframes apSlide{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+        .anim-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:#181825;border-bottom:1px solid #313244;flex-wrap:wrap;gap:8px}
+        .anim-tc{font-size:.84em;color:#89b4fa;font-weight:600}
+        .anim-ctrls{display:flex;gap:5px}
+        .anim-ctrls button{background:#313244;color:#cdd6f4;border:1px solid #45475a;padding:5px 12px;border-radius:6px;cursor:pointer;font-size:.82em;transition:all .2s}
+        .anim-ctrls button:hover{background:#45475a;color:#fff}
+        .anim-vis{padding:18px 16px;min-height:60px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px;overflow-x:auto}
+        .av-arr{display:inline-flex;gap:3px;align-items:flex-end}
+        .av-cell{display:flex;flex-direction:column;align-items:center;min-width:38px;border-radius:6px;background:#313244;border:2px solid #45475a;transition:all .35s}
+        .av-val{padding:7px 5px;font-weight:700;font-size:.95em;color:#cdd6f4;font-family:'Courier New',monospace}
+        .av-idx{font-size:.65em;color:#6c7086;padding:2px 0;border-top:1px solid #45475a;width:100%;text-align:center}
+        .av-ptr{font-size:.68em;color:#f9e2af;padding:1px 4px;font-weight:700;background:#1e1e2e;border-radius:3px;margin-top:3px;white-space:nowrap}
+        .av-cell.win{background:#1e3a2f;border-color:#a6e3a1}
+        .av-cell.active{background:#3b2e1a;border-color:#fab387;box-shadow:0 0 8px rgba(250,179,135,.25)}
+        .av-cell.done{background:#1e3a2f;border-color:#a6e3a1}
+        .av-cell.removed{background:#3b1e1e;border-color:#f38ba8;opacity:.65}
+        .av-cell.compare{background:#2e1e3a;border-color:#cba6f7}
+        .av-cell.found{background:#1e303a;border-color:#89dceb;box-shadow:0 0 8px rgba(137,220,235,.25)}
+        .av-cell.mid{background:#3a3a1e;border-color:#f9e2af}
+        .anim-vars{padding:8px 16px;display:flex;flex-wrap:wrap;gap:10px;background:#181825;font-family:'Courier New',monospace;font-size:.84em}
+        .av-var b{color:#89b4fa}.av-var{color:#a6e3a1}
+        .anim-desc{padding:10px 16px;font-size:.88em;color:#b4befe;border-top:1px solid #313244;min-height:36px;line-height:1.5}
+        .anim-step{padding:6px 16px;font-size:.75em;color:#6c7086;text-align:right;border-top:1px solid #313244}
+        pre .cl{padding:1px 4px;transition:background .25s,border-color .25s;border-left:3px solid transparent;display:block;min-height:1em}
+        pre .cl.hl{background:rgba(249,226,175,.12);border-left-color:#f9e2af}
+        .av-stk{display:inline-flex;gap:3px;align-items:flex-end;margin-left:16px}
+        .av-stk-lbl{font-size:.72em;color:#6c7086;margin-bottom:3px;text-align:center}
+        .av-stk-cell{padding:5px 10px;background:#313244;border:1px solid #45475a;border-radius:4px;font-family:monospace;font-weight:700;color:#cdd6f4;text-align:center;transition:all .3s;font-size:.88em}
+        .av-stk-cell.push{background:#1e3a2f;border-color:#a6e3a1}
+        .av-stk-cell.pop{background:#3b1e1e;border-color:#f38ba8}
+        .av-res{display:inline-block;padding:8px 14px;background:#1e3a2f;border:1px solid #a6e3a1;border-radius:6px;color:#a6e3a1;font-weight:700;font-family:monospace;margin-top:8px}
+        .av-map{display:inline-flex;flex-direction:column;gap:2px;background:#181825;padding:8px 12px;border-radius:6px;font-family:monospace;font-size:.8em;margin-left:12px}
+        .av-me{color:#a6e3a1}.av-me b{color:#89b4fa}
+        .av-tree{font-family:monospace;white-space:pre;color:#cdd6f4;line-height:1.35;text-align:center;font-size:.88em;padding:8px}
+        .av-tree .hl-node{color:#fab387;font-weight:700}
+        .av-tree .done-node{color:#a6e3a1;font-weight:700}
+        .av-grid{display:inline-grid;gap:2px;font-family:monospace}
+        .av-grid-cell{padding:5px 8px;background:#313244;border:1px solid #45475a;border-radius:4px;text-align:center;font-weight:600;color:#cdd6f4;min-width:34px;transition:all .3s;font-size:.88em}
+        .av-grid-cell.active{background:#3b2e1a;border-color:#fab387}
+        .av-grid-cell.done{background:#1e3a2f;border-color:#a6e3a1}
+        @media(max-width:768px){.av-cell{min-width:30px}.av-val{font-size:.82em;padding:5px 3px}.av-idx{font-size:.58em}.av-ptr{font-size:.6em}.anim-desc{font-size:.82em}.anim-tc{font-size:.76em}.anim-ctrls button{padding:4px 8px;font-size:.76em}}
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>DSA Quick Revision - Rules &amp; Templates</h1>
+        <p>9 Topics &bull; All Essential Patterns &bull; Last Minute Reference</p>
+    </header>
+
+    <nav>
+        <a href="#sliding-window" onclick="openAndScroll(event,'sliding-window')">Sliding Window</a>
+        <a href="#prefix-sum" onclick="openAndScroll(event,'prefix-sum')">Prefix Sum</a>
+        <a href="#binary-search" onclick="openAndScroll(event,'binary-search')">Binary Search</a>
+        <a href="#monotonic-stack" onclick="openAndScroll(event,'monotonic-stack')">Monotonic Stack</a>
+        <a href="#greedy" onclick="openAndScroll(event,'greedy')">Greedy</a>
+        <a href="#recursion" onclick="openAndScroll(event,'recursion')">Recursion</a>
+        <a href="#top-k" onclick="openAndScroll(event,'top-k')">Top K Elements</a>
+        <a href="#binary-trees" onclick="openAndScroll(event,'binary-trees')">Binary Trees</a>
+        <a href="#dp" onclick="openAndScroll(event,'dp')">Dynamic Programming</a>
+    </nav>
+
+    <div class="content">
+
+<!-- ==================== 1. SLIDING WINDOW ==================== -->
+<div class="topic" id="sliding-window">
+    <div class="topic-header" style="background: #e3f2fd;" onclick="toggleTopic(this)">
+        <h2>1. Sliding Window</h2>
+        <span class="arrow">&#9660;</span>
+    </div>
+    <div class="topic-body">
+        <div class="intro-box">
+            <p><strong>When to use:</strong> Contiguous subarray/substring problems with POSITIVE numbers</p>
+            <p><strong>Keywords:</strong> "longest", "shortest", "maximum sum", "minimum length", "at most K"</p>
+            <p><strong>Does NOT work</strong> when array has NEGATIVE numbers (use Prefix Sum instead)</p>
+        </div>
+
+        <div class="guide-box">
+            <h3>When to Use Which Rule?</h3>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #1 &mdash; Fixed Window</div>
+                <div class="guide-explain">Use this when the problem directly tells you the window size. It says something like "subarray of size K" or "every K consecutive elements". You don't need to grow or shrink the window &mdash; it's always the same size, just sliding one step at a time.</div>
+                <div class="guide-example"><strong>Example:</strong> "Find the maximum sum of any subarray of size 3."<br><strong>Input:</strong> arr = [2, 1, 5, 1, 3, 2], k = 3<br><strong>Output:</strong> 9 &mdash; because the subarray [5, 1, 3] has the largest sum.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #2 &mdash; Longest Subarray/Substring</div>
+                <div class="guide-explain">Use this when the problem asks for the LONGEST subarray or substring that satisfies some condition. The idea is: keep expanding the window from the right. If the window becomes invalid (breaks the condition), shrink from the left until it's valid again. Then check the size &mdash; update your answer AFTER shrinking.</div>
+                <div class="guide-example"><strong>Example:</strong> "Find the longest substring without repeating characters."<br><strong>Input:</strong> s = "abcabcbb"<br><strong>Output:</strong> 3 &mdash; the substring "abc" is the longest with all unique characters.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #3 &mdash; Shortest Subarray/Substring</div>
+                <div class="guide-explain">Use this when the problem asks for the SHORTEST or MINIMUM length subarray/substring. It's the opposite of Rule #2. Here, you keep expanding until the window becomes valid, then try to shrink it as much as possible while it's still valid &mdash; update your answer DURING shrinking (because you want the smallest valid window).</div>
+                <div class="guide-example"><strong>Example:</strong> "Find the smallest subarray with sum &ge; 7."<br><strong>Input:</strong> arr = [2, 3, 1, 2, 4, 3], target = 7<br><strong>Output:</strong> 2 &mdash; the subarray [4, 3] has sum 7 and is the shortest.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #4 &mdash; Exactly K (Subtraction Trick)</div>
+                <div class="guide-explain">Use this when the problem says "exactly K" distinct elements or "exactly K" occurrences. Sliding window can't directly handle "exactly K" &mdash; it's hard to know when to shrink. The trick is: exactly(K) = atMost(K) &minus; atMost(K&minus;1). So you solve two easier "at most" problems and subtract.</div>
+                <div class="guide-example"><strong>Example:</strong> "Count subarrays with exactly 2 distinct integers."<br><strong>Input:</strong> arr = [1, 2, 1, 2, 3]<br><strong>Output:</strong> 7 &mdash; subarrays like [1,2], [2,1], [1,2], [1,2,1], [2,1,2], [1,2,1,2], [2,3].</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #5 &mdash; Minimum Window Substring (Have/Need)</div>
+                <div class="guide-explain">Use this when the problem says "find the smallest window that contains all characters of a given pattern". You keep two maps &mdash; one for what you NEED (from the pattern) and one for what you HAVE (in current window). Expand until you have everything, then shrink to find the minimum.</div>
+                <div class="guide-example"><strong>Example:</strong> "Find minimum window in s that contains all characters of t."<br><strong>Input:</strong> s = "ADOBECODEBANC", t = "ABC"<br><strong>Output:</strong> "BANC" &mdash; it's the smallest substring containing A, B, and C.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #6 &mdash; Count All Valid Subarrays</div>
+                <div class="guide-explain">Use this when the problem asks you to COUNT how many subarrays satisfy a condition (not just find the longest or shortest). The key trick is: for each position of 'right', the number of valid subarrays ending at 'right' is (right &minus; left + 1). You add this to your count at each step.</div>
+                <div class="guide-example"><strong>Example:</strong> "Count subarrays where product of all elements is less than 100."<br><strong>Input:</strong> arr = [10, 5, 2, 6], k = 100<br><strong>Output:</strong> 8 &mdash; [10], [5], [2], [6], [10,5], [5,2], [2,6], [5,2,6].</div>
+            </div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #1565c0; color: #1565c0;">Rule #1 &mdash; Fixed Window (Size K)</h3>
+            <div class="when-to-use"><p>Window size is fixed. Max/min sum of subarray of size K.</p></div>
+<pre>int left = 0, sum = 0, maxSum = 0;
+
+for (int right = 0; right &lt; n; right++) {
+    sum += arr[right];                 // Expand window
+
+    if ((right - left + 1) &gt; k) {      // Window too big
+        sum -= arr[left];
+        left++;
+    }
+
+    if (right - left + 1 == k) {       // Window exact size
+        maxSum = Math.max(maxSum, sum);
+    }
+}
+return maxSum;</pre>
+            <div class="complexity-box"><strong>Time:</strong> O(N) &nbsp;|&nbsp; <strong>Space:</strong> O(1)</div>
+            <div class="key-problems"><h4>Key Problems:</h4>
+                <p>Maximum Sum Subarray of Size K | Maximum Average Subarray I (LC 643) | Sliding Window Maximum (LC 239)</p>
+            </div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #1565c0; color: #1565c0;">Rule #2 &mdash; Longest Subarray/Substring (Update AFTER Shrink)</h3>
+            <div class="when-to-use"><p>Find LONGEST subarray/substring. "At most K" distinct elements. Shrink until valid, then update.</p></div>
+<pre>int left = 0, best = 0;
+
+for (int right = 0; right &lt; n; right++) {
+    add(arr[right]);                   // Expand
+
+    while (!isValid()) {               // Shrink until valid
+        remove(arr[left]);
+        left++;
+    }
+
+    best = Math.max(best, right - left + 1);  // Update AFTER shrink
+}
+return best;</pre>
+            <div class="complexity-box"><strong>Time:</strong> O(N) &nbsp;|&nbsp; <strong>Space:</strong> O(1) or O(K)</div>
+            <div class="key-problems"><h4>Key Problems:</h4>
+                <p>Longest Substring Without Repeating Characters (LC 3) | Longest Substring with At Most K Distinct (LC 340) | Max Consecutive Ones III (LC 1004) | Longest Repeating Character Replacement (LC 424)</p>
+            </div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #1565c0; color: #1565c0;">Rule #3 &mdash; Shortest Subarray/Substring (Update DURING Shrink)</h3>
+            <div class="when-to-use"><p>Find SHORTEST. "Sum &ge; target", "contains all characters of pattern". Update DURING shrink.</p></div>
+<pre>int left = 0, best = Integer.MAX_VALUE;
+
+for (int right = 0; right &lt; n; right++) {
+    add(arr[right]);
+
+    while (isValid()) {                          // Window is valid
+        best = Math.min(best, right - left + 1); // Update DURING shrink
+        remove(arr[left]);
+        left++;
+    }
+}
+return best == Integer.MAX_VALUE ? 0 : best;</pre>
+            <div class="complexity-box"><strong>Time:</strong> O(N) &nbsp;|&nbsp; <strong>Space:</strong> O(1) or O(K)</div>
+            <div class="key-problems"><h4>Key Problems:</h4>
+                <p>Minimum Size Subarray Sum (LC 209) | Minimum Window Substring (LC 76)</p>
+            </div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #1565c0; color: #1565c0;">Rule #4 &mdash; "Exactly K" = atMost(K) &minus; atMost(K&minus;1)</h3>
+            <div class="when-to-use"><p>EXACTLY K distinct elements or occurrences. Use subtraction trick.</p></div>
+<pre>int exactlyK(int[] arr, int k) {
+    return atMostK(arr, k) - atMostK(arr, k - 1);
+}
+
+int atMostK(int[] arr, int k) {
+    Map&lt;Integer, Integer&gt; freq = new HashMap&lt;&gt;();
+    int left = 0, count = 0;
+
+    for (int right = 0; right &lt; arr.length; right++) {
+        freq.merge(arr[right], 1, Integer::sum);
+
+        while (freq.size() &gt; k) {
+            freq.merge(arr[left], -1, Integer::sum);
+            if (freq.get(arr[left]) == 0) freq.remove(arr[left]);
+            left++;
+        }
+        count += (right - left + 1);   // All subarrays ending at right
+    }
+    return count;
+}</pre>
+            <div class="complexity-box"><strong>Time:</strong> O(N) &nbsp;|&nbsp; <strong>Space:</strong> O(K)</div>
+            <div class="key-problems"><h4>Key Problems:</h4>
+                <p>Subarrays with K Different Integers (LC 992) | Count Number of Nice Subarrays (LC 1248) | Binary Subarrays With Sum (LC 930)</p>
+            </div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #1565c0; color: #1565c0;">Rule #5 &mdash; Minimum Window Substring (Have/Need Pattern)</h3>
+            <div class="when-to-use"><p>Find minimum window containing all chars of pattern. Anagrams. Permutation check.</p></div>
+<pre>Map&lt;Character, Integer&gt; need = new HashMap&lt;&gt;(), have = new HashMap&lt;&gt;();
+for (char c : pattern.toCharArray())
+    need.merge(c, 1, Integer::sum);
+
+int required = need.size(), formed = 0;
+int left = 0, minLen = Integer.MAX_VALUE, minStart = 0;
+
+for (int right = 0; right &lt; s.length(); right++) {
+    char c = s.charAt(right);
+    have.merge(c, 1, Integer::sum);
+
+    if (need.containsKey(c) &amp;&amp; have.get(c).equals(need.get(c)))
+        formed++;
+
+    while (formed == required) {
+        if (right - left + 1 &lt; minLen) {
+            minLen = right - left + 1;
+            minStart = left;
+        }
+        char lc = s.charAt(left);
+        have.merge(lc, -1, Integer::sum);
+        if (need.containsKey(lc) &amp;&amp; have.get(lc) &lt; need.get(lc))
+            formed--;
+        left++;
+    }
+}
+return minLen == Integer.MAX_VALUE ? "" : s.substring(minStart, minStart + minLen);</pre>
+            <div class="complexity-box"><strong>Time:</strong> O(N) &nbsp;|&nbsp; <strong>Space:</strong> O(K)</div>
+            <div class="key-problems"><h4>Key Problems:</h4>
+                <p>Minimum Window Substring (LC 76) | Find All Anagrams (LC 438) | Permutation in String (LC 567)</p>
+            </div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #1565c0; color: #1565c0;">Rule #6 &mdash; Counting All Valid Subarrays</h3>
+            <div class="when-to-use"><p>Count ALL valid subarrays (not just longest/shortest). Product &lt; K, Sum &lt; K.</p></div>
+<pre>int left = 0;
+long count = 0;
+
+for (int right = 0; right &lt; n; right++) {
+    add(arr[right]);
+
+    while (!isValid()) {
+        remove(arr[left]);
+        left++;
+    }
+
+    count += (right - left + 1);   // All subarrays ending at right
+}
+return count;</pre>
+            <div class="complexity-box"><strong>Time:</strong> O(N) &nbsp;|&nbsp; <strong>Space:</strong> O(1)</div>
+            <div class="key-problems"><h4>Key Problems:</h4>
+                <p>Subarray Product Less Than K (LC 713) | Number of Substrings Containing All Three Characters (LC 1358)</p>
+            </div>
+        </div>
+
+        <div class="summary-box">
+            <h3>Decision Tree</h3>
+            <table class="cheat-table">
+                <tr><th>Problem Type</th><th>Template</th></tr>
+                <tr><td>Fixed size K</td><td>Rule #1: if (size &gt; k) shrink</td></tr>
+                <tr><td>Longest subarray/string</td><td>Rule #2: while(!valid) shrink, then update</td></tr>
+                <tr><td>Shortest subarray/string</td><td>Rule #3: while(valid) update, then shrink</td></tr>
+                <tr><td>Exactly K distinct</td><td>Rule #4: atMost(K) &minus; atMost(K&minus;1)</td></tr>
+                <tr><td>Contains all of pattern</td><td>Rule #5: have/need + formed counter</td></tr>
+                <tr><td>Count all valid subarrays</td><td>Rule #6: count += (right &minus; left + 1)</td></tr>
+                <tr><td>Negative numbers + sum</td><td>Use Prefix Sum + HashMap instead</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 2. PREFIX SUM ==================== -->
+<div class="topic" id="prefix-sum">
+    <div class="topic-header" style="background: #e8f5e9;" onclick="toggleTopic(this)">
+        <h2>2. Prefix Sum</h2>
+        <span class="arrow">&#9660;</span>
+    </div>
+    <div class="topic-body">
+        <div class="intro-box">
+            <p><strong>What:</strong> prefix[i] = sum of elements from index 0 to i. O(1) range sum after O(N) build.</p>
+            <p><strong>When:</strong> Multiple range sum queries, count subarrays with sum = K, NEGATIVE numbers, sum divisible by K</p>
+        </div>
+
+        <div class="guide-box">
+            <h3>When to Use Which Rule?</h3>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #1 &mdash; Basic Prefix Sum</div>
+                <div class="guide-explain">Use this when you need to find the sum of elements between two indices many times. Instead of adding up elements every time (which is slow), you build a prefix sum array once, and then any range sum is just one subtraction. Think of it like a running total &mdash; prefix[5] tells you the sum of elements from index 0 to 5.</div>
+                <div class="guide-example"><strong>Example:</strong> "Given an array, answer multiple queries: what is the sum from index L to R?"<br><strong>Input:</strong> nums = [1, 2, 3, 4, 5], query: sum from index 1 to 3<br><strong>Output:</strong> 9 &mdash; because 2 + 3 + 4 = 9. With prefix array [1,3,6,10,15], answer = prefix[3] &minus; prefix[0] = 10 &minus; 1 = 9.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #2 &mdash; Prefix Sum + HashMap</div>
+                <div class="guide-explain">Use this when the problem says "count subarrays with sum equal to K" and the array can have NEGATIVE numbers. Sliding window won't work here because shrinking the window might increase the sum (due to negatives). Instead, as you build the prefix sum, you check: "have I seen (currentPrefix &minus; K) before?" If yes, that means there's a subarray summing to K ending here.</div>
+                <div class="guide-example"><strong>Example:</strong> "Count subarrays with sum equal to 3."<br><strong>Input:</strong> nums = [1, 2, 3, &minus;2, 5], k = 3<br><strong>Output:</strong> 4 &mdash; subarrays [1,2], [3], [3,&minus;2,2... wait], let's trace: prefix = [1,3,6,4,9]. At prefix=3, we check 3&minus;3=0 (exists, count++). At prefix=6, 6&minus;3=3 (exists, count++). And so on.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #3 &mdash; Mod Prefix</div>
+                <div class="guide-explain">Use this when the problem says "sum divisible by K". The key idea is: if two prefix sums give the same remainder when divided by K, then the subarray between them has a sum divisible by K. So instead of storing the full prefix sum in the map, you store the remainder (prefix % K).</div>
+                <div class="guide-example"><strong>Example:</strong> "Count subarrays whose sum is divisible by 5."<br><strong>Input:</strong> nums = [4, 5, 0, &minus;2, &minus;3, 1], k = 5<br><strong>Output:</strong> 7 &mdash; for instance [5], [5,0], [0], [4,5,0,&minus;2,&minus;3,1], etc. all have sums divisible by 5.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #4 &mdash; 2D Prefix Sum</div>
+                <div class="guide-explain">Use this when you have a 2D matrix and need to quickly find the sum of any rectangle inside it. You build a 2D prefix sum table once, and then any rectangular region sum is calculated in O(1) using inclusion-exclusion (add the big rectangle, subtract two overlapping strips, add back the corner you subtracted twice).</div>
+                <div class="guide-example"><strong>Example:</strong> "Given a matrix, find sum of rectangle from (1,1) to (2,2)."<br><strong>Input:</strong> matrix = [[1,2,3],[4,5,6],[7,8,9]]<br><strong>Output:</strong> 28 &mdash; the submatrix [[5,6],[8,9]] sums to 5+6+8+9 = 28.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #5 &mdash; Difference Array</div>
+                <div class="guide-explain">Use this when you need to perform many "add value to a range" operations. Instead of looping through every element in the range each time, you just mark the start and end of each update in a difference array. At the end, one prefix sum pass gives you the final values. Very useful for booking/scheduling problems.</div>
+                <div class="guide-example"><strong>Example:</strong> "You have 5 seats (all 0). Add +2 to seats 1-3, add +3 to seats 2-4."<br><strong>Input:</strong> n = 5, updates = [[1,3,2], [2,4,3]]<br><strong>Output:</strong> [0, 2, 5, 5, 3] &mdash; seat 2 gets both +2 and +3 = 5.</div>
+            </div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #2e7d32; color: #2e7d32;">Rule #1 &mdash; Basic Prefix Sum (Range Sum Queries)</h3>
+<pre>int[] prefix = new int[n];
+prefix[0] = nums[0];
+for (int i = 1; i &lt; n; i++)
+    prefix[i] = prefix[i - 1] + nums[i];
+
+// Query sum of range [L, R]:
+// Answer = prefix[R] - (L &gt; 0 ? prefix[L-1] : 0)</pre>
+            <div class="complexity-box"><strong>Build:</strong> O(N) &nbsp;|&nbsp; <strong>Query:</strong> O(1)</div>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Range Sum Query (LC 303) | Find Pivot Index (LC 724) | Product of Array Except Self (LC 238)</p></div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #2e7d32; color: #2e7d32;">Rule #2 &mdash; Prefix Sum + HashMap (Count Subarrays with Sum = K)</h3>
+            <div class="when-to-use"><p>If prefix[j] &minus; prefix[i] = k, then subarray [i+1, j] has sum k. Check: does (prefix &minus; k) exist in map?</p></div>
+<pre>HashMap&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+map.put(0, 1);
+int prefix = 0, count = 0;
+
+for (int x : nums) {
+    prefix += x;
+    if (map.containsKey(prefix - k))
+        count += map.get(prefix - k);
+    map.merge(prefix, 1, Integer::sum);
+}
+return count;</pre>
+            <div class="complexity-box"><strong>Time:</strong> O(N) &nbsp;|&nbsp; <strong>Space:</strong> O(N)</div>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Subarray Sum Equals K (LC 560) | Contiguous Array (LC 525) &mdash; convert 0 to &minus;1, find sum=0</p></div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #2e7d32; color: #2e7d32;">Rule #3 &mdash; Mod Prefix (Sum Divisible by K)</h3>
+            <div class="when-to-use"><p>If two prefix sums have same remainder: (prefix[j] &minus; prefix[i]) % k == 0</p></div>
+<pre>HashMap&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+map.put(0, 1);
+int prefix = 0, count = 0;
+
+for (int x : nums) {
+    prefix += x;
+    int mod = ((prefix % k) + k) % k;  // Handle negatives
+    if (map.containsKey(mod))
+        count += map.get(mod);
+    map.merge(mod, 1, Integer::sum);
+}
+return count;</pre>
+            <div class="complexity-box"><strong>Time:</strong> O(N) &nbsp;|&nbsp; <strong>Space:</strong> O(K)</div>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Subarray Sums Divisible by K (LC 974) | Continuous Subarray Sum (LC 523)</p></div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #2e7d32; color: #2e7d32;">Rule #4 &mdash; 2D Prefix Sum (Matrix Sum Queries)</h3>
+<pre>// Build
+int[][] p = new int[m+1][n+1];
+for (int i = 1; i &lt;= m; i++)
+    for (int j = 1; j &lt;= n; j++)
+        p[i][j] = matrix[i-1][j-1] + p[i-1][j] + p[i][j-1] - p[i-1][j-1];
+
+// Query rectangle (r1,c1) to (r2,c2)
+int sum = p[r2+1][c2+1] - p[r1][c2+1] - p[r2+1][c1] + p[r1][c1];</pre>
+            <div class="complexity-box"><strong>Build:</strong> O(M&times;N) &nbsp;|&nbsp; <strong>Query:</strong> O(1)</div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #2e7d32; color: #2e7d32;">Rule #5 &mdash; Difference Array (Range Updates)</h3>
+            <div class="when-to-use"><p>Multiple range updates: add val to range [L, R]. Converts O(N) per update to O(1).</p></div>
+<pre>int[] diff = new int[n + 1];
+
+// For each update: add val to range [L, R]
+diff[L] += val;
+diff[R + 1] -= val;
+
+// Convert to actual values (prefix sum of diff array)
+for (int i = 1; i &lt; n; i++)
+    diff[i] += diff[i - 1];</pre>
+            <div class="complexity-box"><strong>Each update:</strong> O(1) &nbsp;|&nbsp; <strong>Build final:</strong> O(N)</div>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Range Addition (LC 370) | Car Pooling (LC 1094) | Corporate Flight Bookings (LC 1109)</p></div>
+        </div>
+
+        <div class="summary-box">
+            <h3>Prefix Sum vs Sliding Window</h3>
+            <table class="cheat-table">
+                <tr><th>Use Sliding Window</th><th>Use Prefix Sum</th></tr>
+                <tr><td>All numbers POSITIVE</td><td>Array has NEGATIVE numbers</td></tr>
+                <tr><td>Fixed window size K</td><td>Count subarrays with sum = K</td></tr>
+                <tr><td>Shrinking &rarr; sum decreases</td><td>Sum divisible by K</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 3. BINARY SEARCH ==================== -->
+<div class="topic" id="binary-search">
+    <div class="topic-header" style="background: #fff3e0;" onclick="toggleTopic(this)">
+        <h2>3. Binary Search</h2>
+        <span class="arrow">&#9660;</span>
+    </div>
+    <div class="topic-body">
+        <div class="intro-box">
+            <p><strong>What:</strong> Find elements/answers in O(log N) by halving search space. Works on SORTED or MONOTONIC data.</p>
+            <p><strong>Keywords:</strong> "minimize the maximum", "maximize the minimum", "find first/last", sorted array</p>
+        </div>
+
+        <div class="guide-box">
+            <h3>When to Use Which Rule?</h3>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #1 &mdash; Classic Binary Search</div>
+                <div class="guide-explain">Use this when you have a SORTED array and need to find if a target value exists (and where). You look at the middle, if it's too small go right, if it's too big go left. Simple and straightforward &mdash; this is the most basic form of binary search.</div>
+                <div class="guide-example"><strong>Example:</strong> "Find the index of 9 in a sorted array."<br><strong>Input:</strong> arr = [1, 3, 5, 7, 9, 11], target = 9<br><strong>Output:</strong> 4 &mdash; element 9 is at index 4.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #2 &mdash; First / Last Occurrence</div>
+                <div class="guide-explain">Use this when duplicates exist in the sorted array and you need the FIRST or LAST position of the target. The trick: when you find the target, DON'T stop. For first occurrence, save the result and keep searching LEFT (maybe there's an earlier one). For last occurrence, save and keep searching RIGHT.</div>
+                <div class="guide-example"><strong>Example:</strong> "Find the first and last position of 8 in the array."<br><strong>Input:</strong> arr = [5, 7, 7, 8, 8, 8, 10], target = 8<br><strong>Output:</strong> [3, 5] &mdash; first 8 is at index 3, last 8 is at index 5.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #3 &mdash; Rotated Sorted Array</div>
+                <div class="guide-explain">Use this when the sorted array has been rotated (like [4,5,6,7,0,1,2]). The key insight: even after rotation, at least ONE half (left or right of mid) is always sorted. Figure out which half is sorted, then check if the target falls in that sorted half. If yes, search there; if no, search the other half.</div>
+                <div class="guide-example"><strong>Example:</strong> "Search for 0 in a rotated sorted array."<br><strong>Input:</strong> nums = [4, 5, 6, 7, 0, 1, 2], target = 0<br><strong>Output:</strong> 4 &mdash; element 0 is at index 4.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #4 &mdash; Find Peak Element</div>
+                <div class="guide-explain">Use this when you need to find a peak (an element bigger than its neighbors). The trick: compare mid with mid+1. If mid+1 is bigger, the peak must be on the right side (things are still going up). If mid is bigger, the peak is on the left side (or mid itself is the peak). Always move towards the larger neighbor.</div>
+                <div class="guide-example"><strong>Example:</strong> "Find a peak element."<br><strong>Input:</strong> nums = [1, 2, 3, 1]<br><strong>Output:</strong> 2 &mdash; index 2 has value 3, which is greater than neighbors 2 and 1.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #5 &mdash; Binary Search on Answer</div>
+                <div class="guide-explain">Use this when the problem says "minimize the maximum" or "maximize the minimum" or any optimization where you can GUESS the answer and CHECK if it works. Instead of searching an array, you binary search on the range of possible answers. For each guess, you write a helper function to check: "Is this answer feasible?" If yes, try a smaller answer; if no, try a bigger one.</div>
+                <div class="guide-example"><strong>Example:</strong> "Koko has piles of bananas [3,6,7,11]. She can eat at speed K bananas/hour. Find minimum K to finish all piles in 8 hours."<br><strong>Input:</strong> piles = [3, 6, 7, 11], h = 8<br><strong>Output:</strong> 4 &mdash; at speed 4, she needs 1+2+2+3 = 8 hours. Speed 3 would need more than 8 hours.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #6 &mdash; Search in 2D Matrix</div>
+                <div class="guide-explain">Use this when searching in a sorted matrix. If the matrix is fully sorted (each row starts after the previous row ends), treat it as a 1D array and do normal binary search using row = mid/cols, col = mid%cols. If only rows and columns are individually sorted, start from the top-right corner and move left or down.</div>
+                <div class="guide-example"><strong>Example:</strong> "Search for 3 in a sorted matrix."<br><strong>Input:</strong> matrix = [[1,3,5],[7,9,11],[13,15,17]], target = 3<br><strong>Output:</strong> true &mdash; 3 is found at row 0, column 1.</div>
+            </div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #e65100; color: #e65100;">Rule #1 &mdash; Classic Binary Search (Find Target)</h3>
+<pre>int left = 0, right = arr.length - 1;
+while (left &lt;= right) {
+    int mid = left + (right - left) / 2;
+    if (arr[mid] == target) return mid;
+    else if (arr[mid] &lt; target) left = mid + 1;
+    else right = mid - 1;
+}
+return -1;</pre>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #e65100; color: #e65100;">Rule #2 &mdash; First / Last Occurrence</h3>
+<pre>// First Occurrence: when found, save result and keep searching LEFT
+if (arr[mid] == target) { result = mid; right = mid - 1; }
+
+// Last Occurrence: when found, save result and keep searching RIGHT
+if (arr[mid] == target) { result = mid; left = mid + 1; }</pre>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Find First and Last Position (LC 34)</p></div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #e65100; color: #e65100;">Rule #3 &mdash; Search in Rotated Sorted Array</h3>
+            <div class="when-to-use"><p>At least one half is always sorted. Find which half is sorted, check if target is in it.</p></div>
+<pre>while (left &lt;= right) {
+    int mid = left + (right - left) / 2;
+    if (nums[mid] == target) return mid;
+
+    if (nums[left] &lt;= nums[mid]) {         // LEFT half sorted
+        if (nums[left] &lt;= target &amp;&amp; target &lt; nums[mid])
+            right = mid - 1;
+        else left = mid + 1;
+    } else {                                // RIGHT half sorted
+        if (nums[mid] &lt; target &amp;&amp; target &lt;= nums[right])
+            left = mid + 1;
+        else right = mid - 1;
+    }
+}</pre>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Search in Rotated Sorted Array (LC 33) | Find Minimum in Rotated Array (LC 153)</p></div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #e65100; color: #e65100;">Rule #4 &mdash; Find Peak Element</h3>
+            <div class="when-to-use"><p>If nums[mid] &lt; nums[mid+1], peak is on the right. Move toward larger neighbor.</p></div>
+<pre>while (left &lt; right) {
+    int mid = left + (right - left) / 2;
+    if (nums[mid] &lt; nums[mid + 1]) left = mid + 1;
+    else right = mid;
+}
+return left;</pre>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #e65100; color: #e65100;">Rule #5 &mdash; Binary Search on Answer (Minimize Max / Maximize Min)</h3>
+            <div class="when-to-use"><p>Binary search on the ANSWER, not the array. Guess answer, check if feasible, adjust.</p></div>
+<pre>int left = minPossibleAnswer, right = maxPossibleAnswer;
+
+while (left &lt; right) {
+    int mid = left + (right - left) / 2;
+    if (isFeasible(arr, mid, constraint))
+        right = mid;       // Try smaller answer
+    else
+        left = mid + 1;    // Need larger answer
+}
+return left;</pre>
+            <div class="complexity-box"><strong>Time:</strong> O(N &times; log(range)) &nbsp;|&nbsp; <strong>Space:</strong> O(1)</div>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Koko Eating Bananas (LC 875) | Capacity To Ship Packages (LC 1011) | Split Array Largest Sum (LC 410)</p></div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #e65100; color: #e65100;">Rule #6 &mdash; Search in 2D Matrix</h3>
+<pre>// Fully sorted: treat as 1D array
+int left = 0, right = m * n - 1;
+int row = mid / n, col = mid % n;
+
+// Row &amp; column sorted: start from top-right corner
+int row = 0, col = n - 1;
+while (row &lt; m &amp;&amp; col &gt;= 0) {
+    if (matrix[row][col] == target) return true;
+    else if (matrix[row][col] &lt; target) row++;
+    else col--;
+}</pre>
+        </div>
+
+        <div class="summary-box">
+            <h3>Template Comparison</h3>
+            <table class="cheat-table">
+                <tr><th>Template</th><th>When to Use</th></tr>
+                <tr><td><code>while (left &lt;= right)</code></td><td>Find exact element</td></tr>
+                <tr><td><code>while (left &lt; right)</code></td><td>Find boundary/condition</td></tr>
+            </table>
+        </div>
+
+        <div class="mistakes-box">
+            <h4>Common Mistakes</h4>
+            <p>&#10060; Integer overflow: use <code>mid = left + (right - left) / 2</code></p>
+            <p>&#10060; Not identifying monotonic property for binary search on answer</p>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 4. MONOTONIC STACK ==================== -->
+<div class="topic" id="monotonic-stack">
+    <div class="topic-header" style="background: #f3e5f5;" onclick="toggleTopic(this)">
+        <h2>4. Monotonic Stack</h2>
+        <span class="arrow">&#9660;</span>
+    </div>
+    <div class="topic-body">
+        <div class="intro-box">
+            <p><strong>What:</strong> Stack maintaining elements in increasing or decreasing order. Each element pushed/popped at most once &rarr; O(N).</p>
+            <p><strong>Store INDICES</strong> (not values) to track positions.</p>
+            <p><strong>Next Greater &rarr;</strong> Decreasing stack &nbsp;|&nbsp; <strong>Next Smaller &rarr;</strong> Increasing stack</p>
+        </div>
+
+        <div class="guide-box">
+            <h3>When to Use Which Rule?</h3>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #1 &mdash; Next Greater Element</div>
+                <div class="guide-explain">Use this when the problem asks "for each element, find the next element that is BIGGER than it". You use a decreasing stack (top is smallest). As you go through the array, whenever the current element is bigger than the top of the stack, the current element IS the "next greater" for that stack element. Pop it and record the answer.</div>
+                <div class="guide-example"><strong>Example:</strong> "For each temperature, find how many days until a warmer day."<br><strong>Input:</strong> temperatures = [73, 74, 75, 71, 69, 72, 76, 73]<br><strong>Output:</strong> [1, 1, 4, 2, 1, 1, 0, 0] &mdash; from day 0 (73&deg;), the next warmer day is day 1 (74&deg;), so answer is 1.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #2 &mdash; Largest Rectangle in Histogram</div>
+                <div class="guide-explain">Use this when you need to find the largest rectangle that can be formed. For each bar, you need to know how far it can stretch left and right (until it hits a shorter bar). An increasing stack helps: when a shorter bar comes, you pop taller bars and calculate their area, because that shorter bar is the right boundary for them.</div>
+                <div class="guide-example"><strong>Example:</strong> "Find the largest rectangle in a histogram."<br><strong>Input:</strong> heights = [2, 1, 5, 6, 2, 3]<br><strong>Output:</strong> 10 &mdash; the bars with heights 5 and 6 (indices 2-3) form a rectangle of height 5 &times; width 2 = 10.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #3 &mdash; Trapping Rain Water</div>
+                <div class="guide-explain">Use this when the problem asks how much water can be trapped between bars. For each position, the water level is decided by the SHORTER of the two tallest walls on its left and right. The two-pointer approach is easiest: start from both ends, move the shorter side inward, and calculate water based on the max height seen so far on that side.</div>
+                <div class="guide-example"><strong>Example:</strong> "How much rain water is trapped?"<br><strong>Input:</strong> height = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]<br><strong>Output:</strong> 6 &mdash; water fills up the gaps between the bars.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #4 &mdash; Remove K Digits</div>
+                <div class="guide-explain">Use this when the problem asks you to remove some digits to make the smallest (or largest) possible number. The idea: go through digits left to right. If the current digit is smaller than the previous one on the stack, pop the previous one (removing a bigger digit makes the number smaller). This is like building a monotonically increasing sequence of digits.</div>
+                <div class="guide-example"><strong>Example:</strong> "Remove 3 digits from '1432219' to make the smallest number."<br><strong>Input:</strong> num = "1432219", k = 3<br><strong>Output:</strong> "1219" &mdash; remove 4, 3, 2 to get the smallest possible number.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #5 &mdash; Parentheses / Matching</div>
+                <div class="guide-explain">Use this when the problem involves matching pairs like parentheses, brackets, or colliding elements (like asteroids). Push opening brackets onto the stack. When you see a closing bracket, check if it matches the top of the stack. If yes, pop (they cancel out). If no, it's invalid.</div>
+                <div class="guide-example"><strong>Example:</strong> "Check if parentheses are valid."<br><strong>Input:</strong> s = "({[]})"<br><strong>Output:</strong> true &mdash; every opening bracket has a matching closing bracket in the correct order.</div>
+            </div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #6a1b9a; color: #6a1b9a;">Rule #1 &mdash; Next Greater Element (Decreasing Stack)</h3>
+<pre>int[] result = new int[n];
+Arrays.fill(result, -1);
+Stack&lt;Integer&gt; stack = new Stack&lt;&gt;();  // Stores indices
+
+for (int i = 0; i &lt; n; i++) {
+    while (!stack.isEmpty() &amp;&amp; arr[stack.peek()] &lt; arr[i]) {
+        int idx = stack.pop();
+        result[idx] = arr[i];  // Current is NGE for popped element
+    }
+    stack.push(i);
+}</pre>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Daily Temperatures (LC 739) | Next Greater Element I (LC 496) | Next Greater Element II (LC 503, circular)</p></div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #6a1b9a; color: #6a1b9a;">Rule #2 &mdash; Largest Rectangle in Histogram</h3>
+            <div class="when-to-use"><p>For each bar: find how far it can extend left and right. Area = height &times; (right &minus; left &minus; 1)</p></div>
+<pre>Stack&lt;Integer&gt; stack = new Stack&lt;&gt;();
+int maxArea = 0;
+
+for (int i = 0; i &lt;= n; i++) {
+    int currHeight = (i == n) ? 0 : heights[i];
+    while (!stack.isEmpty() &amp;&amp; heights[stack.peek()] &gt; currHeight) {
+        int height = heights[stack.pop()];
+        int width = stack.isEmpty() ? i : i - stack.peek() - 1;
+        maxArea = Math.max(maxArea, height * width);
+    }
+    stack.push(i);
+}</pre>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Largest Rectangle in Histogram (LC 84) | Maximal Rectangle (LC 85)</p></div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #6a1b9a; color: #6a1b9a;">Rule #3 &mdash; Trapping Rain Water (Two Pointers)</h3>
+            <div class="when-to-use"><p>Water at position i = min(leftMax, rightMax) &minus; height[i]</p></div>
+<pre>int left = 0, right = height.length - 1;
+int leftMax = 0, rightMax = 0, water = 0;
+
+while (left &lt; right) {
+    if (height[left] &lt; height[right]) {
+        if (height[left] &gt;= leftMax) leftMax = height[left];
+        else water += leftMax - height[left];
+        left++;
+    } else {
+        if (height[right] &gt;= rightMax) rightMax = height[right];
+        else water += rightMax - height[right];
+        right--;
+    }
+}</pre>
+            <div class="complexity-box"><strong>Time:</strong> O(N) &nbsp;|&nbsp; <strong>Space:</strong> O(1)</div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #6a1b9a; color: #6a1b9a;">Rule #4 &mdash; Remove K Digits / Build Optimal Number</h3>
+<pre>// Remove K Digits (smallest number)
+Stack&lt;Character&gt; stack = new Stack&lt;&gt;();
+for (char digit : num.toCharArray()) {
+    while (!stack.isEmpty() &amp;&amp; k &gt; 0 &amp;&amp; stack.peek() &gt; digit) {
+        stack.pop(); k--;
+    }
+    stack.push(digit);
+}
+while (k &gt; 0) { stack.pop(); k--; }
+// Remove leading zeros from result</pre>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #6a1b9a; color: #6a1b9a;">Rule #5 &mdash; Collision / Matching (Asteroids, Parentheses)</h3>
+<pre>// Valid Parentheses
+for (char c : s.toCharArray()) {
+    if (c == '(') stack.push(')');
+    else if (c == '{') stack.push('}');
+    else if (c == '[') stack.push(']');
+    else if (stack.isEmpty() || stack.pop() != c)
+        return false;
+}
+return stack.isEmpty();</pre>
+        </div>
+
+        <div class="summary-box">
+            <h3>Stack Type Quick Reference</h3>
+            <table class="cheat-table">
+                <tr><th>Problem Type</th><th>Stack Type</th><th>When to Pop</th></tr>
+                <tr><td>Next Greater Element</td><td>Decreasing</td><td>stack.peek() &lt; current</td></tr>
+                <tr><td>Next Smaller Element</td><td>Increasing</td><td>stack.peek() &gt; current</td></tr>
+                <tr><td>Largest Rectangle</td><td>Increasing</td><td>stack.peek() &ge; current</td></tr>
+                <tr><td>Build smallest number</td><td>Decreasing</td><td>stack.peek() &gt; current</td></tr>
+            </table>
+        </div>
+
+        <div class="mistakes-box">
+            <h4>Common Mistakes</h4>
+            <p>&#10060; Storing values instead of indices</p>
+            <p>&#10060; Forgetting remaining elements in stack after loop (default to &minus;1)</p>
+            <p>&#10060; Off-by-one in width: width = right &minus; left &minus; 1 (not right &minus; left)</p>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 5. GREEDY ==================== -->
+<div class="topic" id="greedy">
+    <div class="topic-header" style="background: #e0f2f1;" onclick="toggleTopic(this)">
+        <h2>5. Greedy Approach</h2>
+        <span class="arrow">&#9660;</span>
+    </div>
+    <div class="topic-body">
+        <div class="intro-box">
+            <p><strong>What:</strong> Make locally optimal choice at each step &rarr; global optimum. No need to reconsider.</p>
+            <p><strong>Keywords:</strong> "maximum profit", "minimum cost", "optimal", often involves sorting first</p>
+        </div>
+
+        <div class="guide-box">
+            <h3>When to Use Which Rule?</h3>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #1 &mdash; Interval Scheduling</div>
+                <div class="guide-explain">Use this when you have a list of intervals (like meetings or events) and need to find the maximum number of non-overlapping ones, or remove the minimum number to make them non-overlapping. The trick is to sort by END time, then greedily pick intervals that don't overlap with the last picked one. Sorting by end time works because finishing early leaves room for more intervals.</div>
+                <div class="guide-example"><strong>Example:</strong> "Find minimum number of intervals to remove to make the rest non-overlapping."<br><strong>Input:</strong> intervals = [[1,2], [2,3], [3,4], [1,3]]<br><strong>Output:</strong> 1 &mdash; remove [1,3] and the remaining [1,2], [2,3], [3,4] don't overlap.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #2 &mdash; Minimum Meeting Rooms</div>
+                <div class="guide-explain">Use this when you need to find the maximum number of overlapping events at any point (like how many meeting rooms you need). The trick: separate start times and end times, sort both. Walk through them &mdash; each start means +1 room needed, each end means &minus;1 room freed. Track the maximum rooms needed at any point.</div>
+                <div class="guide-example"><strong>Example:</strong> "How many meeting rooms do you need?"<br><strong>Input:</strong> meetings = [[0,30], [5,10], [15,20]]<br><strong>Output:</strong> 2 &mdash; meetings [0,30] and [5,10] overlap, so you need 2 rooms at time 5.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #3 &mdash; Jump Game</div>
+                <div class="guide-explain">Use this when you're at each position and can jump some steps forward, and you need to know if you can reach the end (or the minimum jumps to reach it). Keep track of the farthest position you can reach. If at any index you're beyond the farthest reachable, you're stuck. For minimum jumps, be greedy: always jump to the position that lets you go the farthest next.</div>
+                <div class="guide-example"><strong>Example:</strong> "Can you reach the last index?"<br><strong>Input:</strong> nums = [2, 3, 1, 1, 4]<br><strong>Output:</strong> true &mdash; jump 1 step from index 0 to 1, then 3 steps to the end.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #4 &mdash; Buy/Sell Stock</div>
+                <div class="guide-explain">Use this when you have stock prices over time and want maximum profit. For ONE transaction: track the minimum price seen so far, and at each day calculate profit = today's price &minus; minimum. For UNLIMITED transactions: just add up every upward movement (whenever tomorrow's price is higher than today's, take that profit).</div>
+                <div class="guide-example"><strong>Example (one transaction):</strong> "Buy once, sell once for max profit."<br><strong>Input:</strong> prices = [7, 1, 5, 3, 6, 4]<br><strong>Output:</strong> 5 &mdash; buy at 1, sell at 6.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #5 &mdash; Gas Station</div>
+                <div class="guide-explain">Use this when you're going around a circular route and need to find the starting point where you won't run out of fuel. First check: if total gas &lt; total cost, it's impossible. Otherwise, walk through the stations. If at any point your current gas goes negative, the start must be AFTER that station (reset current gas and update start). The answer is guaranteed to be unique.</div>
+                <div class="guide-example"><strong>Example:</strong> "Find starting gas station to complete the circuit."<br><strong>Input:</strong> gas = [1,2,3,4,5], cost = [3,4,5,1,2]<br><strong>Output:</strong> 3 &mdash; start at station 3 (gas=4, cost=1), you can complete the full circle.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #6 &mdash; Partition Labels</div>
+                <div class="guide-explain">Use this when you need to cut a string into as many parts as possible such that each character appears in at most one part. First, record the LAST index where each character appears. Then scan left to right &mdash; expand the current partition's end to include the farthest reach of every character you encounter. When you reach the end of the current partition, cut there.</div>
+                <div class="guide-example"><strong>Example:</strong> "Partition the string so each letter appears in at most one part."<br><strong>Input:</strong> s = "ababcbacadefegdehijhklij"<br><strong>Output:</strong> [9, 7, 8] &mdash; "ababcbaca" (9 chars), "defegde" (7 chars), "hijhklij" (8 chars).</div>
+            </div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #00695c; color: #00695c;">Rule #1 &mdash; Interval Scheduling (Sort by End Time)</h3>
+<pre>Arrays.sort(intervals, (a, b) -&gt; a[1] - b[1]);  // Sort by END
+int count = 0, lastEnd = Integer.MIN_VALUE;
+
+for (int[] interval : intervals) {
+    if (interval[0] &gt;= lastEnd) {
+        count++;
+        lastEnd = interval[1];
+    }
+}</pre>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Non-overlapping Intervals (LC 435) | Merge Intervals (LC 56)</p></div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #00695c; color: #00695c;">Rule #2 &mdash; Minimum Meeting Rooms (Sort Start &amp; End Separately)</h3>
+<pre>Arrays.sort(starts);
+Arrays.sort(ends);
+int rooms = 0, maxRooms = 0, i = 0, j = 0;
+
+while (i &lt; n) {
+    if (starts[i] &lt; ends[j]) { rooms++; maxRooms = Math.max(maxRooms, rooms); i++; }
+    else { rooms--; j++; }
+}</pre>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #00695c; color: #00695c;">Rule #3 &mdash; Jump Game (Track Max Reachable)</h3>
+<pre>// Can Jump?
+int maxReach = 0;
+for (int i = 0; i &lt; nums.length; i++) {
+    if (i &gt; maxReach) return false;
+    maxReach = Math.max(maxReach, i + nums[i]);
+}
+return true;
+
+// Minimum Jumps
+int jumps = 0, currentEnd = 0, farthest = 0;
+for (int i = 0; i &lt; nums.length - 1; i++) {
+    farthest = Math.max(farthest, i + nums[i]);
+    if (i == currentEnd) { jumps++; currentEnd = farthest; }
+}</pre>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #00695c; color: #00695c;">Rule #4 &mdash; Buy/Sell Stock</h3>
+<pre>// One Transaction: track min price
+int minPrice = Integer.MAX_VALUE, maxProfit = 0;
+for (int price : prices) {
+    minPrice = Math.min(minPrice, price);
+    maxProfit = Math.max(maxProfit, price - minPrice);
+}
+
+// Unlimited Transactions: collect every upward movement
+int profit = 0;
+for (int i = 1; i &lt; prices.length; i++)
+    if (prices[i] &gt; prices[i-1]) profit += prices[i] - prices[i-1];</pre>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #00695c; color: #00695c;">Rule #5 &mdash; Gas Station (Track Total &amp; Current Balance)</h3>
+<pre>int totalGas = 0, currentGas = 0, startIndex = 0;
+for (int i = 0; i &lt; n; i++) {
+    int diff = gas[i] - cost[i];
+    totalGas += diff;
+    currentGas += diff;
+    if (currentGas &lt; 0) { startIndex = i + 1; currentGas = 0; }
+}
+return totalGas &gt;= 0 ? startIndex : -1;</pre>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #00695c; color: #00695c;">Rule #6 &mdash; Partition Labels</h3>
+<pre>int[] lastIndex = new int[26];
+for (int i = 0; i &lt; s.length(); i++)
+    lastIndex[s.charAt(i) - 'a'] = i;
+
+List&lt;Integer&gt; result = new ArrayList&lt;&gt;();
+int start = 0, end = 0;
+for (int i = 0; i &lt; s.length(); i++) {
+    end = Math.max(end, lastIndex[s.charAt(i) - 'a']);
+    if (i == end) { result.add(end - start + 1); start = i + 1; }
+}</pre>
+        </div>
+
+        <div class="summary-box">
+            <h3>Greedy vs DP</h3>
+            <p><strong>Greedy works:</strong> Activity Selection, Fractional Knapsack, Stock Buy/Sell</p>
+            <p><strong>Greedy FAILS:</strong> 0/1 Knapsack, Coin Change (arbitrary coins) &rarr; use DP</p>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 6. RECURSION ==================== -->
+<div class="topic" id="recursion">
+    <div class="topic-header" style="background: #fce4ec;" onclick="toggleTopic(this)">
+        <h2>6. Recursion &amp; Backtracking</h2>
+        <span class="arrow">&#9660;</span>
+    </div>
+    <div class="topic-body">
+        <div class="intro-box">
+            <p><strong>Key:</strong> Trust the recursion. Focus on ONE level. Always define base case first.</p>
+        </div>
+
+        <div class="guide-box">
+            <h3>When to Use Which Rule?</h3>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #1 &mdash; Subsets</div>
+                <div class="guide-explain">Use this when the problem says "generate all subsets" or "find all combinations of elements" (where order doesn't matter and you pick any number of elements). At each element, you have two choices: INCLUDE it or EXCLUDE it. This gives you 2^N total subsets. Think of it as a yes/no decision for every element.</div>
+                <div class="guide-example"><strong>Example:</strong> "Find all subsets of [1, 2, 3]."<br><strong>Input:</strong> nums = [1, 2, 3]<br><strong>Output:</strong> [[], [1], [2], [3], [1,2], [1,3], [2,3], [1,2,3]] &mdash; 8 subsets total (2&sup3; = 8).</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #2 &mdash; Permutations</div>
+                <div class="guide-explain">Use this when the problem says "generate all arrangements" or "all orderings". Unlike subsets, ORDER matters here and you must use ALL elements. You pick each unused element for the current position, then recursively fill the remaining positions. Use a visited[] array to track which elements are already used.</div>
+                <div class="guide-example"><strong>Example:</strong> "Find all permutations of [1, 2, 3]."<br><strong>Input:</strong> nums = [1, 2, 3]<br><strong>Output:</strong> [[1,2,3], [1,3,2], [2,1,3], [2,3,1], [3,1,2], [3,2,1]] &mdash; 6 permutations (3! = 6).</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #3 &mdash; Combinations</div>
+                <div class="guide-explain">Use this when the problem says "choose K elements from N" and order doesn't matter. It's like subsets but with a fixed size. The key difference from permutations: you always move FORWARD (start from index i+1, not from 0) to avoid duplicates like [1,2] and [2,1]. Think of it as "pick K items from a shelf, left to right, no going back."</div>
+                <div class="guide-example"><strong>Example:</strong> "Choose 2 numbers from [1, 2, 3, 4]."<br><strong>Input:</strong> n = 4, k = 2<br><strong>Output:</strong> [[1,2], [1,3], [1,4], [2,3], [2,4], [3,4]] &mdash; 6 combinations (C(4,2) = 6).</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #4 &mdash; Backtracking</div>
+                <div class="guide-explain">Use this when you need to build a solution step by step with CONSTRAINTS (not all choices are valid). The pattern is: Choose &rarr; Explore &rarr; Unchoose. At each step, try a choice, go deeper. If it leads to a dead end, undo the choice (backtrack) and try the next option. It's like navigating a maze &mdash; if a path is blocked, go back and try another route.</div>
+                <div class="guide-example"><strong>Example:</strong> "Place N queens on an N&times;N chessboard so no two queens attack each other."<br><strong>Input:</strong> n = 4<br><strong>Output:</strong> [[".Q..","...Q","Q...","..Q."], ["..Q.","Q...","...Q",".Q.."]] &mdash; 2 valid arrangements.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #5 &mdash; Divide and Conquer</div>
+                <div class="guide-explain">Use this when you can split the problem into TWO smaller independent subproblems, solve each separately, and combine the results. Classic example is merge sort: split the array in half, sort each half, then merge them back together. The key is that subproblems don't overlap (if they do, use DP instead).</div>
+                <div class="guide-example"><strong>Example:</strong> "Sort an array using merge sort."<br><strong>Input:</strong> arr = [5, 2, 4, 1, 3]<br><strong>Output:</strong> [1, 2, 3, 4, 5] &mdash; split into [5,2] and [4,1,3], sort each, then merge.</div>
+            </div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #c62828; color: #c62828;">Rule #1 &mdash; Subsets (Include or Exclude)</h3>
+<pre>void subsets(int[] nums, int index, List&lt;Integer&gt; current, List&lt;List&lt;Integer&gt;&gt; result) {
+    if (index == nums.length) { result.add(new ArrayList&lt;&gt;(current)); return; }
+
+    subsets(nums, index + 1, current, result);            // Exclude
+    current.add(nums[index]);
+    subsets(nums, index + 1, current, result);            // Include
+    current.remove(current.size() - 1);                   // Backtrack
+}</pre>
+            <div class="complexity-box"><strong>Time:</strong> O(2<sup>N</sup>) &nbsp;|&nbsp; <strong>Space:</strong> O(N)</div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #c62828; color: #c62828;">Rule #2 &mdash; Permutations (Visited Array)</h3>
+<pre>void permute(int[] nums, List&lt;Integer&gt; current, boolean[] visited, List&lt;List&lt;Integer&gt;&gt; result) {
+    if (current.size() == nums.length) { result.add(new ArrayList&lt;&gt;(current)); return; }
+
+    for (int i = 0; i &lt; nums.length; i++) {
+        if (visited[i]) continue;
+        visited[i] = true; current.add(nums[i]);
+        permute(nums, current, visited, result);
+        current.remove(current.size() - 1); visited[i] = false;
+    }
+}</pre>
+            <div class="complexity-box"><strong>Time:</strong> O(N! &times; N) &nbsp;|&nbsp; <strong>Space:</strong> O(N)</div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #c62828; color: #c62828;">Rule #3 &mdash; Combinations (Choose K from N)</h3>
+            <div class="when-to-use"><p><strong>Key difference:</strong> Permutations loop from 0 with visited[]. Combinations loop from 'start' with i+1.</p></div>
+<pre>void combine(int n, int k, int start, List&lt;Integer&gt; current, List&lt;List&lt;Integer&gt;&gt; result) {
+    if (current.size() == k) { result.add(new ArrayList&lt;&gt;(current)); return; }
+
+    for (int i = start; i &lt;= n; i++) {
+        current.add(i);
+        combine(n, k, i + 1, current, result);  // i+1: move forward only
+        current.remove(current.size() - 1);
+    }
+}</pre>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #c62828; color: #c62828;">Rule #4 &mdash; Backtracking (Choose &rarr; Explore &rarr; Unchoose)</h3>
+<pre>void backtrack(state, choices) {
+    if (isSolution(state)) { addToResult(state); return; }
+
+    for (choice : choices) {
+        if (!isValid(choice, state)) continue;  // Prune
+        makeChoice(choice, state);              // Choose
+        backtrack(state, newChoices);            // Explore
+        undoChoice(choice, state);              // Unchoose
+    }
+}</pre>
+            <div class="key-problems"><h4>Key Problems:</h4><p>N-Queens (LC 51) | Word Search (LC 79) | Palindrome Partitioning (LC 131) | Generate Parentheses (LC 22)</p></div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #c62828; color: #c62828;">Rule #5 &mdash; Divide and Conquer (Split &rarr; Solve &rarr; Merge)</h3>
+<pre>void mergeSort(int[] arr, int left, int right) {
+    if (left &gt;= right) return;
+    int mid = left + (right - left) / 2;
+    mergeSort(arr, left, mid);
+    mergeSort(arr, mid + 1, right);
+    merge(arr, left, mid, right);
+}</pre>
+        </div>
+
+        <div class="summary-box">
+            <h3>Subsets vs Permutations vs Combinations</h3>
+            <table class="cheat-table">
+                <tr><th>Pattern</th><th>Time</th><th>Key Characteristic</th></tr>
+                <tr><td>Subsets</td><td>O(2<sup>N</sup>)</td><td>Include/Exclude each element</td></tr>
+                <tr><td>Permutations</td><td>O(N!)</td><td>All arrangements, use all elements</td></tr>
+                <tr><td>Combinations</td><td>O(C(n,k))</td><td>Select k, order doesn't matter, move forward only</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 7. TOP K ELEMENTS ==================== -->
+<div class="topic" id="top-k">
+    <div class="topic-header" style="background: #fff8e1;" onclick="toggleTopic(this)">
+        <h2>7. Top K Elements</h2>
+        <span class="arrow">&#9660;</span>
+    </div>
+    <div class="topic-body">
+        <div class="intro-box">
+            <p><strong>Key:</strong> Min-Heap of size K for K LARGEST. Max-Heap of size K for K SMALLEST.</p>
+            <p><strong>Why heap over sorting?</strong> Sorting: O(N log N) always. Heap of size K: O(N log K) &mdash; faster when K &laquo; N.</p>
+        </div>
+
+        <div class="guide-box">
+            <h3>When to Use Which Rule?</h3>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #1 &mdash; K Largest Elements</div>
+                <div class="guide-explain">Use this when the problem says "find the Kth largest element" or "top K biggest". Use a MIN-heap of size K. Why min-heap? Because you want to keep the K biggest, and the min-heap's root is the smallest among them &mdash; so when a new element comes that's bigger than the root, swap them in. After processing everything, the root is the Kth largest.</div>
+                <div class="guide-example"><strong>Example:</strong> "Find the 2nd largest element."<br><strong>Input:</strong> nums = [3, 2, 1, 5, 6, 4], k = 2<br><strong>Output:</strong> 5 &mdash; the 2nd largest is 5 (after 6).</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #2 &mdash; K Most Frequent</div>
+                <div class="guide-explain">Use this when the problem says "find K most frequent elements". First count the frequency of each element using a HashMap. Then use a min-heap of size K, but this time sorted by FREQUENCY. The heap keeps the K elements with the highest frequencies. When the heap exceeds size K, the element with the lowest frequency gets removed.</div>
+                <div class="guide-example"><strong>Example:</strong> "Find the 2 most frequent elements."<br><strong>Input:</strong> nums = [1, 1, 1, 2, 2, 3], k = 2<br><strong>Output:</strong> [1, 2] &mdash; 1 appears 3 times, 2 appears 2 times.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #3 &mdash; K Closest</div>
+                <div class="guide-explain">Use this when you need "K closest points" or "K nearest neighbors". Use a MAX-heap of size K sorted by distance. The root is the FARTHEST among the K closest. When a new point comes that's closer than the root, swap them. This way, after processing all points, the heap contains the K closest.</div>
+                <div class="guide-example"><strong>Example:</strong> "Find the 2 closest points to the origin."<br><strong>Input:</strong> points = [[1,3], [&minus;2,2], [5,8], [0,1]], k = 2<br><strong>Output:</strong> [[0,1], [&minus;2,2]] &mdash; distances are &radic;10, &radic;8, &radic;89, 1. The 2 closest are [0,1] and [&minus;2,2].</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #4 &mdash; Merge K Sorted Lists</div>
+                <div class="guide-explain">Use this when you have K sorted lists (or arrays) and need to merge them into one sorted result. Put the first element of each list into a min-heap. Pop the smallest, add it to the result, and push the next element from that same list. The heap always has at most K elements, so each operation is O(log K).</div>
+                <div class="guide-example"><strong>Example:</strong> "Merge 3 sorted lists."<br><strong>Input:</strong> lists = [[1,4,5], [1,3,4], [2,6]]<br><strong>Output:</strong> [1, 1, 2, 3, 4, 4, 5, 6] &mdash; all merged in sorted order.</div>
+            </div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #f57f17; color: #e65100;">Rule #1 &mdash; K Largest Elements (Min-Heap of Size K)</h3>
+<pre>PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+for (int num : nums) {
+    minHeap.offer(num);
+    if (minHeap.size() &gt; k) minHeap.poll();  // Remove smallest
+}
+return minHeap.peek();  // Kth largest</pre>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #f57f17; color: #e65100;">Rule #2 &mdash; K Most Frequent (Frequency Map + Min-Heap)</h3>
+<pre>Map&lt;Integer, Integer&gt; freq = new HashMap&lt;&gt;();
+for (int num : nums) freq.merge(num, 1, Integer::sum);
+
+PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;(
+    (a, b) -&gt; freq.get(a) - freq.get(b)
+);
+for (int num : freq.keySet()) {
+    minHeap.offer(num);
+    if (minHeap.size() &gt; k) minHeap.poll();
+}</pre>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Top K Frequent Elements (LC 347) | Top K Frequent Words (LC 692)</p></div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #f57f17; color: #e65100;">Rule #3 &mdash; K Closest (Max-Heap by Distance)</h3>
+<pre>// K Closest Points to Origin: max-heap so farthest is at root
+PriorityQueue&lt;int[]&gt; maxHeap = new PriorityQueue&lt;&gt;(
+    (a, b) -&gt; (b[0]*b[0] + b[1]*b[1]) - (a[0]*a[0] + a[1]*a[1])
+);
+for (int[] p : points) {
+    maxHeap.offer(p);
+    if (maxHeap.size() &gt; k) maxHeap.poll();  // Remove farthest
+}</pre>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #f57f17; color: #e65100;">Rule #4 &mdash; Merge K Sorted Lists (Min-Heap)</h3>
+<pre>PriorityQueue&lt;ListNode&gt; minHeap = new PriorityQueue&lt;&gt;((a, b) -&gt; a.val - b.val);
+for (ListNode list : lists)
+    if (list != null) minHeap.offer(list);
+
+ListNode dummy = new ListNode(0), curr = dummy;
+while (!minHeap.isEmpty()) {
+    ListNode smallest = minHeap.poll();
+    curr.next = smallest; curr = curr.next;
+    if (smallest.next != null) minHeap.offer(smallest.next);
+}</pre>
+        </div>
+
+        <div class="summary-box">
+            <h3>Heap Selection Quick Reference</h3>
+            <table class="cheat-table">
+                <tr><th>Problem Type</th><th>Heap Type</th><th>Why?</th></tr>
+                <tr><td>K largest elements</td><td>Min-heap (k)</td><td>Root = smallest of largest</td></tr>
+                <tr><td>K smallest elements</td><td>Max-heap (k)</td><td>Root = largest of smallest</td></tr>
+                <tr><td>K most frequent</td><td>Min-heap (k)</td><td>Root = least frequent of k</td></tr>
+                <tr><td>K closest</td><td>Max-heap (k)</td><td>Root = farthest of closest</td></tr>
+                <tr><td>Merge K sorted</td><td>Min-heap (k)</td><td>Root = next smallest</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 8. BINARY TREES ==================== -->
+<div class="topic" id="binary-trees">
+    <div class="topic-header" style="background: #e8eaf6;" onclick="toggleTopic(this)">
+        <h2>8. Binary Trees</h2>
+        <span class="arrow">&#9660;</span>
+    </div>
+    <div class="topic-body">
+        <div class="intro-box">
+            <p><strong>Two main approaches:</strong> DFS (go deep, use recursion/stack) | BFS (level by level, use queue)</p>
+        </div>
+
+        <div class="guide-box">
+            <h3>When to Use Which Rule?</h3>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #1 &mdash; Traversals</div>
+                <div class="guide-explain">Use Inorder (Left &rarr; Root &rarr; Right) when you need elements in SORTED order from a BST. Use Preorder (Root &rarr; Left &rarr; Right) when you need to copy or serialize a tree (root comes first). Use Postorder (Left &rarr; Right &rarr; Root) when you need to process children before the parent (like calculating height or deleting nodes).</div>
+                <div class="guide-example"><strong>Example:</strong> "Get sorted elements from a BST."<br><strong>Input:</strong> BST with nodes [4, 2, 6, 1, 3, 5, 7]<br><strong>Output (Inorder):</strong> [1, 2, 3, 4, 5, 6, 7] &mdash; inorder on BST always gives sorted output.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #2 &mdash; Level Order (BFS)</div>
+                <div class="guide-explain">Use this when the problem asks for anything level-by-level: "print level order", "zigzag traversal", "right side view", "average of each level", or "minimum depth". Use a queue. Process all nodes at the current level before moving to the next. The key is using queue.size() at the start of each level to know how many nodes belong to that level.</div>
+                <div class="guide-example"><strong>Example:</strong> "Return nodes level by level."<br><strong>Input:</strong> Tree: 3 &rarr; [9, 20], 20 &rarr; [15, 7]<br><strong>Output:</strong> [[3], [9, 20], [15, 7]] &mdash; three levels.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #3 &mdash; Height / Diameter</div>
+                <div class="guide-explain">Use this when the problem asks for tree height (longest path from root to leaf) or diameter (longest path between ANY two nodes). Height is simple recursion: 1 + max(left height, right height). For diameter, at each node calculate leftHeight + rightHeight (this is the longest path through that node) and keep track of the global maximum.</div>
+                <div class="guide-example"><strong>Example:</strong> "Find the diameter of the tree."<br><strong>Input:</strong> Tree: 1 &rarr; [2, 3], 2 &rarr; [4, 5]<br><strong>Output:</strong> 3 &mdash; longest path is 4 &rarr; 2 &rarr; 1 &rarr; 3, which has 3 edges.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #4 &mdash; Same Tree / Symmetric</div>
+                <div class="guide-explain">Use this when comparing two trees (or two halves of the same tree). For "same tree": both null = true, one null = false, values differ = false, otherwise check left subtrees and right subtrees. For "symmetric": compare the LEFT child of one side with the RIGHT child of the other (mirror comparison).</div>
+                <div class="guide-example"><strong>Example:</strong> "Is this tree symmetric?"<br><strong>Input:</strong> Tree: 1 &rarr; [2, 2], left 2 &rarr; [3, 4], right 2 &rarr; [4, 3]<br><strong>Output:</strong> true &mdash; the left and right halves are mirror images.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #5 &mdash; Path Sum / Max Path Sum</div>
+                <div class="guide-explain">Use "root to leaf path sum" when the problem asks "does a path from root to a leaf add up to a target?" At each node subtract the node's value from the target; at a leaf, check if target equals the node value. Use "max path sum" when ANY path (not just root-to-leaf) is allowed &mdash; at each node, the best path through it is node + max(leftGain, 0) + max(rightGain, 0).</div>
+                <div class="guide-example"><strong>Example:</strong> "Does any root-to-leaf path sum to 22?"<br><strong>Input:</strong> Tree: 5 &rarr; [4, 8], 4 &rarr; [11, null], 11 &rarr; [7, 2], target = 22<br><strong>Output:</strong> true &mdash; path 5 &rarr; 4 &rarr; 11 &rarr; 2 = 22.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #6 &mdash; Lowest Common Ancestor (LCA)</div>
+                <div class="guide-explain">Use this when you need to find the deepest node that is an ancestor of both given nodes. The idea: recursively search left and right subtrees. If the left subtree returns one node and the right returns the other, the current node is the LCA (this is where the paths split). For a BST, it's simpler: if both values are smaller go left, both bigger go right, otherwise current node is the LCA.</div>
+                <div class="guide-example"><strong>Example:</strong> "Find LCA of nodes 5 and 1."<br><strong>Input:</strong> Tree: 3 &rarr; [5, 1], 5 &rarr; [6, 2], 1 &rarr; [0, 8], p = 5, q = 1<br><strong>Output:</strong> 3 &mdash; node 3 is the lowest common ancestor of 5 and 1.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #7 &mdash; BST Operations</div>
+                <div class="guide-explain">Use "validate BST" when you need to check if a tree is a valid BST. Each node must be within a range (min, max). Go left: update max to current node's value. Go right: update min to current node's value. Use "Kth smallest in BST" by doing an inorder traversal (which gives sorted order) and counting until you reach the Kth element.</div>
+                <div class="guide-example"><strong>Example:</strong> "Find the 3rd smallest element in a BST."<br><strong>Input:</strong> BST: 5 &rarr; [3, 6], 3 &rarr; [2, 4], 2 &rarr; [1, null], k = 3<br><strong>Output:</strong> 3 &mdash; inorder gives [1, 2, 3, 4, 5, 6], the 3rd element is 3.</div>
+            </div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #283593; color: #283593;">Rule #1 &mdash; Traversals (Inorder / Preorder / Postorder)</h3>
+<pre>// INORDER (Left &rarr; Root &rarr; Right) &mdash; gives sorted order for BST
+// PREORDER (Root &rarr; Left &rarr; Right) &mdash; used to copy/serialize
+// POSTORDER (Left &rarr; Right &rarr; Root) &mdash; used to delete, calculate height</pre>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #283593; color: #283593;">Rule #2 &mdash; Level Order Traversal (BFS)</h3>
+<pre>Queue&lt;TreeNode&gt; queue = new LinkedList&lt;&gt;();
+queue.offer(root);
+while (!queue.isEmpty()) {
+    int levelSize = queue.size();
+    for (int i = 0; i &lt; levelSize; i++) {
+        TreeNode node = queue.poll();
+        // process node
+        if (node.left != null) queue.offer(node.left);
+        if (node.right != null) queue.offer(node.right);
+    }
+}</pre>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #283593; color: #283593;">Rule #3 &mdash; Height / Diameter</h3>
+<pre>// Height
+int height(TreeNode root) {
+    if (root == null) return 0;
+    return 1 + Math.max(height(root.left), height(root.right));
+}
+
+// Diameter (update global max at each node)
+diameter = Math.max(diameter, leftHeight + rightHeight);</pre>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #283593; color: #283593;">Rule #4 &mdash; Same Tree / Symmetric</h3>
+<pre>boolean isSameTree(TreeNode p, TreeNode q) {
+    if (p == null &amp;&amp; q == null) return true;
+    if (p == null || q == null) return false;
+    return p.val == q.val &amp;&amp; isSameTree(p.left, q.left) &amp;&amp; isSameTree(p.right, q.right);
+}
+
+// Symmetric: compare outer (left.left, right.right) and inner (left.right, right.left)</pre>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #283593; color: #283593;">Rule #5 &mdash; Path Sum / Max Path Sum</h3>
+<pre>// Root to Leaf path sum
+boolean hasPathSum(TreeNode root, int target) {
+    if (root == null) return false;
+    if (root.left == null &amp;&amp; root.right == null) return root.val == target;
+    return hasPathSum(root.left, target - root.val) || hasPathSum(root.right, target - root.val);
+}
+
+// Max Path Sum: at each node, maxGain = node.val + max(leftGain, rightGain)
+// Update global: maxSum = max(maxSum, node.val + leftGain + rightGain)</pre>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #283593; color: #283593;">Rule #6 &mdash; Lowest Common Ancestor (LCA)</h3>
+<pre>TreeNode lca(TreeNode root, TreeNode p, TreeNode q) {
+    if (root == null || root == p || root == q) return root;
+    TreeNode left = lca(root.left, p, q);
+    TreeNode right = lca(root.right, p, q);
+    if (left != null &amp;&amp; right != null) return root;  // Split point
+    return left != null ? left : right;
+}
+
+// BST LCA: if both &lt; root go left, both &gt; root go right, else root is LCA</pre>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #283593; color: #283593;">Rule #7 &mdash; BST Operations</h3>
+<pre>// Validate BST: each node must be within (min, max) range
+boolean validate(TreeNode node, long min, long max) {
+    if (node == null) return true;
+    if (node.val &lt;= min || node.val &gt;= max) return false;
+    return validate(node.left, min, node.val) &amp;&amp; validate(node.right, node.val, max);
+}
+
+// Kth Smallest: inorder traversal, count until k</pre>
+        </div>
+
+        <div class="summary-box">
+            <h3>DFS vs BFS</h3>
+            <table class="cheat-table">
+                <tr><th>Use DFS</th><th>Use BFS</th></tr>
+                <tr><td>Path sum, Height, Diameter</td><td>Level-wise operation</td></tr>
+                <tr><td>Validate BST, LCA</td><td>Shortest path, Zigzag</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 9. DYNAMIC PROGRAMMING ==================== -->
+<div class="topic" id="dp">
+    <div class="topic-header" style="background: #eceff1;" onclick="toggleTopic(this)">
+        <h2>9. Dynamic Programming</h2>
+        <span class="arrow">&#9660;</span>
+    </div>
+    <div class="topic-body">
+        <div class="intro-box">
+            <p><strong>Framework:</strong> 1. Define STATE &rarr; 2. Define RECURRENCE &rarr; 3. BASE CASE &rarr; 4. ANSWER</p>
+            <p><strong>Top-Down:</strong> Recursion + Cache &nbsp;|&nbsp; <strong>Bottom-Up:</strong> Iterative + Table</p>
+        </div>
+
+        <div class="guide-box">
+            <h3>When to Use Which Rule?</h3>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #1 &mdash; Linear DP (Fibonacci / House Robber)</div>
+                <div class="guide-explain">Use this when each step depends only on the previous 1 or 2 steps. You're making a simple choice at each position: "take this or skip this." If you take it, add its value to the answer from 2 steps back (because you can't take adjacent ones). If you skip it, carry forward the answer from 1 step back. You only need two variables, not a whole array.</div>
+                <div class="guide-example"><strong>Example:</strong> "Rob houses in a row, can't rob two adjacent houses. Maximize money."<br><strong>Input:</strong> nums = [2, 7, 9, 3, 1]<br><strong>Output:</strong> 12 &mdash; rob house 0 (2) + house 2 (9) + house 4 (1) = 12.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #2 &mdash; Grid DP (2D Paths)</div>
+                <div class="guide-explain">Use this when you're moving through a 2D grid from top-left to bottom-right, only going right or down. Each cell's answer depends on the cell above and the cell to the left. For "count paths": add them. For "minimum cost path": take the minimum and add the current cell's cost.</div>
+                <div class="guide-example"><strong>Example:</strong> "How many unique paths from top-left to bottom-right of a 3&times;3 grid?"<br><strong>Input:</strong> m = 3, n = 3<br><strong>Output:</strong> 6 &mdash; there are 6 different paths (each path is a combination of 2 downs and 2 rights).</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #3 &mdash; 0/1 Knapsack (Take or Skip)</div>
+                <div class="guide-explain">Use this when you have items and each item can be used AT MOST ONCE, and you need to hit a target sum or maximize value. The key is iterating the capacity RIGHT to LEFT in the inner loop. Why? Because going left to right would mean you might use the same item twice (since dp[j &minus; num] would already reflect the current item). Right to left ensures each item is only counted once.</div>
+                <div class="guide-example"><strong>Example:</strong> "Can you partition [1, 5, 11, 5] into two subsets with equal sum?"<br><strong>Input:</strong> nums = [1, 5, 11, 5], total = 22, target = 11<br><strong>Output:</strong> true &mdash; subset [1, 5, 5] sums to 11 and [11] sums to 11.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #4 &mdash; Unbounded Knapsack (Coin Change)</div>
+                <div class="guide-explain">Use this when items can be used UNLIMITED times (like coins). The inner loop goes LEFT to RIGHT because you WANT to reuse items. For "minimum coins": dp[i] = min(dp[i], dp[i &minus; coin] + 1). For "count ways": be careful &mdash; iterate coins in the OUTER loop to avoid counting different orderings as different ways (e.g., [1,2] and [2,1] should count as one way).</div>
+                <div class="guide-example"><strong>Example:</strong> "Minimum coins to make amount 11 using coins [1, 5, 6]."<br><strong>Input:</strong> coins = [1, 5, 6], amount = 11<br><strong>Output:</strong> 2 &mdash; use coins 5 + 6 = 11.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #5 &mdash; LCS (Longest Common Subsequence)</div>
+                <div class="guide-explain">Use this when you have TWO strings and need to find the longest sequence of characters that appears in both (in order, but not necessarily consecutive). If characters match, take diagonal + 1. If they don't match, take the better of skipping one character from either string. Edit Distance is a variation: when characters don't match, you try insert, delete, or replace (three choices).</div>
+                <div class="guide-example"><strong>Example:</strong> "Find LCS of 'abcde' and 'ace'."<br><strong>Input:</strong> text1 = "abcde", text2 = "ace"<br><strong>Output:</strong> 3 &mdash; the LCS is "ace", which has length 3.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #6 &mdash; LIS (Longest Increasing Subsequence)</div>
+                <div class="guide-explain">Use this when you need the longest subsequence where each element is strictly bigger than the previous one. The O(N&sup2;) approach: for each element, check all previous elements &mdash; if a previous element is smaller, you can extend its subsequence. The O(N log N) approach uses a "tails" array with binary search to find where the current element fits.</div>
+                <div class="guide-example"><strong>Example:</strong> "Find length of longest increasing subsequence."<br><strong>Input:</strong> nums = [10, 9, 2, 5, 3, 7, 101, 18]<br><strong>Output:</strong> 4 &mdash; one LIS is [2, 3, 7, 101].</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #7 &mdash; Palindrome DP</div>
+                <div class="guide-explain">Use this when the problem involves palindromes in strings. To check if every substring is a palindrome, use dp[i][j] = true if s[i] == s[j] AND dp[i+1][j&minus;1] is true (the inner part is also a palindrome). For "longest palindromic subsequence": if characters at both ends match, take inner + 2; otherwise, try dropping one end or the other and take the maximum.</div>
+                <div class="guide-example"><strong>Example:</strong> "Find the longest palindromic substring."<br><strong>Input:</strong> s = "babad"<br><strong>Output:</strong> "bab" (or "aba") &mdash; both are valid palindromic substrings of length 3.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #8 &mdash; Word Break</div>
+                <div class="guide-explain">Use this when you need to check if a string can be split into words from a dictionary. dp[i] means "the first i characters of the string can be broken into valid words." For each position i, check all possible previous positions j: if dp[j] is true AND s[j..i] is a word in the dictionary, then dp[i] = true. Think of it as "can I reach position i by jumping from some valid position j using a real word?"</div>
+                <div class="guide-example"><strong>Example:</strong> "Can 'leetcode' be segmented into dictionary words?"<br><strong>Input:</strong> s = "leetcode", wordDict = ["leet", "code"]<br><strong>Output:</strong> true &mdash; "leetcode" = "leet" + "code".</div>
+            </div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #37474f; color: #37474f;">Rule #1 &mdash; Linear DP (Fibonacci / House Robber)</h3>
+<pre>// dp[i] = max(skip i, rob i) = max(dp[i-1], dp[i-2] + nums[i])
+// Space optimized:
+int prev2 = 0, prev1 = 0;
+for (int num : nums) {
+    int curr = Math.max(prev1, prev2 + num);
+    prev2 = prev1; prev1 = curr;
+}
+return prev1;</pre>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Climbing Stairs (LC 70) | House Robber (LC 198) | House Robber II (LC 213)</p></div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #37474f; color: #37474f;">Rule #2 &mdash; Grid DP (2D Paths)</h3>
+<pre>// Unique Paths
+dp[i][j] = dp[i-1][j] + dp[i][j-1];
+
+// Min Path Sum
+dp[i][j] = grid[i][j] + Math.min(dp[i-1][j], dp[i][j-1]);</pre>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Unique Paths (LC 62) | Minimum Path Sum (LC 64) | Maximal Square (LC 221)</p></div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #37474f; color: #37474f;">Rule #3 &mdash; 0/1 Knapsack (Take or Skip &mdash; RIGHT to LEFT)</h3>
+<pre>boolean[] dp = new boolean[target + 1];
+dp[0] = true;
+for (int num : nums)
+    for (int j = target; j &gt;= num; j--)   // RIGHT to LEFT (each item once)
+        dp[j] = dp[j] || dp[j - num];</pre>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Partition Equal Subset Sum (LC 416) | Target Sum (LC 494)</p></div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #37474f; color: #37474f;">Rule #4 &mdash; Unbounded Knapsack (Coin Change &mdash; LEFT to RIGHT)</h3>
+<pre>// Min Coins
+int[] dp = new int[amount + 1];
+Arrays.fill(dp, amount + 1);
+dp[0] = 0;
+for (int i = 1; i &lt;= amount; i++)
+    for (int coin : coins)
+        if (coin &lt;= i) dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+
+// Count Ways (coins FIRST to avoid counting order as different)
+dp[0] = 1;
+for (int coin : coins)
+    for (int i = coin; i &lt;= amount; i++)
+        dp[i] += dp[i - coin];</pre>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Coin Change (LC 322) | Coin Change II (LC 518) | Perfect Squares (LC 279)</p></div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #37474f; color: #37474f;">Rule #5 &mdash; LCS (Longest Common Subsequence)</h3>
+<pre>// If match: dp[i][j] = dp[i-1][j-1] + 1
+// If no match: dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+
+// Edit Distance
+if (word1[i-1] == word2[j-1]) dp[i][j] = dp[i-1][j-1];
+else dp[i][j] = 1 + min(dp[i-1][j-1], dp[i-1][j], dp[i][j-1]);</pre>
+            <div class="key-problems"><h4>Key Problems:</h4><p>LCS (LC 1143) | Edit Distance (LC 72)</p></div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #37474f; color: #37474f;">Rule #6 &mdash; LIS (Longest Increasing Subsequence)</h3>
+<pre>// O(N&sup2;)
+for (int i = 1; i &lt; n; i++)
+    for (int j = 0; j &lt; i; j++)
+        if (nums[j] &lt; nums[i])
+            dp[i] = Math.max(dp[i], dp[j] + 1);
+
+// O(N log N) with binary search on tails array</pre>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #37474f; color: #37474f;">Rule #7 &mdash; Palindrome DP</h3>
+<pre>// dp[i][j] = true if s[i..j] is palindrome
+// dp[i][j] = (s[i] == s[j]) &amp;&amp; dp[i+1][j-1]
+
+// Longest Palindromic Subsequence
+if (s[i] == s[j]) dp[i][j] = dp[i+1][j-1] + 2;
+else dp[i][j] = max(dp[i+1][j], dp[i][j-1]);</pre>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #37474f; color: #37474f;">Rule #8 &mdash; Word Break</h3>
+<pre>boolean[] dp = new boolean[n + 1];
+dp[0] = true;
+for (int i = 1; i &lt;= n; i++)
+    for (int j = 0; j &lt; i; j++)
+        if (dp[j] &amp;&amp; wordSet.contains(s.substring(j, i)))
+            { dp[i] = true; break; }</pre>
+        </div>
+
+        <div class="summary-box">
+            <h3>DP Pattern Recognition</h3>
+            <table class="cheat-table">
+                <tr><th>Keywords</th><th>Pattern</th></tr>
+                <tr><td>Climbing, ways, count</td><td>Linear DP (#1)</td></tr>
+                <tr><td>Grid, path, robot</td><td>Grid DP (#2)</td></tr>
+                <tr><td>Subset, partition, target</td><td>0/1 Knapsack (#3) &mdash; RIGHT to LEFT</td></tr>
+                <tr><td>Coins, unlimited, ways</td><td>Unbounded Knapsack (#4) &mdash; LEFT to RIGHT</td></tr>
+                <tr><td>Common, two strings</td><td>LCS (#5)</td></tr>
+                <tr><td>Increasing, chain</td><td>LIS (#6)</td></tr>
+                <tr><td>Palindrome</td><td>Palindrome DP (#7)</td></tr>
+                <tr><td>Word break, segment</td><td>String DP (#8)</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 DSA Quick Revision Guide | Last Minute Reference for Interview Preparation</p>
+    </footer>
+</div>
+
+<button class="scroll-top" onclick="window.scrollTo({top:0, behavior:'smooth'})">&#8593;</button>
+
+<script>
+function toggleTopic(header) {
+    const body = header.nextElementSibling;
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open');
+    header.classList.toggle('open');
+}
+
+function openAndScroll(e, id) {
+    e.preventDefault();
+    const topic = document.getElementById(id);
+    const header = topic.querySelector('.topic-header');
+    const body = topic.querySelector('.topic-body');
+
+    if (!body.classList.contains('open')) {
+        body.classList.add('open');
+        header.classList.add('open');
+    }
+
+    const navHeight = document.querySelector('nav').offsetHeight;
+    const pos = topic.getBoundingClientRect().top + window.pageYOffset - navHeight - 10;
+    window.scrollTo({ top: pos, behavior: 'smooth' });
+}
+
+window.addEventListener('scroll', function() {
+    const btn = document.querySelector('.scroll-top');
+    btn.style.display = window.pageYOffset > 300 ? 'flex' : 'none';
+});
+
+(function restructureGuides() {
+    document.querySelectorAll('.topic-body').forEach(function(topicBody) {
+        var guideBox = topicBody.querySelector('.guide-box');
+        if (!guideBox) return;
+        var guideItems = Array.from(guideBox.querySelectorAll('.guide-item'));
+        var ruleCards = Array.from(topicBody.querySelectorAll('.rule-card'));
+
+        var heading = document.createElement('h3');
+        heading.className = 'guide-heading';
+        heading.textContent = 'When to Use Which Rule?';
+        guideBox.parentNode.insertBefore(heading, guideBox);
+
+        guideItems.forEach(function(item, index) {
+            if (index < ruleCards.length) {
+                ruleCards[index].parentNode.insertBefore(item, ruleCards[index]);
+            }
+        });
+
+        guideBox.remove();
+    });
+})();
+// ===== DSA RULES ANIMATION SYSTEM =====
+(function(){
+var ANIMS={},states={};
+
+function renderVis(vis){
+    if(!vis)return'';var h='';
+    if(vis.html)h+=vis.html;
+    if(vis.a){
+        h+='<div class="av-arr">';
+        for(var i=0;i<vis.a.length;i++){
+            var c='av-cell';
+            if(vis.w&&i>=vis.w[0]&&i<=vis.w[1])c+=' win';
+            if(vis.h&&vis.h.indexOf(i)>=0)c+=' active';
+            if(vis.d&&vis.d.indexOf(i)>=0)c+=' done';
+            if(vis.rm&&vis.rm.indexOf(i)>=0)c+=' removed';
+            if(vis.cmp&&vis.cmp.indexOf(i)>=0)c+=' compare';
+            if(vis.fnd&&vis.fnd.indexOf(i)>=0)c+=' found';
+            if(vis.mi&&vis.mi.indexOf(i)>=0)c+=' mid';
+            h+='<div class="'+c+'"><span class="av-val">'+vis.a[i]+'</span><span class="av-idx">'+i+'</span>';
+            if(vis.p){var lb=[];for(var k in vis.p)if(vis.p[k]===i)lb.push(k);if(lb.length)h+='<span class="av-ptr">'+lb.join(',')+'</span>';}
+            h+='</div>';
+        }
+        h+='</div>';
+    }
+    if(vis.stk!==undefined){
+        h+='<div style="margin-left:16px;text-align:center"><div class="av-stk-lbl">Stack</div><div class="av-stk">';
+        if(!vis.stk.length)h+='<div style="color:#6c7086;font-size:.78em;padding:4px">(empty)</div>';
+        for(var i=0;i<vis.stk.length;i++){var c='av-stk-cell';if(vis.stkP&&i===vis.stk.length-1)c+=' push';if(vis.stkO&&i===vis.stk.length-1)c+=' pop';h+='<div class="'+c+'">'+vis.stk[i]+'</div>';}
+        h+='</div></div>';
+    }
+    if(vis.map){h+='<div class="av-map">';for(var k in vis.map)h+='<div class="av-me"><b>'+k+'</b>: '+vis.map[k]+'</div>';h+='</div>';}
+    if(vis.res!==undefined)h+='<div class="av-res">Result: '+vis.res+'</div>';
+    if(vis.xtra)h+='<div style="margin-top:8px;font-size:.84em;color:#94e2d5;font-family:monospace">'+vis.xtra+'</div>';
+    return h;
+}
+function renderVars(v){if(!v)return'';var h='';for(var k in v)h+='<span class="av-var"><b>'+k+':</b> '+v[k]+'</span>';return h;}
+
+function wrapLines(id){
+    var pre=document.querySelector('pre[data-anim-id="'+id+'"]');
+    if(!pre||pre.dataset.wrapped)return;
+    var lines=pre.innerHTML.split('\n');
+    pre.innerHTML=lines.map(function(l){return'<div class="cl">'+(l||' ')+'</div>';}).join('');
+    pre.dataset.wrapped='1';
+}
+function render(id){
+    var data=ANIMS[id],st=states[id],s=data.steps[st.step];
+    var pre=document.querySelector('pre[data-anim-id="'+id+'"]');
+    if(pre){var cls=pre.querySelectorAll('.cl');for(var i=0;i<cls.length;i++)cls[i].classList.remove('hl');if(s.l&&cls[s.l-1])cls[s.l-1].classList.add('hl');}
+    document.getElementById('av-'+id).innerHTML=renderVis(s.vis);
+    document.getElementById('avr-'+id).innerHTML=renderVars(s.v);
+    document.getElementById('ad-'+id).innerHTML=s.d;
+    document.getElementById('as-'+id).textContent='Step '+(st.step+1)+' / '+data.steps.length;
+}
+window.toggleAnim=function(id){
+    var panel=document.getElementById('ap-'+id);if(!panel)return;
+    var btns=document.querySelectorAll('button[data-anim-id="'+id+'"]');
+    if(panel.classList.contains('open')){
+        panel.classList.remove('open');for(var i=0;i<btns.length;i++){btns[i].classList.remove('active');btns[i].textContent='\u25B6 Animate with Example';}
+        if(states[id]){clearInterval(states[id].timer);states[id].playing=false;}
+        var pre=document.querySelector('pre[data-anim-id="'+id+'"]');if(pre){var cls=pre.querySelectorAll('.cl');for(var i=0;i<cls.length;i++)cls[i].classList.remove('hl');}
+    }else{
+        panel.classList.add('open');for(var i=0;i<btns.length;i++){btns[i].classList.add('active');btns[i].textContent='\u25A0 Close Animation';}
+        wrapLines(id);if(!states[id])states[id]={step:0,playing:false,timer:null};render(id);
+    }
+};
+window.animCmd=function(id,cmd){
+    var data=ANIMS[id],st=states[id];if(!st)return;
+    if(cmd==='next'){if(st.step<data.steps.length-1){st.step++;render(id);}}
+    else if(cmd==='prev'){if(st.step>0){st.step--;render(id);}}
+    else if(cmd==='reset'){st.step=0;clearInterval(st.timer);st.playing=false;var b=document.getElementById('abtn-'+id);if(b)b.textContent='\u25B6 Play';render(id);}
+    else if(cmd==='toggle'){
+        if(st.playing){clearInterval(st.timer);st.playing=false;document.getElementById('abtn-'+id).textContent='\u25B6 Play';}
+        else{st.playing=true;document.getElementById('abtn-'+id).textContent='\u23F8 Pause';st.timer=setInterval(function(){if(st.step<data.steps.length-1){st.step++;render(id);}else{clearInterval(st.timer);st.playing=false;document.getElementById('abtn-'+id).textContent='\u25B6 Play';}},1200);}
+    }
+};
+
+function SS(l,d,v,vis){return{l:l,d:d,v:v||{},vis:vis||{}};}
+
+// ===== SLIDING WINDOW =====
+function genSW1(){
+    var a=[2,1,5,1,3,2],k=3,s=[],l=0,sm=0,mx=0;
+    s.push(SS(1,'Initialize: left=0, sum=0, maxSum=0',{left:0,sum:0,maxSum:0},{a:a,p:{L:0}}));
+    for(var r=0;r<a.length;r++){
+        sm+=a[r];
+        s.push(SS(4,'sum += arr['+r+']='+a[r]+' \u2192 sum='+sm,{right:r,sum:sm},{a:a,w:[l,r],p:{L:l,R:r},h:[r]}));
+        if(r-l+1>k){
+            s.push(SS(7,'Window size '+(r-l+1)+' > k='+k+': remove arr['+l+']='+a[l],{},{a:a,w:[l,r],p:{L:l,R:r},rm:[l]}));
+            sm-=a[l];l++;
+            s.push(SS(8,'left='+l+', sum='+sm,{left:l,sum:sm},{a:a,w:[l,r],p:{L:l,R:r}}));
+        }
+        if(r-l+1===k){var om=mx;mx=Math.max(mx,sm);s.push(SS(12,'Window=k=3: maxSum=max('+om+','+sm+')='+mx,{maxSum:mx},{a:a,w:[l,r],p:{L:l,R:r},d:[l,l+1,l+2]}));}
+    }
+    s.push(SS(15,'Return maxSum = '+mx+' \u2714',{result:mx},{a:a,res:mx}));
+    return{test:'arr=[2,1,5,1,3,2], k=3 \u2192 9',steps:s};
+}
+
+function genSW2(){
+    var a=[1,2,1,3,5],s=[],l=0,best=0,freq={};
+    s.push(SS(1,'Initialize: left=0, best=0, freq={}',{left:0,best:0},{a:a,p:{L:0}}));
+    for(var r=0;r<a.length;r++){
+        freq[a[r]]=(freq[a[r]]||0)+1;
+        s.push(SS(4,'Expand: add arr['+r+']='+a[r]+', freq='+JSON.stringify(freq),{right:r},{a:a,w:[l,r],p:{L:l,R:r},h:[r]}));
+        while(freq[a[r]]>1){
+            s.push(SS(7,'Invalid (duplicate '+a[r]+'): remove arr['+l+']='+a[l],{},{a:a,w:[l,r],p:{L:l,R:r},rm:[l]}));
+            freq[a[l]]--;l++;
+        }
+        best=Math.max(best,r-l+1);
+        s.push(SS(11,'Valid! best=max(old,'+( r-l+1)+')='+best,{best:best},{a:a,w:[l,r],p:{L:l,R:r},d:Array.from({length:r-l+1},function(_,i){return l+i;})}));
+    }
+    s.push(SS(13,'Return best = '+best+' \u2714',{result:best},{a:a,res:best}));
+    return{test:'arr=[1,2,1,3,5], longest all unique \u2192 4',steps:s};
+}
+
+function genSW3(){
+    var a=[2,3,1,2,4,3],tgt=7,s=[],l=0,best=999,sm=0;
+    s.push(SS(1,'Initialize: left=0, best=\u221E, sum=0',{left:0,best:'\u221E',sum:0},{a:a,p:{L:0}}));
+    for(var r=0;r<a.length;r++){
+        sm+=a[r];
+        s.push(SS(4,'Expand: sum+=arr['+r+']='+a[r]+' \u2192 sum='+sm,{right:r,sum:sm},{a:a,w:[l,r],p:{L:l,R:r},h:[r]}));
+        while(sm>=tgt){
+            best=Math.min(best,r-l+1);
+            s.push(SS(7,'Valid (sum='+sm+'\u2265'+tgt+'): best=min(old,'+(r-l+1)+')='+best,{best:best},{a:a,w:[l,r],p:{L:l,R:r},d:Array.from({length:r-l+1},function(_,i){return l+i;})}));
+            sm-=a[l];l++;
+            s.push(SS(9,'Shrink: remove arr['+(l-1)+']='+a[l-1]+', left='+l+', sum='+sm,{left:l,sum:sm},{a:a,w:l<=r?[l,r]:undefined,p:{L:l,R:r}}));
+        }
+    }
+    s.push(SS(12,'Return best = '+best+' \u2714',{result:best},{a:a,res:best}));
+    return{test:'arr=[2,3,1,2,4,3], target\u22657 \u2192 2',steps:s};
+}
+
+function genSW4(){
+    var a=[1,2,1,2,3],s=[];
+    s.push(SS(2,'exactly(K=2) = atMost(2) \u2212 atMost(1)',{},{a:a,xtra:'Step 1: Compute atMost(K=2)'}));
+    // simulate atMost(2)
+    var l=0,cnt=0,freq={};
+    for(var r=0;r<a.length;r++){
+        freq[a[r]]=(freq[a[r]]||0)+1;
+        while(Object.keys(freq).length>2){freq[a[l]]--;if(freq[a[l]]===0)delete freq[a[l]];l++;}
+        cnt+=(r-l+1);
+        s.push(SS(17,'atMost(2): r='+r+', window=['+l+','+r+'], distinct='+Object.keys(freq).length+', count+='+( r-l+1)+' \u2192 '+cnt,{count:cnt},{a:a,w:[l,r],p:{L:l,R:r}}));
+    }
+    s.push(SS(19,'atMost(2) = '+cnt,{atMost2:cnt},{a:a,res:'atMost(2)='+cnt}));
+    // atMost(1)
+    l=0;var cnt2=0;freq={};
+    for(var r=0;r<a.length;r++){
+        freq[a[r]]=(freq[a[r]]||0)+1;
+        while(Object.keys(freq).length>1){freq[a[l]]--;if(freq[a[l]]===0)delete freq[a[l]];l++;}
+        cnt2+=(r-l+1);
+    }
+    s.push(SS(2,'atMost(1) = '+cnt2+' (same process with k=1)',{atMost1:cnt2},{a:a,res:'atMost(1)='+cnt2}));
+    s.push(SS(2,'exactly(2) = '+cnt+' \u2212 '+cnt2+' = '+(cnt-cnt2)+' \u2714',{result:cnt-cnt2},{a:a,res:'exactly(2) = '+(cnt-cnt2)}));
+    return{test:'arr=[1,2,1,2,3], exactly 2 distinct \u2192 7',steps:s};
+}
+
+function genSW5(){
+    var str='ADOBECODEBANC',t='ABC',a=str.split(''),s=[];
+    var need={A:1,B:1,C:1},have={},req=3,formed=0,l=0,mL=999,mS=0;
+    s.push(SS(1,'Build need map from pattern "ABC"',{required:req,formed:0},{a:a,map:{A:1,B:1,C:1},xtra:'need = {A:1, B:1, C:1}'}));
+    for(var r=0;r<a.length;r++){
+        var c=a[r];have[c]=(have[c]||0)+1;
+        if(need[c]!==undefined&&have[c]===need[c])formed++;
+        if(formed===req||r===0||r===3||r===5){
+            s.push(SS(10,'r='+r+' ('+c+'): have['+c+']='+have[c]+(need[c]!==undefined&&have[c]===need[c]?' \u2192 formed='+formed:''),{right:r,formed:formed},{a:a,w:[l,r],p:{L:l,R:r},h:[r]}));
+        }
+        while(formed===req){
+            if(r-l+1<mL){mL=r-l+1;mS=l;}
+            s.push(SS(17,'Valid window ['+l+','+r+'] len='+(r-l+1)+', minLen='+mL+', minStart='+mS,{minLen:mL},{a:a,w:[l,r],p:{L:l,R:r},d:Array.from({length:r-l+1},function(_,i){return l+i;})}));
+            var lc=a[l];have[lc]--;
+            if(need[lc]!==undefined&&have[lc]<need[lc])formed--;
+            l++;
+            if(formed<req)s.push(SS(24,'Removed '+lc+', formed='+formed+', left='+l+' \u2192 shrink stops',{left:l,formed:formed},{a:a,w:l<=r?[l,r]:undefined,p:{L:l,R:r}}));
+        }
+    }
+    s.push(SS(27,'Return "'+str.substring(mS,mS+mL)+'" (start='+mS+', len='+mL+') \u2714',{result:'"'+str.substring(mS,mS+mL)+'"'},{a:a,w:[mS,mS+mL-1],d:Array.from({length:mL},function(_,i){return mS+i;}),res:'"'+str.substring(mS,mS+mL)+'"'}));
+    return{test:'s="ADOBECODEBANC", t="ABC" \u2192 "BANC"',steps:s};
+}
+
+function genSW6(){
+    var a=[10,5,2,6],k=100,s=[],l=0,cnt=0,prod=1;
+    s.push(SS(1,'Initialize: left=0, count=0, product=1',{left:0,count:0,product:1},{a:a,p:{L:0}}));
+    for(var r=0;r<a.length;r++){
+        prod*=a[r];
+        s.push(SS(5,'product *= arr['+r+']='+a[r]+' \u2192 product='+prod,{right:r,product:prod},{a:a,w:[l,r],p:{L:l,R:r},h:[r]}));
+        while(prod>=k&&l<=r){
+            s.push(SS(8,'Invalid ('+prod+'\u2265'+k+'): remove arr['+l+']='+a[l],{},{a:a,w:[l,r],p:{L:l,R:r},rm:[l]}));
+            prod/=a[l];l++;
+        }
+        cnt+=(r-l+1);
+        s.push(SS(12,'count += '+(r-l+1)+' (subarrays ending at '+r+') \u2192 count='+cnt,{count:cnt},{a:a,w:l<=r?[l,r]:undefined,p:{L:l,R:r}}));
+    }
+    s.push(SS(14,'Return count = '+cnt+' \u2714',{result:cnt},{a:a,res:cnt}));
+    return{test:'arr=[10,5,2,6], product<100 \u2192 8',steps:s};
+}
+
+// ===== PREFIX SUM =====
+function genPS1(){
+    var nums=[1,2,3,4,5],s=[],pfx=[];
+    pfx[0]=nums[0];
+    s.push(SS(2,'prefix[0] = nums[0] = '+nums[0],{},{a:nums,h:[0],xtra:'prefix = ['+pfx.join(',')+']'}));
+    for(var i=1;i<nums.length;i++){
+        pfx[i]=pfx[i-1]+nums[i];
+        s.push(SS(4,'prefix['+i+'] = prefix['+(i-1)+']+nums['+i+'] = '+pfx[i-1]+'+'+nums[i]+' = '+pfx[i],{},{a:pfx.slice(),h:[i],xtra:'prefix = ['+pfx.join(',')+']'}));
+    }
+    s.push(SS(7,'Query sum(1,3) = prefix[3] \u2212 prefix[0] = '+pfx[3]+' \u2212 '+pfx[0]+' = '+(pfx[3]-pfx[0]),{},{a:pfx,w:[1,3],res:'sum(1,3) = '+(pfx[3]-pfx[0])}));
+    return{test:'nums=[1,2,3,4,5], sum(1,3) \u2192 9',steps:s};
+}
+
+function genPS2(){
+    var nums=[1,1,1],k=2,s=[],map={'0':1},pfx=0,cnt=0;
+    s.push(SS(2,'map = {0: 1}, prefix=0, count=0',{prefix:0,count:0},{a:nums,map:{'0':1}}));
+    for(var i=0;i<nums.length;i++){
+        pfx+=nums[i];
+        var need=pfx-k;
+        var found=map[need]||0;
+        if(found)cnt+=found;
+        s.push(SS(7,'x='+nums[i]+': prefix='+pfx+', check prefix\u2212k='+(pfx-k)+(found?' \u2192 found '+found+' times! count='+cnt:' \u2192 not found'),{prefix:pfx,count:cnt},{a:nums,h:[i],map:Object.assign({},map)}));
+        map[pfx]=(map[pfx]||0)+1;
+        s.push(SS(9,'Store prefix='+pfx+' in map',{},{a:nums,h:[i],map:Object.assign({},map)}));
+    }
+    s.push(SS(11,'Return count = '+cnt+' \u2714',{result:cnt},{a:nums,res:cnt}));
+    return{test:'nums=[1,1,1], k=2 \u2192 2',steps:s};
+}
+
+function genPS3(){
+    var nums=[4,5,0,-2,-3,1],k=5,s=[],map={'0':1},pfx=0,cnt=0;
+    s.push(SS(2,'map = {0: 1}, prefix=0, count=0',{prefix:0,count:0},{a:nums,map:{'0':1}}));
+    for(var i=0;i<nums.length;i++){
+        pfx+=nums[i];
+        var mod=((pfx%k)+k)%k;
+        var found=map[mod]||0;
+        if(found)cnt+=found;
+        s.push(SS(7,'x='+nums[i]+': prefix='+pfx+', mod='+mod+(found?' \u2192 found '+found+' time(s)! count='+cnt:''),{prefix:pfx,mod:mod,count:cnt},{a:nums,h:[i],map:Object.assign({},map)}));
+        map[mod]=(map[mod]||0)+1;
+    }
+    s.push(SS(12,'Return count = '+cnt+' \u2714',{result:cnt},{a:nums,res:cnt}));
+    return{test:'nums=[4,5,0,-2,-3,1], k=5 \u2192 7',steps:s};
+}
+
+function genPS4(){
+    var m=[[1,2,3],[4,5,6],[7,8,9]],s=[];
+    s.push(SS(1,'Build 2D prefix sum for 3\u00D73 matrix',{},{html:'<div class="av-tree">Matrix:\n1 2 3\n4 5 6\n7 8 9</div>'}));
+    s.push(SS(5,'Build prefix table P using inclusion-exclusion',{},{html:'<div class="av-tree">P[i][j] = matrix[i-1][j-1] + P[i-1][j] + P[i][j-1] - P[i-1][j-1]\n\nPrefix P (1-indexed):\n 0  0  0  0\n 0  1  3  6\n 0  5 12 21\n 0 12 27 45</div>'}));
+    s.push(SS(8,'Query (1,1) to (2,2): P[3][3] \u2212 P[1][3] \u2212 P[3][1] + P[1][1]',{},{html:'<div class="av-tree">= 45 \u2212 6 \u2212 12 + 1 = <span class="hl-node">28</span>\n\nSubmatrix:\n<span class="hl-node">5 6</span>\n<span class="hl-node">8 9</span>\nSum = 5+6+8+9 = 28 \u2714</div>'}));
+    return{test:'matrix 3\u00D73, query(1,1)-(2,2) \u2192 28',steps:s};
+}
+
+function genPS5(){
+    var n=5,s=[],diff=[0,0,0,0,0,0];
+    s.push(SS(1,'Initialize diff = [0,0,0,0,0,0] (size n+1)',{},{a:diff}));
+    diff[1]+=2;diff[4]-=2;
+    s.push(SS(4,'Update [1,3] +2: diff[1]+=2, diff[4]-=2',{},{a:diff.slice(),h:[1],rm:[4]}));
+    diff[2]+=3;diff[5]-=3;
+    s.push(SS(5,'Update [2,4] +3: diff[2]+=3, diff[5]-=3',{},{a:diff.slice(),h:[2],rm:[5]}));
+    var result=[diff[0]];
+    for(var i=1;i<n;i++){diff[i]+=diff[i-1];result.push(diff[i]);}
+    s.push(SS(9,'Prefix sum of diff \u2192 final array',{},{a:result,d:[0,1,2,3,4],res:'['+result.join(',')+']'}));
+    return{test:'n=5, updates [1,3]+2, [2,4]+3 \u2192 [0,2,5,5,3]',steps:s};
+}
+
+// ===== BINARY SEARCH =====
+function genBS1(){
+    var a=[1,3,5,7,9,11],tgt=9,s=[],l=0,r=5;
+    s.push(SS(1,'Initialize: left=0, right=5, target=9',{left:0,right:5},{a:a,p:{L:0,R:5}}));
+    while(l<=r){
+        var mid=l+Math.floor((r-l)/2);
+        s.push(SS(3,'mid = '+mid+', arr['+mid+'] = '+a[mid],{mid:mid},{a:a,p:{L:l,R:r,mid:mid},mi:[mid]}));
+        if(a[mid]===tgt){s.push(SS(4,'arr['+mid+'] == target! Return '+mid+' \u2714',{result:mid},{a:a,fnd:[mid],res:'index '+mid}));break;}
+        else if(a[mid]<tgt){s.push(SS(5,'arr['+mid+']='+a[mid]+' < '+tgt+' \u2192 left = mid+1 = '+(mid+1),{left:mid+1},{a:a,p:{L:mid+1,R:r},rm:Array.from({length:mid+1},function(_,i){return i;})}));l=mid+1;}
+        else{s.push(SS(6,'arr['+mid+']='+a[mid]+' > '+tgt+' \u2192 right = mid-1 = '+(mid-1),{right:mid-1},{a:a,p:{L:l,R:mid-1},rm:Array.from({length:a.length-mid},function(_,i){return mid+i;})}));r=mid-1;}
+    }
+    return{test:'arr=[1,3,5,7,9,11], target=9 \u2192 index 4',steps:s};
+}
+
+function genBS2(){
+    var a=[5,7,7,8,8,8,10],tgt=8,s=[];
+    // First occurrence
+    var l=0,r=6,res=-1;
+    s.push(SS(1,'Find FIRST 8: left=0, right=6, result=-1',{left:0,right:6,result:-1},{a:a,p:{L:0,R:6}}));
+    while(l<=r){
+        var mid=l+Math.floor((r-l)/2);
+        if(a[mid]===tgt){res=mid;s.push(SS(2,'mid='+mid+', arr[mid]=8 == target! result='+mid+', search LEFT (right='+(mid-1)+')',{result:mid},{a:a,p:{L:l,R:r,mid:mid},fnd:[mid]}));r=mid-1;}
+        else if(a[mid]<tgt){s.push(SS(2,'mid='+mid+', arr[mid]='+a[mid]+' < 8, go RIGHT',{},{a:a,p:{L:l,R:r,mid:mid},mi:[mid]}));l=mid+1;}
+        else{s.push(SS(2,'mid='+mid+', arr[mid]='+a[mid]+' > 8, go LEFT',{},{a:a,p:{L:l,R:r,mid:mid},mi:[mid]}));r=mid-1;}
+    }
+    s.push(SS(2,'First occurrence at index '+res,{first:res},{a:a,fnd:[res],res:'first='+res}));
+    // Last occurrence
+    l=0;r=6;var res2=-1;
+    while(l<=r){var mid=l+Math.floor((r-l)/2);if(a[mid]===tgt){res2=mid;l=mid+1;}else if(a[mid]<tgt)l=mid+1;else r=mid-1;}
+    s.push(SS(5,'Last occurrence (search RIGHT when found): index '+res2,{last:res2},{a:a,fnd:[res,res2],res:'['+res+', '+res2+']'}));
+    return{test:'arr=[5,7,7,8,8,8,10], target=8 \u2192 [3,5]',steps:s};
+}
+
+function genBS3(){
+    var a=[4,5,6,7,0,1,2],tgt=0,s=[],l=0,r=6;
+    s.push(SS(1,'Rotated array, target=0, left=0, right=6',{left:0,right:6},{a:a,p:{L:0,R:6}}));
+    while(l<=r){
+        var mid=l+Math.floor((r-l)/2);
+        s.push(SS(2,'mid='+mid+', nums[mid]='+a[mid],{mid:mid},{a:a,p:{L:l,R:r,mid:mid},mi:[mid]}));
+        if(a[mid]===tgt){s.push(SS(3,'Found! nums['+mid+']='+tgt+' \u2714',{result:mid},{a:a,fnd:[mid],res:'index '+mid}));break;}
+        if(a[l]<=a[mid]){
+            if(a[l]<=tgt&&tgt<a[mid]){s.push(SS(7,'Left sorted ['+a[l]+'..'+a[mid]+'], target '+tgt+' in range \u2192 go LEFT',{},{a:a,w:[l,mid],p:{L:l,R:r}}));r=mid-1;}
+            else{s.push(SS(8,'Left sorted ['+a[l]+'..'+a[mid]+'], target '+tgt+' NOT in range \u2192 go RIGHT',{},{a:a,p:{L:l,R:r},rm:Array.from({length:mid-l+1},function(_,i){return l+i;})}));l=mid+1;}
+        }else{
+            if(a[mid]<tgt&&tgt<=a[r]){s.push(SS(11,'Right sorted ['+a[mid]+'..'+a[r]+'], target in range \u2192 go RIGHT',{},{a:a,w:[mid,r],p:{L:l,R:r}}));l=mid+1;}
+            else{s.push(SS(12,'Right sorted, target NOT in range \u2192 go LEFT',{},{a:a,p:{L:l,R:r}}));r=mid-1;}
+        }
+    }
+    return{test:'nums=[4,5,6,7,0,1,2], target=0 \u2192 index 4',steps:s};
+}
+
+function genBS4(){
+    var a=[1,2,3,1],s=[],l=0,r=3;
+    s.push(SS(1,'Find peak: left=0, right=3',{left:0,right:3},{a:a,p:{L:0,R:3}}));
+    while(l<r){
+        var mid=l+Math.floor((r-l)/2);
+        s.push(SS(2,'mid='+mid+', nums[mid]='+a[mid]+', nums[mid+1]='+a[mid+1],{mid:mid},{a:a,p:{L:l,R:r,mid:mid},mi:[mid],cmp:[mid+1]}));
+        if(a[mid]<a[mid+1]){s.push(SS(3,'nums[mid] < nums[mid+1] \u2192 peak is RIGHT, left='+(mid+1),{left:mid+1},{a:a,p:{L:mid+1,R:r}}));l=mid+1;}
+        else{s.push(SS(4,'nums[mid] \u2265 nums[mid+1] \u2192 peak is LEFT or at mid, right='+mid,{right:mid},{a:a,p:{L:l,R:mid}}));r=mid;}
+    }
+    s.push(SS(6,'left=right='+l+', peak at index '+l+', value='+a[l]+' \u2714',{result:l},{a:a,fnd:[l],res:'peak at index '+l+' (value='+a[l]+')'}));
+    return{test:'nums=[1,2,3,1] \u2192 peak at index 2',steps:s};
+}
+
+function genBS5(){
+    var piles=[3,6,7,11],h=8,s=[],l=1,r=11;
+    function canFinish(speed){var hrs=0;for(var i=0;i<piles.length;i++)hrs+=Math.ceil(piles[i]/speed);return hrs<=h;}
+    s.push(SS(1,'Koko Bananas: min speed to finish in 8hrs. Search [1,11]',{left:1,right:11},{a:piles,xtra:'piles=[3,6,7,11], hours=8'}));
+    while(l<r){
+        var mid=l+Math.floor((r-l)/2);
+        var hrs=0;for(var i=0;i<piles.length;i++)hrs+=Math.ceil(piles[i]/mid);
+        var ok=hrs<=h;
+        s.push(SS(5,'speed='+mid+': hours=\u2308'+piles.map(function(p){return p+'/'+mid;}).join('\u2309+\u2308')+'\u2309 = '+hrs+(ok?' \u2264 8 \u2714':' > 8 \u2718'),{speed:mid,hours:hrs},{a:piles,xtra:'speed='+mid+', hours='+hrs+(ok?' \u2264 8 \u2192 try smaller':' > 8 \u2192 need faster')}));
+        if(ok){r=mid;s.push(SS(6,'Feasible! right='+mid,{right:mid},{}));}
+        else{l=mid+1;s.push(SS(8,'Too slow! left='+(mid+1),{left:mid+1},{}));}
+    }
+    s.push(SS(10,'left=right='+l+', minimum speed = '+l+' \u2714',{result:l},{a:piles,res:'min speed = '+l}));
+    return{test:'piles=[3,6,7,11], h=8 \u2192 speed=4',steps:s};
+}
+
+function genBS6(){
+    var mat=[[1,3,5],[7,9,11],[13,15,17]],flat=[1,3,5,7,9,11,13,15,17],tgt=3,s=[],l=0,r=8,n=3;
+    s.push(SS(2,'Treat 3\u00D73 as 1D array, left=0, right=8',{left:0,right:8},{a:flat,p:{L:0,R:8}}));
+    while(l<=r){
+        var mid=l+Math.floor((r-l)/2);
+        var row=Math.floor(mid/n),col=mid%n;
+        s.push(SS(3,'mid='+mid+' \u2192 row='+row+', col='+col+', val='+flat[mid],{mid:mid},{a:flat,p:{L:l,R:r},mi:[mid]}));
+        if(flat[mid]===tgt){s.push(SS(3,'Found '+tgt+' at index '+mid+' (row='+row+', col='+col+') \u2714',{result:mid},{a:flat,fnd:[mid],res:'row='+row+', col='+col}));break;}
+        else if(flat[mid]<tgt){l=mid+1;s.push(SS(3,flat[mid]+' < '+tgt+' \u2192 go RIGHT',{left:l},{a:flat,p:{L:l,R:r}}));}
+        else{r=mid-1;s.push(SS(3,flat[mid]+' > '+tgt+' \u2192 go LEFT',{right:r},{a:flat,p:{L:l,R:r}}));}
+    }
+    return{test:'matrix 3\u00D73 sorted, target=3 \u2192 (0,1)',steps:s};
+}
+
+// ===== MONOTONIC STACK =====
+function genMS1(){
+    var a=[4,2,1,5,3],s=[],res=[-1,-1,-1,-1,-1],stk=[];
+    s.push(SS(3,'Initialize result=[-1,-1,-1,-1,-1], stack=[]',{},{a:a,stk:[]}));
+    for(var i=0;i<a.length;i++){
+        s.push(SS(5,'i='+i+', arr[i]='+a[i]+'. Check stack top...',{i:i},{a:a,h:[i],stk:stk.slice()}));
+        while(stk.length&&a[stk[stk.length-1]]<a[i]){
+            var idx=stk.pop();res[idx]=a[i];
+            s.push(SS(8,'arr['+idx+']='+a[idx]+' < '+a[i]+' \u2192 NGE['+idx+']='+a[i]+'. Pop!',{},{a:a,h:[i],stk:stk.slice(),stkO:true,d:[idx],xtra:'result=['+res.join(',')+']'}));
+        }
+        stk.push(i);
+        s.push(SS(10,'Push index '+i+' onto stack',{},{a:a,h:[i],stk:stk.slice(),stkP:true}));
+    }
+    s.push(SS(10,'Done! Remaining stack elements have no NGE (-1)',{},{a:res,d:[0,1,2,3,4],res:'['+res.join(',')+']'}));
+    return{test:'arr=[4,2,1,5,3] \u2192 NGE=[5,5,5,-1,-1]',steps:s};
+}
+
+function genMS2(){
+    var ht=[2,1,5,6,2,3],s=[],stk=[],mx=0;
+    s.push(SS(1,'heights=[2,1,5,6,2,3], stack=[], maxArea=0',{maxArea:0},{a:ht,stk:[]}));
+    for(var i=0;i<=ht.length;i++){
+        var ch=i===ht.length?0:ht[i];
+        s.push(SS(5,'i='+i+', currHeight='+(i===ht.length?'0 (sentinel)':ch),{i:i},{a:ht,h:i<ht.length?[i]:[],stk:stk.slice()}));
+        while(stk.length&&ht[stk[stk.length-1]]>ch){
+            var h=ht[stk.pop()];var w=stk.length?i-stk[stk.length-1]-1:i;var area=h*w;
+            mx=Math.max(mx,area);
+            s.push(SS(9,'Pop h='+h+', w='+w+', area='+area+'. maxArea='+mx,{maxArea:mx},{a:ht,stk:stk.slice(),stkO:true,xtra:'height='+h+' \u00D7 width='+w+' = '+area}));
+        }
+        if(i<ht.length){stk.push(i);s.push(SS(11,'Push index '+i,{},{a:ht,stk:stk.slice(),stkP:true}));}
+    }
+    s.push(SS(11,'Done! maxArea = '+mx+' \u2714',{result:mx},{a:ht,res:mx}));
+    return{test:'heights=[2,1,5,6,2,3] \u2192 10',steps:s};
+}
+
+function genMS3(){
+    var ht=[4,2,0,3,2,5],s=[],l=0,r=5,lm=0,rm=0,w=0;
+    s.push(SS(1,'height=[4,2,0,3,2,5], two pointers',{left:0,right:5,water:0},{a:ht,p:{L:0,R:5}}));
+    while(l<r){
+        if(ht[l]<ht[r]){
+            if(ht[l]>=lm){lm=ht[l];s.push(SS(6,'height['+l+']='+ht[l]+' \u2265 leftMax \u2192 leftMax='+lm,{leftMax:lm},{a:ht,p:{L:l,R:r},h:[l]}));}
+            else{w+=lm-ht[l];s.push(SS(7,'water += leftMax\u2212height['+l+'] = '+lm+'\u2212'+ht[l]+' = '+(lm-ht[l])+', total='+w,{water:w},{a:ht,p:{L:l,R:r},h:[l]}));}
+            l++;
+        }else{
+            if(ht[r]>=rm){rm=ht[r];s.push(SS(10,'height['+r+']='+ht[r]+' \u2265 rightMax \u2192 rightMax='+rm,{rightMax:rm},{a:ht,p:{L:l,R:r},h:[r]}));}
+            else{w+=rm-ht[r];s.push(SS(11,'water += rightMax\u2212height['+r+'] = '+rm+'\u2212'+ht[r]+' = '+(rm-ht[r])+', total='+w,{water:w},{a:ht,p:{L:l,R:r},h:[r]}));}
+            r--;
+        }
+    }
+    s.push(SS(14,'Total water = '+w+' \u2714',{result:w},{a:ht,res:w}));
+    return{test:'height=[4,2,0,3,2,5] \u2192 water=9',steps:s};
+}
+
+function genMS4(){
+    var num='1432219',k=3,s=[],stk=[],kk=3;
+    s.push(SS(2,'num="1432219", k=3, stack=[]',{k:kk},{a:num.split(''),stk:[]}));
+    for(var i=0;i<num.length;i++){
+        var d=num[i];
+        s.push(SS(3,'digit=\''+d+'\'. Check stack top...',{i:i},{a:num.split(''),h:[i],stk:stk.slice()}));
+        while(stk.length&&kk>0&&stk[stk.length-1]>d){
+            var popped=stk.pop();kk--;
+            s.push(SS(5,'stack top \''+popped+'\' > \''+d+'\' \u2192 pop! k='+kk,{k:kk},{a:num.split(''),h:[i],stk:stk.slice(),stkO:true}));
+        }
+        stk.push(d);
+        s.push(SS(7,'Push \''+d+'\'. stack=['+stk.join(',')+']',{},{a:num.split(''),h:[i],stk:stk.slice(),stkP:true}));
+    }
+    while(kk>0){stk.pop();kk--;}
+    s.push(SS(9,'Remove remaining k elements. Result: "'+stk.join('')+'" \u2714',{result:'"'+stk.join('')+'"'},{a:stk,d:Array.from({length:stk.length},function(_,i){return i;}),res:'"'+stk.join('')+'"'}));
+    return{test:'num="1432219", k=3 \u2192 "1219"',steps:s};
+}
+
+function genMS5(){
+    var str='({[]})',a=str.split(''),s=[],stk=[];
+    var map={'(':')','{':'}','[':']'};
+    s.push(SS(1,'Validate "({[]})", stack=[]',{},{a:a,stk:[]}));
+    for(var i=0;i<a.length;i++){
+        var c=a[i];
+        if(map[c]){stk.push(map[c]);s.push(SS(3,'\''+c+'\' is opening \u2192 push \''+map[c]+'\' onto stack',{},{a:a,h:[i],stk:stk.slice(),stkP:true}));}
+        else{
+            var top=stk.length?stk[stk.length-1]:'';
+            if(stk.length&&top===c){stk.pop();s.push(SS(6,'\''+c+'\' matches stack top \''+top+'\' \u2192 pop! \u2714',{},{a:a,h:[i],stk:stk.slice(),stkO:true}));}
+            else{s.push(SS(7,'Mismatch! \u2718',{},{a:a,h:[i],stk:stk.slice()}));}
+        }
+    }
+    s.push(SS(9,'Stack empty \u2192 valid! Return true \u2714',{result:'true'},{a:a,d:[0,1,2,3,4,5],res:'true'}));
+    return{test:'s="({[]})" \u2192 true',steps:s};
+}
+
+// ===== GREEDY =====
+function genGR1(){
+    var iv=[[1,2],[2,3],[1,3],[3,4]],sorted=[[1,2],[2,3],[1,3],[3,4]].sort(function(a,b){return a[1]-b[1];}),s=[],cnt=0,lastEnd=-Infinity;
+    var labels=sorted.map(function(x){return'['+x[0]+','+x[1]+']';});
+    s.push(SS(1,'Sort by END time: '+labels.join(', '),{count:0},{html:'<div class="av-tree">Sorted intervals:\n'+labels.join(' \u2192 ')+'</div>'}));
+    for(var i=0;i<sorted.length;i++){
+        var iv=sorted[i];
+        if(iv[0]>=lastEnd){cnt++;lastEnd=iv[1];s.push(SS(5,labels[i]+': start '+iv[0]+' \u2265 lastEnd '+(i?sorted[i-1][1]:'-\u221E')+' \u2192 TAKE! count='+cnt,{count:cnt,lastEnd:lastEnd},{html:'<div class="av-tree">'+labels.map(function(l,j){return j<i?'<span class="done-node">'+l+'</span>':j===i?'<span class="hl-node">'+l+' \u2190 TAKE</span>':l;}).join('  ')+'</div>'}));}
+        else{s.push(SS(4,labels[i]+': start '+iv[0]+' < lastEnd '+lastEnd+' \u2192 SKIP (overlaps)',{},{html:'<div class="av-tree">'+labels.map(function(l,j){return j<i?'<span class="done-node">'+l+'</span>':j===i?'<span style="color:#f38ba8">'+l+' \u2190 SKIP</span>':l;}).join('  ')+'</div>'}));}
+    }
+    s.push(SS(9,'Max non-overlapping = '+cnt+', removed = '+(sorted.length-cnt)+' \u2714',{result:sorted.length-cnt},{res:'remove '+(sorted.length-cnt)}));
+    return{test:'intervals=[[1,2],[2,3],[1,3],[3,4]] \u2192 remove 1',steps:s};
+}
+
+function genGR2(){
+    var starts=[0,5,15],ends=[10,20,30],s=[],rooms=0,mx=0,si=0,ei=0;
+    s.push(SS(1,'starts=[0,5,15], ends=[10,20,30]',{rooms:0,maxRooms:0},{html:'<div class="av-tree">Meetings: [0,30] [5,10] [15,20]\nTimeline: |--0========30--|\n          |--5==10--|  |--15==20--|</div>'}));
+    while(si<3){
+        if(starts[si]<ends[ei]){rooms++;mx=Math.max(mx,rooms);s.push(SS(6,'start['+si+']='+starts[si]+' < end['+ei+']='+ends[ei]+' \u2192 new meeting! rooms='+rooms+', max='+mx,{rooms:rooms,maxRooms:mx},{}));si++;}
+        else{rooms--;s.push(SS(7,'start['+si+']='+starts[si]+' \u2265 end['+ei+']='+ends[ei]+' \u2192 meeting ended. rooms='+rooms,{rooms:rooms},{}));ei++;}
+    }
+    s.push(SS(8,'maxRooms = '+mx+' \u2714',{result:mx},{res:mx}));
+    return{test:'meetings=[[0,30],[5,10],[15,20]] \u2192 2 rooms',steps:s};
+}
+
+function genGR3(){
+    var a=[2,3,1,1,4],s=[],mr=0;
+    s.push(SS(2,'nums=[2,3,1,1,4], maxReach=0',{maxReach:0},{a:a,p:{i:0}}));
+    for(var i=0;i<a.length;i++){
+        if(i>mr){s.push(SS(4,'i='+i+' > maxReach='+mr+' \u2192 stuck! return false',{},{a:a,h:[i]}));break;}
+        var omr=mr;mr=Math.max(mr,i+a[i]);
+        s.push(SS(5,'i='+i+': maxReach=max('+omr+','+i+'+'+a[i]+')='+mr,{i:i,maxReach:mr},{a:a,h:[i],w:[0,Math.min(mr,a.length-1)],p:{i:i}}));
+    }
+    s.push(SS(7,'Reached end! Return true \u2714',{result:'true'},{a:a,d:[0,1,2,3,4],res:'true'}));
+    return{test:'nums=[2,3,1,1,4] \u2192 can jump? true',steps:s};
+}
+
+function genGR4(){
+    var a=[7,1,5,3,6,4],s=[],minP=Infinity,maxPr=0;
+    s.push(SS(2,'prices=[7,1,5,3,6,4], minPrice=\u221E, maxProfit=0',{minPrice:'\u221E',maxProfit:0},{a:a}));
+    for(var i=0;i<a.length;i++){
+        minP=Math.min(minP,a[i]);maxPr=Math.max(maxPr,a[i]-minP);
+        s.push(SS(5,'day '+i+' price='+a[i]+': minPrice='+minP+', profit='+a[i]+'\u2212'+minP+'='+(a[i]-minP)+', maxProfit='+maxPr,{minPrice:minP,maxProfit:maxPr},{a:a,h:[i]}));
+    }
+    s.push(SS(6,'Buy at 1, sell at 6 \u2192 maxProfit = '+maxPr+' \u2714',{result:maxPr},{a:a,d:[1,4],res:maxPr}));
+    return{test:'prices=[7,1,5,3,6,4] \u2192 profit=5',steps:s};
+}
+
+function genGR5(){
+    var gas=[1,2,3,4,5],cost=[3,4,5,1,2],s=[],tg=0,cg=0,si=0;
+    s.push(SS(1,'gas=[1,2,3,4,5], cost=[3,4,5,1,2]',{totalGas:0,currentGas:0,start:0},{a:gas,xtra:'cost=[3,4,5,1,2]'}));
+    for(var i=0;i<5;i++){
+        var diff=gas[i]-cost[i];tg+=diff;cg+=diff;
+        if(cg<0){
+            s.push(SS(6,'i='+i+': gas='+gas[i]+'\u2212cost='+cost[i]+'='+diff+', currentGas='+cg+' < 0 \u2192 reset start='+(i+1),{start:i+1,currentGas:0,totalGas:tg},{a:gas,h:[i],rm:Array.from({length:i+1},function(_,j){return j;})}));
+            si=i+1;cg=0;
+        }else{
+            s.push(SS(5,'i='+i+': gas='+gas[i]+'\u2212cost='+cost[i]+'='+diff+', currentGas='+cg+', totalGas='+tg,{currentGas:cg,totalGas:tg},{a:gas,h:[i],w:[si,i]}));
+        }
+    }
+    s.push(SS(8,'totalGas='+tg+' \u2265 0 \u2192 return start='+si+' \u2714',{result:si},{a:gas,fnd:[si],res:'start='+si}));
+    return{test:'gas=[1,2,3,4,5], cost=[3,4,5,1,2] \u2192 start=3',steps:s};
+}
+
+function genGR6(){
+    var str='abcabdef',a=str.split(''),s=[],last={};
+    for(var i=0;i<a.length;i++)last[a[i]]=i;
+    s.push(SS(3,'Build lastIndex map for "'+str+'"',{},{a:a,map:last}));
+    var start=0,end=0,result=[];
+    for(var i=0;i<a.length;i++){
+        end=Math.max(end,last[a[i]]);
+        s.push(SS(8,'i='+i+' (\''+a[i]+'\'): last[\''+a[i]+'\']='+last[a[i]]+', end='+end,{end:end},{a:a,h:[i],w:[start,end],p:{start:start,end:end}}));
+        if(i===end){
+            result.push(end-start+1);
+            s.push(SS(9,'i=end='+end+' \u2192 CUT! partition size='+(end-start+1),{},{a:a,d:Array.from({length:end-start+1},function(_,j){return start+j;}),xtra:'partitions so far: ['+result.join(',')+']'}));
+            start=i+1;
+        }
+    }
+    s.push(SS(10,'Result: ['+result.join(',')+'] \u2714',{result:'['+result.join(',')+']'},{a:a,res:'['+result.join(',')+']'}));
+    return{test:'s="abcabdef" \u2192 [5,1,1,1]',steps:s};
+}
+
+// ===== RECURSION =====
+function genRC1(){
+    var s=[];
+    s.push(SS(1,'subsets([1,2], index=0, current=[])',{index:0,current:'[]'},{html:'<div class="av-tree">Call: subsets(index=0, current=[])\nTwo choices: EXCLUDE 1 or INCLUDE 1</div>'}));
+    s.push(SS(4,'EXCLUDE 1 \u2192 subsets(index=1, current=[])',{index:1,current:'[]'},{html:'<div class="av-tree">subsets(0, [])\n\u251C\u2500 Exclude 1: subsets(1, <span class="hl-node">[]</span>)\n\u2514\u2500 Include 1: (next)</div>'}));
+    s.push(SS(4,'  EXCLUDE 2 \u2192 subsets(index=2, current=[])',{index:2,current:'[]'},{html:'<div class="av-tree">subsets(1, [])\n\u251C\u2500 Exclude 2: subsets(2, <span class="hl-node">[]</span>)\n\u2514\u2500 Include 2: (next)</div>'}));
+    s.push(SS(2,'  Base case! Add [] to result',{},{html:'<div class="av-tree">index=2 == length \u2192 Add <span class="done-node">[]</span> to result\nresult = [ [] ]</div>'}));
+    s.push(SS(6,'  INCLUDE 2 \u2192 subsets(index=2, current=[2])',{index:2,current:'[2]'},{html:'<div class="av-tree">Back to subsets(1, [])\nInclude 2: subsets(2, <span class="hl-node">[2]</span>)</div>'}));
+    s.push(SS(2,'  Base case! Add [2] to result',{},{html:'<div class="av-tree">Add <span class="done-node">[2]</span> to result\nresult = [ [], [2] ]</div>'}));
+    s.push(SS(5,'INCLUDE 1 \u2192 subsets(index=1, current=[1])',{index:1,current:'[1]'},{html:'<div class="av-tree">Back to subsets(0, [])\nInclude 1: subsets(1, <span class="hl-node">[1]</span>)</div>'}));
+    s.push(SS(4,'  EXCLUDE 2 \u2192 Base case! Add [1]',{},{html:'<div class="av-tree">subsets(1, [1]) \u2192 Exclude 2 \u2192 Add <span class="done-node">[1]</span>\nresult = [ [], [2], [1] ]</div>'}));
+    s.push(SS(6,'  INCLUDE 2 \u2192 Base case! Add [1,2]',{},{html:'<div class="av-tree">subsets(1, [1]) \u2192 Include 2 \u2192 Add <span class="done-node">[1,2]</span>\nresult = [ [], [2], [1], [1,2] ]</div>'}));
+    s.push(SS(8,'All paths explored. Result: [[], [2], [1], [1,2]] \u2714',{result:'4 subsets'},{html:'<div class="av-tree"><span class="done-node">Complete recursion tree:</span>\n        subsets(0,[])\n       /            \\\n  Excl 1           Incl 1\n subsets(1,[])    subsets(1,[1])\n  /      \\        /       \\\nExcl 2  Incl 2  Excl 2  Incl 2\n <span class="done-node">[]</span>     <span class="done-node">[2]</span>    <span class="done-node">[1]</span>    <span class="done-node">[1,2]</span></div>'}));
+    return{test:'nums=[1,2] \u2192 [[], [2], [1], [1,2]]',steps:s};
+}
+
+function genRC2(){
+    var s=[];
+    s.push(SS(1,'permute([1,2,3], current=[], visited=[F,F,F])',{},{html:'<div class="av-tree">Generate all orderings of [1,2,3]\nTry each unused element at each position</div>'}));
+    s.push(SS(6,'Pick 1 \u2192 current=[1], visited=[T,F,F]',{current:'[1]'},{html:'<div class="av-tree">Position 0: try <span class="hl-node">1</span>\ncurrent=[1], visited=[T,F,F]</div>'}));
+    s.push(SS(6,'  Pick 2 \u2192 current=[1,2], visited=[T,T,F]',{current:'[1,2]'},{html:'<div class="av-tree">Position 1: try <span class="hl-node">2</span>\ncurrent=[1,2], visited=[T,T,F]</div>'}));
+    s.push(SS(2,'    Pick 3 \u2192 current=[1,2,3] \u2192 Add! \u2714',{},{html:'<div class="av-tree">Position 2: try <span class="hl-node">3</span>\ncurrent=[1,2,3] \u2192 <span class="done-node">ADD [1,2,3]</span></div>'}));
+    s.push(SS(8,'  Backtrack: remove 3, unvisit. Try 3 at pos 1...',{current:'[1]'},{html:'<div class="av-tree">Backtrack \u2192 current=[1]\nPosition 1: skip 1(used), skip 2(done), try <span class="hl-node">3</span></div>'}));
+    s.push(SS(2,'    current=[1,3,2] \u2192 Add! \u2714',{},{html:'<div class="av-tree">current=[1,3] \u2192 pick 2 \u2192 <span class="done-node">ADD [1,3,2]</span></div>'}));
+    s.push(SS(8,'Backtrack all. Try 2 at pos 0...',{current:'[2]'},{html:'<div class="av-tree">Backtrack \u2192 current=[]\nPosition 0: try <span class="hl-node">2</span> \u2192 [2,1,3], [2,3,1]</div>'}));
+    s.push(SS(8,'Try 3 at pos 0...',{current:'[3]'},{html:'<div class="av-tree">Position 0: try <span class="hl-node">3</span> \u2192 [3,1,2], [3,2,1]</div>'}));
+    s.push(SS(2,'All 6 permutations found \u2714',{result:'3!=6'},{html:'<div class="av-tree"><span class="done-node">All permutations:</span>\n[1,2,3] [1,3,2] [2,1,3]\n[2,3,1] [3,1,2] [3,2,1]</div>'}));
+    return{test:'nums=[1,2,3] \u2192 6 permutations',steps:s};
+}
+
+function genRC3(){
+    var s=[];
+    s.push(SS(1,'combine(n=4, k=2, start=1, current=[])',{},{html:'<div class="av-tree">Choose 2 from {1,2,3,4}\nKey: always move FORWARD (i+1)</div>'}));
+    s.push(SS(5,'i=1: current=[1], recurse with start=2',{current:'[1]'},{html:'<div class="av-tree">current=[<span class="hl-node">1</span>]\n\u251C i=2: [1,<span class="done-node">2</span>] \u2714 Add!\n\u251C i=3: [1,<span class="done-node">3</span>] \u2714 Add!\n\u2514 i=4: [1,<span class="done-node">4</span>] \u2714 Add!</div>'}));
+    s.push(SS(5,'i=2: current=[2], recurse with start=3',{current:'[2]'},{html:'<div class="av-tree">current=[<span class="hl-node">2</span>]\n\u251C i=3: [2,<span class="done-node">3</span>] \u2714 Add!\n\u2514 i=4: [2,<span class="done-node">4</span>] \u2714 Add!</div>'}));
+    s.push(SS(5,'i=3: current=[3], recurse with start=4',{current:'[3]'},{html:'<div class="av-tree">current=[<span class="hl-node">3</span>]\n\u2514 i=4: [3,<span class="done-node">4</span>] \u2714 Add!</div>'}));
+    s.push(SS(5,'i=4: current=[4], but need k=2 and start=5>4 \u2192 no more',{},{html:'<div class="av-tree">current=[4], no elements left to pair with</div>'}));
+    s.push(SS(9,'Result: [[1,2],[1,3],[1,4],[2,3],[2,4],[3,4]] \u2714',{result:'C(4,2)=6'},{html:'<div class="av-tree"><span class="done-node">All combinations:</span>\n[1,2] [1,3] [1,4]\n[2,3] [2,4] [3,4]</div>'}));
+    return{test:'n=4, k=2 \u2192 6 combinations',steps:s};
+}
+
+function genRC4(){
+    var s=[];
+    s.push(SS(1,'Generate valid parentheses, n=2',{},{html:'<div class="av-tree">Build string char by char\nConstraints: open \u2264 n, close \u2264 open</div>'}));
+    s.push(SS(6,'Choose "(": state="(", open=1, close=0',{},{html:'<div class="av-tree">  ""\n  \u2514 "<span class="hl-node">(</span>" open=1, close=0</div>'}));
+    s.push(SS(6,'Choose "(": state="((", open=2, close=0',{},{html:'<div class="av-tree">  "("\n  \u2514 "((<span class="hl-node">(</span>" open=2=n, can only close now</div>'}));
+    s.push(SS(6,'Choose ")": state="(()", then ")": "(())" \u2714',{},{html:'<div class="av-tree">"((" \u2192 "(()" \u2192 <span class="done-node">"(())"</span> \u2714</div>'}));
+    s.push(SS(8,'Backtrack to "(", try ")": state="()"',{},{html:'<div class="av-tree">"("\n\u251C "((" \u2192 "(())" \u2714\n\u2514 "(<span class="hl-node">)</span>" open=1, close=1</div>'}));
+    s.push(SS(6,'Choose "(": "()(" then ")": "()()" \u2714',{},{html:'<div class="av-tree">"()" \u2192 "()(" \u2192 <span class="done-node">"()()"</span> \u2714</div>'}));
+    s.push(SS(2,'All valid: ["(())", "()()"] \u2714',{result:2},{html:'<div class="av-tree"><span class="done-node">Results: "(())", "()()"</span>\nBacktracking explored all valid paths!</div>'}));
+    return{test:'Generate parentheses n=2 \u2192 "(())", "()()"',steps:s};
+}
+
+function genRC5(){
+    var s=[];
+    s.push(SS(1,'mergeSort([5,2,4,1,3], 0, 4)',{},{a:[5,2,4,1,3]}));
+    s.push(SS(4,'Split: [5,2,4,1,3] \u2192 [5,2] and [4,1,3]',{},{html:'<div class="av-tree">[5, 2, 4, 1, 3]\n      /         \\\n  [5, 2]      [4, 1, 3]</div>'}));
+    s.push(SS(4,'Split: [5,2]\u2192[5],[2] and [4,1,3]\u2192[4],[1,3]\u2192[1],[3]',{},{html:'<div class="av-tree">       [5,2,4,1,3]\n       /         \\\n    [5,2]      [4,1,3]\n    / \\        /    \\\n  [5] [2]    [4]  [1,3]\n                  / \\\n                [1] [3]</div>'}));
+    s.push(SS(6,'Merge [5],[2] \u2192 [2,5]',{},{html:'<div class="av-tree">Merge: [5] + [2] \u2192 <span class="done-node">[2, 5]</span></div>'}));
+    s.push(SS(6,'Merge [1],[3] \u2192 [1,3]. Then merge [4],[1,3] \u2192 [1,3,4]',{},{html:'<div class="av-tree">Merge: [1]+[3] \u2192 [1,3]\nMerge: [4]+[1,3] \u2192 <span class="done-node">[1, 3, 4]</span></div>'}));
+    s.push(SS(6,'Final merge: [2,5] + [1,3,4] \u2192 [1,2,3,4,5]',{},{html:'<div class="av-tree">Merge: <span class="hl-node">[2,5]</span> + <span class="hl-node">[1,3,4]</span>\nCompare 2 vs 1 \u2192 1\nCompare 2 vs 3 \u2192 2\nCompare 5 vs 3 \u2192 3\nCompare 5 vs 4 \u2192 4\nRemaining: 5\n\u2192 <span class="done-node">[1, 2, 3, 4, 5]</span></div>'}));
+    s.push(SS(7,'Sorted! [1,2,3,4,5] \u2714',{result:'[1,2,3,4,5]'},{a:[1,2,3,4,5],d:[0,1,2,3,4],res:'[1,2,3,4,5]'}));
+    return{test:'arr=[5,2,4,1,3] \u2192 [1,2,3,4,5]',steps:s};
+}
+
+// ===== TOP K =====
+function genTK1(){
+    var a=[3,2,1,5,6,4],k=2,s=[],heap=[];
+    function heapPush(h,v){h.push(v);h.sort(function(a,b){return a-b;});}
+    s.push(SS(1,'nums=[3,2,1,5,6,4], k=2, minHeap=[]',{k:2},{a:a,stk:[]}));
+    for(var i=0;i<a.length;i++){
+        heapPush(heap,a[i]);
+        if(heap.length>k){var removed=heap.shift();s.push(SS(4,'Add '+a[i]+', heap=['+heap.join(',')+'] (removed '+removed+', size>k)',{},{a:a,h:[i],stk:heap.slice(),stkO:true}));}
+        else{s.push(SS(3,'Add '+a[i]+', heap=['+heap.join(',')+']',{},{a:a,h:[i],stk:heap.slice(),stkP:true}));}
+    }
+    s.push(SS(6,'peek() = '+heap[0]+' = '+k+'th largest \u2714',{result:heap[0]},{a:a,res:k+'th largest = '+heap[0]}));
+    return{test:'nums=[3,2,1,5,6,4], k=2 \u2192 5',steps:s};
+}
+
+function genTK2(){
+    var a=[1,1,1,2,2,3],k=2,s=[],freq={};
+    for(var i=0;i<a.length;i++)freq[a[i]]=(freq[a[i]]||0)+1;
+    s.push(SS(2,'Build freq map: {1:3, 2:2, 3:1}',{k:2},{a:a,map:freq}));
+    var heap=[],keys=Object.keys(freq);
+    for(var i=0;i<keys.length;i++){
+        var num=parseInt(keys[i]);
+        heap.push({n:num,f:freq[num]});heap.sort(function(a,b){return a.f-b.f;});
+        if(heap.length>k){var rm=heap.shift();s.push(SS(9,'Add '+num+'(freq='+freq[num]+'), remove '+rm.n+'(freq='+rm.f+'). Heap=['+heap.map(function(x){return x.n+'('+x.f+')';}).join(',')+']',{},{a:a,stk:heap.map(function(x){return x.n;})}));}
+        else{s.push(SS(8,'Add '+num+'(freq='+freq[num]+'). Heap=['+heap.map(function(x){return x.n+'('+x.f+')';}).join(',')+']',{},{a:a,stk:heap.map(function(x){return x.n;})  ,stkP:true}));}
+    }
+    s.push(SS(10,'Top '+k+' frequent: ['+heap.map(function(x){return x.n;}).join(',')+'] \u2714',{result:'['+heap.map(function(x){return x.n;}).join(',')+']'},{a:a,res:'['+heap.map(function(x){return x.n;}).join(',')+']'}));
+    return{test:'nums=[1,1,1,2,2,3], k=2 \u2192 [1,2]',steps:s};
+}
+
+function genTK3(){
+    var pts=[[1,3],[-2,2],[5,8],[0,1]],k=2,s=[];
+    var dists=pts.map(function(p){return p[0]*p[0]+p[1]*p[1];});
+    var labels=pts.map(function(p,i){return'('+p[0]+','+p[1]+') d\u00B2='+dists[i];});
+    s.push(SS(1,'Points with distances\u00B2: '+labels.join(', '),{k:2},{html:'<div class="av-tree">'+labels.join('\n')+'</div>'}));
+    var heap=[];
+    for(var i=0;i<pts.length;i++){
+        heap.push({p:pts[i],d:dists[i]});heap.sort(function(a,b){return b.d-a.d;});
+        if(heap.length>k){var rm=heap.shift();s.push(SS(7,'Add ('+pts[i]+'), remove farthest ('+rm.p+') d\u00B2='+rm.d,{},{html:'<div class="av-tree">MaxHeap (by dist): '+heap.map(function(x){return'('+x.p+') d\u00B2='+x.d;}).join(', ')+'</div>'}));}
+        else{s.push(SS(6,'Add ('+pts[i]+') d\u00B2='+dists[i],{},{html:'<div class="av-tree">MaxHeap: '+heap.map(function(x){return'('+x.p+') d\u00B2='+x.d;}).join(', ')+'</div>'}));}
+    }
+    s.push(SS(8,'K closest: ['+heap.map(function(x){return'('+x.p+')';}).join(',')+'] \u2714',{result:heap.map(function(x){return'('+x.p+')';}).join(',')},{html:'<div class="av-tree"><span class="done-node">K=2 closest points:\n'+heap.map(function(x){return'('+x.p+') dist=\u221A'+x.d;}).join('\n')+'</span></div>'}));
+    return{test:'points, k=2 \u2192 [(-2,2),(0,1)]',steps:s};
+}
+
+function genTK4(){
+    var lists=[[1,4,5],[1,3,4],[2,6]],s=[],result=[];
+    var ptrs=[0,0,0];
+    s.push(SS(1,'3 sorted lists. Init heap with first elements.',{},{html:'<div class="av-tree">List 0: [<span class="hl-node">1</span>,4,5]\nList 1: [<span class="hl-node">1</span>,3,4]\nList 2: [<span class="hl-node">2</span>,6]\nHeap: [1(L0), 1(L1), 2(L2)]</div>'}));
+    var heap=[{v:1,li:0},{v:1,li:1},{v:2,li:2}];
+    for(var step=0;step<8;step++){
+        heap.sort(function(a,b){return a.v-b.v;});
+        var smallest=heap.shift();result.push(smallest.v);ptrs[smallest.li]++;
+        var nextVal=ptrs[smallest.li]<lists[smallest.li].length?lists[smallest.li][ptrs[smallest.li]]:null;
+        if(nextVal!==null)heap.push({v:nextVal,li:smallest.li});
+        s.push(SS(7,'Poll '+smallest.v+'(L'+smallest.li+') \u2192 result=['+result.join(',')+']'+(nextVal!==null?'. Push '+nextVal+'(L'+smallest.li+')':'. L'+smallest.li+' done.'),{},{html:'<div class="av-tree">Result: ['+result.join(', ')+']\nHeap: ['+heap.map(function(x){return x.v+'(L'+x.li+')';}).join(', ')+(heap.length?'':'empty')+']</div>'}));
+    }
+    s.push(SS(10,'Merged: ['+result.join(',')+'] \u2714',{result:'['+result.join(',')+']'},{res:'['+result.join(',')+']'}));
+    return{test:'lists=[[1,4,5],[1,3,4],[2,6]] \u2192 merged',steps:s};
+}
+
+// ===== BINARY TREES =====
+function genBT1(){
+    var s=[];
+    s.push(SS(1,'BST: [4,2,6,1,3,5,7]. Inorder = sorted!',{},{html:'<div class="av-tree">       4\n      / \\\n     2   6\n    / \\ / \\\n   1  3 5  7\n\nInorder: Left \u2192 Root \u2192 Right</div>'}));
+    s.push(SS(1,'Go LEFT from 4 \u2192 2 \u2192 1 (leaf). Visit <span class="hl-node">1</span>',{},{html:'<div class="av-tree">       4\n      / \\\n     2   6\n    / \\ / \\\n  <span class="hl-node">[1]</span> 3 5  7\n\nVisited: [1]</div>'}));
+    s.push(SS(1,'Back to 2. Visit <span class="hl-node">2</span>. Go right to 3. Visit <span class="hl-node">3</span>',{},{html:'<div class="av-tree">       4\n      / \\\n    <span class="hl-node">[2]</span>  6\n    / \\ / \\\n  <span class="done-node">1</span> <span class="hl-node">[3]</span> 5  7\n\nVisited: [1, 2, 3]</div>'}));
+    s.push(SS(1,'Back to 4. Visit <span class="hl-node">4</span>. Then right subtree: 5,6,7',{},{html:'<div class="av-tree">      <span class="hl-node">[4]</span>\n      / \\\n    <span class="done-node">2</span>   6\n    / \\ / \\\n  <span class="done-node">1  3</span> 5  7\n\nVisited: [1, 2, 3, 4]</div>'}));
+    s.push(SS(1,'Right subtree: 5, 6, 7',{},{html:'<div class="av-tree">      <span class="done-node">4</span>\n      / \\\n    <span class="done-node">2</span>  <span class="done-node">[6]</span>\n    / \\ / \\\n  <span class="done-node">1  3</span><span class="hl-node">[5]</span> <span class="hl-node">[7]</span>\n\nResult: <span class="done-node">[1,2,3,4,5,6,7]</span> \u2714</div>'}));
+    return{test:'BST Inorder \u2192 [1,2,3,4,5,6,7]',steps:s};
+}
+
+function genBT2(){
+    var s=[];
+    s.push(SS(1,'Level order: tree [3,9,20,null,null,15,7]',{},{html:'<div class="av-tree">     3\n    / \\\n   9  20\n      / \\\n    15   7\n\nBFS with queue</div>'}));
+    s.push(SS(2,'Queue: [3]. Level 0 start (size=1)',{},{html:'<div class="av-tree">     <span class="hl-node">[3]</span>\n    / \\\n   9  20\n      / \\\n    15   7\n\nQueue: [3], Level 0</div>'}));
+    s.push(SS(6,'Poll 3. Add children 9, 20. Level 0: [3]',{},{html:'<div class="av-tree">     <span class="done-node">3</span>\n    / \\\n   <span class="hl-node">9</span>  <span class="hl-node">20</span>\n      / \\\n    15   7\n\nQueue: [9, 20], Output: [[3]]</div>'}));
+    s.push(SS(4,'Level 1 (size=2): poll 9 (no children), poll 20 (children 15,7)',{},{html:'<div class="av-tree">     <span class="done-node">3</span>\n    / \\\n  <span class="done-node">9</span>  <span class="done-node">20</span>\n      / \\\n   <span class="hl-node">15</span>  <span class="hl-node">7</span>\n\nQueue: [15, 7], Output: [[3],[9,20]]</div>'}));
+    s.push(SS(6,'Level 2 (size=2): poll 15, poll 7. Queue empty.',{},{html:'<div class="av-tree">     <span class="done-node">3</span>\n    / \\\n  <span class="done-node">9</span>  <span class="done-node">20</span>\n      / \\\n  <span class="done-node">15</span>  <span class="done-node">7</span>\n\nOutput: [[3],[9,20],[15,7]] \u2714</div>'}));
+    return{test:'Level order \u2192 [[3],[9,20],[15,7]]',steps:s};
+}
+
+function genBT3(){
+    var s=[];
+    s.push(SS(1,'Tree: 1\u21922,3. Node 2\u21924,5. Find height & diameter.',{},{html:'<div class="av-tree">     1\n    / \\\n   2   3\n  / \\\n 4   5</div>'}));
+    s.push(SS(3,'height(4)=0(null)+1=1, height(5)=1',{},{html:'<div class="av-tree">     1\n    / \\\n   2   3\n  / \\\n <span class="hl-node">4</span>   <span class="hl-node">5</span>  \u2190 height=1 each</div>'}));
+    s.push(SS(4,'height(2)=1+max(1,1)=2. Diameter at 2: L+R=1+1=2',{},{html:'<div class="av-tree">     1\n    / \\\n  <span class="hl-node">[2]</span>  3   \u2190 h=2, diameter=1+1=2\n  / \\\n <span class="done-node">4</span>   <span class="done-node">5</span></div>'}));
+    s.push(SS(4,'height(3)=1. height(1)=1+max(2,1)=3',{},{html:'<div class="av-tree">    <span class="hl-node">[1]</span>     \u2190 h=3\n    / \\\n  <span class="done-node">2</span>  <span class="done-node">3</span>   h=2  h=1\n  / \\\n <span class="done-node">4   5</span></div>'}));
+    s.push(SS(8,'Diameter at node 1: leftH(2)+rightH(1)=3. Max diameter = 3 \u2714',{result:3},{html:'<div class="av-tree">    <span class="done-node">1</span>\n    / \\\n  <span class="done-node">2</span>  <span class="done-node">3</span>\n  / \\\n <span class="done-node">4   5</span>\n\nDiameter = 3 (path: 4\u21922\u21921\u21923) \u2714</div>'}));
+    return{test:'Diameter of tree \u2192 3',steps:s};
+}
+
+function genBT4(){
+    var s=[];
+    s.push(SS(1,'Is tree symmetric? Root=1, L=2, R=2',{},{html:'<div class="av-tree">      1\n     / \\\n    2   2\n   / \\ / \\\n  3  4 4  3</div>'}));
+    s.push(SS(2,'Both null? No. One null? No. p.val==q.val? 2==2 \u2714',{},{html:'<div class="av-tree">      1\n     / \\\n   <span class="hl-node">[2]</span> <span class="hl-node">[2]</span>  \u2190 compare mirror\n   / \\ / \\\n  3  4 4  3</div>'}));
+    s.push(SS(4,'Mirror compare: left.left(3) vs right.right(3) \u2192 3==3 \u2714',{},{html:'<div class="av-tree">      1\n     / \\\n    2   2\n   / \\ / \\\n <span class="hl-node">[3]</span> 4 4 <span class="hl-node">[3]</span>  \u2190 outer pair</div>'}));
+    s.push(SS(4,'Mirror compare: left.right(4) vs right.left(4) \u2192 4==4 \u2714',{},{html:'<div class="av-tree">      1\n     / \\\n    2   2\n   / \\ / \\\n  3 <span class="hl-node">[4]</span><span class="hl-node">[4]</span> 3  \u2190 inner pair</div>'}));
+    s.push(SS(4,'All pairs match! Tree is symmetric \u2714',{result:'true'},{html:'<div class="av-tree">      <span class="done-node">1</span>\n     / \\\n   <span class="done-node">2</span>   <span class="done-node">2</span>\n   / \\ / \\\n  <span class="done-node">3  4 4  3</span>\n\nSymmetric = true \u2714</div>'}));
+    return{test:'Symmetric tree \u2192 true',steps:s};
+}
+
+function genBT5(){
+    var s=[];
+    s.push(SS(2,'hasPathSum(root=5, target=22)',{target:22},{html:'<div class="av-tree">       5     target=22\n      / \\\n     4   8\n    /\n   11\n  / \\\n 7   2</div>'}));
+    s.push(SS(5,'Go left: hasPathSum(4, 22-5=17)',{target:17},{html:'<div class="av-tree">       <span class="done-node">5</span>     \n      / \\\n    <span class="hl-node">[4]</span>  8    target=17\n    /\n   11\n  / \\\n 7   2</div>'}));
+    s.push(SS(5,'Go left: hasPathSum(11, 17-4=13)',{target:13},{html:'<div class="av-tree">       <span class="done-node">5</span>\n      / \\\n    <span class="done-node">4</span>   8\n    /\n  <span class="hl-node">[11]</span>   target=13\n  / \\\n 7   2</div>'}));
+    s.push(SS(5,'Try left: hasPathSum(7, 13-11=2). Leaf: 7\u22602 \u2718',{target:2},{html:'<div class="av-tree">       <span class="done-node">5</span>\n      / \\\n    <span class="done-node">4</span>   8\n    /\n  <span class="done-node">11</span>\n  / \\\n<span style="color:#f38ba8">[7]</span>  2   7\u22602 \u2718</div>'}));
+    s.push(SS(5,'Try right: hasPathSum(2, 13-11=2). Leaf: 2==2 \u2714!',{target:2},{html:'<div class="av-tree">       <span class="done-node">5</span>\n      / \\\n    <span class="done-node">4</span>   8\n    /\n  <span class="done-node">11</span>\n  / \\\n 7  <span class="done-node">[2]</span>  2==2 \u2714!</div>'}));
+    s.push(SS(5,'Path found: 5\u21924\u219211\u21922 = 22 \u2714',{result:'true'},{html:'<div class="av-tree">      <span class="done-node">[5]</span>\n      /\n    <span class="done-node">[4]</span>\n    /\n  <span class="done-node">[11]</span>\n      \\\n      <span class="done-node">[2]</span>\n\n5+4+11+2 = 22 \u2714</div>'}));
+    return{test:'Path sum 5\u21924\u219211\u21922 = 22 \u2714',steps:s};
+}
+
+function genBT6(){
+    var s=[];
+    s.push(SS(1,'LCA of 5 and 1 in tree rooted at 3',{},{html:'<div class="av-tree">       3\n      / \\\n     5   1\n    / \\ / \\\n   6  2 0  8</div>'}));
+    s.push(SS(2,'root=3: not null, not 5, not 1 \u2192 search both sides',{},{html:'<div class="av-tree">      <span class="hl-node">[3]</span>\n      / \\\n     5   1\n    / \\ / \\\n   6  2 0  8</div>'}));
+    s.push(SS(3,'left = lca(5, p=5, q=1): root==p \u2192 return 5',{},{html:'<div class="av-tree">       3\n      / \\\n    <span class="hl-node">[5]</span>  1   \u2190 root==p, return 5\n    / \\ / \\\n   6  2 0  8</div>'}));
+    s.push(SS(4,'right = lca(1, p=5, q=1): root==q \u2192 return 1',{},{html:'<div class="av-tree">       3\n      / \\\n     5  <span class="hl-node">[1]</span>  \u2190 root==q, return 1\n    / \\ / \\\n   6  2 0  8</div>'}));
+    s.push(SS(5,'At node 3: left=5 (not null), right=1 (not null) \u2192 SPLIT POINT!',{},{html:'<div class="av-tree">      <span class="done-node">[3]</span> \u2190 LCA!\n      / \\\n    <span class="hl-node">5</span>   <span class="hl-node">1</span>   both sides returned non-null\n    / \\ / \\\n   6  2 0  8</div>'}));
+    s.push(SS(5,'LCA(5,1) = 3 \u2714',{result:3},{html:'<div class="av-tree">      <span class="done-node">[3]</span> \u2190 Lowest Common Ancestor\n      / \\\n    <span class="done-node">5</span>   <span class="done-node">1</span>\n\nLCA = 3 \u2714</div>'}));
+    return{test:'LCA of 5 and 1 \u2192 3',steps:s};
+}
+
+function genBT7(){
+    var s=[];
+    s.push(SS(2,'Validate BST: each node in range (min, max)',{},{html:'<div class="av-tree">       5\n      / \\\n     3   7\n    / \\ / \\\n   1  4 6  8</div>'}));
+    s.push(SS(4,'validate(5, -\u221E, +\u221E): -\u221E < 5 < +\u221E \u2714',{},{html:'<div class="av-tree">      <span class="hl-node">[5]</span> range: (-\u221E, +\u221E) \u2714\n      / \\\n     3   7\n    / \\ / \\\n   1  4 6  8</div>'}));
+    s.push(SS(5,'validate(3, -\u221E, 5): -\u221E < 3 < 5 \u2714',{},{html:'<div class="av-tree">       <span class="done-node">5</span>\n      / \\\n    <span class="hl-node">[3]</span>  7   range: (-\u221E, 5) \u2714\n    / \\\n   1  4</div>'}));
+    s.push(SS(5,'validate(1, -\u221E, 3) \u2714, validate(4, 3, 5) \u2714',{},{html:'<div class="av-tree">       <span class="done-node">5</span>\n      / \\\n    <span class="done-node">3</span>   7\n    / \\\n  <span class="hl-node">[1]</span> <span class="hl-node">[4]</span>  1\u2208(-\u221E,3)\u2714  4\u2208(3,5)\u2714</div>'}));
+    s.push(SS(5,'validate(7, 5, +\u221E) \u2714, validate(6, 5, 7) \u2714, validate(8, 7, +\u221E) \u2714',{},{html:'<div class="av-tree">       <span class="done-node">5</span>\n      / \\\n    <span class="done-node">3</span>  <span class="hl-node">[7]</span>  range: (5,+\u221E) \u2714\n    / \\ / \\\n  <span class="done-node">1  4</span><span class="hl-node">[6]</span> <span class="hl-node">[8]</span></div>'}));
+    s.push(SS(5,'All nodes valid! BST confirmed \u2714',{result:'true'},{html:'<div class="av-tree">      <span class="done-node">5</span>\n      / \\\n    <span class="done-node">3</span>   <span class="done-node">7</span>\n    / \\ / \\\n  <span class="done-node">1  4 6  8</span>\n\nValid BST \u2714</div>'}));
+    return{test:'Validate BST \u2192 true',steps:s};
+}
+
+// ===== DYNAMIC PROGRAMMING =====
+function genDP1(){
+    var a=[2,7,9,3,1],s=[],p2=0,p1=0;
+    s.push(SS(3,'House Robber: nums=[2,7,9,3,1], prev2=0, prev1=0',{prev2:0,prev1:0},{a:a}));
+    for(var i=0;i<a.length;i++){
+        var curr=Math.max(p1,p2+a[i]);
+        s.push(SS(5,'num='+a[i]+': curr=max(prev1='+p1+', prev2+num='+p2+'+'+a[i]+'='+(p2+a[i])+') = '+curr,{curr:curr},{a:a,h:[i],xtra:'skip='+p1+' vs rob='+(p2+a[i])+' \u2192 '+(curr===p1?'SKIP':'ROB')}));
+        p2=p1;p1=curr;
+        s.push(SS(6,'prev2='+p2+', prev1='+p1,{prev2:p2,prev1:p1},{a:a,h:[i]}));
+    }
+    s.push(SS(8,'Return prev1 = '+p1+' \u2714',{result:p1},{a:a,res:p1}));
+    return{test:'nums=[2,7,9,3,1] \u2192 12 (rob 2+9+1)',steps:s};
+}
+
+function genDP2(){
+    var s=[];
+    s.push(SS(1,'Unique Paths in 3\u00D73 grid. dp[i][j] = dp[i-1][j] + dp[i][j-1]',{},{html:'<div class="av-tree">Grid 3\u00D73: fill row by row\nFirst row & col are all 1s (only one way)</div>'}));
+    s.push(SS(2,'Base: first row=[1,1,1], first col=[1,1,1]',{},{html:'<div class="av-tree"><span class="done-node">1</span> <span class="done-node">1</span> <span class="done-node">1</span>\n<span class="done-node">1</span> ? ?\n<span class="done-node">1</span> ? ?</div>'}));
+    s.push(SS(2,'dp[1][1] = dp[0][1]+dp[1][0] = 1+1 = 2',{},{html:'<div class="av-tree"><span class="done-node">1</span> <span class="done-node">1</span> <span class="done-node">1</span>\n<span class="done-node">1</span> <span class="hl-node">2</span> ?\n<span class="done-node">1</span> ? ?</div>'}));
+    s.push(SS(2,'dp[1][2] = dp[0][2]+dp[1][1] = 1+2 = 3',{},{html:'<div class="av-tree"><span class="done-node">1</span> <span class="done-node">1</span> <span class="done-node">1</span>\n<span class="done-node">1</span> <span class="done-node">2</span> <span class="hl-node">3</span>\n<span class="done-node">1</span> ? ?</div>'}));
+    s.push(SS(2,'dp[2][1] = dp[1][1]+dp[2][0] = 2+1 = 3',{},{html:'<div class="av-tree"><span class="done-node">1</span> <span class="done-node">1</span> <span class="done-node">1</span>\n<span class="done-node">1</span> <span class="done-node">2</span> <span class="done-node">3</span>\n<span class="done-node">1</span> <span class="hl-node">3</span> ?</div>'}));
+    s.push(SS(2,'dp[2][2] = dp[1][2]+dp[2][1] = 3+3 = 6 \u2714',{result:6},{html:'<div class="av-tree"><span class="done-node">1</span> <span class="done-node">1</span> <span class="done-node">1</span>\n<span class="done-node">1</span> <span class="done-node">2</span> <span class="done-node">3</span>\n<span class="done-node">1</span> <span class="done-node">3</span> <span class="done-node">6</span> \u2190 answer!\n\nUnique paths = 6 \u2714</div>'}));
+    return{test:'3\u00D73 grid unique paths \u2192 6',steps:s};
+}
+
+function genDP3(){
+    var nums=[1,5,11,5],tgt=11,s=[];
+    var dp=new Array(tgt+1);for(var i=0;i<=tgt;i++)dp[i]=false;dp[0]=true;
+    s.push(SS(2,'Partition Equal Subset: target=11, dp[0]=T',{target:11},{a:dp.map(function(v){return v?'T':'F';}),xtra:'dp indices 0..11'}));
+    for(var ni=0;ni<nums.length;ni++){
+        var num=nums[ni];
+        for(var j=tgt;j>=num;j--){
+            if(!dp[j]&&dp[j-num]){dp[j]=true;}
+        }
+        s.push(SS(4,'Process num='+num+' (RIGHT to LEFT). dp=['+dp.map(function(v){return v?'T':'F';}).join(',')+']',{num:num},{a:dp.map(function(v){return v?'T':'F';}),xtra:'After processing '+num+': true at indices '+dp.map(function(v,i){return v?i:null;}).filter(function(v){return v!==null;}).join(',')}));
+    }
+    s.push(SS(5,'dp[11] = '+(dp[11]?'TRUE':'FALSE')+' \u2192 Can partition! \u2714',{result:dp[11]},{a:dp.map(function(v){return v?'T':'F';}),fnd:[11],res:dp[11]?'true':'false'}));
+    return{test:'nums=[1,5,11,5], partition \u2192 true',steps:s};
+}
+
+function genDP4(){
+    var coins=[1,5,6],amt=11,s=[];
+    var dp=new Array(amt+1);dp[0]=0;for(var i=1;i<=amt;i++)dp[i]=amt+1;
+    s.push(SS(4,'Coin Change: coins=[1,5,6], amount=11. dp[0]=0, rest=\u221E',{},{a:dp.map(function(v){return v>amt?'\u221E':v;}),xtra:'dp indices 0..11'}));
+    for(var i=1;i<=amt;i++){
+        for(var c=0;c<coins.length;c++){
+            if(coins[c]<=i)dp[i]=Math.min(dp[i],dp[i-coins[c]]+1);
+        }
+        if(i<=6||i===10||i===11){
+            s.push(SS(7,'dp['+i+'] = min('+coins.filter(function(c){return c<=i;}).map(function(c){return'dp['+(i-c)+']+1='+(dp[i-c]>amt?'\u221E':dp[i-c]+1);}).join(', ')+') = '+(dp[i]>amt?'\u221E':dp[i]),{},{a:dp.map(function(v){return v>amt?'\u221E':v;}),h:[i]}));
+        }
+    }
+    s.push(SS(7,'dp[11] = '+dp[11]+' (coins: 5+6=11) \u2714',{result:dp[11]},{a:dp.map(function(v){return v>amt?'\u221E':v;}),fnd:[11],res:dp[11]+' coins'}));
+    return{test:'coins=[1,5,6], amount=11 \u2192 2 coins',steps:s};
+}
+
+function genDP5(){
+    var t1='abcde',t2='ace',s=[];
+    var m=t2.length,n=t1.length;
+    var dp=[];for(var i=0;i<=m;i++){dp[i]=[];for(var j=0;j<=n;j++)dp[i][j]=0;}
+    s.push(SS(1,'LCS of "abcde" and "ace". Build (m+1)\u00D7(n+1) table.',{},{html:'<div class="av-tree">    "" a b c d e\n""  0 0 0 0 0 0\na   0 ? ? ? ? ?\nc   0 ? ? ? ? ?\ne   0 ? ? ? ? ?</div>'}));
+    for(var i=1;i<=m;i++){
+        for(var j=1;j<=n;j++){
+            if(t2[i-1]===t1[j-1])dp[i][j]=dp[i-1][j-1]+1;
+            else dp[i][j]=Math.max(dp[i-1][j],dp[i][j-1]);
+        }
+        var row=dp[i].join(' ');
+        s.push(SS(i<=1?1:2,'Row "'+t2[i-1]+'": ['+dp[i].join(',')+']',{},{html:'<div class="av-tree">    "" a b c d e\n""  0 0 0 0 0 0\na   '+dp[1].join(' ')+'\n'+(i>=2?'c   '+dp[2].join(' ')+'\n':'')+(i>=3?'e   '+dp[3].join(' ')+'\n':'')+'\n'+(i<m?'Processing row for "'+t2[i-1]+'"...':'All rows done!')}));
+    }
+    s.push(SS(2,'LCS length = dp[3][5] = '+dp[m][n]+' (subsequence: "ace") \u2714',{result:dp[m][n]},{html:'<div class="av-tree">    "" a b c d e\n""  0 0 0 0 0 0\na   0 <span class="hl-node">1</span> 1 1 1 1\nc   0 1 1 <span class="hl-node">2</span> 2 2\ne   0 1 1 2 2 <span class="hl-node">3</span>\n\nLCS = "ace", length = 3 \u2714</div>'}));
+    return{test:'"abcde" vs "ace" \u2192 LCS=3',steps:s};
+}
+
+function genDP6(){
+    var a=[10,9,2,5,3,7,101,18],s=[];
+    var dp=new Array(a.length);for(var i=0;i<a.length;i++)dp[i]=1;
+    s.push(SS(1,'LIS: nums=[10,9,2,5,3,7,101,18], dp=[1,1,1,1,1,1,1,1]',{},{a:a,xtra:'dp=['+dp.join(',')+']'}));
+    for(var i=1;i<a.length;i++){
+        for(var j=0;j<i;j++){if(a[j]<a[i])dp[i]=Math.max(dp[i],dp[j]+1);}
+        s.push(SS(5,'i='+i+' ('+a[i]+'): check all j<i where nums[j]<'+a[i]+'. dp['+i+']='+dp[i],{},{a:a,h:[i],xtra:'dp=['+dp.join(',')+']'}));
+    }
+    var maxLIS=Math.max.apply(null,dp);
+    s.push(SS(5,'max(dp) = '+maxLIS+' \u2714 (e.g. [2,3,7,101])',{result:maxLIS},{a:a,d:dp.map(function(v,i){return v===maxLIS?i:null;}).filter(function(v){return v!==null;}),res:'LIS length = '+maxLIS}));
+    return{test:'LIS of [10,9,2,5,3,7,101,18] \u2192 4',steps:s};
+}
+
+function genDP7(){
+    var str='babad',s=[];
+    s.push(SS(1,'Longest Palindromic Substring in "babad"',{},{a:str.split('')}));
+    s.push(SS(2,'All single chars are palindromes (length 1)',{},{a:str.split(''),xtra:'Palindromes: b, a, b, a, d'}));
+    s.push(SS(2,'Check length 2: ba\u2718, ab\u2718, ba\u2718, ad\u2718 (no adjacent pairs match)',{},{a:str.split(''),xtra:'No length-2 palindromes'}));
+    s.push(SS(2,'Check length 3: s[0]==s[2]? b==b \u2714 \u2192 "bab" is palindrome!',{},{a:str.split(''),w:[0,2],d:[0,1,2],xtra:'"bab" \u2714 (s[0]=b == s[2]=b, inner "a" is palindrome)'}));
+    s.push(SS(2,'s[1]==s[3]? a==a \u2714 \u2192 "aba" is also palindrome!',{},{a:str.split(''),w:[1,3],d:[1,2,3],xtra:'"aba" \u2714 (s[1]=a == s[3]=a)'}));
+    s.push(SS(2,'Check length 4,5: no new palindromes found',{},{a:str.split(''),xtra:'Lengths 4,5: no palindromes'}));
+    s.push(SS(2,'Longest palindromic substring = "bab" (or "aba"), length 3 \u2714',{result:'"bab"'},{a:str.split(''),w:[0,2],res:'"bab" (length 3)'}));
+    return{test:'s="babad" \u2192 "bab"',steps:s};
+}
+
+function genDP8(){
+    var str='leetcode',dict=['leet','code'],s=[];
+    var n=str.length,dp=new Array(n+1);for(var i=0;i<=n;i++)dp[i]=false;dp[0]=true;
+    var set={};dict.forEach(function(w){set[w]=true;});
+    s.push(SS(2,'s="leetcode", dict=["leet","code"]. dp[0]=T',{},{a:str.split(''),xtra:'dp = [T,F,F,F,F,F,F,F,F]'}));
+    for(var i=1;i<=n;i++){
+        for(var j=0;j<i;j++){
+            if(dp[j]&&set[str.substring(j,i)]){dp[i]=true;break;}
+        }
+        if(dp[i]||i===1||i===4||i===8){
+            s.push(SS(5,'dp['+i+']: check all j<'+i+' where dp[j]=T and s[j..'+i+'] in dict.'+(dp[i]?' Found! s['+0+'..'+i+']="'+str.substring(0,i)+'"':' No match.'),{},{a:str.split(''),w:dp[i]?[0,i-1]:undefined,xtra:'dp['+i+'] = '+(dp[i]?'TRUE':'false')}));
+        }
+    }
+    s.push(SS(6,'dp[8] = TRUE. "leetcode" = "leet" + "code" \u2714',{result:'true'},{a:str.split(''),d:[0,1,2,3,4,5,6,7],res:'true'}));
+    return{test:'s="leetcode", dict=["leet","code"] \u2192 true',steps:s};
+}
+
+// ===== INITIALIZATION =====
+var G={
+    'sliding-window':[genSW1,genSW2,genSW3,genSW4,genSW5,genSW6],
+    'prefix-sum':[genPS1,genPS2,genPS3,genPS4,genPS5],
+    'binary-search':[genBS1,genBS2,genBS3,genBS4,genBS5,genBS6],
+    'monotonic-stack':[genMS1,genMS2,genMS3,genMS4,genMS5],
+    'greedy':[genGR1,genGR2,genGR3,genGR4,genGR5,genGR6],
+    'recursion':[genRC1,genRC2,genRC3,genRC4,genRC5],
+    'top-k':[genTK1,genTK2,genTK3,genTK4],
+    'binary-trees':[genBT1,genBT2,genBT3,genBT4,genBT5,genBT6,genBT7],
+    'dp':[genDP1,genDP2,genDP3,genDP4,genDP5,genDP6,genDP7,genDP8]
+};
+for(var t in G)G[t].forEach(function(g,i){ANIMS[t+'-'+(i+1)]=g();});
+
+function setup(){
+    var topics=document.querySelectorAll('.topic');
+    topics.forEach(function(topic){
+        var topicId=topic.id;
+        var body=topic.querySelector('.topic-body');
+        if(!body)return;
+        var ruleCards=body.querySelectorAll('.rule-card');
+        ruleCards.forEach(function(card,idx){
+            var animId=topicId+'-'+(idx+1);
+            if(!ANIMS[animId])return;
+            var pre=card.querySelector('pre');
+            if(pre)pre.setAttribute('data-anim-id',animId);
+            var btn=document.createElement('button');
+            btn.className='anim-btn';btn.textContent='\u25B6 Animate with Example';
+            btn.setAttribute('data-anim-id',animId);
+            btn.onclick=function(){window.toggleAnim(animId);};
+            card.appendChild(btn);
+            var panel=document.createElement('div');
+            panel.className='anim-panel';panel.id='ap-'+animId;
+            panel.innerHTML='<div class="anim-header"><span class="anim-tc">\uD83C\uDFAC '+ANIMS[animId].test+'</span><div class="anim-ctrls"><button onclick="animCmd(\''+animId+'\',\'reset\')" title="Reset">\u21BA</button><button onclick="animCmd(\''+animId+'\',\'prev\')" title="Previous Step">\u25C0\u25C0</button><button onclick="animCmd(\''+animId+'\',\'toggle\')" id="abtn-'+animId+'" title="Play/Pause">\u25B6 Play</button><button onclick="animCmd(\''+animId+'\',\'next\')" title="Next Step">\u25B6\u25B6</button></div></div><div class="anim-vis" id="av-'+animId+'"></div><div class="anim-vars" id="avr-'+animId+'"></div><div class="anim-desc" id="ad-'+animId+'"></div><div class="anim-step" id="as-'+animId+'"></div>';
+            card.appendChild(panel);
+        });
+    });
+}
+setup();
+})();
+</script>
+</body>
+</html>
