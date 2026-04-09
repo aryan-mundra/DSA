@@ -1771,15 +1771,18 @@ function SS(l,d,v,vis){return{l:l,d:d,v:v||{},vis:vis||{}};}
 function genSW1(){
     var a=[2,1,5,1,3,2],k=3,s=[],l=0,sm=0,mx=0;
     s.push(SS(1,'Initialize: left=0, sum=0, maxSum=0',{left:0,sum:0,maxSum:0},{a:a,p:{L:0}}));
+    s.push(SS(3,'Enter for loop: right = 0 to n\u22121',{},{a:a,p:{L:0}}));
     for(var r=0;r<a.length;r++){
         sm+=a[r];
         s.push(SS(4,'sum += arr['+r+']='+a[r]+' \u2192 sum='+sm,{right:r,sum:sm},{a:a,w:[l,r],p:{L:l,R:r},h:[r]}));
+        s.push(SS(6,'Window size '+(r-l+1)+' > k='+k+'? '+(r-l+1>k?'YES':'No'),{},{a:a,w:[l,r],p:{L:l,R:r}}));
         if(r-l+1>k){
-            s.push(SS(7,'Window size '+(r-l+1)+' > k='+k+': remove arr['+l+']='+a[l],{},{a:a,w:[l,r],p:{L:l,R:r},rm:[l]}));
+            s.push(SS(7,'sum -= arr['+l+']='+a[l],{},{a:a,w:[l,r],p:{L:l,R:r},rm:[l]}));
             sm-=a[l];l++;
-            s.push(SS(8,'left='+l+', sum='+sm,{left:l,sum:sm},{a:a,w:[l,r],p:{L:l,R:r}}));
+            s.push(SS(8,'left++ \u2192 left='+l+', sum='+sm,{left:l,sum:sm},{a:a,w:[l,r],p:{L:l,R:r}}));
         }
-        if(r-l+1===k){var om=mx;mx=Math.max(mx,sm);s.push(SS(12,'Window=k=3: maxSum=max('+om+','+sm+')='+mx,{maxSum:mx},{a:a,w:[l,r],p:{L:l,R:r},d:[l,l+1,l+2]}));}
+        s.push(SS(11,'Window size '+(r-l+1)+' == k='+k+'? '+(r-l+1===k?'YES':'No'),{},{a:a,w:[l,r],p:{L:l,R:r}}));
+        if(r-l+1===k){var om=mx;mx=Math.max(mx,sm);s.push(SS(12,'maxSum=max('+om+','+sm+')='+mx,{maxSum:mx},{a:a,w:[l,r],p:{L:l,R:r},d:[l,l+1,l+2]}));}
     }
     s.push(SS(15,'Return maxSum = '+mx+' \u2714',{result:mx},{a:a,res:mx}));
     return{test:'arr=[2,1,5,1,3,2], k=3 \u2192 9',steps:s};
@@ -1788,15 +1791,20 @@ function genSW1(){
 function genSW2(){
     var a=[1,2,1,3,5],s=[],l=0,best=0,freq={};
     s.push(SS(1,'Initialize: left=0, best=0, freq={}',{left:0,best:0},{a:a,p:{L:0}}));
+    s.push(SS(3,'Enter for loop: right = 0 to n\u22121',{},{a:a,p:{L:0}}));
     for(var r=0;r<a.length;r++){
         freq[a[r]]=(freq[a[r]]||0)+1;
-        s.push(SS(4,'Expand: add arr['+r+']='+a[r]+', freq='+JSON.stringify(freq),{right:r},{a:a,w:[l,r],p:{L:l,R:r},h:[r]}));
+        s.push(SS(4,'add(arr['+r+'])='+a[r]+', freq='+JSON.stringify(freq),{right:r},{a:a,w:[l,r],p:{L:l,R:r},h:[r]}));
+        if(freq[a[r]]>1){
+            s.push(SS(6,'while(!isValid): duplicate '+a[r]+' found, shrink',{},{a:a,w:[l,r],p:{L:l,R:r}}));
+        }
         while(freq[a[r]]>1){
-            s.push(SS(7,'Invalid (duplicate '+a[r]+'): remove arr['+l+']='+a[l],{},{a:a,w:[l,r],p:{L:l,R:r},rm:[l]}));
+            s.push(SS(7,'remove(arr['+l+'])='+a[l],{},{a:a,w:[l,r],p:{L:l,R:r},rm:[l]}));
             freq[a[l]]--;l++;
+            s.push(SS(8,'left++ \u2192 left='+l,{left:l},{a:a,w:[l,r],p:{L:l,R:r}}));
         }
         best=Math.max(best,r-l+1);
-        s.push(SS(11,'Valid! best=max(old,'+( r-l+1)+')='+best,{best:best},{a:a,w:[l,r],p:{L:l,R:r},d:Array.from({length:r-l+1},function(_,i){return l+i;})}));
+        s.push(SS(11,'best=max(old,'+(r-l+1)+')='+best,{best:best},{a:a,w:[l,r],p:{L:l,R:r},d:Array.from({length:r-l+1},function(_,i){return l+i;})}));
     }
     s.push(SS(13,'Return best = '+best+' \u2714',{result:best},{a:a,res:best}));
     return{test:'arr=[1,2,1,3,5], longest all unique \u2192 4',steps:s};
@@ -1805,14 +1813,19 @@ function genSW2(){
 function genSW3(){
     var a=[2,3,1,2,4,3],tgt=7,s=[],l=0,best=999,sm=0;
     s.push(SS(1,'Initialize: left=0, best=\u221E, sum=0',{left:0,best:'\u221E',sum:0},{a:a,p:{L:0}}));
+    s.push(SS(3,'Enter for loop: right = 0 to n\u22121',{},{a:a,p:{L:0}}));
     for(var r=0;r<a.length;r++){
         sm+=a[r];
-        s.push(SS(4,'Expand: sum+=arr['+r+']='+a[r]+' \u2192 sum='+sm,{right:r,sum:sm},{a:a,w:[l,r],p:{L:l,R:r},h:[r]}));
+        s.push(SS(4,'add(arr['+r+'])='+a[r]+' \u2192 sum='+sm,{right:r,sum:sm},{a:a,w:[l,r],p:{L:l,R:r},h:[r]}));
+        if(sm>=tgt){
+            s.push(SS(6,'while(isValid): sum='+sm+' \u2265 target='+tgt,{},{a:a,w:[l,r],p:{L:l,R:r}}));
+        }
         while(sm>=tgt){
             best=Math.min(best,r-l+1);
-            s.push(SS(7,'Valid (sum='+sm+'\u2265'+tgt+'): best=min(old,'+(r-l+1)+')='+best,{best:best},{a:a,w:[l,r],p:{L:l,R:r},d:Array.from({length:r-l+1},function(_,i){return l+i;})}));
+            s.push(SS(7,'best=min(old,'+(r-l+1)+')='+best,{best:best},{a:a,w:[l,r],p:{L:l,R:r},d:Array.from({length:r-l+1},function(_,i){return l+i;})}));
+            s.push(SS(8,'remove(arr['+l+'])='+a[l],{},{a:a,w:[l,r],p:{L:l,R:r},rm:[l]}));
             sm-=a[l];l++;
-            s.push(SS(9,'Shrink: remove arr['+(l-1)+']='+a[l-1]+', left='+l+', sum='+sm,{left:l,sum:sm},{a:a,w:l<=r?[l,r]:undefined,p:{L:l,R:r}}));
+            s.push(SS(9,'left++ \u2192 left='+l+', sum='+sm,{left:l,sum:sm},{a:a,w:l<=r?[l,r]:undefined,p:{L:l,R:r}}));
         }
     }
     s.push(SS(12,'Return best = '+best+' \u2714',{result:best},{a:a,res:best}));
@@ -1821,17 +1834,33 @@ function genSW3(){
 
 function genSW4(){
     var a=[1,2,1,2,3],s=[];
+    s.push(SS(1,'Call exactlyK(arr, k=2)',{},{a:a,xtra:'exactlyK function'}));
     s.push(SS(2,'exactly(K=2) = atMost(2) \u2212 atMost(1)',{},{a:a,xtra:'Step 1: Compute atMost(K=2)'}));
-    // simulate atMost(2)
+    s.push(SS(5,'Enter atMostK(arr, k=2)',{},{a:a}));
     var l=0,cnt=0,freq={};
+    s.push(SS(6,'Create freq = new HashMap',{},{a:a}));
+    s.push(SS(7,'Initialize left=0, count=0',{left:0,count:0},{a:a,p:{L:0}}));
+    s.push(SS(9,'Enter for loop: right = 0 to n\u22121',{},{a:a,p:{L:0}}));
     for(var r=0;r<a.length;r++){
         freq[a[r]]=(freq[a[r]]||0)+1;
-        while(Object.keys(freq).length>2){freq[a[l]]--;if(freq[a[l]]===0)delete freq[a[l]];l++;}
+        s.push(SS(10,'freq['+a[r]+']++ \u2192 distinct='+Object.keys(freq).length,{right:r},{a:a,w:[l,r],p:{L:l,R:r},h:[r],map:Object.assign({},freq)}));
+        var dk=Object.keys(freq).length;
+        s.push(SS(12,'while(freq.size()='+dk+' > k=2)? '+(dk>2?'YES':'No'),{},{a:a,w:[l,r],p:{L:l,R:r}}));
+        while(Object.keys(freq).length>2){
+            var ol=l;
+            s.push(SS(13,'freq[arr['+ol+']='+a[ol]+']--',{},{a:a,w:[l,r],p:{L:l,R:r},rm:[ol],map:Object.assign({},freq)}));
+            freq[a[l]]--;
+            if(freq[a[l]]===0){
+                s.push(SS(14,'freq['+a[ol]+']==0 \u2192 remove from map',{},{a:a,w:[l,r],p:{L:l,R:r},map:Object.assign({},freq)}));
+                delete freq[a[l]];
+            }
+            l++;
+            s.push(SS(15,'left++ \u2192 left='+l,{left:l},{a:a,w:l<=r?[l,r]:undefined,p:{L:l,R:r},map:Object.assign({},freq)}));
+        }
         cnt+=(r-l+1);
-        s.push(SS(17,'atMost(2): r='+r+', window=['+l+','+r+'], distinct='+Object.keys(freq).length+', count+='+( r-l+1)+' \u2192 '+cnt,{count:cnt},{a:a,w:[l,r],p:{L:l,R:r}}));
+        s.push(SS(17,'count += '+(r-l+1)+' \u2192 count='+cnt,{count:cnt},{a:a,w:[l,r],p:{L:l,R:r}}));
     }
-    s.push(SS(19,'atMost(2) = '+cnt,{atMost2:cnt},{a:a,res:'atMost(2)='+cnt}));
-    // atMost(1)
+    s.push(SS(19,'return count = '+cnt,{atMost2:cnt},{a:a,res:'atMost(2)='+cnt}));
     l=0;var cnt2=0;freq={};
     for(var r=0;r<a.length;r++){
         freq[a[r]]=(freq[a[r]]||0)+1;
@@ -1846,38 +1875,66 @@ function genSW4(){
 function genSW5(){
     var str='ADOBECODEBANC',t='ABC',a=str.split(''),s=[];
     var need={A:1,B:1,C:1},have={},req=3,formed=0,l=0,mL=999,mS=0;
-    s.push(SS(1,'Build need map from pattern "ABC"',{required:req,formed:0},{a:a,map:{A:1,B:1,C:1},xtra:'need = {A:1, B:1, C:1}'}));
+    s.push(SS(1,'Declare need & have HashMaps',{},{a:a,xtra:'need={}, have={}'}));
+    s.push(SS(2,'for each char in pattern...',{},{a:a,xtra:'pattern="ABC"'}));
+    s.push(SS(3,'need.merge(c,1) \u2192 need={A:1,B:1,C:1}',{required:req},{a:a,map:{A:1,B:1,C:1}}));
+    s.push(SS(5,'required=need.size()=3, formed=0',{required:req,formed:0},{a:a}));
+    s.push(SS(6,'left=0, minLen=\u221E, minStart=0',{left:0,minLen:'\u221E'},{a:a}));
+    s.push(SS(8,'Enter for loop: right=0 to '+(a.length-1),{},{a:a}));
     for(var r=0;r<a.length;r++){
         var c=a[r];have[c]=(have[c]||0)+1;
+        var pf=formed;
         if(need[c]!==undefined&&have[c]===need[c])formed++;
-        if(formed===req||r===0||r===3||r===5){
-            s.push(SS(10,'r='+r+' ('+c+'): have['+c+']='+have[c]+(need[c]!==undefined&&have[c]===need[c]?' \u2192 formed='+formed:''),{right:r,formed:formed},{a:a,w:[l,r],p:{L:l,R:r},h:[r]}));
+        s.push(SS(9,'r='+r+': char c = \''+c+'\'',{right:r},{a:a,w:[l,r],p:{L:l,R:r},h:[r]}));
+        s.push(SS(10,'have['+c+']++ = '+have[c],{},{a:a,w:[l,r],p:{L:l,R:r},h:[r]}));
+        if(formed>pf){
+            s.push(SS(12,'need has \''+c+'\' && have==need? YES',{},{a:a,w:[l,r],p:{L:l,R:r},h:[r]}));
+            s.push(SS(13,'formed++ \u2192 '+formed,{formed:formed},{a:a,w:[l,r],p:{L:l,R:r},h:[r]}));
+        }
+        if(formed===req){
+            s.push(SS(15,'while(formed==required): '+formed+'=='+req,{},{a:a,w:[l,r],p:{L:l,R:r}}));
         }
         while(formed===req){
-            if(r-l+1<mL){mL=r-l+1;mS=l;}
-            s.push(SS(17,'Valid window ['+l+','+r+'] len='+(r-l+1)+', minLen='+mL+', minStart='+mS,{minLen:mL},{a:a,w:[l,r],p:{L:l,R:r},d:Array.from({length:r-l+1},function(_,i){return l+i;})}));
-            var lc=a[l];have[lc]--;
-            if(need[lc]!==undefined&&have[lc]<need[lc])formed--;
+            s.push(SS(16,'len='+(r-l+1)+' < minLen='+mL+'? '+(r-l+1<mL?'YES':'No'),{},{a:a,w:[l,r],p:{L:l,R:r}}));
+            if(r-l+1<mL){
+                mL=r-l+1;
+                s.push(SS(17,'minLen='+mL,{minLen:mL},{a:a,w:[l,r],p:{L:l,R:r},d:Array.from({length:r-l+1},function(_,i){return l+i;})}));
+                mS=l;
+                s.push(SS(18,'minStart='+mS,{minStart:mS},{a:a,w:[l,r],p:{L:l,R:r}}));
+            }
+            var lc=a[l];
+            s.push(SS(20,'char lc = s['+l+'] = \''+lc+'\'',{},{a:a,w:[l,r],p:{L:l,R:r}}));
+            have[lc]--;
+            s.push(SS(21,'have['+lc+']-- = '+have[lc],{},{a:a,w:[l,r],p:{L:l,R:r}}));
+            if(need[lc]!==undefined&&have[lc]<need[lc]){
+                s.push(SS(22,'need has \''+lc+'\' && have<need? YES',{},{a:a,w:[l,r],p:{L:l,R:r}}));
+                formed--;
+                s.push(SS(23,'formed-- \u2192 '+formed,{formed:formed},{a:a,w:[l,r],p:{L:l,R:r}}));
+            }
             l++;
-            if(formed<req)s.push(SS(24,'Removed '+lc+', formed='+formed+', left='+l+' \u2192 shrink stops',{left:l,formed:formed},{a:a,w:l<=r?[l,r]:undefined,p:{L:l,R:r}}));
+            s.push(SS(24,'left++ \u2192 left='+l,{left:l,formed:formed},{a:a,w:l<=r?[l,r]:undefined,p:{L:l,R:r}}));
         }
     }
-    s.push(SS(27,'Return "'+str.substring(mS,mS+mL)+'" (start='+mS+', len='+mL+') \u2714',{result:'"'+str.substring(mS,mS+mL)+'"'},{a:a,w:[mS,mS+mL-1],d:Array.from({length:mL},function(_,i){return mS+i;}),res:'"'+str.substring(mS,mS+mL)+'"'}));
+    s.push(SS(27,'Return "'+str.substring(mS,mS+mL)+'" \u2714',{result:'"'+str.substring(mS,mS+mL)+'"'},{a:a,w:[mS,mS+mL-1],d:Array.from({length:mL},function(_,i){return mS+i;}),res:'"'+str.substring(mS,mS+mL)+'"'}));
     return{test:'s="ADOBECODEBANC", t="ABC" \u2192 "BANC"',steps:s};
 }
 
 function genSW6(){
     var a=[10,5,2,6],k=100,s=[],l=0,cnt=0,prod=1;
-    s.push(SS(1,'Initialize: left=0, count=0, product=1',{left:0,count:0,product:1},{a:a,p:{L:0}}));
+    s.push(SS(1,'Initialize: left=0',{left:0},{a:a,p:{L:0}}));
+    s.push(SS(2,'count=0, product=1',{count:0,product:1},{a:a,p:{L:0}}));
+    s.push(SS(4,'Enter for loop: right=0 to n\u22121',{},{a:a,p:{L:0}}));
     for(var r=0;r<a.length;r++){
         prod*=a[r];
-        s.push(SS(5,'product *= arr['+r+']='+a[r]+' \u2192 product='+prod,{right:r,product:prod},{a:a,w:[l,r],p:{L:l,R:r},h:[r]}));
+        s.push(SS(5,'add(arr['+r+'])='+a[r]+' \u2192 product='+prod,{right:r,product:prod},{a:a,w:[l,r],p:{L:l,R:r},h:[r]}));
+        s.push(SS(7,'while(!isValid): '+prod+'\u2265'+k+'? '+(prod>=k&&l<=r?'YES':'No'),{},{a:a,w:[l,r],p:{L:l,R:r}}));
         while(prod>=k&&l<=r){
-            s.push(SS(8,'Invalid ('+prod+'\u2265'+k+'): remove arr['+l+']='+a[l],{},{a:a,w:[l,r],p:{L:l,R:r},rm:[l]}));
+            s.push(SS(8,'remove(arr['+l+'])='+a[l],{},{a:a,w:[l,r],p:{L:l,R:r},rm:[l]}));
             prod/=a[l];l++;
+            s.push(SS(9,'left++ \u2192 left='+l+', product='+prod,{left:l,product:prod},{a:a,w:l<=r?[l,r]:undefined,p:{L:l,R:r}}));
         }
         cnt+=(r-l+1);
-        s.push(SS(12,'count += '+(r-l+1)+' (subarrays ending at '+r+') \u2192 count='+cnt,{count:cnt},{a:a,w:l<=r?[l,r]:undefined,p:{L:l,R:r}}));
+        s.push(SS(12,'count += '+(r-l+1)+' \u2192 count='+cnt,{count:cnt},{a:a,w:l<=r?[l,r]:undefined,p:{L:l,R:r}}));
     }
     s.push(SS(14,'Return count = '+cnt+' \u2714',{result:cnt},{a:a,res:cnt}));
     return{test:'arr=[10,5,2,6], product<100 \u2192 8',steps:s};
@@ -1886,27 +1943,36 @@ function genSW6(){
 // ===== PREFIX SUM =====
 function genPS1(){
     var nums=[1,2,3,4,5],s=[],pfx=[];
+    s.push(SS(1,'int[] prefix = new int[n]',{},{a:nums,xtra:'Allocate prefix array'}));
     pfx[0]=nums[0];
     s.push(SS(2,'prefix[0] = nums[0] = '+nums[0],{},{a:nums,h:[0],xtra:'prefix = ['+pfx.join(',')+']'}));
+    s.push(SS(3,'Enter for loop: i = 1 to n\u22121',{},{a:nums}));
     for(var i=1;i<nums.length;i++){
         pfx[i]=pfx[i-1]+nums[i];
         s.push(SS(4,'prefix['+i+'] = prefix['+(i-1)+']+nums['+i+'] = '+pfx[i-1]+'+'+nums[i]+' = '+pfx[i],{},{a:pfx.slice(),h:[i],xtra:'prefix = ['+pfx.join(',')+']'}));
     }
-    s.push(SS(7,'Query sum(1,3) = prefix[3] \u2212 prefix[0] = '+pfx[3]+' \u2212 '+pfx[0]+' = '+(pfx[3]-pfx[0]),{},{a:pfx,w:[1,3],res:'sum(1,3) = '+(pfx[3]-pfx[0])}));
+    s.push(SS(6,'// Query sum of range [L, R]:',{},{a:pfx,xtra:'Now we can query any range in O(1)'}));
+    s.push(SS(7,'sum(1,3) = prefix[3] \u2212 prefix[0] = '+pfx[3]+' \u2212 '+pfx[0]+' = '+(pfx[3]-pfx[0]),{},{a:pfx,w:[1,3],res:'sum(1,3) = '+(pfx[3]-pfx[0])}));
     return{test:'nums=[1,2,3,4,5], sum(1,3) \u2192 9',steps:s};
 }
 
 function genPS2(){
     var nums=[1,1,1],k=2,s=[],map={'0':1},pfx=0,cnt=0;
-    s.push(SS(2,'map = {0: 1}, prefix=0, count=0',{prefix:0,count:0},{a:nums,map:{'0':1}}));
+    s.push(SS(1,'HashMap map = new HashMap',{},{a:nums}));
+    s.push(SS(2,'map.put(0, 1)',{},{a:nums,map:{'0':1}}));
+    s.push(SS(3,'prefix=0, count=0',{prefix:0,count:0},{a:nums}));
+    s.push(SS(5,'Enter for loop: each x in nums',{},{a:nums}));
     for(var i=0;i<nums.length;i++){
         pfx+=nums[i];
+        s.push(SS(6,'prefix += '+nums[i]+' \u2192 prefix='+pfx,{prefix:pfx},{a:nums,h:[i]}));
         var need=pfx-k;
         var found=map[need]||0;
-        if(found)cnt+=found;
-        s.push(SS(7,'x='+nums[i]+': prefix='+pfx+', check prefix\u2212k='+(pfx-k)+(found?' \u2192 found '+found+' times! count='+cnt:' \u2192 not found'),{prefix:pfx,count:cnt},{a:nums,h:[i],map:Object.assign({},map)}));
+        s.push(SS(7,'map.containsKey(prefix\u2212k='+need+')? '+(found?'YES':'No'),{},{a:nums,h:[i],map:Object.assign({},map)}));
+        if(found){cnt+=found;
+            s.push(SS(8,'count += map.get('+need+')='+found+' \u2192 count='+cnt,{count:cnt},{a:nums,h:[i],map:Object.assign({},map)}));
+        }
         map[pfx]=(map[pfx]||0)+1;
-        s.push(SS(9,'Store prefix='+pfx+' in map',{},{a:nums,h:[i],map:Object.assign({},map)}));
+        s.push(SS(9,'map.merge('+pfx+', 1)',{},{a:nums,h:[i],map:Object.assign({},map)}));
     }
     s.push(SS(11,'Return count = '+cnt+' \u2714',{result:cnt},{a:nums,res:cnt}));
     return{test:'nums=[1,1,1], k=2 \u2192 2',steps:s};
@@ -1914,14 +1980,22 @@ function genPS2(){
 
 function genPS3(){
     var nums=[4,5,0,-2,-3,1],k=5,s=[],map={'0':1},pfx=0,cnt=0;
-    s.push(SS(2,'map = {0: 1}, prefix=0, count=0',{prefix:0,count:0},{a:nums,map:{'0':1}}));
+    s.push(SS(1,'HashMap map = new HashMap',{},{a:nums}));
+    s.push(SS(2,'map.put(0, 1)',{},{a:nums,map:{'0':1}}));
+    s.push(SS(3,'prefix=0, count=0',{prefix:0,count:0},{a:nums}));
+    s.push(SS(5,'Enter for loop: each x in nums',{},{a:nums}));
     for(var i=0;i<nums.length;i++){
         pfx+=nums[i];
+        s.push(SS(6,'prefix += '+nums[i]+' \u2192 prefix='+pfx,{prefix:pfx},{a:nums,h:[i]}));
         var mod=((pfx%k)+k)%k;
+        s.push(SS(7,'mod = (('+pfx+' % '+k+') + '+k+') % '+k+' = '+mod,{mod:mod},{a:nums,h:[i]}));
         var found=map[mod]||0;
-        if(found)cnt+=found;
-        s.push(SS(7,'x='+nums[i]+': prefix='+pfx+', mod='+mod+(found?' \u2192 found '+found+' time(s)! count='+cnt:''),{prefix:pfx,mod:mod,count:cnt},{a:nums,h:[i],map:Object.assign({},map)}));
+        s.push(SS(8,'map.containsKey('+mod+')? '+(found?'YES':'No'),{},{a:nums,h:[i],map:Object.assign({},map)}));
+        if(found){cnt+=found;
+            s.push(SS(9,'count += map.get('+mod+')='+found+' \u2192 count='+cnt,{count:cnt},{a:nums,h:[i],map:Object.assign({},map)}));
+        }
         map[mod]=(map[mod]||0)+1;
+        s.push(SS(10,'map.merge('+mod+', 1)',{},{a:nums,h:[i],map:Object.assign({},map)}));
     }
     s.push(SS(12,'Return count = '+cnt+' \u2714',{result:cnt},{a:nums,res:cnt}));
     return{test:'nums=[4,5,0,-2,-3,1], k=5 \u2192 7',steps:s};
@@ -1929,8 +2003,12 @@ function genPS3(){
 
 function genPS4(){
     var m=[[1,2,3],[4,5,6],[7,8,9]],s=[];
-    s.push(SS(1,'Build 2D prefix sum for 3\u00D73 matrix',{},{html:'<div class="av-tree">Matrix:\n1 2 3\n4 5 6\n7 8 9</div>'}));
+    s.push(SS(1,'// Build phase',{},{html:'<div class="av-tree">Matrix:\n1 2 3\n4 5 6\n7 8 9</div>'}));
+    s.push(SS(2,'int[][] p = new int[m+1][n+1]',{},{html:'<div class="av-tree">Allocate prefix table P (4\u00D74, all zeros)</div>'}));
+    s.push(SS(3,'for i = 1 to m...',{},{html:'<div class="av-tree">Iterate rows</div>'}));
+    s.push(SS(4,'for j = 1 to n...',{},{html:'<div class="av-tree">Iterate columns within each row</div>'}));
     s.push(SS(5,'Build prefix table P using inclusion-exclusion',{},{html:'<div class="av-tree">P[i][j] = matrix[i-1][j-1] + P[i-1][j] + P[i][j-1] - P[i-1][j-1]\n\nPrefix P (1-indexed):\n 0  0  0  0\n 0  1  3  6\n 0  5 12 21\n 0 12 27 45</div>'}));
+    s.push(SS(7,'// Query phase',{},{html:'<div class="av-tree">Now query any rectangle in O(1)</div>'}));
     s.push(SS(8,'Query (1,1) to (2,2): P[3][3] \u2212 P[1][3] \u2212 P[3][1] + P[1][1]',{},{html:'<div class="av-tree">= 45 \u2212 6 \u2212 12 + 1 = <span class="hl-node">28</span>\n\nSubmatrix:\n<span class="hl-node">5 6</span>\n<span class="hl-node">8 9</span>\nSum = 5+6+8+9 = 28 \u2714</div>'}));
     return{test:'matrix 3\u00D73, query(1,1)-(2,2) \u2192 28',steps:s};
 }
@@ -1938,13 +2016,18 @@ function genPS4(){
 function genPS5(){
     var n=5,s=[],diff=[0,0,0,0,0,0];
     s.push(SS(1,'Initialize diff = [0,0,0,0,0,0] (size n+1)',{},{a:diff}));
+    s.push(SS(3,'// For each update: add val to range [L, R]',{},{a:diff,xtra:'Apply range updates'}));
     diff[1]+=2;diff[4]-=2;
-    s.push(SS(4,'Update [1,3] +2: diff[1]+=2, diff[4]-=2',{},{a:diff.slice(),h:[1],rm:[4]}));
+    s.push(SS(4,'diff[1] += 2',{},{a:diff.slice(),h:[1]}));
+    s.push(SS(5,'diff[4] -= 2',{},{a:diff.slice(),rm:[4]}));
     diff[2]+=3;diff[5]-=3;
-    s.push(SS(5,'Update [2,4] +3: diff[2]+=3, diff[5]-=3',{},{a:diff.slice(),h:[2],rm:[5]}));
+    s.push(SS(4,'diff[2] += 3',{},{a:diff.slice(),h:[2]}));
+    s.push(SS(5,'diff[5] -= 3',{},{a:diff.slice(),rm:[5]}));
+    s.push(SS(7,'// Convert to actual values (prefix sum)',{},{a:diff.slice(),xtra:'Now apply prefix sum'}));
+    s.push(SS(8,'for i = 1 to n\u22121...',{},{a:diff.slice()}));
     var result=[diff[0]];
     for(var i=1;i<n;i++){diff[i]+=diff[i-1];result.push(diff[i]);}
-    s.push(SS(9,'Prefix sum of diff \u2192 final array',{},{a:result,d:[0,1,2,3,4],res:'['+result.join(',')+']'}));
+    s.push(SS(9,'diff[i] += diff[i-1] \u2192 final array',{},{a:result,d:[0,1,2,3,4],res:'['+result.join(',')+']'}));
     return{test:'n=5, updates [1,3]+2, [2,4]+3 \u2192 [0,2,5,5,3]',steps:s};
 }
 
@@ -1953,47 +2036,60 @@ function genBS1(){
     var a=[1,3,5,7,9,11],tgt=9,s=[],l=0,r=5;
     s.push(SS(1,'Initialize: left=0, right=5, target=9',{left:0,right:5},{a:a,p:{L:0,R:5}}));
     while(l<=r){
+        s.push(SS(2,'while(left='+l+' <= right='+r+')? YES',{},{a:a,p:{L:l,R:r}}));
         var mid=l+Math.floor((r-l)/2);
-        s.push(SS(3,'mid = '+mid+', arr['+mid+'] = '+a[mid],{mid:mid},{a:a,p:{L:l,R:r,mid:mid},mi:[mid]}));
-        if(a[mid]===tgt){s.push(SS(4,'arr['+mid+'] == target! Return '+mid+' \u2714',{result:mid},{a:a,fnd:[mid],res:'index '+mid}));break;}
-        else if(a[mid]<tgt){s.push(SS(5,'arr['+mid+']='+a[mid]+' < '+tgt+' \u2192 left = mid+1 = '+(mid+1),{left:mid+1},{a:a,p:{L:mid+1,R:r},rm:Array.from({length:mid+1},function(_,i){return i;})}));l=mid+1;}
-        else{s.push(SS(6,'arr['+mid+']='+a[mid]+' > '+tgt+' \u2192 right = mid-1 = '+(mid-1),{right:mid-1},{a:a,p:{L:l,R:mid-1},rm:Array.from({length:a.length-mid},function(_,i){return mid+i;})}));r=mid-1;}
+        s.push(SS(3,'mid = '+l+' + ('+r+'\u2212'+l+')/2 = '+mid+', arr['+mid+']='+a[mid],{mid:mid},{a:a,p:{L:l,R:r,mid:mid},mi:[mid]}));
+        if(a[mid]===tgt){s.push(SS(4,'arr['+mid+']=='+tgt+'! Return '+mid+' \u2714',{result:mid},{a:a,fnd:[mid],res:'index '+mid}));break;}
+        else if(a[mid]<tgt){s.push(SS(5,a[mid]+' < '+tgt+' \u2192 left=mid+1='+(mid+1),{left:mid+1},{a:a,p:{L:mid+1,R:r},rm:Array.from({length:mid+1},function(_,i){return i;})}));l=mid+1;}
+        else{s.push(SS(6,a[mid]+' > '+tgt+' \u2192 right=mid\u22121='+(mid-1),{right:mid-1},{a:a,p:{L:l,R:mid-1},rm:Array.from({length:a.length-mid},function(_,i){return mid+i;})}));r=mid-1;}
     }
+    if(l>r)s.push(SS(8,'left > right, target not found. Return -1',{result:-1},{a:a,res:-1}));
     return{test:'arr=[1,3,5,7,9,11], target=9 \u2192 index 4',steps:s};
 }
 
 function genBS2(){
     var a=[5,7,7,8,8,8,10],tgt=8,s=[];
-    // First occurrence
     var l=0,r=6,res=-1;
-    s.push(SS(1,'Find FIRST 8: left=0, right=6, result=-1',{left:0,right:6,result:-1},{a:a,p:{L:0,R:6}}));
+    s.push(SS(1,'// First Occurrence: save result, keep searching LEFT',{},{a:a,p:{L:0,R:6}}));
     while(l<=r){
         var mid=l+Math.floor((r-l)/2);
-        if(a[mid]===tgt){res=mid;s.push(SS(2,'mid='+mid+', arr[mid]=8 == target! result='+mid+', search LEFT (right='+(mid-1)+')',{result:mid},{a:a,p:{L:l,R:r,mid:mid},fnd:[mid]}));r=mid-1;}
-        else if(a[mid]<tgt){s.push(SS(2,'mid='+mid+', arr[mid]='+a[mid]+' < 8, go RIGHT',{},{a:a,p:{L:l,R:r,mid:mid},mi:[mid]}));l=mid+1;}
-        else{s.push(SS(2,'mid='+mid+', arr[mid]='+a[mid]+' > 8, go LEFT',{},{a:a,p:{L:l,R:r,mid:mid},mi:[mid]}));r=mid-1;}
+        if(a[mid]===tgt){res=mid;s.push(SS(2,'mid='+mid+', arr[mid]=8==target! result='+mid+', right='+(mid-1),{result:mid},{a:a,p:{L:l,R:r,mid:mid},fnd:[mid]}));r=mid-1;}
+        else if(a[mid]<tgt){s.push(SS(2,'mid='+mid+', '+a[mid]+'<8 \u2192 go RIGHT',{},{a:a,p:{L:l,R:r,mid:mid},mi:[mid]}));l=mid+1;}
+        else{s.push(SS(2,'mid='+mid+', '+a[mid]+'>8 \u2192 go LEFT',{},{a:a,p:{L:l,R:r,mid:mid},mi:[mid]}));r=mid-1;}
     }
     s.push(SS(2,'First occurrence at index '+res,{first:res},{a:a,fnd:[res],res:'first='+res}));
-    // Last occurrence
+    s.push(SS(4,'// Last Occurrence: save result, keep searching RIGHT',{},{a:a}));
     l=0;r=6;var res2=-1;
     while(l<=r){var mid=l+Math.floor((r-l)/2);if(a[mid]===tgt){res2=mid;l=mid+1;}else if(a[mid]<tgt)l=mid+1;else r=mid-1;}
-    s.push(SS(5,'Last occurrence (search RIGHT when found): index '+res2,{last:res2},{a:a,fnd:[res,res2],res:'['+res+', '+res2+']'}));
+    s.push(SS(5,'Last occurrence: index '+res2,{last:res2},{a:a,fnd:[res,res2],res:'['+res+', '+res2+']'}));
     return{test:'arr=[5,7,7,8,8,8,10], target=8 \u2192 [3,5]',steps:s};
 }
 
 function genBS3(){
     var a=[4,5,6,7,0,1,2],tgt=0,s=[],l=0,r=6;
-    s.push(SS(1,'Rotated array, target=0, left=0, right=6',{left:0,right:6},{a:a,p:{L:0,R:6}}));
+    s.push(SS(1,'while(left='+l+' <= right='+r+')',{left:0,right:6},{a:a,p:{L:0,R:6}}));
     while(l<=r){
         var mid=l+Math.floor((r-l)/2);
         s.push(SS(2,'mid='+mid+', nums[mid]='+a[mid],{mid:mid},{a:a,p:{L:l,R:r,mid:mid},mi:[mid]}));
         if(a[mid]===tgt){s.push(SS(3,'Found! nums['+mid+']='+tgt+' \u2714',{result:mid},{a:a,fnd:[mid],res:'index '+mid}));break;}
         if(a[l]<=a[mid]){
-            if(a[l]<=tgt&&tgt<a[mid]){s.push(SS(7,'Left sorted ['+a[l]+'..'+a[mid]+'], target '+tgt+' in range \u2192 go LEFT',{},{a:a,w:[l,mid],p:{L:l,R:r}}));r=mid-1;}
-            else{s.push(SS(8,'Left sorted ['+a[l]+'..'+a[mid]+'], target '+tgt+' NOT in range \u2192 go RIGHT',{},{a:a,p:{L:l,R:r},rm:Array.from({length:mid-l+1},function(_,i){return l+i;})}));l=mid+1;}
+            s.push(SS(5,'nums[left]='+a[l]+' \u2264 nums[mid]='+a[mid]+' \u2192 LEFT half sorted',{},{a:a,w:[l,mid],p:{L:l,R:r}}));
+            if(a[l]<=tgt&&tgt<a[mid]){
+                s.push(SS(6,'target '+tgt+' in ['+a[l]+','+a[mid]+')? YES',{},{a:a,w:[l,mid],p:{L:l,R:r}}));
+                s.push(SS(7,'right = mid\u22121',{},{a:a,w:[l,mid],p:{L:l,R:r}}));r=mid-1;
+            }else{
+                s.push(SS(6,'target '+tgt+' in ['+a[l]+','+a[mid]+')? No',{},{a:a,p:{L:l,R:r}}));
+                s.push(SS(8,'left = mid+1',{},{a:a,p:{L:l,R:r},rm:Array.from({length:mid-l+1},function(_,i){return l+i;})}));l=mid+1;
+            }
         }else{
-            if(a[mid]<tgt&&tgt<=a[r]){s.push(SS(11,'Right sorted ['+a[mid]+'..'+a[r]+'], target in range \u2192 go RIGHT',{},{a:a,w:[mid,r],p:{L:l,R:r}}));l=mid+1;}
-            else{s.push(SS(12,'Right sorted, target NOT in range \u2192 go LEFT',{},{a:a,p:{L:l,R:r}}));r=mid-1;}
+            s.push(SS(9,'nums[left]='+a[l]+' > nums[mid]='+a[mid]+' \u2192 RIGHT half sorted',{},{a:a,w:[mid,r],p:{L:l,R:r}}));
+            if(a[mid]<tgt&&tgt<=a[r]){
+                s.push(SS(10,'target '+tgt+' in ('+a[mid]+','+a[r]+']? YES',{},{a:a,w:[mid,r],p:{L:l,R:r}}));
+                s.push(SS(11,'left = mid+1',{},{a:a,w:[mid,r],p:{L:l,R:r}}));l=mid+1;
+            }else{
+                s.push(SS(10,'target '+tgt+' in ('+a[mid]+','+a[r]+']? No',{},{a:a,p:{L:l,R:r}}));
+                s.push(SS(12,'right = mid\u22121',{},{a:a,p:{L:l,R:r}}));r=mid-1;
+            }
         }
     }
     return{test:'nums=[4,5,6,7,0,1,2], target=0 \u2192 index 4',steps:s};
@@ -2015,60 +2111,82 @@ function genBS4(){
 function genBS5(){
     var piles=[3,6,7,11],h=8,s=[],l=1,r=11;
     function canFinish(speed){var hrs=0;for(var i=0;i<piles.length;i++)hrs+=Math.ceil(piles[i]/speed);return hrs<=h;}
-    s.push(SS(1,'Koko Bananas: min speed to finish in 8hrs. Search [1,11]',{left:1,right:11},{a:piles,xtra:'piles=[3,6,7,11], hours=8'}));
+    s.push(SS(1,'left=minAnswer=1, right=maxAnswer=11',{left:1,right:11},{a:piles,xtra:'piles=[3,6,7,11], hours=8'}));
     while(l<r){
+        s.push(SS(3,'while(left='+l+' < right='+r+')',{},{a:piles}));
         var mid=l+Math.floor((r-l)/2);
+        s.push(SS(4,'mid = '+l+' + ('+r+'\u2212'+l+')/2 = '+mid,{mid:mid},{a:piles}));
         var hrs=0;for(var i=0;i<piles.length;i++)hrs+=Math.ceil(piles[i]/mid);
         var ok=hrs<=h;
-        s.push(SS(5,'speed='+mid+': hours=\u2308'+piles.map(function(p){return p+'/'+mid;}).join('\u2309+\u2308')+'\u2309 = '+hrs+(ok?' \u2264 8 \u2714':' > 8 \u2718'),{speed:mid,hours:hrs},{a:piles,xtra:'speed='+mid+', hours='+hrs+(ok?' \u2264 8 \u2192 try smaller':' > 8 \u2192 need faster')}));
-        if(ok){r=mid;s.push(SS(6,'Feasible! right='+mid,{right:mid},{}));}
-        else{l=mid+1;s.push(SS(8,'Too slow! left='+(mid+1),{left:mid+1},{}));}
+        s.push(SS(5,'isFeasible(speed='+mid+'): hours='+hrs+(ok?' \u2264 8? YES':' > 8? No'),{speed:mid,hours:hrs},{a:piles,xtra:'speed='+mid+', hours='+hrs}));
+        if(ok){s.push(SS(6,'right = mid = '+mid,{right:mid},{}));r=mid;}
+        else{l=mid+1;s.push(SS(8,'left = mid+1 = '+l,{left:l},{}));}
     }
-    s.push(SS(10,'left=right='+l+', minimum speed = '+l+' \u2714',{result:l},{a:piles,res:'min speed = '+l}));
+    s.push(SS(10,'left==right='+l+', return '+l+' \u2714',{result:l},{a:piles,res:'min speed = '+l}));
     return{test:'piles=[3,6,7,11], h=8 \u2192 speed=4',steps:s};
 }
 
 function genBS6(){
     var mat=[[1,3,5],[7,9,11],[13,15,17]],flat=[1,3,5,7,9,11,13,15,17],tgt=3,s=[],l=0,r=8,n=3;
-    s.push(SS(2,'Treat 3\u00D73 as 1D array, left=0, right=8',{left:0,right:8},{a:flat,p:{L:0,R:8}}));
+    s.push(SS(1,'// Fully sorted: treat as 1D array',{},{a:flat,xtra:'Matrix is fully sorted row-wise'}));
+    s.push(SS(2,'left=0, right=m*n\u22121=8',{left:0,right:8},{a:flat,p:{L:0,R:8}}));
     while(l<=r){
         var mid=l+Math.floor((r-l)/2);
         var row=Math.floor(mid/n),col=mid%n;
         s.push(SS(3,'mid='+mid+' \u2192 row='+row+', col='+col+', val='+flat[mid],{mid:mid},{a:flat,p:{L:l,R:r},mi:[mid]}));
-        if(flat[mid]===tgt){s.push(SS(3,'Found '+tgt+' at index '+mid+' (row='+row+', col='+col+') \u2714',{result:mid},{a:flat,fnd:[mid],res:'row='+row+', col='+col}));break;}
-        else if(flat[mid]<tgt){l=mid+1;s.push(SS(3,flat[mid]+' < '+tgt+' \u2192 go RIGHT',{left:l},{a:flat,p:{L:l,R:r}}));}
-        else{r=mid-1;s.push(SS(3,flat[mid]+' > '+tgt+' \u2192 go LEFT',{right:r},{a:flat,p:{L:l,R:r}}));}
+        if(flat[mid]===tgt){s.push(SS(3,'Found '+tgt+' at ('+row+','+col+') \u2714',{result:mid},{a:flat,fnd:[mid],res:'row='+row+', col='+col}));break;}
+        else if(flat[mid]<tgt){l=mid+1;s.push(SS(3,flat[mid-1]+' < '+tgt+' \u2192 go RIGHT',{left:l},{a:flat,p:{L:l,R:r}}));}
+        else{r=mid-1;s.push(SS(3,flat[mid+1]+' > '+tgt+' \u2192 go LEFT',{right:r},{a:flat,p:{L:l,R:r}}));}
     }
+    s.push(SS(5,'// Row & column sorted: staircase approach',{},{html:'<div class="av-tree">Start top-right corner</div>'}));
+    s.push(SS(6,'row=0, col=n\u22121',{},{html:'<div class="av-tree">row=0, col=2, val=5</div>'}));
+    s.push(SS(7,'while(row < m && col >= 0)',{},{html:'<div class="av-tree">Staircase search loop</div>'}));
+    s.push(SS(8,'matrix[0][2]=5 == 3? No',{},{html:'<div class="av-tree">5 > 3 \u2192 col--</div>'}));
+    s.push(SS(9,'5 > 3 \u2192 row++ not needed',{},{html:'<div class="av-tree">Move left</div>'}));
+    s.push(SS(10,'col-- \u2192 col=1, matrix[0][1]=3 == 3? YES \u2714',{},{html:'<div class="av-tree">Found at (0,1) \u2714</div>'}));
     return{test:'matrix 3\u00D73 sorted, target=3 \u2192 (0,1)',steps:s};
 }
 
 // ===== MONOTONIC STACK =====
 function genMS1(){
     var a=[4,2,1,5,3],s=[],res=[-1,-1,-1,-1,-1],stk=[];
-    s.push(SS(3,'Initialize result=[-1,-1,-1,-1,-1], stack=[]',{},{a:a,stk:[]}));
+    s.push(SS(1,'int[] result = new int[n]',{},{a:a}));
+    s.push(SS(2,'Arrays.fill(result, -1)',{},{a:a,xtra:'result=[-1,-1,-1,-1,-1]'}));
+    s.push(SS(3,'Stack stack = new Stack<>()',{},{a:a,stk:[]}));
+    s.push(SS(5,'Enter for loop: i=0 to n\u22121',{},{a:a}));
     for(var i=0;i<a.length;i++){
-        s.push(SS(5,'i='+i+', arr[i]='+a[i]+'. Check stack top...',{i:i},{a:a,h:[i],stk:stk.slice()}));
+        s.push(SS(6,'while(!empty && arr[peek]<arr['+i+']='+a[i]+')?'+(stk.length&&a[stk[stk.length-1]]<a[i]?' YES':' No'),{i:i},{a:a,h:[i],stk:stk.slice()}));
         while(stk.length&&a[stk[stk.length-1]]<a[i]){
-            var idx=stk.pop();res[idx]=a[i];
-            s.push(SS(8,'arr['+idx+']='+a[idx]+' < '+a[i]+' \u2192 NGE['+idx+']='+a[i]+'. Pop!',{},{a:a,h:[i],stk:stk.slice(),stkO:true,d:[idx],xtra:'result=['+res.join(',')+']'}));
+            var idx=stk.pop();
+            s.push(SS(7,'idx = stack.pop() = '+idx,{},{a:a,h:[i],stk:stk.slice(),stkO:true}));
+            res[idx]=a[i];
+            s.push(SS(8,'result['+idx+'] = arr['+i+'] = '+a[i],{},{a:a,h:[i],stk:stk.slice(),d:[idx],xtra:'result=['+res.join(',')+']'}));
         }
         stk.push(i);
-        s.push(SS(10,'Push index '+i+' onto stack',{},{a:a,h:[i],stk:stk.slice(),stkP:true}));
+        s.push(SS(10,'stack.push('+i+')',{},{a:a,h:[i],stk:stk.slice(),stkP:true}));
     }
-    s.push(SS(10,'Done! Remaining stack elements have no NGE (-1)',{},{a:res,d:[0,1,2,3,4],res:'['+res.join(',')+']'}));
+    s.push(SS(10,'Done! Remaining \u2192 -1',{},{a:res,d:[0,1,2,3,4],res:'['+res.join(',')+']'}));
     return{test:'arr=[4,2,1,5,3] \u2192 NGE=[5,5,5,-1,-1]',steps:s};
 }
 
 function genMS2(){
     var ht=[2,1,5,6,2,3],s=[],stk=[],mx=0;
-    s.push(SS(1,'heights=[2,1,5,6,2,3], stack=[], maxArea=0',{maxArea:0},{a:ht,stk:[]}));
+    s.push(SS(1,'Stack stack = new Stack<>()',{},{a:ht,stk:[]}));
+    s.push(SS(2,'maxArea = 0',{maxArea:0},{a:ht}));
+    s.push(SS(4,'Enter for loop: i=0 to n (with sentinel)',{},{a:ht}));
     for(var i=0;i<=ht.length;i++){
         var ch=i===ht.length?0:ht[i];
         s.push(SS(5,'i='+i+', currHeight='+(i===ht.length?'0 (sentinel)':ch),{i:i},{a:ht,h:i<ht.length?[i]:[],stk:stk.slice()}));
+        if(stk.length&&ht[stk[stk.length-1]]>ch){
+            s.push(SS(6,'while(peek()='+ht[stk[stk.length-1]]+' > '+ch+') YES',{},{a:ht,stk:stk.slice()}));
+        }
         while(stk.length&&ht[stk[stk.length-1]]>ch){
-            var h=ht[stk.pop()];var w=stk.length?i-stk[stk.length-1]-1:i;var area=h*w;
-            mx=Math.max(mx,area);
-            s.push(SS(9,'Pop h='+h+', w='+w+', area='+area+'. maxArea='+mx,{maxArea:mx},{a:ht,stk:stk.slice(),stkO:true,xtra:'height='+h+' \u00D7 width='+w+' = '+area}));
+            var h=ht[stk.pop()];
+            s.push(SS(7,'height = heights[pop()] = '+h,{},{a:ht,stk:stk.slice(),stkO:true}));
+            var w=stk.length?i-stk[stk.length-1]-1:i;
+            s.push(SS(8,'width = '+(stk.length?i+'\u2212'+stk[stk.length-1]+'\u22121':'i')+' = '+w,{},{a:ht,stk:stk.slice()}));
+            var area=h*w;mx=Math.max(mx,area);
+            s.push(SS(9,'area='+h+'\u00D7'+w+'='+area+'. maxArea='+mx,{maxArea:mx},{a:ht,stk:stk.slice(),xtra:h+'\u00D7'+w+'='+area}));
         }
         if(i<ht.length){stk.push(i);s.push(SS(11,'Push index '+i,{},{a:ht,stk:stk.slice(),stkP:true}));}
     }
@@ -2078,16 +2196,22 @@ function genMS2(){
 
 function genMS3(){
     var ht=[4,2,0,3,2,5],s=[],l=0,r=5,lm=0,rm=0,w=0;
-    s.push(SS(1,'height=[4,2,0,3,2,5], two pointers',{left:0,right:5,water:0},{a:ht,p:{L:0,R:5}}));
+    s.push(SS(1,'left=0, right='+r,{left:0,right:5},{a:ht,p:{L:0,R:5}}));
+    s.push(SS(2,'leftMax=0, rightMax=0, water=0',{leftMax:0,rightMax:0,water:0},{a:ht}));
     while(l<r){
+        s.push(SS(4,'while(left='+l+' < right='+r+')',{},{a:ht,p:{L:l,R:r}}));
         if(ht[l]<ht[r]){
+            s.push(SS(5,'height['+l+']='+ht[l]+' < height['+r+']='+ht[r]+' \u2192 left side',{},{a:ht,p:{L:l,R:r}}));
             if(ht[l]>=lm){lm=ht[l];s.push(SS(6,'height['+l+']='+ht[l]+' \u2265 leftMax \u2192 leftMax='+lm,{leftMax:lm},{a:ht,p:{L:l,R:r},h:[l]}));}
-            else{w+=lm-ht[l];s.push(SS(7,'water += leftMax\u2212height['+l+'] = '+lm+'\u2212'+ht[l]+' = '+(lm-ht[l])+', total='+w,{water:w},{a:ht,p:{L:l,R:r},h:[l]}));}
+            else{w+=lm-ht[l];s.push(SS(7,'water += '+lm+'\u2212'+ht[l]+'='+(lm-ht[l])+', total='+w,{water:w},{a:ht,p:{L:l,R:r},h:[l]}));}
             l++;
+            s.push(SS(8,'left++ \u2192 left='+l,{left:l},{a:ht,p:{L:l,R:r}}));
         }else{
+            s.push(SS(9,'height['+l+']='+ht[l]+' \u2265 height['+r+']='+ht[r]+' \u2192 right side',{},{a:ht,p:{L:l,R:r}}));
             if(ht[r]>=rm){rm=ht[r];s.push(SS(10,'height['+r+']='+ht[r]+' \u2265 rightMax \u2192 rightMax='+rm,{rightMax:rm},{a:ht,p:{L:l,R:r},h:[r]}));}
-            else{w+=rm-ht[r];s.push(SS(11,'water += rightMax\u2212height['+r+'] = '+rm+'\u2212'+ht[r]+' = '+(rm-ht[r])+', total='+w,{water:w},{a:ht,p:{L:l,R:r},h:[r]}));}
+            else{w+=rm-ht[r];s.push(SS(11,'water += '+rm+'\u2212'+ht[r]+'='+(rm-ht[r])+', total='+w,{water:w},{a:ht,p:{L:l,R:r},h:[r]}));}
             r--;
+            s.push(SS(12,'right-- \u2192 right='+r,{right:r},{a:ht,p:{L:l,R:r}}));
         }
     }
     s.push(SS(14,'Total water = '+w+' \u2714',{result:w},{a:ht,res:w}));
@@ -2096,36 +2220,50 @@ function genMS3(){
 
 function genMS4(){
     var num='1432219',k=3,s=[],stk=[],kk=3;
-    s.push(SS(2,'num="1432219", k=3, stack=[]',{k:kk},{a:num.split(''),stk:[]}));
+    s.push(SS(1,'// Remove K Digits (smallest number)',{},{a:num.split(''),xtra:'Goal: remove 3 digits for smallest result'}));
+    s.push(SS(2,'Stack stack = new Stack<>()',{k:kk},{a:num.split(''),stk:[]}));
     for(var i=0;i<num.length;i++){
         var d=num[i];
-        s.push(SS(3,'digit=\''+d+'\'. Check stack top...',{i:i},{a:num.split(''),h:[i],stk:stk.slice()}));
+        s.push(SS(3,'digit=\''+d+'\'',{i:i},{a:num.split(''),h:[i],stk:stk.slice()}));
+        if(stk.length&&kk>0&&stk[stk.length-1]>d){
+            s.push(SS(4,'while(k>0 && peek()>\''+d+'\') YES',{},{a:num.split(''),h:[i],stk:stk.slice()}));
+        }
         while(stk.length&&kk>0&&stk[stk.length-1]>d){
             var popped=stk.pop();kk--;
-            s.push(SS(5,'stack top \''+popped+'\' > \''+d+'\' \u2192 pop! k='+kk,{k:kk},{a:num.split(''),h:[i],stk:stk.slice(),stkO:true}));
+            s.push(SS(5,'pop \''+popped+'\', k-- \u2192 k='+kk,{k:kk},{a:num.split(''),h:[i],stk:stk.slice(),stkO:true}));
         }
         stk.push(d);
         s.push(SS(7,'Push \''+d+'\'. stack=['+stk.join(',')+']',{},{a:num.split(''),h:[i],stk:stk.slice(),stkP:true}));
     }
     while(kk>0){stk.pop();kk--;}
-    s.push(SS(9,'Remove remaining k elements. Result: "'+stk.join('')+'" \u2714',{result:'"'+stk.join('')+'"'},{a:stk,d:Array.from({length:stk.length},function(_,i){return i;}),res:'"'+stk.join('')+'"'}));
+    s.push(SS(9,'while(k>0) pop remaining',{},{a:stk.slice(),stk:stk.slice()}));
+    s.push(SS(10,'Result: "'+stk.join('')+'" \u2714',{result:'"'+stk.join('')+'"'},{a:stk,d:Array.from({length:stk.length},function(_,i){return i;}),res:'"'+stk.join('')+'"'}));
     return{test:'num="1432219", k=3 \u2192 "1219"',steps:s};
 }
 
 function genMS5(){
     var str='({[]})',a=str.split(''),s=[],stk=[];
     var map={'(':')','{':'}','[':']'};
-    s.push(SS(1,'Validate "({[]})", stack=[]',{},{a:a,stk:[]}));
+    var lineMap={'(':3,'{':4,'[':5};
+    s.push(SS(1,'// Valid Parentheses',{},{a:a,xtra:'Check if brackets are balanced'}));
+    s.push(SS(2,'Enter for loop: each char in s',{},{a:a,stk:[]}));
     for(var i=0;i<a.length;i++){
         var c=a[i];
-        if(map[c]){stk.push(map[c]);s.push(SS(3,'\''+c+'\' is opening \u2192 push \''+map[c]+'\' onto stack',{},{a:a,h:[i],stk:stk.slice(),stkP:true}));}
-        else{
+        if(map[c]){
+            var ln=lineMap[c]||3;
+            stk.push(map[c]);
+            s.push(SS(ln,'\''+c+'\' is opening \u2192 push \''+map[c]+'\'',{},{a:a,h:[i],stk:stk.slice(),stkP:true}));
+        }else{
             var top=stk.length?stk[stk.length-1]:'';
-            if(stk.length&&top===c){stk.pop();s.push(SS(6,'\''+c+'\' matches stack top \''+top+'\' \u2192 pop! \u2714',{},{a:a,h:[i],stk:stk.slice(),stkO:true}));}
-            else{s.push(SS(7,'Mismatch! \u2718',{},{a:a,h:[i],stk:stk.slice()}));}
+            if(stk.length&&top===c){
+                stk.pop();
+                s.push(SS(6,'\''+c+'\' matches stack top \u2192 pop! \u2714',{},{a:a,h:[i],stk:stk.slice(),stkO:true}));
+            }else{
+                s.push(SS(7,'Mismatch! return false \u2718',{},{a:a,h:[i],stk:stk.slice()}));
+            }
         }
     }
-    s.push(SS(9,'Stack empty \u2192 valid! Return true \u2714',{result:'true'},{a:a,d:[0,1,2,3,4,5],res:'true'}));
+    s.push(SS(9,'stack.isEmpty()? YES \u2192 return true \u2714',{result:'true'},{a:a,d:[0,1,2,3,4,5],res:'true'}));
     return{test:'s="({[]})" \u2192 true',steps:s};
 }
 
@@ -2133,22 +2271,32 @@ function genMS5(){
 function genGR1(){
     var iv=[[1,2],[2,3],[1,3],[3,4]],sorted=[[1,2],[2,3],[1,3],[3,4]].sort(function(a,b){return a[1]-b[1];}),s=[],cnt=0,lastEnd=-Infinity;
     var labels=sorted.map(function(x){return'['+x[0]+','+x[1]+']';});
-    s.push(SS(1,'Sort by END time: '+labels.join(', '),{count:0},{html:'<div class="av-tree">Sorted intervals:\n'+labels.join(' \u2192 ')+'</div>'}));
+    s.push(SS(1,'Sort by END time: '+labels.join(', '),{},{html:'<div class="av-tree">Sorted intervals:\n'+labels.join(' \u2192 ')+'</div>'}));
+    s.push(SS(2,'count=0, lastEnd=\u2212\u221E',{count:0,lastEnd:'\u2212\u221E'},{html:'<div class="av-tree">Initialize tracking variables</div>'}));
+    s.push(SS(4,'Enter for loop: each interval',{},{html:'<div class="av-tree">Process intervals in sorted order</div>'}));
     for(var i=0;i<sorted.length;i++){
         var iv=sorted[i];
-        if(iv[0]>=lastEnd){cnt++;lastEnd=iv[1];s.push(SS(5,labels[i]+': start '+iv[0]+' \u2265 lastEnd '+(i?sorted[i-1][1]:'-\u221E')+' \u2192 TAKE! count='+cnt,{count:cnt,lastEnd:lastEnd},{html:'<div class="av-tree">'+labels.map(function(l,j){return j<i?'<span class="done-node">'+l+'</span>':j===i?'<span class="hl-node">'+l+' \u2190 TAKE</span>':l;}).join('  ')+'</div>'}));}
-        else{s.push(SS(4,labels[i]+': start '+iv[0]+' < lastEnd '+lastEnd+' \u2192 SKIP (overlaps)',{},{html:'<div class="av-tree">'+labels.map(function(l,j){return j<i?'<span class="done-node">'+l+'</span>':j===i?'<span style="color:#f38ba8">'+l+' \u2190 SKIP</span>':l;}).join('  ')+'</div>'}));}
+        s.push(SS(5,labels[i]+': start='+iv[0]+' \u2265 lastEnd='+(lastEnd===-Infinity?'\u2212\u221E':lastEnd)+'? '+(iv[0]>=lastEnd?'YES':'No'),{},{html:'<div class="av-tree">'+labels.map(function(l,j){return j<i?'<span class="done-node">'+l+'</span>':j===i?'<span class="hl-node">'+l+'</span>':l;}).join('  ')+'</div>'}));
+        if(iv[0]>=lastEnd){
+            cnt++;
+            s.push(SS(6,'count++ \u2192 count='+cnt,{count:cnt},{html:'<div class="av-tree">'+labels.map(function(l,j){return j<i?'<span class="done-node">'+l+'</span>':j===i?'<span class="hl-node">'+l+' \u2190 TAKE</span>':l;}).join('  ')+'</div>'}));
+            lastEnd=iv[1];
+            s.push(SS(7,'lastEnd = '+lastEnd,{lastEnd:lastEnd},{}));
+        }
     }
-    s.push(SS(9,'Max non-overlapping = '+cnt+', removed = '+(sorted.length-cnt)+' \u2714',{result:sorted.length-cnt},{res:'remove '+(sorted.length-cnt)}));
+    s.push(SS(9,'Max non-overlapping='+cnt+', removed='+(sorted.length-cnt)+' \u2714',{result:sorted.length-cnt},{res:'remove '+(sorted.length-cnt)}));
     return{test:'intervals=[[1,2],[2,3],[1,3],[3,4]] \u2192 remove 1',steps:s};
 }
 
 function genGR2(){
     var starts=[0,5,15],ends=[10,20,30],s=[],rooms=0,mx=0,si=0,ei=0;
-    s.push(SS(1,'starts=[0,5,15], ends=[10,20,30]',{rooms:0,maxRooms:0},{html:'<div class="av-tree">Meetings: [0,30] [5,10] [15,20]\nTimeline: |--0========30--|\n          |--5==10--|  |--15==20--|</div>'}));
+    s.push(SS(1,'Sort starts=[0,5,15]',{},{html:'<div class="av-tree">Sorted start times</div>'}));
+    s.push(SS(2,'Sort ends=[10,20,30]',{},{html:'<div class="av-tree">Sorted end times</div>'}));
+    s.push(SS(3,'rooms=0, maxRooms=0, i=0, j=0',{rooms:0,maxRooms:0},{html:'<div class="av-tree">Meetings: [0,30] [5,10] [15,20]</div>'}));
+    s.push(SS(5,'while(i < n)',{},{}));
     while(si<3){
-        if(starts[si]<ends[ei]){rooms++;mx=Math.max(mx,rooms);s.push(SS(6,'start['+si+']='+starts[si]+' < end['+ei+']='+ends[ei]+' \u2192 new meeting! rooms='+rooms+', max='+mx,{rooms:rooms,maxRooms:mx},{}));si++;}
-        else{rooms--;s.push(SS(7,'start['+si+']='+starts[si]+' \u2265 end['+ei+']='+ends[ei]+' \u2192 meeting ended. rooms='+rooms,{rooms:rooms},{}));ei++;}
+        if(starts[si]<ends[ei]){rooms++;mx=Math.max(mx,rooms);s.push(SS(6,'starts['+si+']='+starts[si]+' < ends['+ei+']='+ends[ei]+' \u2192 rooms++, rooms='+rooms+', max='+mx,{rooms:rooms,maxRooms:mx},{}));si++;}
+        else{rooms--;s.push(SS(7,'starts['+si+']='+starts[si]+' \u2265 ends['+ei+']='+ends[ei]+' \u2192 rooms--, rooms='+rooms,{rooms:rooms},{}));ei++;}
     }
     s.push(SS(8,'maxRooms = '+mx+' \u2714',{result:mx},{res:mx}));
     return{test:'meetings=[[0,30],[5,10],[15,20]] \u2192 2 rooms',steps:s};
@@ -2156,11 +2304,14 @@ function genGR2(){
 
 function genGR3(){
     var a=[2,3,1,1,4],s=[],mr=0;
-    s.push(SS(2,'nums=[2,3,1,1,4], maxReach=0',{maxReach:0},{a:a,p:{i:0}}));
+    s.push(SS(1,'// Can Jump?',{},{a:a,xtra:'Check if we can reach the end'}));
+    s.push(SS(2,'maxReach=0',{maxReach:0},{a:a,p:{i:0}}));
+    s.push(SS(3,'Enter for loop: i=0 to n\u22121',{},{a:a}));
     for(var i=0;i<a.length;i++){
-        if(i>mr){s.push(SS(4,'i='+i+' > maxReach='+mr+' \u2192 stuck! return false',{},{a:a,h:[i]}));break;}
+        s.push(SS(4,'i='+i+' > maxReach='+mr+'? '+(i>mr?'YES \u2192 stuck!':'No'),{},{a:a,h:[i]}));
+        if(i>mr)break;
         var omr=mr;mr=Math.max(mr,i+a[i]);
-        s.push(SS(5,'i='+i+': maxReach=max('+omr+','+i+'+'+a[i]+')='+mr,{i:i,maxReach:mr},{a:a,h:[i],w:[0,Math.min(mr,a.length-1)],p:{i:i}}));
+        s.push(SS(5,'maxReach=max('+omr+','+i+'+'+a[i]+')='+mr,{i:i,maxReach:mr},{a:a,h:[i],w:[0,Math.min(mr,a.length-1)],p:{i:i}}));
     }
     s.push(SS(7,'Reached end! Return true \u2714',{result:'true'},{a:a,d:[0,1,2,3,4],res:'true'}));
     return{test:'nums=[2,3,1,1,4] \u2192 can jump? true',steps:s};
@@ -2168,10 +2319,14 @@ function genGR3(){
 
 function genGR4(){
     var a=[7,1,5,3,6,4],s=[],minP=Infinity,maxPr=0;
-    s.push(SS(2,'prices=[7,1,5,3,6,4], minPrice=\u221E, maxProfit=0',{minPrice:'\u221E',maxProfit:0},{a:a}));
+    s.push(SS(1,'// One Transaction: track min price',{},{a:a,xtra:'Buy once, sell once'}));
+    s.push(SS(2,'minPrice=\u221E, maxProfit=0',{minPrice:'\u221E',maxProfit:0},{a:a}));
+    s.push(SS(3,'Enter for loop: each price',{},{a:a}));
     for(var i=0;i<a.length;i++){
-        minP=Math.min(minP,a[i]);maxPr=Math.max(maxPr,a[i]-minP);
-        s.push(SS(5,'day '+i+' price='+a[i]+': minPrice='+minP+', profit='+a[i]+'\u2212'+minP+'='+(a[i]-minP)+', maxProfit='+maxPr,{minPrice:minP,maxProfit:maxPr},{a:a,h:[i]}));
+        var oldMin=minP;minP=Math.min(minP,a[i]);
+        s.push(SS(4,'minPrice = min('+(oldMin===Infinity?'\u221E':oldMin)+', '+a[i]+') = '+minP,{minPrice:minP},{a:a,h:[i]}));
+        maxPr=Math.max(maxPr,a[i]-minP);
+        s.push(SS(5,'maxProfit = max('+maxPr+', '+a[i]+'\u2212'+minP+') = '+maxPr,{maxProfit:maxPr},{a:a,h:[i]}));
     }
     s.push(SS(6,'Buy at 1, sell at 6 \u2192 maxProfit = '+maxPr+' \u2714',{result:maxPr},{a:a,d:[1,4],res:maxPr}));
     return{test:'prices=[7,1,5,3,6,4] \u2192 profit=5',steps:s};
@@ -2179,31 +2334,40 @@ function genGR4(){
 
 function genGR5(){
     var gas=[1,2,3,4,5],cost=[3,4,5,1,2],s=[],tg=0,cg=0,si=0;
-    s.push(SS(1,'gas=[1,2,3,4,5], cost=[3,4,5,1,2]',{totalGas:0,currentGas:0,start:0},{a:gas,xtra:'cost=[3,4,5,1,2]'}));
+    s.push(SS(1,'totalGas=0, currentGas=0, startIndex=0',{totalGas:0,currentGas:0,start:0},{a:gas,xtra:'cost=[3,4,5,1,2]'}));
+    s.push(SS(2,'Enter for loop: i=0 to n\u22121',{},{a:gas}));
     for(var i=0;i<5;i++){
-        var diff=gas[i]-cost[i];tg+=diff;cg+=diff;
+        var diff=gas[i]-cost[i];
+        s.push(SS(3,'diff = gas['+i+']\u2212cost['+i+'] = '+gas[i]+'\u2212'+cost[i]+' = '+diff,{},{a:gas,h:[i]}));
+        tg+=diff;
+        s.push(SS(4,'totalGas += '+diff+' \u2192 totalGas='+tg,{totalGas:tg},{a:gas,h:[i]}));
+        cg+=diff;
+        s.push(SS(5,'currentGas += '+diff+' \u2192 currentGas='+cg,{currentGas:cg},{a:gas,h:[i],w:[si,i]}));
         if(cg<0){
-            s.push(SS(6,'i='+i+': gas='+gas[i]+'\u2212cost='+cost[i]+'='+diff+', currentGas='+cg+' < 0 \u2192 reset start='+(i+1),{start:i+1,currentGas:0,totalGas:tg},{a:gas,h:[i],rm:Array.from({length:i+1},function(_,j){return j;})}));
+            s.push(SS(6,'currentGas='+cg+' < 0 \u2192 reset start='+(i+1)+', currentGas=0',{start:i+1,currentGas:0},{a:gas,h:[i],rm:Array.from({length:i+1},function(_,j){return j;})}));
             si=i+1;cg=0;
-        }else{
-            s.push(SS(5,'i='+i+': gas='+gas[i]+'\u2212cost='+cost[i]+'='+diff+', currentGas='+cg+', totalGas='+tg,{currentGas:cg,totalGas:tg},{a:gas,h:[i],w:[si,i]}));
         }
     }
-    s.push(SS(8,'totalGas='+tg+' \u2265 0 \u2192 return start='+si+' \u2714',{result:si},{a:gas,fnd:[si],res:'start='+si}));
+    s.push(SS(8,'totalGas='+tg+' \u2265 0? YES \u2192 return start='+si+' \u2714',{result:si},{a:gas,fnd:[si],res:'start='+si}));
     return{test:'gas=[1,2,3,4,5], cost=[3,4,5,1,2] \u2192 start=3',steps:s};
 }
 
 function genGR6(){
     var str='abcabdef',a=str.split(''),s=[],last={};
+    s.push(SS(1,'int[] lastIndex = new int[26]',{},{a:a}));
+    s.push(SS(2,'for each char, record last index',{},{a:a}));
     for(var i=0;i<a.length;i++)last[a[i]]=i;
-    s.push(SS(3,'Build lastIndex map for "'+str+'"',{},{a:a,map:last}));
+    s.push(SS(3,'lastIndex built for "'+str+'"',{},{a:a,map:last}));
+    s.push(SS(5,'result = new ArrayList<>()',{},{a:a}));
     var start=0,end=0,result=[];
+    s.push(SS(6,'start=0, end=0',{start:0,end:0},{a:a}));
+    s.push(SS(7,'Enter for loop: i=0 to n\u22121',{},{a:a}));
     for(var i=0;i<a.length;i++){
         end=Math.max(end,last[a[i]]);
-        s.push(SS(8,'i='+i+' (\''+a[i]+'\'): last[\''+a[i]+'\']='+last[a[i]]+', end='+end,{end:end},{a:a,h:[i],w:[start,end],p:{start:start,end:end}}));
+        s.push(SS(8,'i='+i+' (\''+a[i]+'\'): end=max('+end+',last[\''+a[i]+'\']='+last[a[i]]+')='+end,{end:end},{a:a,h:[i],w:[start,end],p:{start:start,end:end}}));
         if(i===end){
             result.push(end-start+1);
-            s.push(SS(9,'i=end='+end+' \u2192 CUT! partition size='+(end-start+1),{},{a:a,d:Array.from({length:end-start+1},function(_,j){return start+j;}),xtra:'partitions so far: ['+result.join(',')+']'}));
+            s.push(SS(9,'i==end='+end+' \u2192 CUT! size='+(end-start+1),{},{a:a,d:Array.from({length:end-start+1},function(_,j){return start+j;}),xtra:'partitions: ['+result.join(',')+']'}));
             start=i+1;
         }
     }
@@ -2220,9 +2384,11 @@ function genRC1(){
     s.push(SS(2,'  Base case! Add [] to result',{},{html:'<div class="av-tree">index=2 == length \u2192 Add <span class="done-node">[]</span> to result\nresult = [ [] ]</div>'}));
     s.push(SS(6,'  INCLUDE 2 \u2192 subsets(index=2, current=[2])',{index:2,current:'[2]'},{html:'<div class="av-tree">Back to subsets(1, [])\nInclude 2: subsets(2, <span class="hl-node">[2]</span>)</div>'}));
     s.push(SS(2,'  Base case! Add [2] to result',{},{html:'<div class="av-tree">Add <span class="done-node">[2]</span> to result\nresult = [ [], [2] ]</div>'}));
-    s.push(SS(5,'INCLUDE 1 \u2192 subsets(index=1, current=[1])',{index:1,current:'[1]'},{html:'<div class="av-tree">Back to subsets(0, [])\nInclude 1: subsets(1, <span class="hl-node">[1]</span>)</div>'}));
+    s.push(SS(5,'current.add(nums[0]=1) \u2192 current=[1]',{current:'[1]'},{html:'<div class="av-tree">Back to subsets(0, [])\ncurrent.add(1) \u2192 current=[1]</div>'}));
+    s.push(SS(6,'INCLUDE 1: subsets(index=1, current=[1])',{index:1},{html:'<div class="av-tree">Include 1: subsets(1, <span class="hl-node">[1]</span>)</div>'}));
     s.push(SS(4,'  EXCLUDE 2 \u2192 Base case! Add [1]',{},{html:'<div class="av-tree">subsets(1, [1]) \u2192 Exclude 2 \u2192 Add <span class="done-node">[1]</span>\nresult = [ [], [2], [1] ]</div>'}));
     s.push(SS(6,'  INCLUDE 2 \u2192 Base case! Add [1,2]',{},{html:'<div class="av-tree">subsets(1, [1]) \u2192 Include 2 \u2192 Add <span class="done-node">[1,2]</span>\nresult = [ [], [2], [1], [1,2] ]</div>'}));
+    s.push(SS(7,'current.remove(last) \u2192 Backtrack',{},{html:'<div class="av-tree">Backtrack: undo additions</div>'}));
     s.push(SS(8,'All paths explored. Result: [[], [2], [1], [1,2]] \u2714',{result:'4 subsets'},{html:'<div class="av-tree"><span class="done-node">Complete recursion tree:</span>\n        subsets(0,[])\n       /            \\\n  Excl 1           Incl 1\n subsets(1,[])    subsets(1,[1])\n  /      \\        /       \\\nExcl 2  Incl 2  Excl 2  Incl 2\n <span class="done-node">[]</span>     <span class="done-node">[2]</span>    <span class="done-node">[1]</span>    <span class="done-node">[1,2]</span></div>'}));
     return{test:'nums=[1,2] \u2192 [[], [2], [1], [1,2]]',steps:s};
 }
@@ -2230,7 +2396,10 @@ function genRC1(){
 function genRC2(){
     var s=[];
     s.push(SS(1,'permute([1,2,3], current=[], visited=[F,F,F])',{},{html:'<div class="av-tree">Generate all orderings of [1,2,3]\nTry each unused element at each position</div>'}));
-    s.push(SS(6,'Pick 1 \u2192 current=[1], visited=[T,F,F]',{current:'[1]'},{html:'<div class="av-tree">Position 0: try <span class="hl-node">1</span>\ncurrent=[1], visited=[T,F,F]</div>'}));
+    s.push(SS(4,'for i=0 to n\u22121',{},{html:'<div class="av-tree">Loop through all elements</div>'}));
+    s.push(SS(5,'visited[0]=false \u2192 not skipped',{},{html:'<div class="av-tree">Check: is element 1 already used? No</div>'}));
+    s.push(SS(6,'visited[0]=true, current.add(1) \u2192 [1]',{current:'[1]'},{html:'<div class="av-tree">Position 0: try <span class="hl-node">1</span>\ncurrent=[1], visited=[T,F,F]</div>'}));
+    s.push(SS(7,'permute(current=[1], visited=[T,F,F])',{},{html:'<div class="av-tree">Recursive call with current=[1]</div>'}));
     s.push(SS(6,'  Pick 2 \u2192 current=[1,2], visited=[T,T,F]',{current:'[1,2]'},{html:'<div class="av-tree">Position 1: try <span class="hl-node">2</span>\ncurrent=[1,2], visited=[T,T,F]</div>'}));
     s.push(SS(2,'    Pick 3 \u2192 current=[1,2,3] \u2192 Add! \u2714',{},{html:'<div class="av-tree">Position 2: try <span class="hl-node">3</span>\ncurrent=[1,2,3] \u2192 <span class="done-node">ADD [1,2,3]</span></div>'}));
     s.push(SS(8,'  Backtrack: remove 3, unvisit. Try 3 at pos 1...',{current:'[1]'},{html:'<div class="av-tree">Backtrack \u2192 current=[1]\nPosition 1: skip 1(used), skip 2(done), try <span class="hl-node">3</span></div>'}));
@@ -2244,21 +2413,28 @@ function genRC2(){
 function genRC3(){
     var s=[];
     s.push(SS(1,'combine(n=4, k=2, start=1, current=[])',{},{html:'<div class="av-tree">Choose 2 from {1,2,3,4}\nKey: always move FORWARD (i+1)</div>'}));
-    s.push(SS(5,'i=1: current=[1], recurse with start=2',{current:'[1]'},{html:'<div class="av-tree">current=[<span class="hl-node">1</span>]\n\u251C i=2: [1,<span class="done-node">2</span>] \u2714 Add!\n\u251C i=3: [1,<span class="done-node">3</span>] \u2714 Add!\n\u2514 i=4: [1,<span class="done-node">4</span>] \u2714 Add!</div>'}));
-    s.push(SS(5,'i=2: current=[2], recurse with start=3',{current:'[2]'},{html:'<div class="av-tree">current=[<span class="hl-node">2</span>]\n\u251C i=3: [2,<span class="done-node">3</span>] \u2714 Add!\n\u2514 i=4: [2,<span class="done-node">4</span>] \u2714 Add!</div>'}));
-    s.push(SS(5,'i=3: current=[3], recurse with start=4',{current:'[3]'},{html:'<div class="av-tree">current=[<span class="hl-node">3</span>]\n\u2514 i=4: [3,<span class="done-node">4</span>] \u2714 Add!</div>'}));
-    s.push(SS(5,'i=4: current=[4], but need k=2 and start=5>4 \u2192 no more',{},{html:'<div class="av-tree">current=[4], no elements left to pair with</div>'}));
+    s.push(SS(2,'current.size()==k? 0==2? No \u2192 continue',{},{html:'<div class="av-tree">Base case check: not enough elements yet</div>'}));
+    s.push(SS(4,'for i=start(1) to n(4)',{},{html:'<div class="av-tree">Try each element from start position</div>'}));
+    s.push(SS(5,'current.add(1)',{current:'[1]'},{html:'<div class="av-tree">current=[<span class="hl-node">1</span>]</div>'}));
+    s.push(SS(6,'combine(4, 2, i+1=2, [1])',{},{html:'<div class="av-tree">Recurse: [1,<span class="done-node">2</span>] \u2714 [1,<span class="done-node">3</span>] \u2714 [1,<span class="done-node">4</span>] \u2714</div>'}));
+    s.push(SS(7,'current.remove(last) \u2192 Backtrack',{},{html:'<div class="av-tree">Undo: remove 1 from current</div>'}));
+    s.push(SS(5,'current.add(2)',{current:'[2]'},{html:'<div class="av-tree">current=[<span class="hl-node">2</span>]\n\u251C [2,<span class="done-node">3</span>] \u2714\n\u2514 [2,<span class="done-node">4</span>] \u2714</div>'}));
+    s.push(SS(5,'current.add(3)',{current:'[3]'},{html:'<div class="av-tree">current=[<span class="hl-node">3</span>]\n\u2514 [3,<span class="done-node">4</span>] \u2714</div>'}));
     s.push(SS(9,'Result: [[1,2],[1,3],[1,4],[2,3],[2,4],[3,4]] \u2714',{result:'C(4,2)=6'},{html:'<div class="av-tree"><span class="done-node">All combinations:</span>\n[1,2] [1,3] [1,4]\n[2,3] [2,4] [3,4]</div>'}));
     return{test:'n=4, k=2 \u2192 6 combinations',steps:s};
 }
 
 function genRC4(){
     var s=[];
-    s.push(SS(1,'Generate valid parentheses, n=2',{},{html:'<div class="av-tree">Build string char by char\nConstraints: open \u2264 n, close \u2264 open</div>'}));
-    s.push(SS(6,'Choose "(": state="(", open=1, close=0',{},{html:'<div class="av-tree">  ""\n  \u2514 "<span class="hl-node">(</span>" open=1, close=0</div>'}));
-    s.push(SS(6,'Choose "(": state="((", open=2, close=0',{},{html:'<div class="av-tree">  "("\n  \u2514 "((<span class="hl-node">(</span>" open=2=n, can only close now</div>'}));
-    s.push(SS(6,'Choose ")": state="(()", then ")": "(())" \u2714',{},{html:'<div class="av-tree">"((" \u2192 "(()" \u2192 <span class="done-node">"(())"</span> \u2714</div>'}));
-    s.push(SS(8,'Backtrack to "(", try ")": state="()"',{},{html:'<div class="av-tree">"("\n\u251C "((" \u2192 "(())" \u2714\n\u2514 "(<span class="hl-node">)</span>" open=1, close=1</div>'}));
+    s.push(SS(1,'backtrack(state="", choices)',{},{html:'<div class="av-tree">Build string char by char\nConstraints: open \u2264 n, close \u2264 open</div>'}));
+    s.push(SS(2,'isSolution? No (len < 2*n)',{},{html:'<div class="av-tree">Not a complete solution yet</div>'}));
+    s.push(SS(4,'for each choice: "(" or ")"',{},{html:'<div class="av-tree">Try adding ( or )</div>'}));
+    s.push(SS(5,'isValid("(")? YES (open<n)',{},{html:'<div class="av-tree">Can add ( if open count < n</div>'}));
+    s.push(SS(6,'makeChoice: state="("',{},{html:'<div class="av-tree">"<span class="hl-node">(</span>" open=1, close=0</div>'}));
+    s.push(SS(7,'backtrack(state="(")',{},{html:'<div class="av-tree">Explore deeper</div>'}));
+    s.push(SS(6,'Choose "(": state="(("',{},{html:'<div class="av-tree">"((<span class="hl-node">(</span>" open=2=n, can only close</div>'}));
+    s.push(SS(6,'Close twice: "(())" \u2714',{},{html:'<div class="av-tree">"((" \u2192 "(()" \u2192 <span class="done-node">"(())"</span> \u2714</div>'}));
+    s.push(SS(8,'undoChoice \u2192 Backtrack to "(", try ")"',{},{html:'<div class="av-tree">"("\n\u251C "((" \u2192 "(())" \u2714\n\u2514 "(<span class="hl-node">)</span>" open=1, close=1</div>'}));
     s.push(SS(6,'Choose "(": "()(" then ")": "()()" \u2714',{},{html:'<div class="av-tree">"()" \u2192 "()(" \u2192 <span class="done-node">"()()"</span> \u2714</div>'}));
     s.push(SS(2,'All valid: ["(())", "()()"] \u2714',{result:2},{html:'<div class="av-tree"><span class="done-node">Results: "(())", "()()"</span>\nBacktracking explored all valid paths!</div>'}));
     return{test:'Generate parentheses n=2 \u2192 "(())", "()()"',steps:s};
@@ -2266,9 +2442,11 @@ function genRC4(){
 
 function genRC5(){
     var s=[];
-    s.push(SS(1,'mergeSort([5,2,4,1,3], 0, 4)',{},{a:[5,2,4,1,3]}));
-    s.push(SS(4,'Split: [5,2,4,1,3] \u2192 [5,2] and [4,1,3]',{},{html:'<div class="av-tree">[5, 2, 4, 1, 3]\n      /         \\\n  [5, 2]      [4, 1, 3]</div>'}));
-    s.push(SS(4,'Split: [5,2]\u2192[5],[2] and [4,1,3]\u2192[4],[1,3]\u2192[1],[3]',{},{html:'<div class="av-tree">       [5,2,4,1,3]\n       /         \\\n    [5,2]      [4,1,3]\n    / \\        /    \\\n  [5] [2]    [4]  [1,3]\n                  / \\\n                [1] [3]</div>'}));
+    s.push(SS(1,'mergeSort([5,2,4,1,3], left=0, right=4)',{},{a:[5,2,4,1,3]}));
+    s.push(SS(2,'left=0 >= right=4? No \u2192 continue',{},{html:'<div class="av-tree">Base case check: array has more than 1 element</div>'}));
+    s.push(SS(3,'mid = 0 + (4\u22120)/2 = 2',{},{html:'<div class="av-tree">Calculate midpoint = 2</div>'}));
+    s.push(SS(4,'mergeSort(arr, left=0, mid=2) \u2192 left half',{},{html:'<div class="av-tree">[5, 2, 4, 1, 3]\n      /         \\\n  [5, 2]      [4, 1, 3]</div>'}));
+    s.push(SS(5,'mergeSort(arr, mid+1=3, right=4) \u2192 right half',{},{html:'<div class="av-tree">       [5,2,4,1,3]\n       /         \\\n    [5,2]      [4,1,3]\n    / \\        /    \\\n  [5] [2]    [4]  [1,3]\n                  / \\\n                [1] [3]</div>'}));
     s.push(SS(6,'Merge [5],[2] \u2192 [2,5]',{},{html:'<div class="av-tree">Merge: [5] + [2] \u2192 <span class="done-node">[2, 5]</span></div>'}));
     s.push(SS(6,'Merge [1],[3] \u2192 [1,3]. Then merge [4],[1,3] \u2192 [1,3,4]',{},{html:'<div class="av-tree">Merge: [1]+[3] \u2192 [1,3]\nMerge: [4]+[1,3] \u2192 <span class="done-node">[1, 3, 4]</span></div>'}));
     s.push(SS(6,'Final merge: [2,5] + [1,3,4] \u2192 [1,2,3,4,5]',{},{html:'<div class="av-tree">Merge: <span class="hl-node">[2,5]</span> + <span class="hl-node">[1,3,4]</span>\nCompare 2 vs 1 \u2192 1\nCompare 2 vs 3 \u2192 2\nCompare 5 vs 3 \u2192 3\nCompare 5 vs 4 \u2192 4\nRemaining: 5\n\u2192 <span class="done-node">[1, 2, 3, 4, 5]</span></div>'}));
@@ -2280,20 +2458,24 @@ function genRC5(){
 function genTK1(){
     var a=[3,2,1,5,6,4],k=2,s=[],heap=[];
     function heapPush(h,v){h.push(v);h.sort(function(a,b){return a-b;});}
-    s.push(SS(1,'nums=[3,2,1,5,6,4], k=2, minHeap=[]',{k:2},{a:a,stk:[]}));
+    s.push(SS(1,'PriorityQueue minHeap = new PriorityQueue<>()',{k:2},{a:a,stk:[]}));
+    s.push(SS(2,'Enter for loop: each num in nums',{},{a:a}));
     for(var i=0;i<a.length;i++){
         heapPush(heap,a[i]);
-        if(heap.length>k){var removed=heap.shift();s.push(SS(4,'Add '+a[i]+', heap=['+heap.join(',')+'] (removed '+removed+', size>k)',{},{a:a,h:[i],stk:heap.slice(),stkO:true}));}
-        else{s.push(SS(3,'Add '+a[i]+', heap=['+heap.join(',')+']',{},{a:a,h:[i],stk:heap.slice(),stkP:true}));}
+        s.push(SS(3,'minHeap.offer('+a[i]+')',{},{a:a,h:[i],stk:heap.slice(),stkP:true}));
+        if(heap.length>k){var removed=heap.shift();s.push(SS(4,'size='+heap.length+1+' > k='+k+' \u2192 poll('+removed+'). heap=['+heap.join(',')+']',{},{a:a,h:[i],stk:heap.slice(),stkO:true}));}
     }
-    s.push(SS(6,'peek() = '+heap[0]+' = '+k+'th largest \u2714',{result:heap[0]},{a:a,res:k+'th largest = '+heap[0]}));
+    s.push(SS(6,'return peek() = '+heap[0]+' = '+k+'th largest \u2714',{result:heap[0]},{a:a,res:k+'th largest = '+heap[0]}));
     return{test:'nums=[3,2,1,5,6,4], k=2 \u2192 5',steps:s};
 }
 
 function genTK2(){
     var a=[1,1,1,2,2,3],k=2,s=[],freq={};
+    s.push(SS(1,'Map freq = new HashMap<>()',{},{a:a}));
     for(var i=0;i<a.length;i++)freq[a[i]]=(freq[a[i]]||0)+1;
-    s.push(SS(2,'Build freq map: {1:3, 2:2, 3:1}',{k:2},{a:a,map:freq}));
+    s.push(SS(2,'Build freq: {1:3, 2:2, 3:1}',{k:2},{a:a,map:freq}));
+    s.push(SS(4,'PriorityQueue minHeap sorted by freq',{},{a:a}));
+    s.push(SS(7,'for each num in freq.keySet()',{},{a:a}));
     var heap=[],keys=Object.keys(freq);
     for(var i=0;i<keys.length;i++){
         var num=parseInt(keys[i]);
@@ -2309,7 +2491,9 @@ function genTK3(){
     var pts=[[1,3],[-2,2],[5,8],[0,1]],k=2,s=[];
     var dists=pts.map(function(p){return p[0]*p[0]+p[1]*p[1];});
     var labels=pts.map(function(p,i){return'('+p[0]+','+p[1]+') d\u00B2='+dists[i];});
-    s.push(SS(1,'Points with distances\u00B2: '+labels.join(', '),{k:2},{html:'<div class="av-tree">'+labels.join('\n')+'</div>'}));
+    s.push(SS(1,'// K Closest Points to Origin',{k:2},{html:'<div class="av-tree">'+labels.join('\n')+'</div>'}));
+    s.push(SS(2,'MaxHeap sorted by distance (farthest at root)',{},{html:'<div class="av-tree">Allocate maxHeap</div>'}));
+    s.push(SS(5,'for each point in points',{},{html:'<div class="av-tree">Process each point</div>'}));
     var heap=[];
     for(var i=0;i<pts.length;i++){
         heap.push({p:pts[i],d:dists[i]});heap.sort(function(a,b){return b.d-a.d;});
@@ -2323,7 +2507,9 @@ function genTK3(){
 function genTK4(){
     var lists=[[1,4,5],[1,3,4],[2,6]],s=[],result=[];
     var ptrs=[0,0,0];
-    s.push(SS(1,'3 sorted lists. Init heap with first elements.',{},{html:'<div class="av-tree">List 0: [<span class="hl-node">1</span>,4,5]\nList 1: [<span class="hl-node">1</span>,3,4]\nList 2: [<span class="hl-node">2</span>,6]\nHeap: [1(L0), 1(L1), 2(L2)]</div>'}));
+    s.push(SS(1,'PriorityQueue minHeap = new PriorityQueue<>()',{},{html:'<div class="av-tree">Init minHeap sorted by node value</div>'}));
+    s.push(SS(2,'for each list, offer first node',{},{html:'<div class="av-tree">List 0: [<span class="hl-node">1</span>,4,5]\nList 1: [<span class="hl-node">1</span>,3,4]\nList 2: [<span class="hl-node">2</span>,6]</div>'}));
+    s.push(SS(6,'ListNode dummy = new ListNode(0), curr = dummy',{},{html:'<div class="av-tree">Create dummy head for result list</div>'}));
     var heap=[{v:1,li:0},{v:1,li:1},{v:2,li:2}];
     for(var step=0;step<8;step++){
         heap.sort(function(a,b){return a.v-b.v;});
@@ -2349,42 +2535,56 @@ function genBT1(){
 
 function genBT2(){
     var s=[];
-    s.push(SS(1,'Level order: tree [3,9,20,null,null,15,7]',{},{html:'<div class="av-tree">     3\n    / \\\n   9  20\n      / \\\n    15   7\n\nBFS with queue</div>'}));
-    s.push(SS(2,'Queue: [3]. Level 0 start (size=1)',{},{html:'<div class="av-tree">     <span class="hl-node">[3]</span>\n    / \\\n   9  20\n      / \\\n    15   7\n\nQueue: [3], Level 0</div>'}));
-    s.push(SS(6,'Poll 3. Add children 9, 20. Level 0: [3]',{},{html:'<div class="av-tree">     <span class="done-node">3</span>\n    / \\\n   <span class="hl-node">9</span>  <span class="hl-node">20</span>\n      / \\\n    15   7\n\nQueue: [9, 20], Output: [[3]]</div>'}));
-    s.push(SS(4,'Level 1 (size=2): poll 9 (no children), poll 20 (children 15,7)',{},{html:'<div class="av-tree">     <span class="done-node">3</span>\n    / \\\n  <span class="done-node">9</span>  <span class="done-node">20</span>\n      / \\\n   <span class="hl-node">15</span>  <span class="hl-node">7</span>\n\nQueue: [15, 7], Output: [[3],[9,20]]</div>'}));
-    s.push(SS(6,'Level 2 (size=2): poll 15, poll 7. Queue empty.',{},{html:'<div class="av-tree">     <span class="done-node">3</span>\n    / \\\n  <span class="done-node">9</span>  <span class="done-node">20</span>\n      / \\\n  <span class="done-node">15</span>  <span class="done-node">7</span>\n\nOutput: [[3],[9,20],[15,7]] \u2714</div>'}));
+    s.push(SS(1,'Queue queue = new LinkedList<>()',{},{html:'<div class="av-tree">     3\n    / \\\n   9  20\n      / \\\n    15   7</div>'}));
+    s.push(SS(2,'queue.offer(root=3)',{},{html:'<div class="av-tree">     <span class="hl-node">[3]</span>\n    / \\\n   9  20\n      / \\\n    15   7\n\nQueue: [3]</div>'}));
+    s.push(SS(3,'while(!queue.isEmpty())',{},{html:'<div class="av-tree">Queue not empty \u2192 continue</div>'}));
+    s.push(SS(4,'levelSize = queue.size() = 1',{},{html:'<div class="av-tree">Level 0: process 1 node</div>'}));
+    s.push(SS(5,'for i = 0 to levelSize\u22121',{},{html:'<div class="av-tree">Process each node in this level</div>'}));
+    s.push(SS(6,'node = queue.poll() = 3',{},{html:'<div class="av-tree">     <span class="done-node">3</span>\n    / \\\n   <span class="hl-node">9</span>  <span class="hl-node">20</span>\n      / \\\n    15   7\n\nQueue: [9, 20]</div>'}));
+    s.push(SS(7,'// process node 3',{},{html:'<div class="av-tree">Output: [[3]]</div>'}));
+    s.push(SS(8,'node.left(9)!=null \u2192 queue.offer(9)',{},{html:'<div class="av-tree">Add left child 9</div>'}));
+    s.push(SS(9,'node.right(20)!=null \u2192 queue.offer(20)',{},{html:'<div class="av-tree">Add right child 20</div>'}));
+    s.push(SS(4,'Level 1 (size=2): poll 9, poll 20',{},{html:'<div class="av-tree">     <span class="done-node">3</span>\n    / \\\n  <span class="done-node">9</span>  <span class="done-node">20</span>\n      / \\\n   <span class="hl-node">15</span>  <span class="hl-node">7</span>\n\nOutput: [[3],[9,20]]</div>'}));
+    s.push(SS(6,'Level 2: poll 15, poll 7. Queue empty.',{},{html:'<div class="av-tree">     <span class="done-node">3</span>\n    / \\\n  <span class="done-node">9</span>  <span class="done-node">20</span>\n      / \\\n  <span class="done-node">15</span>  <span class="done-node">7</span>\n\nOutput: [[3],[9,20],[15,7]] \u2714</div>'}));
     return{test:'Level order \u2192 [[3],[9,20],[15,7]]',steps:s};
 }
 
 function genBT3(){
     var s=[];
-    s.push(SS(1,'Tree: 1\u21922,3. Node 2\u21924,5. Find height & diameter.',{},{html:'<div class="av-tree">     1\n    / \\\n   2   3\n  / \\\n 4   5</div>'}));
-    s.push(SS(3,'height(4)=0(null)+1=1, height(5)=1',{},{html:'<div class="av-tree">     1\n    / \\\n   2   3\n  / \\\n <span class="hl-node">4</span>   <span class="hl-node">5</span>  \u2190 height=1 each</div>'}));
+    s.push(SS(1,'// Height function',{},{html:'<div class="av-tree">     1\n    / \\\n   2   3\n  / \\\n 4   5</div>'}));
+    s.push(SS(2,'int height(TreeNode root)',{},{html:'<div class="av-tree">Recursive height calculation</div>'}));
+    s.push(SS(3,'height(4): root==null? No. h=1+max(0,0)=1',{},{html:'<div class="av-tree">     1\n    / \\\n   2   3\n  / \\\n <span class="hl-node">4</span>   <span class="hl-node">5</span>  \u2190 height=1 each</div>'}));
     s.push(SS(4,'height(2)=1+max(1,1)=2. Diameter at 2: L+R=1+1=2',{},{html:'<div class="av-tree">     1\n    / \\\n  <span class="hl-node">[2]</span>  3   \u2190 h=2, diameter=1+1=2\n  / \\\n <span class="done-node">4</span>   <span class="done-node">5</span></div>'}));
     s.push(SS(4,'height(3)=1. height(1)=1+max(2,1)=3',{},{html:'<div class="av-tree">    <span class="hl-node">[1]</span>     \u2190 h=3\n    / \\\n  <span class="done-node">2</span>  <span class="done-node">3</span>   h=2  h=1\n  / \\\n <span class="done-node">4   5</span></div>'}));
-    s.push(SS(8,'Diameter at node 1: leftH(2)+rightH(1)=3. Max diameter = 3 \u2714',{result:3},{html:'<div class="av-tree">    <span class="done-node">1</span>\n    / \\\n  <span class="done-node">2</span>  <span class="done-node">3</span>\n  / \\\n <span class="done-node">4   5</span>\n\nDiameter = 3 (path: 4\u21922\u21921\u21923) \u2714</div>'}));
+    s.push(SS(7,'// Diameter: update global max at each node',{},{html:'<div class="av-tree">Track max(leftH + rightH) across all nodes</div>'}));
+    s.push(SS(8,'diameter = max(diameter, 2+1) = 3 \u2714',{result:3},{html:'<div class="av-tree">    <span class="done-node">1</span>\n    / \\\n  <span class="done-node">2</span>  <span class="done-node">3</span>\n  / \\\n <span class="done-node">4   5</span>\n\nDiameter = 3 (path: 4\u21922\u21921\u21923) \u2714</div>'}));
     return{test:'Diameter of tree \u2192 3',steps:s};
 }
 
 function genBT4(){
     var s=[];
-    s.push(SS(1,'Is tree symmetric? Root=1, L=2, R=2',{},{html:'<div class="av-tree">      1\n     / \\\n    2   2\n   / \\ / \\\n  3  4 4  3</div>'}));
-    s.push(SS(2,'Both null? No. One null? No. p.val==q.val? 2==2 \u2714',{},{html:'<div class="av-tree">      1\n     / \\\n   <span class="hl-node">[2]</span> <span class="hl-node">[2]</span>  \u2190 compare mirror\n   / \\ / \\\n  3  4 4  3</div>'}));
+    s.push(SS(1,'isSameTree(p, q) - symmetric check',{},{html:'<div class="av-tree">      1\n     / \\\n    2   2\n   / \\ / \\\n  3  4 4  3</div>'}));
+    s.push(SS(2,'p==null && q==null? No',{},{html:'<div class="av-tree">Both nodes exist, continue</div>'}));
+    s.push(SS(3,'p==null || q==null? No (both exist)',{},{html:'<div class="av-tree">Neither is null alone</div>'}));
+    s.push(SS(4,'p.val==q.val? 2==2 \u2714, recurse children',{},{html:'<div class="av-tree">      1\n     / \\\n   <span class="hl-node">[2]</span> <span class="hl-node">[2]</span>  \u2190 compare mirror\n   / \\ / \\\n  3  4 4  3</div>'}));
     s.push(SS(4,'Mirror compare: left.left(3) vs right.right(3) \u2192 3==3 \u2714',{},{html:'<div class="av-tree">      1\n     / \\\n    2   2\n   / \\ / \\\n <span class="hl-node">[3]</span> 4 4 <span class="hl-node">[3]</span>  \u2190 outer pair</div>'}));
     s.push(SS(4,'Mirror compare: left.right(4) vs right.left(4) \u2192 4==4 \u2714',{},{html:'<div class="av-tree">      1\n     / \\\n    2   2\n   / \\ / \\\n  3 <span class="hl-node">[4]</span><span class="hl-node">[4]</span> 3  \u2190 inner pair</div>'}));
+    s.push(SS(7,'// Symmetric: compare outer and inner pairs',{},{html:'<div class="av-tree">All outer and inner pairs match!</div>'}));
     s.push(SS(4,'All pairs match! Tree is symmetric \u2714',{result:'true'},{html:'<div class="av-tree">      <span class="done-node">1</span>\n     / \\\n   <span class="done-node">2</span>   <span class="done-node">2</span>\n   / \\ / \\\n  <span class="done-node">3  4 4  3</span>\n\nSymmetric = true \u2714</div>'}));
     return{test:'Symmetric tree \u2192 true',steps:s};
 }
 
 function genBT5(){
     var s=[];
+    s.push(SS(1,'// Root to Leaf path sum',{},{html:'<div class="av-tree">Find path: root to leaf summing to target</div>'}));
     s.push(SS(2,'hasPathSum(root=5, target=22)',{target:22},{html:'<div class="av-tree">       5     target=22\n      / \\\n     4   8\n    /\n   11\n  / \\\n 7   2</div>'}));
+    s.push(SS(3,'root==null? No \u2192 continue',{},{html:'<div class="av-tree">Node 5 exists</div>'}));
     s.push(SS(5,'Go left: hasPathSum(4, 22-5=17)',{target:17},{html:'<div class="av-tree">       <span class="done-node">5</span>     \n      / \\\n    <span class="hl-node">[4]</span>  8    target=17\n    /\n   11\n  / \\\n 7   2</div>'}));
     s.push(SS(5,'Go left: hasPathSum(11, 17-4=13)',{target:13},{html:'<div class="av-tree">       <span class="done-node">5</span>\n      / \\\n    <span class="done-node">4</span>   8\n    /\n  <span class="hl-node">[11]</span>   target=13\n  / \\\n 7   2</div>'}));
-    s.push(SS(5,'Try left: hasPathSum(7, 13-11=2). Leaf: 7\u22602 \u2718',{target:2},{html:'<div class="av-tree">       <span class="done-node">5</span>\n      / \\\n    <span class="done-node">4</span>   8\n    /\n  <span class="done-node">11</span>\n  / \\\n<span style="color:#f38ba8">[7]</span>  2   7\u22602 \u2718</div>'}));
-    s.push(SS(5,'Try right: hasPathSum(2, 13-11=2). Leaf: 2==2 \u2714!',{target:2},{html:'<div class="av-tree">       <span class="done-node">5</span>\n      / \\\n    <span class="done-node">4</span>   8\n    /\n  <span class="done-node">11</span>\n  / \\\n 7  <span class="done-node">[2]</span>  2==2 \u2714!</div>'}));
+    s.push(SS(4,'Try left: hasPathSum(7, 13-11=2). Leaf: 7\u22602 \u2718',{target:2},{html:'<div class="av-tree">       <span class="done-node">5</span>\n      / \\\n    <span class="done-node">4</span>   8\n    /\n  <span class="done-node">11</span>\n  / \\\n<span style="color:#f38ba8">[7]</span>  2   7\u22602 \u2718</div>'}));
+    s.push(SS(4,'Try right: hasPathSum(2, 13-11=2). Leaf: 2==2 \u2714!',{target:2},{html:'<div class="av-tree">       <span class="done-node">5</span>\n      / \\\n    <span class="done-node">4</span>   8\n    /\n  <span class="done-node">11</span>\n  / \\\n 7  <span class="done-node">[2]</span>  2==2 \u2714!</div>'}));
     s.push(SS(5,'Path found: 5\u21924\u219211\u21922 = 22 \u2714',{result:'true'},{html:'<div class="av-tree">      <span class="done-node">[5]</span>\n      /\n    <span class="done-node">[4]</span>\n    /\n  <span class="done-node">[11]</span>\n      \\\n      <span class="done-node">[2]</span>\n\n5+4+11+2 = 22 \u2714</div>'}));
+    s.push(SS(8,'// Max Path Sum: maxGain = node.val + max(left, right)',{},{html:'<div class="av-tree">For max path sum variant:\nmaxGain at each node = val + max(leftGain, rightGain)</div>'}));
     return{test:'Path sum 5\u21924\u219211\u21922 = 22 \u2714',steps:s};
 }
 
@@ -2395,25 +2595,33 @@ function genBT6(){
     s.push(SS(3,'left = lca(5, p=5, q=1): root==p \u2192 return 5',{},{html:'<div class="av-tree">       3\n      / \\\n    <span class="hl-node">[5]</span>  1   \u2190 root==p, return 5\n    / \\ / \\\n   6  2 0  8</div>'}));
     s.push(SS(4,'right = lca(1, p=5, q=1): root==q \u2192 return 1',{},{html:'<div class="av-tree">       3\n      / \\\n     5  <span class="hl-node">[1]</span>  \u2190 root==q, return 1\n    / \\ / \\\n   6  2 0  8</div>'}));
     s.push(SS(5,'At node 3: left=5 (not null), right=1 (not null) \u2192 SPLIT POINT!',{},{html:'<div class="av-tree">      <span class="done-node">[3]</span> \u2190 LCA!\n      / \\\n    <span class="hl-node">5</span>   <span class="hl-node">1</span>   both sides returned non-null\n    / \\ / \\\n   6  2 0  8</div>'}));
+    s.push(SS(6,'return left != null ? left : right',{},{html:'<div class="av-tree">Both non-null \u2192 return root</div>'}));
     s.push(SS(5,'LCA(5,1) = 3 \u2714',{result:3},{html:'<div class="av-tree">      <span class="done-node">[3]</span> \u2190 Lowest Common Ancestor\n      / \\\n    <span class="done-node">5</span>   <span class="done-node">1</span>\n\nLCA = 3 \u2714</div>'}));
+    s.push(SS(9,'// BST LCA: both < root \u2192 go left, both > root \u2192 go right',{},{html:'<div class="av-tree">BST variant uses value comparison</div>'}));
     return{test:'LCA of 5 and 1 \u2192 3',steps:s};
 }
 
 function genBT7(){
     var s=[];
-    s.push(SS(2,'Validate BST: each node in range (min, max)',{},{html:'<div class="av-tree">       5\n      / \\\n     3   7\n    / \\ / \\\n   1  4 6  8</div>'}));
+    s.push(SS(1,'// Validate BST: each node in (min, max) range',{},{html:'<div class="av-tree">       5\n      / \\\n     3   7\n    / \\ / \\\n   1  4 6  8</div>'}));
+    s.push(SS(2,'boolean validate(node, min, max)',{},{html:'<div class="av-tree">Recursive validation function</div>'}));
+    s.push(SS(3,'node==null? return true (base case)',{},{html:'<div class="av-tree">Null nodes are valid</div>'}));
     s.push(SS(4,'validate(5, -\u221E, +\u221E): -\u221E < 5 < +\u221E \u2714',{},{html:'<div class="av-tree">      <span class="hl-node">[5]</span> range: (-\u221E, +\u221E) \u2714\n      / \\\n     3   7\n    / \\ / \\\n   1  4 6  8</div>'}));
     s.push(SS(5,'validate(3, -\u221E, 5): -\u221E < 3 < 5 \u2714',{},{html:'<div class="av-tree">       <span class="done-node">5</span>\n      / \\\n    <span class="hl-node">[3]</span>  7   range: (-\u221E, 5) \u2714\n    / \\\n   1  4</div>'}));
     s.push(SS(5,'validate(1, -\u221E, 3) \u2714, validate(4, 3, 5) \u2714',{},{html:'<div class="av-tree">       <span class="done-node">5</span>\n      / \\\n    <span class="done-node">3</span>   7\n    / \\\n  <span class="hl-node">[1]</span> <span class="hl-node">[4]</span>  1\u2208(-\u221E,3)\u2714  4\u2208(3,5)\u2714</div>'}));
     s.push(SS(5,'validate(7, 5, +\u221E) \u2714, validate(6, 5, 7) \u2714, validate(8, 7, +\u221E) \u2714',{},{html:'<div class="av-tree">       <span class="done-node">5</span>\n      / \\\n    <span class="done-node">3</span>  <span class="hl-node">[7]</span>  range: (5,+\u221E) \u2714\n    / \\ / \\\n  <span class="done-node">1  4</span><span class="hl-node">[6]</span> <span class="hl-node">[8]</span></div>'}));
     s.push(SS(5,'All nodes valid! BST confirmed \u2714',{result:'true'},{html:'<div class="av-tree">      <span class="done-node">5</span>\n      / \\\n    <span class="done-node">3</span>   <span class="done-node">7</span>\n    / \\ / \\\n  <span class="done-node">1  4 6  8</span>\n\nValid BST \u2714</div>'}));
+    s.push(SS(8,'// Kth Smallest: inorder traversal, count until k',{},{html:'<div class="av-tree">Inorder on BST gives sorted order\nStop at kth element</div>'}));
     return{test:'Validate BST \u2192 true',steps:s};
 }
 
 // ===== DYNAMIC PROGRAMMING =====
 function genDP1(){
     var a=[2,7,9,3,1],s=[],p2=0,p1=0;
-    s.push(SS(3,'House Robber: nums=[2,7,9,3,1], prev2=0, prev1=0',{prev2:0,prev1:0},{a:a}));
+    s.push(SS(1,'// dp[i] = max(dp[i-1], dp[i-2] + nums[i])',{},{a:a,xtra:'Linear DP recurrence'}));
+    s.push(SS(2,'// Space optimized: use prev2 and prev1',{},{a:a}));
+    s.push(SS(3,'prev2=0, prev1=0',{prev2:0,prev1:0},{a:a}));
+    s.push(SS(4,'Enter for loop: each num in nums',{},{a:a}));
     for(var i=0;i<a.length;i++){
         var curr=Math.max(p1,p2+a[i]);
         s.push(SS(5,'num='+a[i]+': curr=max(prev1='+p1+', prev2+num='+p2+'+'+a[i]+'='+(p2+a[i])+') = '+curr,{curr:curr},{a:a,h:[i],xtra:'skip='+p1+' vs rob='+(p2+a[i])+' \u2192 '+(curr===p1?'SKIP':'ROB')}));
@@ -2432,13 +2640,17 @@ function genDP2(){
     s.push(SS(2,'dp[1][2] = dp[0][2]+dp[1][1] = 1+2 = 3',{},{html:'<div class="av-tree"><span class="done-node">1</span> <span class="done-node">1</span> <span class="done-node">1</span>\n<span class="done-node">1</span> <span class="done-node">2</span> <span class="hl-node">3</span>\n<span class="done-node">1</span> ? ?</div>'}));
     s.push(SS(2,'dp[2][1] = dp[1][1]+dp[2][0] = 2+1 = 3',{},{html:'<div class="av-tree"><span class="done-node">1</span> <span class="done-node">1</span> <span class="done-node">1</span>\n<span class="done-node">1</span> <span class="done-node">2</span> <span class="done-node">3</span>\n<span class="done-node">1</span> <span class="hl-node">3</span> ?</div>'}));
     s.push(SS(2,'dp[2][2] = dp[1][2]+dp[2][1] = 3+3 = 6 \u2714',{result:6},{html:'<div class="av-tree"><span class="done-node">1</span> <span class="done-node">1</span> <span class="done-node">1</span>\n<span class="done-node">1</span> <span class="done-node">2</span> <span class="done-node">3</span>\n<span class="done-node">1</span> <span class="done-node">3</span> <span class="done-node">6</span> \u2190 answer!\n\nUnique paths = 6 \u2714</div>'}));
+    s.push(SS(4,'// Min Path Sum variant',{},{html:'<div class="av-tree">For min path sum:</div>'}));
+    s.push(SS(5,'dp[i][j] = grid[i][j] + min(dp[i-1][j], dp[i][j-1])',{},{html:'<div class="av-tree">Same structure, replace + with min</div>'}));
     return{test:'3\u00D73 grid unique paths \u2192 6',steps:s};
 }
 
 function genDP3(){
     var nums=[1,5,11,5],tgt=11,s=[];
     var dp=new Array(tgt+1);for(var i=0;i<=tgt;i++)dp[i]=false;dp[0]=true;
-    s.push(SS(2,'Partition Equal Subset: target=11, dp[0]=T',{target:11},{a:dp.map(function(v){return v?'T':'F';}),xtra:'dp indices 0..11'}));
+    s.push(SS(1,'boolean[] dp = new boolean[target+1]',{},{a:dp.map(function(v){return v?'T':'F';})}));
+    s.push(SS(2,'dp[0] = true',{target:11},{a:dp.map(function(v){return v?'T':'F';}),xtra:'dp indices 0..11'}));
+    s.push(SS(3,'for each num in nums',{},{a:dp.map(function(v){return v?'T':'F';})}));
     for(var ni=0;ni<nums.length;ni++){
         var num=nums[ni];
         for(var j=tgt;j>=num;j--){
@@ -2453,7 +2665,12 @@ function genDP3(){
 function genDP4(){
     var coins=[1,5,6],amt=11,s=[];
     var dp=new Array(amt+1);dp[0]=0;for(var i=1;i<=amt;i++)dp[i]=amt+1;
-    s.push(SS(4,'Coin Change: coins=[1,5,6], amount=11. dp[0]=0, rest=\u221E',{},{a:dp.map(function(v){return v>amt?'\u221E':v;}),xtra:'dp indices 0..11'}));
+    s.push(SS(1,'// Min Coins',{},{a:dp.map(function(v){return v>amt?'\u221E':v;})}));
+    s.push(SS(2,'int[] dp = new int[amount+1]',{},{a:dp.map(function(v){return v>amt?'\u221E':v;})}));
+    s.push(SS(3,'Arrays.fill(dp, amount+1)',{},{a:dp.map(function(v){return v>amt?'\u221E':v;})}));
+    s.push(SS(4,'dp[0]=0',{},{a:dp.map(function(v){return v>amt?'\u221E':v;}),xtra:'dp indices 0..11'}));
+    s.push(SS(5,'for i=1 to amount',{},{a:dp.map(function(v){return v>amt?'\u221E':v;})}));
+    s.push(SS(6,'for each coin in coins',{},{a:dp.map(function(v){return v>amt?'\u221E':v;})}));
     for(var i=1;i<=amt;i++){
         for(var c=0;c<coins.length;c++){
             if(coins[c]<=i)dp[i]=Math.min(dp[i],dp[i-coins[c]]+1);
@@ -2480,19 +2697,26 @@ function genDP5(){
         s.push(SS(i<=1?1:2,'Row "'+t2[i-1]+'": ['+dp[i].join(',')+']',{},{html:'<div class="av-tree">    "" a b c d e\n""  0 0 0 0 0 0\na   '+dp[1].join(' ')+'\n'+(i>=2?'c   '+dp[2].join(' ')+'\n':'')+(i>=3?'e   '+dp[3].join(' ')+'\n':'')+'\n'+(i<m?'Processing row for "'+t2[i-1]+'"...':'All rows done!')}));
     }
     s.push(SS(2,'LCS length = dp[3][5] = '+dp[m][n]+' (subsequence: "ace") \u2714',{result:dp[m][n]},{html:'<div class="av-tree">    "" a b c d e\n""  0 0 0 0 0 0\na   0 <span class="hl-node">1</span> 1 1 1 1\nc   0 1 1 <span class="hl-node">2</span> 2 2\ne   0 1 1 2 2 <span class="hl-node">3</span>\n\nLCS = "ace", length = 3 \u2714</div>'}));
+    s.push(SS(4,'// Edit Distance variant',{},{html:'<div class="av-tree">Same table structure, different recurrence</div>'}));
+    s.push(SS(5,'if match: dp[i][j] = dp[i-1][j-1]',{},{html:'<div class="av-tree">Match: no edit needed, take diagonal</div>'}));
+    s.push(SS(6,'else: dp[i][j] = 1 + min(insert, delete, replace)',{},{html:'<div class="av-tree">No match: 1 + min of 3 options</div>'}));
     return{test:'"abcde" vs "ace" \u2192 LCS=3',steps:s};
 }
 
 function genDP6(){
     var a=[10,9,2,5,3,7,101,18],s=[];
     var dp=new Array(a.length);for(var i=0;i<a.length;i++)dp[i]=1;
-    s.push(SS(1,'LIS: nums=[10,9,2,5,3,7,101,18], dp=[1,1,1,1,1,1,1,1]',{},{a:a,xtra:'dp=['+dp.join(',')+']'}));
+    s.push(SS(1,'// O(N\u00B2) LIS',{},{a:a,xtra:'dp=['+dp.join(',')+']'}));
+    s.push(SS(2,'for i=1 to n\u22121',{},{a:a}));
     for(var i=1;i<a.length;i++){
+        s.push(SS(3,'for j=0 to i\u22121',{},{a:a,h:[i]}));
         for(var j=0;j<i;j++){if(a[j]<a[i])dp[i]=Math.max(dp[i],dp[j]+1);}
-        s.push(SS(5,'i='+i+' ('+a[i]+'): check all j<i where nums[j]<'+a[i]+'. dp['+i+']='+dp[i],{},{a:a,h:[i],xtra:'dp=['+dp.join(',')+']'}));
+        s.push(SS(4,'nums[j]<nums['+i+']='+a[i]+'?',{},{a:a,h:[i]}));
+        s.push(SS(5,'dp['+i+']='+dp[i],{},{a:a,h:[i],xtra:'dp=['+dp.join(',')+']'}));
     }
     var maxLIS=Math.max.apply(null,dp);
     s.push(SS(5,'max(dp) = '+maxLIS+' \u2714 (e.g. [2,3,7,101])',{result:maxLIS},{a:a,d:dp.map(function(v,i){return v===maxLIS?i:null;}).filter(function(v){return v!==null;}),res:'LIS length = '+maxLIS}));
+    s.push(SS(7,'// O(N log N) variant uses binary search on tails array',{},{a:a,xtra:'Optimization: maintain sorted tails'}));
     return{test:'LIS of [10,9,2,5,3,7,101,18] \u2192 4',steps:s};
 }
 
@@ -2505,6 +2729,9 @@ function genDP7(){
     s.push(SS(2,'s[1]==s[3]? a==a \u2714 \u2192 "aba" is also palindrome!',{},{a:str.split(''),w:[1,3],d:[1,2,3],xtra:'"aba" \u2714 (s[1]=a == s[3]=a)'}));
     s.push(SS(2,'Check length 4,5: no new palindromes found',{},{a:str.split(''),xtra:'Lengths 4,5: no palindromes'}));
     s.push(SS(2,'Longest palindromic substring = "bab" (or "aba"), length 3 \u2714',{result:'"bab"'},{a:str.split(''),w:[0,2],res:'"bab" (length 3)'}));
+    s.push(SS(4,'// Longest Palindromic Subsequence',{},{a:str.split(''),xtra:'Different problem: subsequence allows gaps'}));
+    s.push(SS(5,'if s[i]==s[j]: dp[i][j] = dp[i+1][j-1] + 2',{},{a:str.split('')}));
+    s.push(SS(6,'else: dp[i][j] = max(dp[i+1][j], dp[i][j-1])',{},{a:str.split('')}));
     return{test:'s="babad" \u2192 "bab"',steps:s};
 }
 
@@ -2512,7 +2739,10 @@ function genDP8(){
     var str='leetcode',dict=['leet','code'],s=[];
     var n=str.length,dp=new Array(n+1);for(var i=0;i<=n;i++)dp[i]=false;dp[0]=true;
     var set={};dict.forEach(function(w){set[w]=true;});
-    s.push(SS(2,'s="leetcode", dict=["leet","code"]. dp[0]=T',{},{a:str.split(''),xtra:'dp = [T,F,F,F,F,F,F,F,F]'}));
+    s.push(SS(1,'boolean[] dp = new boolean[n+1]',{},{a:str.split('')}));
+    s.push(SS(2,'dp[0] = true',{},{a:str.split(''),xtra:'dp = [T,F,F,F,F,F,F,F,F]'}));
+    s.push(SS(3,'for i=1 to n',{},{a:str.split('')}));
+    s.push(SS(4,'for j=0 to i\u22121',{},{a:str.split('')}));
     for(var i=1;i<=n;i++){
         for(var j=0;j<i;j++){
             if(dp[j]&&set[str.substring(j,i)]){dp[i]=true;break;}
