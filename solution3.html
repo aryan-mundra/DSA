@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Random Questions 3</title>
+  <style>
+    :root {
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --accent: #2563eb;
+      --accent2: #6366f1;
+      --text: #1a1a1a;
+      --muted: #4b5563;
+      --border: #e2e8f0;
+      --code-bg: #f1f5f9;
+      --green: #16a34a;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 2rem 1rem;
+      overflow-x: hidden;
+    }
+    .container { 
+      max-width: 960px; 
+      margin: 0 auto;
+      width: 100%;
+    }
+    
+    /* Ensure text wraps properly */
+    p, li, td, th, .problem, .explain {
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: .5rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 3rem;
+      font-size: 1.05rem;
+    }
+    .toc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
+      margin-bottom: 3rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+    .toc h2 { font-size: 1.2rem; margin-bottom: .75rem; color: var(--accent); }
+    .toc ol { padding-left: 1.25rem; }
+    .toc li { margin-bottom: .35rem; color: var(--text); }
+    .toc a { color: var(--accent2); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    .question {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+    .question h2 {
+      font-size: 1.35rem;
+      margin-bottom: .25rem;
+      color: var(--accent);
+    }
+    .badge {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+    .badge-java { background: #fef3c7; color: #b45309; border: 1px solid #f59e0b; }
+    .badge-logic { background: #f3e8ff; color: #7c3aed; border: 1px solid #a78bfa; }
+    .badge-sql { background: #dbeafe; color: #1d4ed8; border: 1px solid #60a5fa; }
+    .problem { color: var(--muted); margin-bottom: 1rem; font-size: .95rem; }
+    .problem strong { color: var(--text); }
+    .problem ol, .problem ul { 
+      margin-left: 1.5rem; 
+      margin-top: .5rem;
+      margin-bottom: .5rem;
+      color: var(--muted);
+    }
+    .problem ol li, .problem ul li {
+      margin-bottom: .25rem;
+    }
+    .explain { margin-bottom: 1rem; }
+    .explain h3 { font-size: 1rem; color: var(--green); margin-bottom: .35rem; }
+    .explain h4 { font-size: .95rem; color: var(--accent); margin: .75rem 0 .25rem; }
+    .explain p, .explain ul, .explain ol { font-size: .93rem; color: var(--muted); }
+    .explain ul, .explain ol { padding-left: 1.25rem; }
+    .explain li { margin-bottom: .2rem; }
+
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      font-size: .88rem;
+      line-height: 1.6;
+      margin-top: .75rem;
+      color: #111111;
+      max-width: 100%;
+      -webkit-overflow-scrolling: touch;
+    }
+    code { 
+      font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace; 
+      color: #111111;
+      word-break: normal;
+      white-space: pre;
+    }
+    .kw   { color: #7c3aed; }
+    .type { color: #0369a1; }
+    .str  { color: #16a34a; }
+    .cmt  { color: #9ca3af; font-style: italic; }
+    .num  { color: #c2410c; }
+    .fn   { color: #b45309; }
+    .sql-kw { color: #7c3aed; font-weight: 600; }
+    .sql-fn { color: #b45309; }
+    .sql-type { color: #0369a1; }
+    .complexity {
+      margin-top: 1rem;
+      padding: .75rem 1rem;
+      background: #eff6ff;
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      font-size: .9rem;
+      color: var(--text);
+    }
+    .answer-box {
+      margin-top: 1rem;
+      padding: 1rem 1.25rem;
+      background: #f0fdf4;
+      border-left: 3px solid var(--green);
+      border-radius: 0 8px 8px 0;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #15803d;
+    }
+
+    .step-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: .75rem 0;
+      font-size: .9rem;
+      display: table;
+      table-layout: auto;
+    }
+    .step-table th {
+      background: var(--accent);
+      color: #fff;
+      padding: .5rem .75rem;
+      text-align: left;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .step-table td {
+      padding: .5rem .75rem;
+      border-bottom: 1px solid var(--border);
+      word-wrap: break-word;
+    }
+    .step-table tr:nth-child(even) td { background: #f8fafc; }
+    
+    .table-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: .75rem 0;
+      width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      body { padding: 1rem .5rem; }
+      h1 { font-size: 1.6rem; }
+      .subtitle { font-size: .95rem; margin-bottom: 2rem; }
+      .toc { padding: 1rem 1.25rem; margin-bottom: 2rem; }
+      .toc ol { padding-left: 1rem; }
+      .question { padding: 1.25rem 1rem; margin-bottom: 1.75rem; }
+      .question h2 { font-size: 1.15rem; }
+      pre { padding: .85rem .75rem; font-size: .78rem; line-height: 1.5; -webkit-overflow-scrolling: touch; }
+      .complexity { font-size: .82rem; padding: .6rem .75rem; }
+      .explain p, .explain ul, .explain ol { font-size: .88rem; }
+      .explain ul, .explain ol { padding-left: 1rem; }
+      .step-table { font-size: .82rem; }
+      .step-table th, .step-table td { padding: .4rem .5rem; }
+      .answer-box { font-size: .9rem; padding: .85rem 1rem; }
+    }
+    @media (max-width: 480px) {
+      body { padding: .75rem .35rem; }
+      h1 { font-size: 1.35rem; }
+      .subtitle { font-size: .88rem; margin-bottom: 1.5rem; }
+      .toc { padding: .85rem 1rem; border-radius: 8px; }
+      .toc h2 { font-size: 1.05rem; }
+      .toc ol { padding-left: .75rem; font-size: .85rem; }
+      .question { padding: 1rem .85rem; border-radius: 8px; }
+      .question h2 { font-size: 1.05rem; }
+      pre { padding: .7rem .6rem; font-size: .72rem; border-radius: 6px; line-height: 1.4; }
+      .badge { font-size: .7rem; padding: 2px 8px; }
+      .problem { font-size: .88rem; }
+      .problem ol, .problem ul { padding-left: .75rem; font-size: .85rem; }
+      .complexity { font-size: .78rem; padding: .65rem .8rem; }
+      .step-table { font-size: .75rem; }
+      .step-table th, .step-table td { padding: .35rem .4rem; }
+      .answer-box { font-size: .9rem; padding: .85rem 1rem; }
+      .explain ul, .explain ol { padding-left: .75rem; font-size: .85rem; }
+      .explain h3 { font-size: .95rem; }
+      .explain h4 { font-size: .9rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+<h1>Interview Solutions — Set 3</h1>
+<p class="subtitle">Logic Puzzles, Java, &amp; SQL</p>
+
+<nav class="toc">
+  <h2>Table of Contents</h2>
+  <ol>
+    <li><a href="#q1">Banana Transport Puzzle</a></li>
+    <li><a href="#q2">Group Anagrams</a></li>
+    <li><a href="#q3">Valid Sudoku Board</a></li>
+    <li><a href="#q4">6-Digit Palindromes</a></li>
+    <li><a href="#q5">Minimum Window Substring</a></li>
+    <li><a href="#q6">Student Club Management — Database Schema &amp; SQL</a></li>
+  </ol>
+</nav>
+
+<!-- ───────────────── Q1 ───────────────── -->
+<section class="question" id="q1">
+  <h2>Q1 — Banana Transport Puzzle</h2>
+  <span class="badge badge-logic">LOGIC / REASONING</span>
+  <p class="problem">
+    A camel is tasked with transporting 3,000 bananas to a destination 1,000 kilometers away.<br><br>
+    <strong>Constraints:</strong>
+  </p>
+  <ol style="margin-left: 1.5rem; margin-bottom: 1rem; color: var(--muted);">
+    <li>The camel can carry up to 1,000 bananas at a time.</li>
+    <li>The camel consumes one banana per kilometer travelled.</li>
+    <li>The camel can make multiple trips between any two points to transport bananas.</li>
+  </ol>
+  <p class="problem">
+    <strong>Question:</strong> What is the maximum number of bananas that can be transported to the destination, 1000 kilometers away?
+  </p>
+
+  <div class="explain">
+    <h3>Key Insight</h3>
+    <p>Since the camel eats 1 banana per km and can only carry 1,000 bananas, if we try to go the full 1,000 km in one trip, we'd need 1,000 bananas just for travel, leaving us with 0 bananas at the destination.</p>
+    <p><strong>The strategy:</strong> We need to create "relay stations" where we temporarily store bananas, reducing the total pile progressively as we make multiple trips.</p>
+  </div>
+
+  <div class="explain">
+    <h3>Solution Strategy</h3>
+    <p>We divide the journey into segments based on how many trips are needed:</p>
+    <ul>
+      <li><strong>Phase 1:</strong> With 3,000 bananas, we need 3 trips to move everything (3 × 1,000 = 3,000)</li>
+      <li><strong>Phase 2:</strong> Once we're down to 2,000 bananas, we need 2 trips</li>
+      <li><strong>Phase 3:</strong> Once we're down to 1,000 bananas or less, we make 1 final trip</li>
+    </ul>
+  </div>
+
+  <div class="explain">
+    <h3>Detailed Calculation</h3>
+    
+    <h4>Phase 1: From 3,000 to 2,000 bananas (requires 5 one-way trips)</h4>
+    <ul>
+      <li>We need to make 3 forward trips and 2 return trips = 5 one-way trips total</li>
+      <li>Cost per km: 5 bananas (1 per trip)</li>
+      <li>We want to reduce from 3,000 to 2,000 bananas = need to spend 1,000 bananas</li>
+      <li>Distance: 1,000 ÷ 5 = <strong>200 km</strong></li>
+      <li>After 200 km, we have: 3,000 - (5 × 200) = 2,000 bananas</li>
+    </ul>
+
+    <h4>Phase 2: From 2,000 to 1,000 bananas (requires 3 one-way trips)</h4>
+    <ul>
+      <li>We need to make 2 forward trips and 1 return trip = 3 one-way trips total</li>
+      <li>Cost per km: 3 bananas</li>
+      <li>We want to reduce from 2,000 to 1,000 bananas = need to spend 1,000 bananas</li>
+      <li>Distance: 1,000 ÷ 3 = <strong>333.33 km</strong></li>
+      <li>After 333.33 km, we have: 2,000 - (3 × 333.33) = 1,000 bananas</li>
+    </ul>
+
+    <h4>Phase 3: Final journey with 1,000 bananas</h4>
+    <ul>
+      <li>Total distance covered so far: 200 + 333.33 = 533.33 km</li>
+      <li>Remaining distance: 1,000 - 533.33 = 466.67 km</li>
+      <li>Starting with 1,000 bananas, cost: 466.67 bananas</li>
+      <li>Bananas arriving at destination: 1,000 - 466.67 = <strong>533.33 bananas</strong></li>
+    </ul>
+  </div>
+
+  <div class="explain">
+    <h3>Step-by-Step Journey</h3>
+    <table class="step-table">
+      <thead>
+        <tr><th>Phase</th><th>Distance (km)</th><th>Trips</th><th>Bananas Used</th><th>Bananas Remaining</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Start</td>
+          <td>0</td>
+          <td>—</td>
+          <td>0</td>
+          <td>3,000</td>
+        </tr>
+        <tr>
+          <td>Phase 1</td>
+          <td>0 → 200</td>
+          <td>5 one-way</td>
+          <td>1,000</td>
+          <td>2,000</td>
+        </tr>
+        <tr>
+          <td>Phase 2</td>
+          <td>200 → 533.33</td>
+          <td>3 one-way</td>
+          <td>1,000</td>
+          <td>1,000</td>
+        </tr>
+        <tr>
+          <td>Phase 3</td>
+          <td>533.33 → 1,000</td>
+          <td>1 one-way</td>
+          <td>466.67</td>
+          <td>533.33</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="answer-box">
+    Answer: The maximum number of bananas that can be transported to the destination is <strong>533 bananas</strong> (or 533.33 if we allow fractional bananas).
+  </div>
+</section>
+
+<!-- ───────────────── Q2 ───────────────── -->
+<section class="question" id="q2">
+  <h2>Q2 — Group Anagrams</h2>
+  <span class="badge badge-java">JAVA</span>
+  <p class="problem">
+    You are given an array of strings. Your task is to group the strings that are anagrams of each other into separate lists. 
+    Two strings are considered anagrams if they contain the same characters in the same frequencies, regardless of their order.<br><br>
+    <strong>Input:</strong> An array of strings, e.g., ["eat", "tea", "tan", "ate", "nat", "bat"]<br>
+    <strong>Output:</strong> A list of groups where each group contains strings that are anagrams of each other.<br>
+    For example, Output: [["eat", "tea", "ate"], ["tan", "nat"], ["bat"]]
+  </p>
+
+  <div class="explain">
+    <h3>Intuition</h3>
+    <p><strong>The key idea:</strong> Anagrams have the same letters in different orders. If we sort the letters of each word, anagrams will produce the same sorted string.</p>
+    <p>For example:</p>
+    <ul>
+      <li>"eat" → sorted: "aet"</li>
+      <li>"tea" → sorted: "aet"</li>
+      <li>"ate" → sorted: "aet"</li>
+    </ul>
+    <p>All three produce "aet", so they're anagrams!</p>
+  </div>
+
+  <div class="explain">
+    <h3>Algorithm</h3>
+    <ol>
+      <li>Create a HashMap where the key is the sorted version of a string, and the value is a list of all strings that match that sorted pattern</li>
+      <li>For each word in the input:
+        <ul>
+          <li>Sort its characters to create a key</li>
+          <li>Add the original word to the list associated with that key</li>
+        </ul>
+      </li>
+      <li>Return all the lists (values) from the HashMap</li>
+    </ol>
+    <p><strong>Example walkthrough:</strong></p>
+    <ul>
+      <li>"eat" → key "aet" → map: {"aet": ["eat"]}</li>
+      <li>"tea" → key "aet" → map: {"aet": ["eat", "tea"]}</li>
+      <li>"tan" → key "ant" → map: {"aet": ["eat", "tea"], "ant": ["tan"]}</li>
+      <li>"ate" → key "aet" → map: {"aet": ["eat", "tea", "ate"], "ant": ["tan"]}</li>
+      <li>And so on...</li>
+    </ul>
+  </div>
+
+<pre><code><span class="kw">import</span> java.util.*;
+
+<span class="kw">public</span> <span class="type">List</span>&lt;<span class="type">List</span>&lt;<span class="type">String</span>&gt;&gt; <span class="fn">groupAnagrams</span>(<span class="type">String</span>[] strs) {
+    <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">List</span>&lt;<span class="type">String</span>&gt;&gt; map = <span class="kw">new</span> HashMap&lt;&gt;();
+    
+    <span class="kw">for</span> (<span class="type">String</span> str : strs) {
+        <span class="cmt">// Convert string to char array, sort it, then back to string</span>
+        <span class="type">char</span>[] chars = str.<span class="fn">toCharArray</span>();
+        Arrays.<span class="fn">sort</span>(chars);
+        <span class="type">String</span> key = <span class="kw">new</span> String(chars);
+        
+        <span class="cmt">// Add the original string to the list for this key</span>
+        <span class="kw">if</span> (!map.<span class="fn">containsKey</span>(key)) {
+            map.<span class="fn">put</span>(key, <span class="kw">new</span> ArrayList&lt;&gt;());
+        }
+        map.<span class="fn">get</span>(key).<span class="fn">add</span>(str);
+    }
+    
+    <span class="cmt">// Return all the grouped lists</span>
+    <span class="kw">return new</span> ArrayList&lt;&gt;(map.<span class="fn">values</span>());
+}
+
+<span class="cmt">// Alternative: Using computeIfAbsent for cleaner code</span>
+<span class="kw">public</span> <span class="type">List</span>&lt;<span class="type">List</span>&lt;<span class="type">String</span>&gt;&gt; <span class="fn">groupAnagramsV2</span>(<span class="type">String</span>[] strs) {
+    <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">List</span>&lt;<span class="type">String</span>&gt;&gt; map = <span class="kw">new</span> HashMap&lt;&gt;();
+    
+    <span class="kw">for</span> (<span class="type">String</span> str : strs) {
+        <span class="type">char</span>[] chars = str.<span class="fn">toCharArray</span>();
+        Arrays.<span class="fn">sort</span>(chars);
+        <span class="type">String</span> key = <span class="kw">new</span> String(chars);
+        
+        <span class="cmt">// computeIfAbsent creates the list if key doesn't exist</span>
+        map.<span class="fn">computeIfAbsent</span>(key, k -&gt; <span class="kw">new</span> ArrayList&lt;&gt;()).<span class="fn">add</span>(str);
+    }
+    
+    <span class="kw">return new</span> ArrayList&lt;&gt;(map.<span class="fn">values</span>());
+}</code></pre>
+
+  <div class="complexity">
+    <strong>Time Complexity:</strong> O(n × k log k) — where n = number of strings, k = average length of strings (sorting each string takes k log k)<br>
+    <strong>Space Complexity:</strong> O(n × k) — storing all strings in the HashMap
+  </div>
+
+  <div class="explain" style="margin-top: 1.5rem;">
+    <h3>Alternative: Character Frequency Key (Optimization)</h3>
+    <p>Instead of sorting, we can create a frequency-based key. This improves time complexity to O(n × k):</p>
+  </div>
+
+<pre><code><span class="kw">public</span> <span class="type">List</span>&lt;<span class="type">List</span>&lt;<span class="type">String</span>&gt;&gt; <span class="fn">groupAnagramsOptimized</span>(<span class="type">String</span>[] strs) {
+    <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">List</span>&lt;<span class="type">String</span>&gt;&gt; map = <span class="kw">new</span> HashMap&lt;&gt;();
+    
+    <span class="kw">for</span> (<span class="type">String</span> str : strs) {
+        <span class="cmt">// Create frequency array for 26 letters</span>
+        <span class="type">int</span>[] count = <span class="kw">new int</span>[<span class="num">26</span>];
+        <span class="kw">for</span> (<span class="type">char</span> c : str.<span class="fn">toCharArray</span>()) {
+            count[c - <span class="str">'a'</span>]++;
+        }
+        
+        <span class="cmt">// Convert count array to string key: "1#0#0#1#1#..." </span>
+        <span class="type">StringBuilder</span> keyBuilder = <span class="kw">new</span> StringBuilder();
+        <span class="kw">for</span> (<span class="type">int</span> i = <span class="num">0</span>; i < <span class="num">26</span>; i++) {
+            keyBuilder.<span class="fn">append</span>(count[i]).<span class="fn">append</span>(<span class="str">'#'</span>);
+        }
+        <span class="type">String</span> key = keyBuilder.<span class="fn">toString</span>();
+        
+        map.<span class="fn">computeIfAbsent</span>(key, k -&gt; <span class="kw">new</span> ArrayList&lt;&gt;()).<span class="fn">add</span>(str);
+    }
+    
+    <span class="kw">return new</span> ArrayList&lt;&gt;(map.<span class="fn">values</span>());
+}</code></pre>
+
+  <div class="complexity">
+    <strong>Time Complexity:</strong> O(n × k) — where n = number of strings, k = average length of strings<br>
+    <strong>Space Complexity:</strong> O(n × k)
+  </div>
+</section>
+
+<!-- ───────────────── Q3 ───────────────── -->
+<section class="question" id="q3">
+  <h2>Q3 — Valid Sudoku Board</h2>
+  <span class="badge badge-java">JAVA</span>
+  <p class="problem">
+    You are given a partially filled 9x9 Sudoku board. Your task is to determine if the board is valid.
+    A Sudoku board is valid if:<br>
+  </p>
+  <ol style="margin-left: 1.5rem; margin-bottom: 1rem; color: var(--muted);">
+    <li>Each row contains the digits 1-9 without repetition.</li>
+    <li>Each column contains the digits 1-9 without repetition.</li>
+    <li>Each of the 9 subgrids (3x3) contains the digits 1-9 without repetition.</li>
+  </ol>
+  <p class="problem">
+    Only the <strong>filled cells</strong> (non-"." cells) need to be validated. Empty cells (".") can be ignored.<br><br>
+    <strong>Input:</strong> A 9x9 grid, where each cell contains a digit from '1' to '9' or a dot (".") representing an empty cell.<br>
+    <strong>Output:</strong> Return <code>true</code> if the board is valid according to the rules. Return <code>false</code> if the board violates any of the rules.
+  </p>
+
+  <div class="explain">
+    <h3>Intuition</h3>
+    <p><strong>The challenge:</strong> We need to check three things simultaneously: no duplicate in any row, any column, or any 3×3 sub-box.</p>
+    <p><strong>Key insight:</strong> Use HashSets to track which numbers we've seen in each row, column, and box. If we encounter a duplicate, return false immediately.</p>
+  </div>
+
+  <div class="explain">
+    <h3>Algorithm Strategy</h3>
+    <ol>
+      <li>Create three arrays of HashSets:
+        <ul>
+          <li><code>rows[9]</code> — one set for each row to track digits</li>
+          <li><code>cols[9]</code> — one set for each column to track digits</li>
+          <li><code>boxes[9]</code> — one set for each 3×3 box to track digits</li>
+        </ul>
+      </li>
+      <li>Iterate through each cell (i, j) in the board</li>
+      <li>If the cell is not empty:
+        <ul>
+          <li>Calculate which box it belongs to: <code>boxIndex = (i / 3) * 3 + (j / 3)</code></li>
+          <li>Check if the digit already exists in <code>rows[i]</code>, <code>cols[j]</code>, or <code>boxes[boxIndex]</code></li>
+          <li>If yes, return false (duplicate found)</li>
+          <li>If no, add the digit to all three sets</li>
+        </ul>
+      </li>
+      <li>If we complete the loop without finding duplicates, return true</li>
+    </ol>
+  </div>
+
+  <div class="explain">
+    <h3>Understanding Box Index Calculation</h3>
+    <p>The 9 boxes are numbered 0-8 in row-major order:</p>
+    <pre style="font-size: .85rem;">
+Box Layout:
+┌─────┬─────┬─────┐
+│  0  │  1  │  2  │
+├─────┼─────┼─────┤
+│  3  │  4  │  5  │
+├─────┼─────┼─────┤
+│  6  │  7  │  8  │
+└─────┴─────┴─────┘
+    </pre>
+    <p>Formula: <code>boxIndex = (row / 3) * 3 + (col / 3)</code></p>
+    <ul>
+      <li>Cell (0,0) → box 0: (0/3)*3 + (0/3) = 0</li>
+      <li>Cell (1,4) → box 1: (1/3)*3 + (4/3) = 0 + 1 = 1</li>
+      <li>Cell (5,7) → box 5: (5/3)*3 + (7/3) = 3 + 2 = 5</li>
+      <li>Cell (8,8) → box 8: (8/3)*3 + (8/3) = 6 + 2 = 8</li>
+    </ul>
+  </div>
+
+<pre><code><span class="kw">import</span> java.util.*;
+
+<span class="kw">public boolean</span> <span class="fn">isValidSudoku</span>(<span class="type">char</span>[][] board) {
+    <span class="cmt">// Create arrays of HashSets for rows, columns, and boxes</span>
+    <span class="type">Set</span>&lt;<span class="type">Character</span>&gt;[] rows = <span class="kw">new</span> HashSet[<span class="num">9</span>];
+    <span class="type">Set</span>&lt;<span class="type">Character</span>&gt;[] cols = <span class="kw">new</span> HashSet[<span class="num">9</span>];
+    <span class="type">Set</span>&lt;<span class="type">Character</span>&gt;[] boxes = <span class="kw">new</span> HashSet[<span class="num">9</span>];
+    
+    <span class="cmt">// Initialize all sets</span>
+    <span class="kw">for</span> (<span class="type">int</span> i = <span class="num">0</span>; i < <span class="num">9</span>; i++) {
+        rows[i] = <span class="kw">new</span> HashSet&lt;&gt;();
+        cols[i] = <span class="kw">new</span> HashSet&lt;&gt;();
+        boxes[i] = <span class="kw">new</span> HashSet&lt;&gt;();
+    }
+    
+    <span class="cmt">// Iterate through each cell</span>
+    <span class="kw">for</span> (<span class="type">int</span> i = <span class="num">0</span>; i < <span class="num">9</span>; i++) {
+        <span class="kw">for</span> (<span class="type">int</span> j = <span class="num">0</span>; j < <span class="num">9</span>; j++) {
+            <span class="type">char</span> num = board[i][j];
+            
+            <span class="cmt">// Skip empty cells</span>
+            <span class="kw">if</span> (num == <span class="str">'.'</span>) {
+                <span class="kw">continue</span>;
+            }
+            
+            <span class="cmt">// Calculate which box this cell belongs to</span>
+            <span class="type">int</span> boxIndex = (i / <span class="num">3</span>) * <span class="num">3</span> + (j / <span class="num">3</span>);
+            
+            <span class="cmt">// Check if number already exists in row, column, or box</span>
+            <span class="kw">if</span> (rows[i].<span class="fn">contains</span>(num) || 
+                cols[j].<span class="fn">contains</span>(num) || 
+                boxes[boxIndex].<span class="fn">contains</span>(num)) {
+                <span class="kw">return false</span>;  <span class="cmt">// Duplicate found!</span>
+            }
+            
+            <span class="cmt">// Add number to all three sets</span>
+            rows[i].<span class="fn">add</span>(num);
+            cols[j].<span class="fn">add</span>(num);
+            boxes[boxIndex].<span class="fn">add</span>(num);
+        }
+    }
+    
+    <span class="cmt">// No duplicates found, board is valid</span>
+    <span class="kw">return true</span>;
+}</code></pre>
+
+  <div class="complexity">
+    <strong>Time Complexity:</strong> O(1) — technically O(81) since we always check 9×9 = 81 cells, which is constant<br>
+    <strong>Space Complexity:</strong> O(1) — we use 27 sets (9 rows + 9 cols + 9 boxes), but each can hold at most 9 elements, so it's O(27 × 9) = O(243) = O(1)
+  </div>
+
+  <div class="explain" style="margin-top: 1.5rem;">
+    <h3>Alternative: Single Set with Encoded Keys</h3>
+    <p>A more compact approach uses string encoding to check all three conditions with one set:</p>
+  </div>
+
+<pre><code><span class="kw">public boolean</span> <span class="fn">isValidSudokuCompact</span>(<span class="type">char</span>[][] board) {
+    <span class="type">Set</span>&lt;<span class="type">String</span>&gt; seen = <span class="kw">new</span> HashSet&lt;&gt;();
+    
+    <span class="kw">for</span> (<span class="type">int</span> i = <span class="num">0</span>; i < <span class="num">9</span>; i++) {
+        <span class="kw">for</span> (<span class="type">int</span> j = <span class="num">0</span>; j < <span class="num">9</span>; j++) {
+            <span class="type">char</span> num = board[i][j];
+            <span class="kw">if</span> (num == <span class="str">'.'</span>) <span class="kw">continue</span>;
+            
+            <span class="cmt">// Create unique strings for row, column, and box</span>
+            <span class="type">String</span> rowKey = num + <span class="str">" in row "</span> + i;
+            <span class="type">String</span> colKey = num + <span class="str">" in col "</span> + j;
+            <span class="type">String</span> boxKey = num + <span class="str">" in box "</span> + (i/<span class="num">3</span>) + <span class="str">"-"</span> + (j/<span class="num">3</span>);
+            
+            <span class="cmt">// If any key already exists, duplicate found</span>
+            <span class="kw">if</span> (!seen.<span class="fn">add</span>(rowKey) || !seen.<span class="fn">add</span>(colKey) || !seen.<span class="fn">add</span>(boxKey)) {
+                <span class="kw">return false</span>;
+            }
+        }
+    }
+    
+    <span class="kw">return true</span>;
+}</code></pre>
+
+  <div class="explain">
+    <h3>How the Encoding Works</h3>
+    <p>For cell (4, 7) with value '5', we create three unique strings:</p>
+    <ul>
+      <li><code>"5 in row 4"</code> — ensures 5 appears only once in row 4</li>
+      <li><code>"5 in col 7"</code> — ensures 5 appears only once in column 7</li>
+      <li><code>"5 in box 1-2"</code> — ensures 5 appears only once in box (1,2)</li>
+    </ul>
+    <p>The <code>add()</code> method returns false if the element already exists, allowing us to detect duplicates immediately.</p>
+  </div>
+</section>
+
+<!-- ───────────────── Q4 ───────────────── -->
+<section class="question" id="q4">
+  <h2>Q4 — 6-Digit Palindromes</h2>
+  <span class="badge badge-java">JAVA</span>
+  <p class="problem">
+    Write a program to print all 6-digit palindromes. A <strong>palindrome</strong> is a number that reads the same forward and backward.<br><br>
+    <strong>Examples:</strong> 100001, 101101, 123321, 999999
+  </p>
+
+  <div class="explain">
+    <h3>Intuition</h3>
+    <p><strong>Key insight:</strong> For a 6-digit palindrome, the structure is: <code>ABCCBA</code></p>
+    <p>The first 3 digits determine the last 3 digits completely. So we only need to generate the first half!</p>
+    <ul>
+      <li>If first half is 100, the palindrome is 100001</li>
+      <li>If first half is 123, the palindrome is 123321</li>
+      <li>If first half is 999, the palindrome is 999999</li>
+    </ul>
+  </div>
+
+  <div class="explain">
+    <h3>Algorithm</h3>
+    <ol>
+      <li>The first 3 digits range from 100 to 999 (to ensure we get 6-digit numbers)</li>
+      <li>For each number in this range:
+        <ul>
+          <li>Reverse it to get the second half</li>
+          <li>Concatenate: first half + reversed half</li>
+        </ul>
+      </li>
+      <li>Print the result</li>
+    </ol>
+    <p><strong>Total palindromes:</strong> 999 - 100 + 1 = 900 palindromes</p>
+  </div>
+
+<pre><code><span class="kw">public class</span> <span class="type">SixDigitPalindromes</span> {
+    
+    <span class="kw">public static void</span> <span class="fn">printAllPalindromes</span>() {
+        <span class="cmt">// First half ranges from 100 to 999</span>
+        <span class="kw">for</span> (<span class="type">int</span> i = <span class="num">100</span>; i <= <span class="num">999</span>; i++) {
+            <span class="cmt">// Reverse the first half to create second half</span>
+            <span class="type">String</span> firstHalf = String.<span class="fn">valueOf</span>(i);
+            <span class="type">String</span> secondHalf = <span class="kw">new</span> StringBuilder(firstHalf).<span class="fn">reverse</span>().<span class="fn">toString</span>();
+            
+            <span class="cmt">// Combine to form palindrome</span>
+            <span class="type">String</span> palindrome = firstHalf + secondHalf;
+            
+            System.out.<span class="fn">println</span>(palindrome);
+        }
+    }
+    
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="type">String</span>[] args) {
+        <span class="fn">printAllPalindromes</span>();
+    }
+}
+
+<span class="cmt">// Alternative: More efficient using integer operations</span>
+<span class="kw">public static void</span> <span class="fn">printAllPalindromesOptimized</span>() {
+    <span class="kw">for</span> (<span class="type">int</span> i = <span class="num">100</span>; i <= <span class="num">999</span>; i++) {
+        <span class="cmt">// Reverse the number mathematically</span>
+        <span class="type">int</span> reversed = <span class="fn">reverseNumber</span>(i);
+        
+        <span class="cmt">// Combine: first half * 1000 + reversed</span>
+        <span class="type">int</span> palindrome = i * <span class="num">1000</span> + reversed;
+        
+        System.out.<span class="fn">println</span>(palindrome);
+    }
+}
+
+<span class="kw">private static int</span> <span class="fn">reverseNumber</span>(<span class="type">int</span> num) {
+    <span class="type">int</span> reversed = <span class="num">0</span>;
+    <span class="kw">while</span> (num > <span class="num">0</span>) {
+        reversed = reversed * <span class="num">10</span> + num % <span class="num">10</span>;
+        num /= <span class="num">10</span>;
+    }
+    <span class="kw">return</span> reversed;
+}</code></pre>
+
+  <div class="complexity">
+    <strong>Time Complexity:</strong> O(900) = O(1) — constant number of iterations<br>
+    <strong>Space Complexity:</strong> O(1)
+  </div>
+
+  <div class="explain" style="margin-top: 1.5rem;">
+    <h3>Sample Output (First 10 and Last 10)</h3>
+    <pre style="font-size: .85rem;">
+First 10 palindromes:
+100001
+101101
+102201
+103301
+104401
+105501
+106601
+107701
+108801
+109901
+
+Last 10 palindromes:
+990099
+991199
+992299
+993399
+994499
+995599
+996699
+997799
+998899
+999999
+
+Total count: 900 palindromes
+    </pre>
+  </div>
+
+  <div class="explain">
+    <h3>Alternative: Print with Formatting</h3>
+  </div>
+
+<pre><code><span class="kw">public static void</span> <span class="fn">printPalindromesWithCount</span>() {
+    <span class="type">int</span> count = <span class="num">0</span>;
+    
+    <span class="kw">for</span> (<span class="type">int</span> i = <span class="num">100</span>; i <= <span class="num">999</span>; i++) {
+        <span class="type">String</span> firstHalf = String.<span class="fn">valueOf</span>(i);
+        <span class="type">String</span> secondHalf = <span class="kw">new</span> StringBuilder(firstHalf).<span class="fn">reverse</span>().<span class="fn">toString</span>();
+        <span class="type">String</span> palindrome = firstHalf + secondHalf;
+        
+        count++;
+        System.out.<span class="fn">printf</span>(<span class="str">"%4d. %s%n"</span>, count, palindrome);
+    }
+    
+    System.out.<span class="fn">println</span>(<span class="str">"\nTotal palindromes: "</span> + count);
+}</code></pre>
+</section>
+
+<!-- ───────────────── Q5 ───────────────── -->
+<section class="question" id="q5">
+  <h2>Q5 — Minimum Window Substring</h2>
+  <span class="badge badge-java">JAVA</span>
+  <p class="problem">
+    Given two strings <strong>s</strong> and <strong>t</strong>, return the minimum window in <strong>s</strong> which contains all the characters in <strong>t</strong>.<br><br>
+    <strong>Input:</strong><br>
+    s = "ADOBECODEBANC"<br>
+    t = "ABC"<br><br>
+    <strong>Output:</strong> "BANC"<br><br>
+    <strong>Explanation:</strong> The minimum window substring "BANC" includes 'A', 'B', and 'C' from string t.
+  </p>
+
+  <div class="explain">
+    <h3>Intuition</h3>
+    <p><strong>The problem:</strong> We need to find the smallest substring of <code>s</code> that contains all characters from <code>t</code> (with their frequencies).</p>
+    <p><strong>Key insight:</strong> Use the <em>sliding window</em> technique with two pointers:</p>
+    <ul>
+      <li><strong>Right pointer:</strong> Expands the window to include more characters</li>
+      <li><strong>Left pointer:</strong> Contracts the window to find the minimum size</li>
+    </ul>
+  </div>
+
+  <div class="explain">
+    <h3>Algorithm (Sliding Window)</h3>
+    <ol>
+      <li><strong>Setup:</strong>
+        <ul>
+          <li>Create a frequency map for characters in <code>t</code></li>
+          <li>Track how many unique characters from <code>t</code> we've satisfied</li>
+        </ul>
+      </li>
+      <li><strong>Expand (move right pointer):</strong>
+        <ul>
+          <li>Add characters to the window</li>
+          <li>Update character counts</li>
+          <li>When a character's count matches the required count, increment "formed" counter</li>
+        </ul>
+      </li>
+      <li><strong>Contract (move left pointer):</strong>
+        <ul>
+          <li>Once all characters are satisfied, try to shrink the window from the left</li>
+          <li>Update the minimum window if current window is smaller</li>
+          <li>Remove characters from the left until the window becomes invalid</li>
+        </ul>
+      </li>
+      <li>Return the minimum window found</li>
+    </ol>
+  </div>
+
+  <div class="explain">
+    <h3>Visual Example</h3>
+    <p>s = "ADOBECODEBANC", t = "ABC"</p>
+    <pre style="font-size: .82rem;">
+Step 1: Expand right until we have all chars
+A D O B E C O D E B A N C
+^               ^
+left          right
+Window: "ADOBEC" ✓ (has A, B, C) — length 6
+
+Step 2: Contract left to minimize
+A D O B E C O D E B A N C
+      ^     ^
+    left  right
+Window: "OBEC" ✗ (missing A)
+
+Step 3: Continue expanding right...
+A D O B E C O D E B A N C
+      ^               ^
+    left            right
+Window: "OBECODEBA" ✓ (has A, B, C) — length 9
+
+Step 4: Contract left again...
+A D O B E C O D E B A N C
+                    ^ ^ ^
+                  left  right
+Window: "BANC" ✓ (has A, B, C) — length 4 (MINIMUM!)
+    </pre>
+  </div>
+
+<pre><code><span class="kw">import</span> java.util.*;
+
+<span class="kw">public</span> <span class="type">String</span> <span class="fn">minWindow</span>(<span class="type">String</span> s, <span class="type">String</span> t) {
+    <span class="kw">if</span> (s.<span class="fn">length</span>() == <span class="num">0</span> || t.<span class="fn">length</span>() == <span class="num">0</span>) {
+        <span class="kw">return</span> <span class="str">""</span>;
+    }
+    
+    <span class="cmt">// Build frequency map for string t</span>
+    <span class="type">Map</span>&lt;<span class="type">Character</span>, <span class="type">Integer</span>&gt; targetMap = <span class="kw">new</span> HashMap&lt;&gt;();
+    <span class="kw">for</span> (<span class="type">char</span> c : t.<span class="fn">toCharArray</span>()) {
+        targetMap.<span class="fn">put</span>(c, targetMap.<span class="fn">getOrDefault</span>(c, <span class="num">0</span>) + <span class="num">1</span>);
+    }
+    
+    <span class="type">int</span> required = targetMap.<span class="fn">size</span>(); <span class="cmt">// Number of unique chars in t</span>
+    <span class="type">int</span> formed = <span class="num">0</span>; <span class="cmt">// How many unique chars in current window match frequency</span>
+    
+    <span class="cmt">// Window character counts</span>
+    <span class="type">Map</span>&lt;<span class="type">Character</span>, <span class="type">Integer</span>&gt; windowMap = <span class="kw">new</span> HashMap&lt;&gt;();
+    
+    <span class="cmt">// Result: [window length, left, right]</span>
+    <span class="type">int</span>[] result = {-<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>}; <span class="cmt">// -1 means no valid window found yet</span>
+    
+    <span class="type">int</span> left = <span class="num">0</span>, right = <span class="num">0</span>;
+    
+    <span class="kw">while</span> (right < s.<span class="fn">length</span>()) {
+        <span class="cmt">// Expand window by adding character at right</span>
+        <span class="type">char</span> c = s.<span class="fn">charAt</span>(right);
+        windowMap.<span class="fn">put</span>(c, windowMap.<span class="fn">getOrDefault</span>(c, <span class="num">0</span>) + <span class="num">1</span>);
+        
+        <span class="cmt">// Check if frequency of current char matches target frequency</span>
+        <span class="kw">if</span> (targetMap.<span class="fn">containsKey</span>(c) && 
+            windowMap.<span class="fn">get</span>(c).<span class="fn">intValue</span>() == targetMap.<span class="fn">get</span>(c).<span class="fn">intValue</span>()) {
+            formed++;
+        }
+        
+        <span class="cmt">// Contract window from left while condition is satisfied</span>
+        <span class="kw">while</span> (left <= right && formed == required) {
+            <span class="cmt">// Update result if this window is smaller</span>
+            <span class="kw">if</span> (result[<span class="num">0</span>] == -<span class="num">1</span> || right - left + <span class="num">1</span> < result[<span class="num">0</span>]) {
+                result[<span class="num">0</span>] = right - left + <span class="num">1</span>;
+                result[<span class="num">1</span>] = left;
+                result[<span class="num">2</span>] = right;
+            }
+            
+            <span class="cmt">// Remove character at left from window</span>
+            <span class="type">char</span> leftChar = s.<span class="fn">charAt</span>(left);
+            windowMap.<span class="fn">put</span>(leftChar, windowMap.<span class="fn">get</span>(leftChar) - <span class="num">1</span>);
+            
+            <span class="cmt">// If this character is in t and frequency no longer matches</span>
+            <span class="kw">if</span> (targetMap.<span class="fn">containsKey</span>(leftChar) && 
+                windowMap.<span class="fn">get</span>(leftChar) < targetMap.<span class="fn">get</span>(leftChar)) {
+                formed--;
+            }
+            
+            left++; <span class="cmt">// Move left pointer forward</span>
+        }
+        
+        right++; <span class="cmt">// Move right pointer forward</span>
+    }
+    
+    <span class="cmt">// Return the minimum window or empty string if not found</span>
+    <span class="kw">return</span> result[<span class="num">0</span>] == -<span class="num">1</span> ? <span class="str">""</span> : s.<span class="fn">substring</span>(result[<span class="num">1</span>], result[<span class="num">2</span>] + <span class="num">1</span>);
+}</code></pre>
+
+  <div class="complexity">
+    <strong>Time Complexity:</strong> O(|s| + |t|) — each character in s is visited at most twice (once by right pointer, once by left pointer)<br>
+    <strong>Space Complexity:</strong> O(|s| + |t|) — for the HashMaps
+  </div>
+
+  <div class="explain" style="margin-top: 1.5rem;">
+    <h3>Example Walkthrough</h3>
+    <p>s = "ADOBECODEBANC", t = "ABC"</p>
+    <table class="step-table">
+      <thead>
+        <tr><th>Step</th><th>Window</th><th>left</th><th>right</th><th>Valid?</th><th>Action</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>"A"</td><td>0</td><td>0</td><td>No</td><td>Expand right</td></tr>
+        <tr><td>2</td><td>"ADOB"</td><td>0</td><td>3</td><td>No</td><td>Expand right</td></tr>
+        <tr><td>3</td><td>"ADOBEC"</td><td>0</td><td>5</td><td>Yes</td><td>Contract left, update min</td></tr>
+        <tr><td>4</td><td>"DOBEC"</td><td>1</td><td>5</td><td>No</td><td>Expand right</td></tr>
+        <tr><td>5</td><td>"ODEBANC"</td><td>3</td><td>12</td><td>Yes</td><td>Contract left</td></tr>
+        <tr><td>6</td><td>"BANC"</td><td>9</td><td>12</td><td>Yes</td><td>Update min (length 4)</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Result:</strong> "BANC" with length 4</p>
+  </div>
+
+  <div class="explain">
+    <h3>Key Points to Remember</h3>
+    <ul>
+      <li><strong>Sliding window</strong> is perfect for substring/subarray problems</li>
+      <li>Use <strong>two pointers</strong>: right expands, left contracts</li>
+      <li>Track <strong>character frequencies</strong> with HashMaps</li>
+      <li>The <code>formed</code> variable efficiently tracks when all requirements are met</li>
+      <li>Always update the result <strong>before</strong> breaking the valid window condition</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ───────────────── Q6 ───────────────── -->
+<section class="question" id="q6">
+  <h2>Q6 — Student Club Management — Database Schema &amp; SQL</h2>
+  <span class="badge badge-sql">SQL</span>
+  <p class="problem">
+    You are hired to design a database for a university's student club management system. The university has multiple clubs, 
+    each with a unique club name and a president. Students can join one or more clubs, and every student has a unique student ID, 
+    name, and enrollment year. Each club organizes multiple events, with details such as the event name, event date, and club 
+    hosting the event.
+  </p>
+
+  <div class="explain">
+    <h3>Database Design Requirements</h3>
+    <ol>
+      <li>Design the database schema by identifying necessary tables, their attributes, and relationships (primary key and foreign keys)</li>
+      <li>Make sure that the schema is in the 3NF.</li>
+      <li>Answer the following SQL queries once the schema is created.</li>
+    </ol>
+  </div>
+
+  <div class="explain" style="margin-top: 1.5rem;">
+    <h3>Understanding the Problem</h3>
+    <p><strong>What we're building:</strong> A database to manage student clubs at a university. We need to track:</p>
+    <ul>
+      <li>Which students belong to which clubs (many-to-many: one student can join multiple clubs, one club has multiple students)</li>
+      <li>Who is the president of each club</li>
+      <li>Which events each club organizes</li>
+      <li>Which students attended which events (many-to-many: one student can attend multiple events, one event has multiple attendees)</li>
+    </ul>
+    
+    <h3>Why 5 Tables? (Breaking Down the Design)</h3>
+    <ol>
+      <li><strong>students</strong> — Core table storing basic student info (ID, name, enrollment year)</li>
+      <li><strong>clubs</strong> — Core table storing club info (name, who's president)
+        <ul><li>President is a foreign key to students table (president must be a valid student)</li></ul>
+      </li>
+      <li><strong>student_clubs</strong> — <em>Junction table</em> connecting students ↔ clubs
+        <ul>
+          <li>Why needed? A student can join many clubs, and a club has many members</li>
+          <li>Each row represents one membership: (student_id, club_id)</li>
+        </ul>
+      </li>
+      <li><strong>events</strong> — Stores each event organized by a club
+        <ul><li>Each event belongs to exactly one club (foreign key to clubs)</li></ul>
+      </li>
+      <li><strong>event_participants</strong> — <em>Junction table</em> connecting students ↔ events
+        <ul>
+          <li>Why needed? A student can attend many events, and an event can have many attendees</li>
+          <li>Each row represents one attendance: (event_id, student_id)</li>
+        </ul>
+      </li>
+    </ol>
+    
+    <h3>What is 3NF? (Simple Explanation)</h3>
+    <p><strong>Third Normal Form (3NF)</strong> means our database has no redundancy and data is organized properly:</p>
+    <ul>
+      <li><strong>Rule 1:</strong> Every column depends on the primary key (no unrelated data in a table)</li>
+      <li><strong>Rule 2:</strong> No transitive dependencies (A → B → C, where B is not a key)</li>
+      <li><strong>Example of violation:</strong> If we stored "club_name" in the events table, we'd repeat the same club name for every event. Instead, we store only club_id and look up the name when needed.</li>
+    </ul>
+    <p>Our design is in 3NF because each table stores only directly related information, and we use foreign keys to connect related data without duplication.</p>
+  </div>
+
+<pre><code><span class="sql-kw">CREATE TABLE</span> students (
+    student_id      <span class="sql-type">INT</span>          <span class="sql-kw">PRIMARY KEY</span>,
+    name            <span class="sql-type">VARCHAR(100)</span> <span class="sql-kw">NOT NULL</span>,
+    enrollment_year <span class="sql-type">INT</span>          <span class="sql-kw">NOT NULL</span>
+);
+
+<span class="sql-kw">CREATE TABLE</span> clubs (
+    club_id      <span class="sql-type">INT</span>          <span class="sql-kw">PRIMARY KEY AUTO_INCREMENT</span>,
+    club_name    <span class="sql-type">VARCHAR(100)</span> <span class="sql-kw">NOT NULL UNIQUE</span>,
+    president_id <span class="sql-type">INT</span>          <span class="sql-kw">NOT NULL</span>,
+    <span class="sql-kw">FOREIGN KEY</span> (president_id) <span class="sql-kw">REFERENCES</span> students(student_id)
+);
+
+<span class="sql-kw">CREATE TABLE</span> student_clubs (
+    student_id <span class="sql-type">INT</span> <span class="sql-kw">NOT NULL</span>,
+    club_id    <span class="sql-type">INT</span> <span class="sql-kw">NOT NULL</span>,
+    <span class="sql-kw">PRIMARY KEY</span> (student_id, club_id),
+    <span class="sql-kw">FOREIGN KEY</span> (student_id) <span class="sql-kw">REFERENCES</span> students(student_id),
+    <span class="sql-kw">FOREIGN KEY</span> (club_id)    <span class="sql-kw">REFERENCES</span> clubs(club_id)
+);
+
+<span class="sql-kw">CREATE TABLE</span> events (
+    event_id   <span class="sql-type">INT</span>          <span class="sql-kw">PRIMARY KEY AUTO_INCREMENT</span>,
+    event_name <span class="sql-type">VARCHAR(200)</span> <span class="sql-kw">NOT NULL</span>,
+    event_date <span class="sql-type">DATE</span>         <span class="sql-kw">NOT NULL</span>,
+    club_id    <span class="sql-type">INT</span>          <span class="sql-kw">NOT NULL</span>,
+    <span class="sql-kw">FOREIGN KEY</span> (club_id) <span class="sql-kw">REFERENCES</span> clubs(club_id)
+);
+
+<span class="sql-kw">CREATE TABLE</span> event_participants (
+    event_id   <span class="sql-type">INT</span> <span class="sql-kw">NOT NULL</span>,
+    student_id <span class="sql-type">INT</span> <span class="sql-kw">NOT NULL</span>,
+    <span class="sql-kw">PRIMARY KEY</span> (event_id, student_id),
+    <span class="sql-kw">FOREIGN KEY</span> (event_id)   <span class="sql-kw">REFERENCES</span> events(event_id),
+    <span class="sql-kw">FOREIGN KEY</span> (student_id) <span class="sql-kw">REFERENCES</span> students(student_id)
+);</code></pre>
+
+  <div class="explain" style="margin-top: 1.75rem;">
+    <h3>SQL Query 1 — List all students along with the clubs they are a part of</h3>
+    <p><strong>Requirement:</strong> If a student is not part of any club, still include their name in the output.</p>
+  </div>
+
+<pre><code><span class="sql-kw">SELECT</span> s.student_id,
+       s.name        <span class="sql-kw">AS</span> student_name,
+       c.club_name
+<span class="sql-kw">FROM</span>   students s
+<span class="sql-kw">LEFT JOIN</span> student_clubs sc <span class="sql-kw">ON</span> s.student_id = sc.student_id
+<span class="sql-kw">LEFT JOIN</span> clubs c          <span class="sql-kw">ON</span> sc.club_id = c.club_id
+<span class="sql-kw">ORDER BY</span> s.name, c.club_name;</code></pre>
+
+  <div class="explain">
+    <h3>Explanation</h3>
+    <ul>
+      <li><strong>LEFT JOIN</strong> ensures all students appear, even if they're not in any club</li>
+      <li>Students with no clubs will have <code>NULL</code> for <code>club_name</code></li>
+      <li>Students in multiple clubs will appear multiple times (one row per club)</li>
+    </ul>
+  </div>
+
+  <div class="explain" style="margin-top: 1.75rem;">
+    <h3>SQL Query 2 — Find the name of the club president and the number of events organized by their club in the year 2024</h3>
+  </div>
+
+<pre><code><span class="sql-kw">SELECT</span> s.name          <span class="sql-kw">AS</span> president_name,
+       c.club_name,
+       <span class="sql-fn">COUNT</span>(e.event_id) <span class="sql-kw">AS</span> events_in_2024
+<span class="sql-kw">FROM</span>   clubs c
+<span class="sql-kw">JOIN</span>   students s <span class="sql-kw">ON</span> c.president_id = s.student_id
+<span class="sql-kw">LEFT JOIN</span> events e <span class="sql-kw">ON</span> c.club_id = e.club_id
+                   <span class="sql-kw">AND</span> <span class="sql-fn">YEAR</span>(e.event_date) = <span class="num">2024</span>
+<span class="sql-kw">GROUP BY</span> c.club_id, c.club_name, s.name
+<span class="sql-kw">ORDER BY</span> events_in_2024 <span class="sql-kw">DESC</span>;</code></pre>
+
+  <div class="explain">
+    <h3>Explanation</h3>
+    <ul>
+      <li><strong>JOIN students</strong> to get president name from president_id</li>
+      <li><strong>LEFT JOIN events</strong> to include clubs with zero events in 2024</li>
+      <li>Filter year 2024 in the JOIN condition (not WHERE) to preserve clubs with 0 events</li>
+      <li><strong>COUNT(e.event_id)</strong> counts events; returns 0 for clubs with no matching events</li>
+      <li><strong>GROUP BY</strong> groups by club (and president) to aggregate event counts</li>
+    </ul>
+  </div>
+
+  <div class="explain" style="margin-top: 1.75rem;">
+    <h3>SQL Query 3 — Retrieve the details of all events (event name, date, and club name) along with the names of students who participated in them</h3>
+    <p><strong>Requirement:</strong> Include events that no student attended.</p>
+  </div>
+
+<pre><code><span class="sql-kw">SELECT</span> e.event_name,
+       e.event_date,
+       c.club_name,
+       s.name <span class="sql-kw">AS</span> participant_name
+<span class="sql-kw">FROM</span>   events e
+<span class="sql-kw">JOIN</span>   clubs c              <span class="sql-kw">ON</span> e.club_id = c.club_id
+<span class="sql-kw">LEFT JOIN</span> event_participants ep <span class="sql-kw">ON</span> e.event_id = ep.event_id
+<span class="sql-kw">LEFT JOIN</span> students s           <span class="sql-kw">ON</span> ep.student_id = s.student_id
+<span class="sql-kw">ORDER BY</span> e.event_date, e.event_name, s.name;</code></pre>
+
+  <div class="explain">
+    <h3>Explanation</h3>
+    <ul>
+      <li><strong>JOIN clubs</strong> to get the club name for each event</li>
+      <li><strong>LEFT JOIN event_participants</strong> ensures events with no participants are included</li>
+      <li><strong>LEFT JOIN students</strong> to get participant names</li>
+      <li>Events with no participants will have <code>NULL</code> for <code>participant_name</code></li>
+      <li>Events with multiple participants will appear multiple times (one row per participant)</li>
+    </ul>
+  </div>
+
+  <div class="explain" style="margin-top: 1.75rem;">
+    <h3>Sample Data Illustration</h3>
+    <p>Let's see what the results would look like with example data:</p>
+  </div>
+
+  <div class="explain">
+    <h4>Query 1 Sample Output:</h4>
+    <table class="step-table">
+      <thead>
+        <tr><th>student_id</th><th>student_name</th><th>club_name</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>101</td><td>Alice Smith</td><td>Coding Club</td></tr>
+        <tr><td>101</td><td>Alice Smith</td><td>Chess Club</td></tr>
+        <tr><td>102</td><td>Bob Johnson</td><td>Coding Club</td></tr>
+        <tr><td>103</td><td>Carol White</td><td>NULL</td></tr>
+      </tbody>
+    </table>
+    <p><em>Note: Carol White is not in any club, but still appears in results.</em></p>
+  </div>
+
+  <div class="explain">
+    <h4>Query 2 Sample Output:</h4>
+    <table class="step-table">
+      <thead>
+        <tr><th>president_name</th><th>club_name</th><th>events_in_2024</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Alice Smith</td><td>Coding Club</td><td>5</td></tr>
+        <tr><td>David Lee</td><td>Chess Club</td><td>3</td></tr>
+        <tr><td>Emma Davis</td><td>Drama Club</td><td>0</td></tr>
+      </tbody>
+    </table>
+    <p><em>Note: Drama Club has 0 events in 2024, but president still appears.</em></p>
+  </div>
+
+  <div class="explain">
+    <h4>Query 3 Sample Output:</h4>
+    <table class="step-table">
+      <thead>
+        <tr><th>event_name</th><th>event_date</th><th>club_name</th><th>participant_name</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Hackathon 2024</td><td>2024-03-15</td><td>Coding Club</td><td>Alice Smith</td></tr>
+        <tr><td>Hackathon 2024</td><td>2024-03-15</td><td>Coding Club</td><td>Bob Johnson</td></tr>
+        <tr><td>Spring Social</td><td>2024-04-10</td><td>Drama Club</td><td>NULL</td></tr>
+      </tbody>
+    </table>
+    <p><em>Note: Spring Social has no participants, but event details still appear.</em></p>
+  </div>
+</section>
+
+</div>
+</body>
+</html>

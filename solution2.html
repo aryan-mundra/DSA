@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> Random Questions 2 </title>
+  <style>
+    :root {
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --accent: #2563eb;
+      --accent2: #6366f1;
+      --text: #1a1a1a;
+      --muted: #4b5563;
+      --border: #e2e8f0;
+      --code-bg: #f1f5f9;
+      --green: #16a34a;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 2rem 1rem;
+    }
+    .container { max-width: 960px; margin: 0 auto; }
+    h1 {
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: .5rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 3rem;
+      font-size: 1.05rem;
+    }
+    .toc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
+      margin-bottom: 3rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+    .toc h2 { font-size: 1.2rem; margin-bottom: .75rem; color: var(--accent); }
+    .toc ol { padding-left: 1.25rem; }
+    .toc li { margin-bottom: .35rem; color: var(--text); }
+    .toc a { color: var(--accent2); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    .question {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+    .question h2 {
+      font-size: 1.35rem;
+      margin-bottom: .25rem;
+      color: var(--accent);
+    }
+    .badge {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+    .badge-java { background: #fef3c7; color: #b45309; border: 1px solid #f59e0b; }
+    .badge-sql  { background: #dbeafe; color: #1d4ed8; border: 1px solid #60a5fa; }
+    .badge-logic { background: #f3e8ff; color: #7c3aed; border: 1px solid #a78bfa; }
+    .problem { color: var(--muted); margin-bottom: 1rem; font-size: .95rem; }
+    .problem strong { color: var(--text); }
+    .explain { margin-bottom: 1rem; }
+    .explain h3 { font-size: 1rem; color: var(--green); margin-bottom: .35rem; }
+    .explain p, .explain ul, .explain ol { font-size: .93rem; color: var(--muted); }
+    .explain ul, .explain ol { padding-left: 1.25rem; }
+    .explain li { margin-bottom: .2rem; }
+
+    .step-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: .75rem 0;
+      font-size: .9rem;
+    }
+    .step-table th {
+      background: var(--accent);
+      color: #fff;
+      padding: .5rem .75rem;
+      text-align: left;
+      font-weight: 600;
+    }
+    .step-table td {
+      padding: .5rem .75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .step-table tr:nth-child(even) td { background: #f8fafc; }
+    .step-table .total-row td {
+      font-weight: 700;
+      background: #eff6ff;
+      color: var(--accent);
+      border-top: 2px solid var(--accent);
+    }
+
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      font-size: .88rem;
+      line-height: 1.6;
+      margin-top: .75rem;
+      color: #111111;
+    }
+    code { font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace; color: #111111; }
+    .kw   { color: #7c3aed; }
+    .type { color: #0369a1; }
+    .str  { color: #16a34a; }
+    .cmt  { color: #9ca3af; font-style: italic; }
+    .num  { color: #c2410c; }
+    .fn   { color: #b45309; }
+    .sql-kw { color: #7c3aed; font-weight: 600; }
+    .sql-fn { color: #b45309; }
+    .sql-type { color: #0369a1; }
+    .complexity {
+      margin-top: 1rem;
+      padding: .75rem 1rem;
+      background: #eff6ff;
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      font-size: .9rem;
+      color: var(--text);
+    }
+    .answer-box {
+      margin-top: 1rem;
+      padding: 1rem 1.25rem;
+      background: #f0fdf4;
+      border-left: 3px solid var(--green);
+      border-radius: 0 8px 8px 0;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #15803d;
+    }
+
+    @media (max-width: 768px) {
+      body { padding: 1rem .5rem; }
+      h1 { font-size: 1.6rem; }
+      .subtitle { font-size: .95rem; margin-bottom: 2rem; }
+      .toc { padding: 1rem 1.25rem; margin-bottom: 2rem; }
+      .question { padding: 1.25rem 1rem; margin-bottom: 1.75rem; }
+      .question h2 { font-size: 1.15rem; }
+      pre { padding: .85rem .75rem; font-size: .78rem; line-height: 1.5; -webkit-overflow-scrolling: touch; }
+      .complexity { font-size: .82rem; padding: .6rem .75rem; }
+      .explain p, .explain ul, .explain ol { font-size: .88rem; }
+      .step-table { font-size: .82rem; }
+      .step-table th, .step-table td { padding: .4rem .5rem; }
+    }
+    @media (max-width: 480px) {
+      body { padding: .75rem .35rem; }
+      h1 { font-size: 1.35rem; }
+      .subtitle { font-size: .88rem; margin-bottom: 1.5rem; }
+      .toc { padding: .85rem 1rem; border-radius: 8px; }
+      .toc h2 { font-size: 1.05rem; }
+      .question { padding: 1rem .85rem; border-radius: 8px; }
+      .question h2 { font-size: 1.05rem; }
+      pre { padding: .7rem .6rem; font-size: .72rem; border-radius: 6px; }
+      .badge { font-size: .7rem; padding: 2px 8px; }
+      .problem { font-size: .88rem; }
+      .complexity { font-size: .78rem; }
+      .step-table { font-size: .75rem; }
+      .step-table th, .step-table td { padding: .35rem .4rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+<h1>Interview Solutions — Set 2</h1>
+<p class="subtitle">Java &amp; SQL — All Questions Answered</p>
+
+<nav class="toc">
+  <h2>Table of Contents</h2>
+  <ol>
+    <li><a href="#q1">Torch Puzzle — Bridge Crossing</a></li>
+    <li><a href="#q2">Best Time to Buy and Sell Stock</a></li>
+    <li><a href="#q3">Rank Transform of an Array</a></li>
+    <li><a href="#q4">Efficient Time-Range Queries for Sensor Data</a></li>
+    <li><a href="#q5">Student Club Management — Database Schema &amp; SQL</a></li>
+  </ol>
+</nav>
+
+<!-- ───────────────── Q1 ───────────────── -->
+<section class="question" id="q1">
+  <h2>Q1 — Torch Puzzle — Bridge Crossing</h2>
+  <span class="badge badge-logic">LOGIC / REASONING</span>
+  <p class="problem">
+    4 people must cross a bridge at night with one torch. The bridge holds at most 2 people at a time.
+    When two cross together, they travel at the <strong>slower</strong> person's speed. The torch must be carried back each time.<br><br>
+    <strong>Speeds:</strong> A = 1 min, B = 2 min, C = 5 min, D = 10 min.<br>
+    <strong>Find:</strong> The minimum total time to get everyone across.
+  </p>
+
+  <div class="explain">
+    <h3>Key Insight</h3>
+    <p>The naive strategy (always send the fastest person back) gives 19 minutes. The optimal trick is to
+    pair the two slowest people together so their large crossing times overlap instead of adding up separately.
+    Use the two fastest as "escorts".</p>
+  </div>
+
+  <div class="explain">
+    <h3>Optimal Steps</h3>
+  </div>
+
+  <table class="step-table">
+    <thead>
+      <tr><th>Step</th><th>Action</th><th>Time</th><th>Left Side</th><th>Right Side</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>A &amp; B cross &rarr;</td>
+        <td>2 min</td>
+        <td>C, D</td>
+        <td>A, B</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>&larr; A comes back</td>
+        <td>1 min</td>
+        <td>A, C, D</td>
+        <td>B</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>C &amp; D cross &rarr;</td>
+        <td>10 min</td>
+        <td>A</td>
+        <td>B, C, D</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>&larr; B comes back</td>
+        <td>2 min</td>
+        <td>A, B</td>
+        <td>C, D</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>A &amp; B cross &rarr;</td>
+        <td>2 min</td>
+        <td>&mdash;</td>
+        <td>A, B, C, D</td>
+      </tr>
+      <tr class="total-row">
+        <td colspan="2">Total</td>
+        <td colspan="3">2 + 1 + 10 + 2 + 2 = <strong>17 minutes</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="explain" style="margin-top:1rem;">
+    <h3>Why not the naive approach?</h3>
+    <p>If A escorts everyone individually: A&amp;B (2) + A back (1) + A&amp;C (5) + A back (1) + A&amp;D (10) = <strong>19 minutes</strong>.<br>
+    The optimal solution saves 2 minutes by making C and D cross together (paying 10 once instead of 5 + 10 = 15).</p>
+  </div>
+
+  <div class="answer-box">Answer: The minimum time is <strong>17 minutes</strong>.</div>
+</section>
+
+<!-- ───────────────── Q2 ───────────────── -->
+<section class="question" id="q2">
+  <h2>Q2 — Best Time to Buy and Sell Stock</h2>
+  <span class="badge badge-java">JAVA</span>
+  <p class="problem">
+    Given an array <code>prices</code> where <code>prices[i]</code> is the stock price on day <em>i</em>,
+    find the maximum profit from one buy-sell transaction. If no profit is possible, return 0.<br>
+    <strong>Examples:</strong> [7,1,5,3,6,4] &rarr; 5 &nbsp;|&nbsp; [7,6,4,3,1] &rarr; 0
+  </p>
+
+  <div class="explain">
+    <h3>Intuition</h3>
+    <p><strong>The key idea:</strong> We want to buy low and sell high. As we go through each day's price, we need to remember the <em>cheapest</em> price we've seen so far (that's our best buying opportunity).</p>
+    <p>For every price we see, we ask: "If I had bought at the cheapest price so far, and I sell today, what profit would I make?" We keep track of the best profit we find.</p>
+    
+    <h3>How It Works</h3>
+    <ol>
+      <li>Start with <code>minPrice</code> = infinity (very high number) and <code>maxProfit</code> = 0</li>
+      <li>Go through each day's price:
+        <ul>
+          <li>If today's price is lower than our <code>minPrice</code>, update it (we found a better buying day)</li>
+          <li>Otherwise, calculate profit = today's price - cheapest price we've seen</li>
+          <li>If this profit is better than our current best, remember it</li>
+        </ul>
+      </li>
+      <li>Return the best profit we found</li>
+    </ol>
+    <p><strong>Example:</strong> [7, 1, 5, 3, 6, 4]</p>
+    <ul>
+      <li>Day 0: price=7 → minPrice=7, profit=0</li>
+      <li>Day 1: price=1 → minPrice=1 (cheaper!), profit=0</li>
+      <li>Day 2: price=5 → profit = 5-1 = 4 (new best!)</li>
+      <li>Day 3: price=3 → profit = 3-1 = 2 (not better than 4)</li>
+      <li>Day 4: price=6 → profit = 6-1 = 5 (new best!)</li>
+      <li>Day 5: price=4 → profit = 4-1 = 3 (not better than 5)</li>
+      <li>Answer: 5</li>
+    </ul>
+  </div>
+
+<pre><code><span class="kw">public</span> <span class="type">int</span> <span class="fn">maxProfit</span>(<span class="type">int</span>[] prices) {
+    <span class="type">int</span> minPrice = Integer.MAX_VALUE;
+    <span class="type">int</span> maxProfit = <span class="num">0</span>;
+
+    <span class="kw">for</span> (<span class="type">int</span> price : prices) {
+        <span class="kw">if</span> (price < minPrice) {
+            minPrice = price;
+        } <span class="kw">else</span> {
+            maxProfit = Math.<span class="fn">max</span>(maxProfit, price - minPrice);
+        }
+    }
+    <span class="kw">return</span> maxProfit;
+}</code></pre>
+
+  <div class="complexity"><strong>Time:</strong> O(n) — single pass &nbsp;|&nbsp; <strong>Space:</strong> O(1)</div>
+</section>
+
+<!-- ───────────────── Q3 ───────────────── -->
+<section class="question" id="q3">
+  <h2>Q3 — Rank Transform of an Array</h2>
+  <span class="badge badge-java">JAVA</span>
+  <p class="problem">
+    Replace each element with its rank. Rank starts at 1, larger elements get larger ranks.
+    Equal elements share the same rank. Ranks should be as small as possible.<br>
+    <strong>Examples:</strong> [100,50,70,90] &rarr; [4,1,2,3] &nbsp;|&nbsp; [10,10,10] &rarr; [1,1,1]
+  </p>
+
+  <div class="explain">
+    <h3>Intuition</h3>
+    <p><strong>The problem:</strong> We need to give each number a rank (1, 2, 3, ...) where smaller numbers get smaller ranks. If two numbers are the same, they should get the same rank.</p>
+    <p><strong>The trick:</strong> If we sort the array first, the smallest value will be first (rank 1), the next unique value will be rank 2, and so on. We can build a "lookup table" (HashMap) that maps each unique value to its rank.</p>
+    
+    <h3>How It Works (Step-by-Step)</h3>
+    <ol>
+      <li><strong>Make a copy and sort it:</strong> [100, 50, 70, 90] → sorted: [50, 70, 90, 100]</li>
+      <li><strong>Build a rank map:</strong> Go through the sorted array:
+        <ul>
+          <li>50 is first unique value → rank 1</li>
+          <li>70 is next → rank 2</li>
+          <li>90 → rank 3</li>
+          <li>100 → rank 4</li>
+          <li>Store in HashMap: {50→1, 70→2, 90→3, 100→4}</li>
+        </ul>
+      </li>
+      <li><strong>Map original values to ranks:</strong> Go through the original array [100, 50, 70, 90]:
+        <ul>
+          <li>100 → look up in map → rank 4</li>
+          <li>50 → rank 1</li>
+          <li>70 → rank 2</li>
+          <li>90 → rank 3</li>
+          <li>Result: [4, 1, 2, 3]</li>
+        </ul>
+      </li>
+    </ol>
+    <p><strong>Why use a HashMap?</strong> Once we build the rank map, we can look up any value's rank in O(1) time (instant lookup).</p>
+    <p><strong>Handling duplicates:</strong> If we see [10, 10, 10], after sorting we see 10 three times. We only assign rank 1 to the first 10, and skip the duplicates. So all three 10s get rank 1.</p>
+  </div>
+
+<pre><code><span class="kw">import</span> java.util.*;
+
+<span class="kw">public</span> <span class="type">int</span>[] <span class="fn">transformRank</span>(<span class="type">int</span>[] arr) {
+    <span class="type">int</span>[] sorted = arr.<span class="fn">clone</span>();
+    Arrays.<span class="fn">sort</span>(sorted);
+
+    <span class="type">Map</span>&lt;<span class="type">Integer</span>, <span class="type">Integer</span>&gt; rankMap = <span class="kw">new</span> HashMap&lt;&gt;();
+    <span class="type">int</span> rank = <span class="num">1</span>;
+
+    <span class="kw">for</span> (<span class="type">int</span> val : sorted) {
+        <span class="kw">if</span> (!rankMap.<span class="fn">containsKey</span>(val)) {
+            rankMap.<span class="fn">put</span>(val, rank++);
+        }
+    }
+
+    <span class="type">int</span>[] result = <span class="kw">new</span> <span class="type">int</span>[arr.length];
+    <span class="kw">for</span> (<span class="type">int</span> i = <span class="num">0</span>; i < arr.length; i++) {
+        result[i] = rankMap.<span class="fn">get</span>(arr[i]);
+    }
+    <span class="kw">return</span> result;
+}</code></pre>
+
+  <div class="complexity"><strong>Time:</strong> O(n log n) due to sorting &nbsp;|&nbsp; <strong>Space:</strong> O(n)</div>
+</section>
+
+<!-- ───────────────── Q4 ───────────────── -->
+<section class="question" id="q4">
+  <h2>Q4 — Efficient Time-Range Queries for Sensor Data</h2>
+  <span class="badge badge-java">JAVA</span>
+  <p class="problem">
+    Store millions of sensor readings (sensorId, timestamp, value) in memory.
+    Given a <code>sensorId</code> and a time range [startTime, endTime],
+    efficiently retrieve all matching readings.
+  </p>
+
+  <div class="explain">
+    <h3>Intuition</h3>
+    <p><strong>The challenge:</strong> We have millions of sensor readings. Each reading has a sensor ID, a timestamp, and a value. We need to quickly find all readings from a specific sensor within a time range (e.g., "Give me all readings from sensor S1 between 10:00 and 11:00").</p>
+    <p><strong>Why not just use a list?</strong> If we store all readings in a simple list and search linearly, it would take O(n) time (checking every reading) — way too slow for millions of readings!</p>
+    
+    <h3>The Solution (Nested Data Structure)</h3>
+    <p>We use a <strong>two-level structure</strong> to organize data efficiently:</p>
+    <ol>
+      <li><strong>Level 1 — HashMap by sensor ID:</strong>
+        <ul>
+          <li>Key: sensor ID (e.g., "S1", "S2")</li>
+          <li>Value: a TreeMap containing all readings for that sensor</li>
+          <li><strong>Why?</strong> HashMap gives us O(1) instant lookup to find a specific sensor's data</li>
+        </ul>
+      </li>
+      <li><strong>Level 2 — TreeMap by timestamp:</strong>
+        <ul>
+          <li>Key: timestamp (e.g., 10:15, 11:30)</li>
+          <li>Value: a List of all readings at that exact time</li>
+          <li><strong>Why?</strong> TreeMap keeps timestamps sorted, so we can efficiently get a range of times using <code>subMap()</code></li>
+        </ul>
+      </li>
+    </ol>
+    
+    <h3>How Searching Works</h3>
+    <ol>
+      <li><strong>Step 1:</strong> Use HashMap to find the sensor's TreeMap → O(1)</li>
+      <li><strong>Step 2:</strong> Use TreeMap's <code>subMap(startTime, endTime)</code> to get all timestamps in the range → O(log n) to find boundaries</li>
+      <li><strong>Step 3:</strong> Iterate through the matching timestamps and collect all readings → O(k) where k = number of results</li>
+      <li><strong>Total:</strong> O(log n + k) — much faster than O(n)!</li>
+    </ol>
+    
+    <h3>Visual Example</h3>
+    <pre style="font-size:.85rem;">
+store = {
+  "S1" → TreeMap {
+    10:00 → [Reading1, Reading2],
+    10:15 → [Reading3],
+    11:30 → [Reading4]
+  },
+  "S2" → TreeMap {
+    10:03 → [Reading5]
+  }
+}
+
+Query: search("S1", 10:00, 11:00)
+→ Get S1's TreeMap (O(1))
+→ subMap(10:00, 11:00) returns {10:00→[...], 10:15→[...]}
+→ Collect all readings from those entries
+→ Return [Reading1, Reading2, Reading3]
+    </pre>
+    <p><strong>Why this is fast:</strong> We never scan through irrelevant sensors or timestamps. We jump directly to the right sensor, then jump to the right time range using the sorted TreeMap.</p>
+  </div>
+
+<pre><code><span class="kw">import</span> java.time.LocalTime;
+<span class="kw">import</span> java.util.*;
+
+<span class="kw">class</span> <span class="type">SensorReading</span> {
+    <span class="type">String</span> sensorId;
+    <span class="type">LocalTime</span> timestamp;
+    <span class="type">double</span> value;
+
+    <span class="kw">public</span> <span class="fn">SensorReading</span>(<span class="type">String</span> sensorId, <span class="type">LocalTime</span> timestamp, <span class="type">double</span> value) {
+        <span class="kw">this</span>.sensorId = sensorId;
+        <span class="kw">this</span>.timestamp = timestamp;
+        <span class="kw">this</span>.value = value;
+    }
+}
+
+<span class="kw">class</span> <span class="type">SensorStore</span> {
+    <span class="kw">private</span> <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">TreeMap</span>&lt;<span class="type">LocalTime</span>, <span class="type">List</span>&lt;<span class="type">SensorReading</span>&gt;&gt;&gt; store = <span class="kw">new</span> HashMap&lt;&gt;();
+
+    <span class="kw">public void</span> <span class="fn">addReading</span>(<span class="type">SensorReading</span> reading) {
+        <span class="cmt">// Get or create the TreeMap for this sensor</span>
+        <span class="type">TreeMap</span>&lt;<span class="type">LocalTime</span>, <span class="type">List</span>&lt;<span class="type">SensorReading</span>&gt;&gt; sensorData = store.<span class="fn">get</span>(reading.sensorId);
+        <span class="kw">if</span> (sensorData == <span class="kw">null</span>) {
+            sensorData = <span class="kw">new</span> TreeMap&lt;&gt;();
+            store.<span class="fn">put</span>(reading.sensorId, sensorData);
+        }
+        
+        <span class="cmt">// Get or create the List for this timestamp</span>
+        <span class="type">List</span>&lt;<span class="type">SensorReading</span>&gt; readingsAtTime = sensorData.<span class="fn">get</span>(reading.timestamp);
+        <span class="kw">if</span> (readingsAtTime == <span class="kw">null</span>) {
+            readingsAtTime = <span class="kw">new</span> ArrayList&lt;&gt;();
+            sensorData.<span class="fn">put</span>(reading.timestamp, readingsAtTime);
+        }
+        
+        <span class="cmt">// Add the reading to the list</span>
+        readingsAtTime.<span class="fn">add</span>(reading);
+    }
+
+    <span class="kw">public</span> <span class="type">Collection</span>&lt;<span class="type">SensorReading</span>&gt; <span class="fn">search</span>(<span class="type">String</span> sensorId,
+                                              <span class="type">LocalTime</span> startTime,
+                                              <span class="type">LocalTime</span> endTime) {
+        <span class="type">List</span>&lt;<span class="type">SensorReading</span>&gt; result = <span class="kw">new</span> ArrayList&lt;&gt;();
+
+        <span class="type">TreeMap</span>&lt;<span class="type">LocalTime</span>, <span class="type">List</span>&lt;<span class="type">SensorReading</span>&gt;&gt; sensorData = store.<span class="fn">get</span>(sensorId);
+        <span class="kw">if</span> (sensorData == <span class="kw">null</span>) <span class="kw">return</span> result;
+
+        <span class="cmt">// subMap returns entries in [startTime, endTime] inclusive</span>
+        <span class="type">NavigableMap</span>&lt;<span class="type">LocalTime</span>, <span class="type">List</span>&lt;<span class="type">SensorReading</span>&gt;&gt; subMap =
+            sensorData.<span class="fn">subMap</span>(startTime, <span class="kw">true</span>, endTime, <span class="kw">true</span>);
+
+        <span class="kw">for</span> (<span class="type">List</span>&lt;<span class="type">SensorReading</span>&gt; readings : subMap.<span class="fn">values</span>()) {
+            result.<span class="fn">addAll</span>(readings);
+        }
+        <span class="kw">return</span> result;
+    }
+}</code></pre>
+
+  <div class="complexity">
+    <strong>Time Complexity:</strong> O(log n + k) — where n = number of distinct timestamps for that sensor,
+    k = number of readings in the range.<br>
+    <strong>Space:</strong> O(total readings across all sensors).
+  </div>
+
+  <div class="explain" style="margin-top:1.5rem;">
+    <h3>Understanding NavigableMap and Its Methods</h3>
+    <p><strong>What is NavigableMap?</strong> It's an interface (blueprint) that TreeMap implements. It provides special "navigation" methods to move around a sorted map efficiently.</p>
+    
+    <h4>Key Methods You Should Know:</h4>
+    <ul>
+      <li><strong>subMap(fromKey, fromInc, toKey, toInc):</strong> Get all entries in a range
+        <ul><li>Example: <code>map.subMap(10:00, true, 12:00, false)</code> → entries from 10:00 (inclusive) to 12:00 (exclusive)</li></ul>
+      </li>
+      <li><strong>lowerKey(key):</strong> Find the largest key <em>less than</em> the given key
+        <ul><li>Example: If map has {10:00, 10:15, 10:30}, <code>lowerKey(10:15)</code> → 10:00</li></ul>
+      </li>
+      <li><strong>higherKey(key):</strong> Find the smallest key <em>greater than</em> the given key
+        <ul><li>Example: <code>higherKey(10:15)</code> → 10:30</li></ul>
+      </li>
+      <li><strong>firstEntry():</strong> Get the entry with the smallest key
+        <ul><li>Example: <code>firstEntry()</code> → {10:00=[readings...]}</li></ul>
+      </li>
+      <li><strong>lastEntry():</strong> Get the entry with the largest key
+        <ul><li>Example: <code>lastEntry()</code> → {10:30=[readings...]}</li></ul>
+      </li>
+      <li><strong>floorKey(key):</strong> Largest key ≤ given key</li>
+      <li><strong>ceilingKey(key):</strong> Smallest key ≥ given key</li>
+    </ul>
+  </div>
+
+  <div class="explain" style="margin-top:1rem; background:#fef3c7; border-left-color:#f59e0b;">
+    <h3>💡 Did You Know?</h3>
+    <p><strong>Understanding the <code>true/false</code> parameters in subMap():</strong></p>
+    <p>The boolean values control whether boundaries are <strong>included</strong> or <strong>excluded</strong>:</p>
+    <ul>
+      <li><code>subMap(9:00, <strong>true</strong>, 11:00, <strong>true</strong>)</code> → [9:00 to 11:00] — both boundaries included</li>
+      <li><code>subMap(9:00, <strong>false</strong>, 11:00, <strong>true</strong>)</code> → (9:00 to 11:00] — exclude 9:00, include 11:00</li>
+      <li><code>subMap(9:00, <strong>true</strong>, 11:00, <strong>false</strong>)</code> → [9:00 to 11:00) — include 9:00, exclude 11:00</li>
+      <li><code>subMap(9:00, <strong>false</strong>, 11:00, <strong>false</strong>)</code> → (9:00 to 11:00) — both excluded</li>
+    </ul>
+    
+    <h4>Quick Reference Code:</h4>
+<pre style="margin-top:.5rem; font-size:.82rem;"><code><span class="type">TreeMap</span>&lt;<span class="type">LocalTime</span>, <span class="type">String</span>&gt; times = <span class="kw">new</span> TreeMap&lt;&gt;();
+times.<span class="fn">put</span>(LocalTime.<span class="fn">of</span>(<span class="num">9</span>, <span class="num">0</span>), <span class="str">"9am"</span>);
+times.<span class="fn">put</span>(LocalTime.<span class="fn">of</span>(<span class="num">10</span>, <span class="num">15</span>), <span class="str">"10:15am"</span>);
+times.<span class="fn">put</span>(LocalTime.<span class="fn">of</span>(<span class="num">11</span>, <span class="num">30</span>), <span class="str">"11:30am"</span>);
+
+<span class="cmt">// Get times from 10:00 to 11:30 (inclusive)</span>
+<span class="type">NavigableMap</span>&lt;<span class="type">LocalTime</span>, <span class="type">String</span>&gt; range = 
+    times.<span class="fn">subMap</span>(LocalTime.<span class="fn">of</span>(<span class="num">10</span>, <span class="num">0</span>), <span class="kw">true</span>, LocalTime.<span class="fn">of</span>(<span class="num">11</span>, <span class="num">30</span>), <span class="kw">true</span>);
+<span class="cmt">// Result: {10:15="10:15am", 11:30="11:30am"}</span>
+
+<span class="cmt">// Find what comes before 11:00</span>
+<span class="type">LocalTime</span> prev = times.<span class="fn">lowerKey</span>(LocalTime.<span class="fn">of</span>(<span class="num">11</span>, <span class="num">0</span>));  <span class="cmt">// → 10:15</span>
+
+<span class="cmt">// Find what comes after 10:15</span>
+<span class="type">LocalTime</span> next = times.<span class="fn">higherKey</span>(LocalTime.<span class="fn">of</span>(<span class="num">10</span>, <span class="num">15</span>)); <span class="cmt">// → 11:30</span></code></pre>
+    <p><strong>Why use NavigableMap type?</strong> The <code>subMap()</code> method returns a view (not a TreeMap object), so we use the interface type. This follows Java best practices.</p>
+  </div>
+</section>
+
+<!-- ───────────────── Q5 ───────────────── -->
+<section class="question" id="q5">
+  <h2>Q5 — Student Club Management — Database Schema &amp; SQL</h2>
+  <span class="badge badge-sql">SQL</span>
+  <p class="problem">
+    Design a 3NF database for a university's student club system. Students can join multiple clubs,
+    each club has a president and organizes events. Then answer three SQL queries.
+  </p>
+
+  <div class="explain">
+    <h3>Understanding the Problem</h3>
+    <p><strong>What we're building:</strong> A database to manage student clubs at a university. We need to track:</p>
+    <ul>
+      <li>Which students belong to which clubs (many-to-many: one student can join multiple clubs, one club has multiple students)</li>
+      <li>Who is the president of each club</li>
+      <li>Which events each club organizes</li>
+      <li>Which students attended which events (many-to-many: one student can attend multiple events, one event has multiple attendees)</li>
+    </ul>
+    
+    <h3>Why 5 Tables? (Breaking Down the Design)</h3>
+    <ol>
+      <li><strong>students</strong> — Core table storing basic student info (ID, name, enrollment year)</li>
+      <li><strong>clubs</strong> — Core table storing club info (name, who's president)
+        <ul><li>President is a foreign key to students table (president must be a valid student)</li></ul>
+      </li>
+      <li><strong>student_clubs</strong> — <em>Junction table</em> connecting students ↔ clubs
+        <ul>
+          <li>Why needed? A student can join many clubs, and a club has many members</li>
+          <li>Each row represents one membership: (student_id, club_id)</li>
+        </ul>
+      </li>
+      <li><strong>events</strong> — Stores each event organized by a club
+        <ul><li>Each event belongs to exactly one club (foreign key to clubs)</li></ul>
+      </li>
+      <li><strong>event_participants</strong> — <em>Junction table</em> connecting students ↔ events
+        <ul>
+          <li>Why needed? A student can attend many events, and an event can have many attendees</li>
+          <li>Each row represents one attendance: (event_id, student_id)</li>
+        </ul>
+      </li>
+    </ol>
+    
+    <h3>What is 3NF? (Simple Explanation)</h3>
+    <p><strong>Third Normal Form (3NF)</strong> means our database has no redundancy and data is organized properly:</p>
+    <ul>
+      <li><strong>Rule 1:</strong> Every column depends on the primary key (no unrelated data in a table)</li>
+      <li><strong>Rule 2:</strong> No transitive dependencies (A → B → C, where B is not a key)</li>
+      <li><strong>Example of violation:</strong> If we stored "club_name" in the events table, we'd repeat the same club name for every event. Instead, we store only club_id and look up the name when needed.</li>
+    </ul>
+    <p>Our design is in 3NF because each table stores only directly related information, and we use foreign keys to connect related data without duplication.</p>
+  </div>
+
+<pre><code><span class="sql-kw">CREATE TABLE</span> students (
+    student_id      <span class="sql-type">INT</span>          <span class="sql-kw">PRIMARY KEY</span>,
+    name            <span class="sql-type">VARCHAR(100)</span> <span class="sql-kw">NOT NULL</span>,
+    enrollment_year <span class="sql-type">INT</span>          <span class="sql-kw">NOT NULL</span>
+);
+
+<span class="sql-kw">CREATE TABLE</span> clubs (
+    club_id      <span class="sql-type">INT</span>          <span class="sql-kw">PRIMARY KEY AUTO_INCREMENT</span>,
+    club_name    <span class="sql-type">VARCHAR(100)</span> <span class="sql-kw">NOT NULL UNIQUE</span>,
+    president_id <span class="sql-type">INT</span>          <span class="sql-kw">NOT NULL</span>,
+    <span class="sql-kw">FOREIGN KEY</span> (president_id) <span class="sql-kw">REFERENCES</span> students(student_id)
+);
+
+<span class="sql-kw">CREATE TABLE</span> student_clubs (
+    student_id <span class="sql-type">INT</span> <span class="sql-kw">NOT NULL</span>,
+    club_id    <span class="sql-type">INT</span> <span class="sql-kw">NOT NULL</span>,
+    <span class="sql-kw">PRIMARY KEY</span> (student_id, club_id),
+    <span class="sql-kw">FOREIGN KEY</span> (student_id) <span class="sql-kw">REFERENCES</span> students(student_id),
+    <span class="sql-kw">FOREIGN KEY</span> (club_id)    <span class="sql-kw">REFERENCES</span> clubs(club_id)
+);
+
+<span class="sql-kw">CREATE TABLE</span> events (
+    event_id   <span class="sql-type">INT</span>          <span class="sql-kw">PRIMARY KEY AUTO_INCREMENT</span>,
+    event_name <span class="sql-type">VARCHAR(200)</span> <span class="sql-kw">NOT NULL</span>,
+    event_date <span class="sql-type">DATE</span>         <span class="sql-kw">NOT NULL</span>,
+    club_id    <span class="sql-type">INT</span>          <span class="sql-kw">NOT NULL</span>,
+    <span class="sql-kw">FOREIGN KEY</span> (club_id) <span class="sql-kw">REFERENCES</span> clubs(club_id)
+);
+
+<span class="sql-kw">CREATE TABLE</span> event_participants (
+    event_id   <span class="sql-type">INT</span> <span class="sql-kw">NOT NULL</span>,
+    student_id <span class="sql-type">INT</span> <span class="sql-kw">NOT NULL</span>,
+    <span class="sql-kw">PRIMARY KEY</span> (event_id, student_id),
+    <span class="sql-kw">FOREIGN KEY</span> (event_id)   <span class="sql-kw">REFERENCES</span> events(event_id),
+    <span class="sql-kw">FOREIGN KEY</span> (student_id) <span class="sql-kw">REFERENCES</span> students(student_id)
+);</code></pre>
+
+  <div class="explain" style="margin-top:1.75rem;">
+    <h3>Query 1 — List all students with the clubs they belong to (include students with no club)</h3>
+  </div>
+
+<pre><code><span class="sql-kw">SELECT</span> s.student_id,
+       s.name        <span class="sql-kw">AS</span> student_name,
+       c.club_name
+<span class="sql-kw">FROM</span>   students s
+<span class="sql-kw">LEFT JOIN</span> student_clubs sc <span class="sql-kw">ON</span> s.student_id = sc.student_id
+<span class="sql-kw">LEFT JOIN</span> clubs c          <span class="sql-kw">ON</span> sc.club_id = c.club_id
+<span class="sql-kw">ORDER BY</span> s.name, c.club_name;</code></pre>
+
+  <div class="explain" style="margin-top:1.75rem;">
+    <h3>Query 2 — Club president name and number of events organized by their club in 2024</h3>
+  </div>
+
+<pre><code><span class="sql-kw">SELECT</span> s.name          <span class="sql-kw">AS</span> president_name,
+       c.club_name,
+       <span class="sql-fn">COUNT</span>(e.event_id) <span class="sql-kw">AS</span> events_in_2024
+<span class="sql-kw">FROM</span>   clubs c
+<span class="sql-kw">JOIN</span>   students s <span class="sql-kw">ON</span> c.president_id = s.student_id
+<span class="sql-kw">LEFT JOIN</span> events e <span class="sql-kw">ON</span> c.club_id = e.club_id
+                   <span class="sql-kw">AND</span> <span class="sql-fn">YEAR</span>(e.event_date) = <span class="num">2024</span>
+<span class="sql-kw">GROUP BY</span> c.club_id, c.club_name, s.name
+<span class="sql-kw">ORDER BY</span> events_in_2024 <span class="sql-kw">DESC</span>;</code></pre>
+
+  <div class="explain" style="margin-top:1.75rem;">
+    <h3>Query 3 — All event details with participant names (include events with no attendees)</h3>
+  </div>
+
+<pre><code><span class="sql-kw">SELECT</span> e.event_name,
+       e.event_date,
+       c.club_name,
+       s.name <span class="sql-kw">AS</span> participant_name
+<span class="sql-kw">FROM</span>   events e
+<span class="sql-kw">JOIN</span>   clubs c              <span class="sql-kw">ON</span> e.club_id = c.club_id
+<span class="sql-kw">LEFT JOIN</span> event_participants ep <span class="sql-kw">ON</span> e.event_id = ep.event_id
+<span class="sql-kw">LEFT JOIN</span> students s           <span class="sql-kw">ON</span> ep.student_id = s.student_id
+<span class="sql-kw">ORDER BY</span> e.event_date, e.event_name, s.name;</code></pre>
+</section>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> Random Questions </title>
+  <style>
+    :root {
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --accent: #2563eb;
+      --accent2: #6366f1;
+      --text: #1a1a1a;
+      --muted: #4b5563;
+      --border: #e2e8f0;
+      --code-bg: #f1f5f9;
+      --green: #16a34a;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 2rem 1rem;
+    }
+    .container { max-width: 960px; margin: 0 auto; }
+    h1 {
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: .5rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 3rem;
+      font-size: 1.05rem;
+    }
+    .toc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
+      margin-bottom: 3rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+    .toc h2 { font-size: 1.2rem; margin-bottom: .75rem; color: var(--accent); }
+    .toc ol { padding-left: 1.25rem; }
+    .toc li { margin-bottom: .35rem; color: var(--text); }
+    .toc a { color: var(--accent2); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    .question {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+    .question h2 {
+      font-size: 1.35rem;
+      margin-bottom: .25rem;
+      color: var(--accent);
+    }
+    .badge {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+    .badge-java { background: #fef3c7; color: #b45309; border: 1px solid #f59e0b; }
+    .badge-sql  { background: #dbeafe; color: #1d4ed8; border: 1px solid #60a5fa; }
+    .problem { color: var(--muted); margin-bottom: 1rem; font-size: .95rem; }
+    .problem strong { color: var(--text); }
+    .explain { margin-bottom: 1rem; }
+    .explain h3 { font-size: 1rem; color: var(--green); margin-bottom: .35rem; }
+    .explain p, .explain ul { font-size: .93rem; color: var(--muted); }
+    .explain ul { padding-left: 1.25rem; }
+    .explain li { margin-bottom: .2rem; }
+
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      font-size: .88rem;
+      line-height: 1.6;
+      margin-top: .75rem;
+      color: #111111;
+    }
+    code { font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace; color: #111111; }
+    .kw   { color: #7c3aed; }
+    .type { color: #0369a1; }
+    .str  { color: #16a34a; }
+    .cmt  { color: #9ca3af; font-style: italic; }
+    .num  { color: #c2410c; }
+    .fn   { color: #b45309; }
+    .sql-kw { color: #7c3aed; font-weight: 600; }
+    .sql-fn { color: #b45309; }
+    .sql-type { color: #0369a1; }
+    .complexity {
+      margin-top: 1rem;
+      padding: .75rem 1rem;
+      background: #eff6ff;
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      font-size: .9rem;
+      color: var(--text);
+    }
+
+    /* ── Mobile Responsive ── */
+    @media (max-width: 768px) {
+      body { padding: 1rem .5rem; }
+      h1 { font-size: 1.6rem; }
+      .subtitle { font-size: .95rem; margin-bottom: 2rem; }
+      .toc { padding: 1rem 1.25rem; margin-bottom: 2rem; }
+      .question { padding: 1.25rem 1rem; margin-bottom: 1.75rem; }
+      .question h2 { font-size: 1.15rem; }
+      pre {
+        padding: .85rem .75rem;
+        font-size: .78rem;
+        line-height: 1.5;
+        -webkit-overflow-scrolling: touch;
+      }
+      .complexity { font-size: .82rem; padding: .6rem .75rem; }
+      .explain p, .explain ul { font-size: .88rem; }
+    }
+
+    @media (max-width: 480px) {
+      body { padding: .75rem .35rem; }
+      h1 { font-size: 1.35rem; }
+      .subtitle { font-size: .88rem; margin-bottom: 1.5rem; }
+      .toc { padding: .85rem 1rem; border-radius: 8px; }
+      .toc h2 { font-size: 1.05rem; }
+      .question { padding: 1rem .85rem; border-radius: 8px; }
+      .question h2 { font-size: 1.05rem; }
+      pre {
+        padding: .7rem .6rem;
+        font-size: .72rem;
+        border-radius: 6px;
+      }
+      .badge { font-size: .7rem; padding: 2px 8px; }
+      .problem { font-size: .88rem; }
+      .complexity { font-size: .78rem; }
+      .anim-panel { flex-direction: column; }
+      .anim-code, .anim-visual { min-width: 0; }
+    }
+
+    /* ── Animation Styles ── */
+    .anim-container {
+      margin-top: 1.5rem;
+      border: 2px solid var(--accent);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .anim-header {
+      background: var(--accent);
+      color: #fff;
+      padding: .6rem 1rem;
+      font-weight: 600;
+      font-size: .95rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .anim-controls { display: flex; gap: .4rem; align-items: center; }
+    .anim-controls button {
+      background: rgba(255,255,255,.2);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.3);
+      border-radius: 6px;
+      padding: .3rem .7rem;
+      cursor: pointer;
+      font-size: .82rem;
+      font-weight: 600;
+      transition: background .2s;
+    }
+    .anim-controls button:hover { background: rgba(255,255,255,.35); }
+    .anim-controls .step-info { font-size: .8rem; opacity: .9; min-width: 70px; text-align: center; }
+    .anim-panel {
+      display: flex;
+      gap: 0;
+      background: #fff;
+    }
+    .anim-code {
+      flex: 1;
+      min-width: 0;
+      background: var(--code-bg);
+      border-right: 1px solid var(--border);
+      overflow-x: auto;
+      padding: 0;
+      max-height: 420px;
+      overflow-y: auto;
+    }
+    .anim-code .aline {
+      display: block;
+      padding: 1px 12px;
+      font-family: 'Fira Code','Cascadia Code','Consolas',monospace;
+      font-size: .8rem;
+      line-height: 1.65;
+      white-space: pre;
+      color: #111;
+      transition: background .3s, border-color .3s;
+      border-left: 3px solid transparent;
+    }
+    .anim-code .aline.highlight {
+      background: #fef9c3;
+      border-left-color: #f59e0b;
+    }
+    .anim-visual {
+      flex: 1;
+      min-width: 0;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+      max-height: 420px;
+      overflow-y: auto;
+    }
+    .anim-narration {
+      background: #eff6ff;
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: .5rem .75rem;
+      font-size: .85rem;
+      color: var(--text);
+      min-height: 40px;
+    }
+    .anim-state {
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+      font-size: .82rem;
+    }
+    .anim-state .state-group {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: .5rem .7rem;
+    }
+    .anim-state .state-group h4 {
+      font-size: .78rem;
+      color: var(--accent);
+      margin-bottom: .3rem;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .anim-state .state-group .val {
+      font-family: 'Fira Code','Consolas',monospace;
+      font-size: .78rem;
+      color: var(--text);
+      word-break: break-all;
+    }
+    .node-box {
+      display: inline-block;
+      padding: 2px 8px;
+      margin: 2px;
+      border-radius: 4px;
+      font-family: 'Fira Code','Consolas',monospace;
+      font-size: .78rem;
+      font-weight: 600;
+    }
+    .node-box.in-queue { background: #dbeafe; color: #1d4ed8; border: 1px solid #93c5fd; }
+    .node-box.processed { background: #dcfce7; color: #16a34a; border: 1px solid #86efac; }
+    .node-box.current { background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; }
+    .node-box.found { background: #f0fdf4; color: #15803d; border: 1px solid #4ade80; }
+    .node-box.excluded { background: #f1f5f9; color: #94a3b8; border: 1px solid #cbd5e1; }
+    .tree-level {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      margin: 2px 0;
+    }
+    .tree-level .lbl {
+      font-weight: 600;
+      color: var(--accent);
+      font-size: .75rem;
+      min-width: 55px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+<h1>Interview Solutions</h1>
+<p class="subtitle">Java &amp; SQL — All Questions Answered</p>
+
+<nav class="toc">
+  <h2>Table of Contents</h2>
+  <ol>
+    <li><a href="#q1">Longest Even-Length Word in a Sentence</a></li>
+    <li><a href="#q2">Pair with Maximum Product in Array</a></li>
+    <li><a href="#q3">Distribute Bananas Equally Among Monkeys</a></li>
+    <li><a href="#q4">Employee Hierarchy — Print by Level</a></li>
+    <li><a href="#q5">Order Search by Time Range</a></li>
+    <li><a href="#q6">Database Schema for Online Shopping (SQL)</a></li>
+    <li><a href="#q7">LRU Cache Implementation</a></li>
+  </ol>
+</nav>
+
+<!-- ───────────────── Q1 ───────────────── -->
+<section class="question" id="q1">
+  <h2>Q1 — Longest Even-Length Word in a Sentence</h2>
+  <span class="badge badge-java">JAVA</span>
+  <p class="problem">
+    Given a sentence, return the longest word whose length is even.<br>
+    <strong>Example:</strong> "Be not afraid of greatness, some are born great, some achieve greatness, and some have greatness thrust upon them." &rarr; <strong>afraid</strong>
+  </p>
+
+  <div class="explain">
+    <h3>Intuition</h3>
+    <p><strong>What we need:</strong> Find the longest word that has an even number of letters (2, 4, 6, 8, etc.).</p>
+    <p><strong>The challenge:</strong> Words might have punctuation (commas, periods) that we need to remove first, since we only count letters.</p>
+    
+    <h3>How It Works (Step-by-Step)</h3>
+    <ol>
+      <li><strong>Split the sentence into words:</strong> Break at spaces to get individual words</li>
+      <li><strong>For each word:</strong>
+        <ul>
+          <li>Remove all non-letter characters (punctuation, numbers, etc.)</li>
+          <li>Check if the cleaned word has an even length (length % 2 == 0)</li>
+          <li>If it's even AND longer than our current longest, save it</li>
+        </ul>
+      </li>
+      <li><strong>Return the longest even-length word we found</strong></li>
+    </ol>
+    
+    <p><strong>Example walkthrough:</strong></p>
+    <ul>
+      <li>"Be" → length 2 (even) → longest = "Be"</li>
+      <li>"not" → length 3 (odd) → skip</li>
+      <li>"afraid" → length 6 (even), longer than "Be" (2) → longest = "afraid"</li>
+      <li>"of" → length 2 (even), not longer than "afraid" (6) → keep "afraid"</li>
+      <li>... continue checking all words ...</li>
+      <li>Final answer: "afraid" (or "greatness" both length 9... wait, 9 is odd!)</li>
+    </ul>
+    <p><em>Note:</em> In the example, "afraid" (6 letters) would actually win as the longest even-length word.</p>
+  </div>
+
+<pre><code><span class="kw">public</span> <span class="type">String</span> <span class="fn">findWord</span>(<span class="type">String</span> sentence) {
+    <span class="cmt">// split("\\s+") splits the sentence on one or more whitespace characters.</span>
+    <span class="cmt">// e.g. "Be not afraid of greatness," → ["Be", "not", "afraid", "of", "greatness,"]</span>
+    <span class="type">String</span>[] words = sentence.<span class="fn">split</span>(<span class="str">"\\s+"</span>);
+    <span class="type">String</span> longest = <span class="str">""</span>;
+
+    <span class="kw">for</span> (<span class="type">String</span> word : words) {
+        <span class="cmt">// replaceAll("[^a-zA-Z]", "") removes every character that is NOT a letter.</span>
+        <span class="cmt">// e.g. "greatness," → "greatness"  |  "them." → "them"</span>
+        <span class="type">String</span> clean = word.<span class="fn">replaceAll</span>(<span class="str">"[^a-zA-Z]"</span>, <span class="str">""</span>);
+        <span class="kw">if</span> (clean.<span class="fn">length</span>() % <span class="num">2</span> == <span class="num">0</span> && clean.<span class="fn">length</span>() > longest.<span class="fn">length</span>()) {
+            longest = clean;
+        }
+    }
+    <span class="kw">return</span> longest;
+}</code></pre>
+  <div class="complexity"><strong>Time:</strong> O(n) where n = number of characters &nbsp;|&nbsp; <strong>Space:</strong> O(n)</div>
+</section>
+
+<!-- ───────────────── Q2 ───────────────── -->
+<section class="question" id="q2">
+  <h2>Q2 — Pair with Maximum Product</h2>
+  <span class="badge badge-java">JAVA</span>
+  <p class="problem">
+    Given an array with both positive and negative integers, return the pair with the highest product.<br>
+    <strong>Examples:</strong> {1,8,3,6,7,0} &rarr; {8,7} &nbsp;|&nbsp; {-1,-3,-6,3,0,-5} &rarr; {-6,-5}
+  </p>
+
+  <div class="explain">
+    <h3>Intuition</h3>
+    <p><strong>The key insight:</strong> When multiplying two numbers, the biggest product comes from either:</p>
+    <ul>
+      <li><strong>Two large positive numbers</strong> (e.g., 8 × 7 = 56)</li>
+      <li><strong>Two very negative numbers</strong> (e.g., -6 × -5 = 30, because negative × negative = positive!)</li>
+    </ul>
+    <p>We need to check BOTH possibilities and pick whichever gives the larger product.</p>
+    
+    <h3>Why Sorting Helps</h3>
+    <p>If we sort the array, all the extreme values are at the ends:</p>
+    <ul>
+      <li><strong>Leftmost (start):</strong> The most negative numbers (smallest values)</li>
+      <li><strong>Rightmost (end):</strong> The largest positive numbers</li>
+    </ul>
+    <p>After sorting <code>[-6, -5, -3, -1, 0, 3]</code>, we only need to check:</p>
+    <ul>
+      <li>First two: -6 × -5 = 30</li>
+      <li>Last two: 3 × 0 = 0</li>
+      <li>Winner: {-6, -5} with product 30</li>
+    </ul>
+    
+    <h3>Step-by-Step Algorithm</h3>
+    <ol>
+      <li><strong>Sort the array</strong> (smallest to largest)</li>
+      <li><strong>Calculate two candidates:</strong>
+        <ul>
+          <li>Product of the two largest (rightmost) elements</li>
+          <li>Product of the two smallest (leftmost) elements</li>
+        </ul>
+      </li>
+      <li><strong>Return whichever pair gives the bigger product</strong></li>
+    </ol>
+    
+    <p><strong>Why use <code>long</code> for products?</strong> Multiplying two large integers might overflow an <code>int</code>. Using <code>long</code> prevents this.</p>
+  </div>
+
+<pre><code><span class="kw">import</span> java.util.Arrays;
+
+<span class="kw">public static</span> <span class="type">int</span>[] <span class="fn">findMaxProductPair</span>(<span class="type">int</span>[] arr) {
+    <span class="kw">if</span> (arr.<span class="fn">length</span> < <span class="num">2</span>) <span class="kw">throw new</span> IllegalArgumentException(<span class="str">"Need at least 2 elements"</span>);
+
+    Arrays.<span class="fn">sort</span>(arr);
+    <span class="type">int</span> n = arr.<span class="fn">length</span>;
+
+    <span class="cmt">// candidate 1: two largest (rightmost)</span>
+    <span class="type">long</span> prodHigh = (<span class="type">long</span>) arr[n - <span class="num">1</span>] * arr[n - <span class="num">2</span>];
+    <span class="cmt">// candidate 2: two smallest / most-negative (leftmost)</span>
+    <span class="type">long</span> prodLow  = (<span class="type">long</span>) arr[<span class="num">0</span>] * arr[<span class="num">1</span>];
+
+    <span class="kw">if</span> (prodHigh >= prodLow) {
+        <span class="kw">return new</span> <span class="type">int</span>[]{ arr[n - <span class="num">1</span>], arr[n - <span class="num">2</span>] };
+    } <span class="kw">else</span> {
+        <span class="kw">return new</span> <span class="type">int</span>[]{ arr[<span class="num">0</span>], arr[<span class="num">1</span>] };
+    }
+}</code></pre>
+  <div class="complexity"><strong>Time:</strong> O(n log n) for sorting &nbsp;|&nbsp; <strong>Space:</strong> O(1) extra</div>
+
+  <div class="explain" style="margin-top:1.5rem;">
+    <h3>O(n) Approach — Single Pass (No Sorting)</h3>
+    <p><strong>Can we do better than O(n log n)?</strong> Yes! We don't actually need to sort the entire array. We only care about 4 numbers:</p>
+    <ul>
+      <li>The two <strong>largest</strong> values (max1, max2)</li>
+      <li>The two <strong>smallest</strong> values (min1, min2)</li>
+    </ul>
+    <p>We can find these in a single pass through the array!</p>
+    
+    <h3>How It Works</h3>
+    <p>As we scan through each number:</p>
+    <ul>
+      <li>If it's bigger than <code>max1</code>, shift <code>max1</code> → <code>max2</code>, and update <code>max1</code></li>
+      <li>Else if it's bigger than <code>max2</code>, update <code>max2</code></li>
+      <li>Same logic for tracking <code>min1</code> and <code>min2</code> (the two smallest)</li>
+    </ul>
+    <p>At the end, compare <code>max1 × max2</code> vs <code>min1 × min2</code> and return the better pair.</p>
+    <p><strong>Time:</strong> O(n) — much faster! &nbsp;|&nbsp; <strong>Space:</strong> O(1) — only 4 variables</p>
+  </div>
+
+<pre><code><span class="kw">public static</span> <span class="type">int</span>[] <span class="fn">findMaxProductPairOptimal</span>(<span class="type">int</span>[] arr) {
+    <span class="kw">if</span> (arr.<span class="fn">length</span> < <span class="num">2</span>) <span class="kw">throw new</span> IllegalArgumentException(<span class="str">"Need at least 2 elements"</span>);
+
+    <span class="type">int</span> max1 = Integer.MIN_VALUE, max2 = Integer.MIN_VALUE;
+    <span class="type">int</span> min1 = Integer.MAX_VALUE, min2 = Integer.MAX_VALUE;
+
+    <span class="kw">for</span> (<span class="type">int</span> val : arr) {
+        <span class="kw">if</span> (val >= max1) {
+            max2 = max1;
+            max1 = val;
+        } <span class="kw">else if</span> (val > max2) {
+            max2 = val;
+        }
+
+        <span class="kw">if</span> (val <= min1) {
+            min2 = min1;
+            min1 = val;
+        } <span class="kw">else if</span> (val < min2) {
+            min2 = val;
+        }
+    }
+
+    <span class="kw">if</span> ((<span class="type">long</span>) max1 * max2 >= (<span class="type">long</span>) min1 * min2) {
+        <span class="kw">return new</span> <span class="type">int</span>[]{ max1, max2 };
+    } <span class="kw">else</span> {
+        <span class="kw">return new</span> <span class="type">int</span>[]{ min1, min2 };
+    }
+}</code></pre>
+  <div class="complexity"><strong>Time:</strong> O(n) — single pass &nbsp;|&nbsp; <strong>Space:</strong> O(1)</div>
+</section>
+
+<!-- ───────────────── Q3 ───────────────── -->
+<section class="question" id="q3">
+  <h2>Q3 — Distribute Bananas Equally Among Monkeys</h2>
+  <span class="badge badge-java">JAVA</span>
+  <p class="problem">
+    Distribute N bananas equally among some monkeys where: each monkey gets &gt; 1 banana,
+    one monkey cannot get all, all bananas must be used, integral distribution only.<br>
+    <strong>Examples:</strong> N=2 &rarr; false &nbsp;|&nbsp; N=15 &rarr; true (3 monkeys &times; 5 bananas)
+  </p>
+
+  <div class="explain">
+    <h3>Intuition</h3>
+    <p><strong>The problem in simple terms:</strong> Can we split N bananas equally among some monkeys where:</p>
+    <ul>
+      <li>Each monkey gets <strong>at least 2 bananas</strong> (more than 1)</li>
+      <li><strong>At least 2 monkeys</strong> are needed (one monkey can't get all the bananas)</li>
+      <li>The split must be <strong>equal</strong> (every monkey gets the same amount)</li>
+    </ul>
+    
+    <h3>Mathematical Translation</h3>
+    <p>We're looking for two numbers that multiply to give N:</p>
+    <ul>
+      <li><strong>Number of monkeys</strong> × <strong>bananas per monkey</strong> = N</li>
+      <li>Both numbers must be ≥ 2</li>
+    </ul>
+    <p>For example: N = 15</p>
+    <ul>
+      <li>3 monkeys × 5 bananas = 15 ✓ (both ≥ 2)</li>
+      <li>5 monkeys × 3 bananas = 15 ✓ (both ≥ 2)</li>
+      <li>15 monkeys × 1 banana = 15 ✗ (violates "each gets &gt; 1")</li>
+      <li>1 monkey × 15 bananas = 15 ✗ (violates "one monkey can't get all")</li>
+    </ul>
+    
+    <h3>The Algorithm</h3>
+    <p><strong>Key insight:</strong> We're checking if N has any divisor <em>d</em> where both <em>d</em> and <em>N/d</em> are ≥ 2.</p>
+    <ol>
+      <li><strong>Quick rejection:</strong> If N &lt; 4, it's impossible (we need at least 2 monkeys × 2 bananas = 4)</li>
+      <li><strong>Try divisors from 2 up to √N:</strong>
+        <ul>
+          <li>For each divisor <em>d</em>, check if <em>N/d</em> ≥ 2</li>
+          <li>If yes, we found a valid split!</li>
+        </ul>
+      </li>
+      <li><strong>Why stop at √N?</strong> If <em>d</em> divides N, then so does <em>N/d</em>. We don't need to check both; checking up to √N covers all cases.</li>
+    </ol>
+    
+    <h3>When It Returns False</h3>
+    <ul>
+      <li><strong>N &lt; 4:</strong> Too few bananas (2 → can't split equally with each getting ≥2; 3 → can't split equally at all)</li>
+      <li><strong>Prime numbers:</strong> A prime like 7 only divides by 1 and 7. We'd get 1×7 or 7×1, both violate our rules.</li>
+      <li><strong>Example:</strong> N = 7 → divisors are {1, 7} → only split is 1 monkey × 7 bananas (violates rules) → false</li>
+    </ul>
+  </div>
+
+<pre><code><span class="kw">static</span> <span class="type">boolean</span> <span class="fn">distribute</span>(<span class="type">int</span> N) {
+    <span class="kw">if</span> (N < <span class="num">4</span>) <span class="kw">return false</span>;
+
+    <span class="kw">for</span> (<span class="type">int</span> d = <span class="num">2</span>; d * d <= N; d++) {
+        <span class="kw">if</span> (N % d == <span class="num">0</span>) {
+            <span class="type">int</span> bananasPerMonkey = N / d;
+            <span class="cmt">// d starts at 2, so d >= 2 is always true; just check bananasPerMonkey</span>
+            <span class="kw">if</span> (bananasPerMonkey >= <span class="num">2</span>) <span class="kw">return true</span>;
+        }
+    }
+    <span class="kw">return false</span>;
+}</code></pre>
+  <div class="complexity"><strong>Time:</strong> O(&radic;N) &nbsp;|&nbsp; <strong>Space:</strong> O(1)<br>
+  Returns <code>false</code> only for N &lt; 4 and prime numbers (no valid split exists).</div>
+</section>
+
+<!-- ───────────────── Q4 ───────────────── -->
+<section class="question" id="q4">
+  <h2>Q4 — Employee Hierarchy — Print by Level</h2>
+  <span class="badge badge-java">JAVA</span>
+  <p class="problem">
+    Given an Employee–Manager table, print all employees grouped by their level in the hierarchy using BFS.<br>
+    CEO is at level 1, direct reports at level 2, etc.
+  </p>
+
+  <div class="explain">
+    <h3>Intuition</h3>
+    <p><strong>The goal:</strong> Print employees organized by their level in the company hierarchy (CEO at level 1, their direct reports at level 2, and so on).</p>
+    <p><strong>Think of it like a family tree:</strong> CEO is the root, their direct reports are their "children," and so on down the tree.</p>
+    
+    <h3>Why Use BFS (Breadth-First Search)?</h3>
+    <p>BFS visits nodes <strong>level by level</strong>, which is exactly what we need! It processes all employees at level 1, then all at level 2, etc.</p>
+    <p>Imagine a tree:</p>
+    <pre style="font-size:.85rem;">
+        Alice (CEO)
+       /   |   \
+     Bob  Eve  Frank
+    /  \
+  Grace Hank
+    </pre>
+    <p>BFS visits: Alice → then Bob, Eve, Frank → then Grace, Hank. This naturally groups by level!</p>
+    
+    <h3>The Algorithm (Two Phases)</h3>
+    
+    <h4>Phase 1: Build the Data Structure</h4>
+    <ol>
+      <li><strong>Create a "reports" map:</strong> For each manager, store a list of their direct reports
+        <ul><li>Example: Alice → [Bob, Eve, Frank]</li></ul>
+      </li>
+      <li><strong>Track all employees:</strong> Keep a set of everyone mentioned</li>
+      <li><strong>Track who has a manager:</strong> Keep a set of people who report to someone</li>
+      <li><strong>Find the CEO:</strong> The CEO is the only person NOT in the "hasManager" set (they don't report to anyone)</li>
+    </ol>
+    
+    <h4>Phase 2: BFS Level-by-Level</h4>
+    <ol>
+      <li><strong>Start with CEO in the queue</strong></li>
+      <li><strong>For each level:</strong>
+        <ul>
+          <li>Remember how many people are in the queue right now (that's the current level's size)</li>
+          <li>Process exactly that many people:
+            <ul>
+              <li>Remove them from queue (poll)</li>
+              <li>Add them to the current level's output list</li>
+              <li>Find their direct reports and add them to the queue (they'll be processed in the next level)</li>
+            </ul>
+          </li>
+          <li>Sort and print the current level</li>
+        </ul>
+      </li>
+      <li><strong>Repeat until queue is empty</strong> (all levels processed)</li>
+    </ol>
+    
+    <h3>Why It Works</h3>
+    <p>The key trick is capturing the queue size at the start of each level. This tells us exactly how many people belong to this level. We process only that many, ensuring level boundaries stay correct even as we add next-level employees to the queue.</p>
+  </div>
+
+<pre><code><span class="kw">import</span> java.util.*;
+
+<span class="kw">public static void</span> <span class="fn">print</span>(<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt; employeeToManager) {
+    <span class="cmt">// Build adjacency list: manager -> list of direct reports</span>
+    <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">List</span>&lt;<span class="type">String</span>&gt;&gt; reports = <span class="kw">new</span> HashMap&lt;&gt;();
+    <span class="type">Set</span>&lt;<span class="type">String</span>&gt; allEmployees = <span class="kw">new</span> HashSet&lt;&gt;();
+    <span class="type">Set</span>&lt;<span class="type">String</span>&gt; hasManager = <span class="kw">new</span> HashSet&lt;&gt;();
+
+    <span class="kw">for</span> (<span class="type">Map.Entry</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt; e : employeeToManager.<span class="fn">entrySet</span>()) {
+        <span class="type">String</span> emp = e.<span class="fn">getKey</span>();
+        <span class="type">String</span> mgr = e.<span class="fn">getValue</span>();
+        allEmployees.<span class="fn">add</span>(emp);
+        allEmployees.<span class="fn">add</span>(mgr);
+        hasManager.<span class="fn">add</span>(emp);
+        <span class="kw">if</span> (!reports.<span class="fn">containsKey</span>(mgr)) {
+            reports.<span class="fn">put</span>(mgr, <span class="kw">new</span> ArrayList&lt;&gt;());
+        }
+        reports.<span class="fn">get</span>(mgr).<span class="fn">add</span>(emp);
+    }
+
+    <span class="cmt">// CEO = employee with no manager</span>
+    <span class="type">String</span> ceo = <span class="kw">null</span>;
+    <span class="kw">for</span> (<span class="type">String</span> name : allEmployees) {
+        <span class="kw">if</span> (!hasManager.<span class="fn">contains</span>(name)) { ceo = name; <span class="kw">break</span>; }
+    }
+
+    <span class="cmt">// BFS level-by-level</span>
+    <span class="type">Queue</span>&lt;<span class="type">String</span>&gt; queue = <span class="kw">new</span> LinkedList&lt;&gt;();
+    queue.<span class="fn">add</span>(ceo);
+    <span class="type">int</span> level = <span class="num">1</span>;
+
+    <span class="kw">while</span> (!queue.<span class="fn">isEmpty</span>()) {
+        <span class="type">int</span> size = queue.<span class="fn">size</span>();
+        <span class="type">List</span>&lt;<span class="type">String</span>&gt; currentLevel = <span class="kw">new</span> ArrayList&lt;&gt;();
+
+        <span class="kw">for</span> (<span class="type">int</span> i = <span class="num">0</span>; i < size; i++) {
+            <span class="type">String</span> person = queue.<span class="fn">poll</span>();
+            currentLevel.<span class="fn">add</span>(person);
+            <span class="type">List</span>&lt;<span class="type">String</span>&gt; directReports = reports.<span class="fn">getOrDefault</span>(person, Collections.<span class="fn">emptyList</span>());
+            queue.<span class="fn">addAll</span>(directReports);
+        }
+
+        Collections.<span class="fn">sort</span>(currentLevel);
+        System.out.<span class="fn">println</span>(<span class="str">"Level "</span> + level + <span class="str">": "</span> + String.<span class="fn">join</span>(<span class="str">" "</span>, currentLevel));
+        level++;
+    }
+}</code></pre>
+  <div class="complexity"><strong>Time:</strong> O(n log n) due to sorting names at each level &nbsp;|&nbsp; <strong>Space:</strong> O(n)</div>
+
+  <!-- Q4 Animation -->
+  <div class="anim-container" id="q4-anim">
+    <div class="anim-header">
+      <span>Step-by-Step Animation</span>
+      <div class="anim-controls">
+        <button onclick="q4Anim.reset()">Reset</button>
+        <button onclick="q4Anim.prev()">&#9664; Prev</button>
+        <span class="step-info" id="q4-step-info">0 / 0</span>
+        <button onclick="q4Anim.next()">Next &#9654;</button>
+        <button onclick="q4Anim.autoPlay()">Auto &#9654;&#9654;</button>
+      </div>
+    </div>
+    <div class="anim-panel">
+      <div class="anim-code" id="q4-code"></div>
+      <div class="anim-visual">
+        <div class="anim-narration" id="q4-narration">Click <strong>Next</strong> or <strong>Auto</strong> to start the animation.</div>
+        <div class="anim-state" id="q4-state"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────── Q5 ───────────────── -->
+<section class="question" id="q5">
+  <h2>Q5 — Order Search by Time Range</h2>
+  <span class="badge badge-java">JAVA</span>
+  <p class="problem">
+    Load millions of Order objects (orderId, entryTime). Efficiently find all orders entered between a start and end time.
+  </p>
+
+  <div class="explain">
+    <h3>Intuition</h3>
+    <p><strong>The challenge:</strong> We have millions of orders, each with a timestamp. We need to quickly find all orders within a time range (e.g., "Give me all orders from 9:00 to 11:00").</p>
+    <p><strong>Why not just use an ArrayList?</strong> Searching a list linearly would take O(n) time — checking every single order. With millions of orders, this is way too slow!</p>
+    
+    <h3>The Solution: TreeMap (Sorted Map)</h3>
+    <p><strong>What is a TreeMap?</strong> It's like a HashMap, but it keeps keys <strong>sorted</strong>. Think of it as a phone book — names are alphabetically ordered, so you can quickly find a range of names.</p>
+    <p><strong>Key insight:</strong> If we organize orders by time in a TreeMap, we can use binary search to jump directly to a time range instead of scanning everything.</p>
+    
+    <h3>Data Structure Breakdown</h3>
+    <ul>
+      <li><strong>Key:</strong> LocalTime (e.g., 10:15, 9:30)</li>
+      <li><strong>Value:</strong> List of all orders placed at that exact time</li>
+      <li><strong>Automatically sorted:</strong> TreeMap keeps times in order (7:00 → 8:00 → 9:00 → ...)</li>
+    </ul>
+    <p>Example:</p>
+    <pre style="font-size:.85rem;">
+TreeMap {
+  7:30  → [Order O314],
+  9:15  → [Order O345, Order O999],
+  10:15 → [Order O124],
+  13:30 → [Order O873]
+}
+    </pre>
+    
+    <h3>How Searching Works</h3>
+    <ol>
+      <li><strong>Call <code>subMap(9:00, 11:00)</code>:</strong> TreeMap uses binary search to find the boundaries in O(log n) time</li>
+      <li><strong>Returns a "view":</strong> A slice of the map containing only times in [9:00, 11:00]
+        <ul><li>In our example: {9:15 → [...], 10:15 → [...]}</li></ul>
+      </li>
+      <li><strong>Iterate the view:</strong> Collect all orders from those time slots — O(k) where k = number of results</li>
+    </ol>
+    
+    <h3>Why This is Fast</h3>
+    <p><strong>Total time:</strong> O(log n + k)</p>
+    <ul>
+      <li>O(log n) to find range boundaries using binary search in the sorted tree</li>
+      <li>O(k) to collect results (where k = number of matching orders)</li>
+    </ul>
+    <p>Compare to O(n) linear scan — for a million orders, this is 1000× faster!</p>
+    
+    <h3>Why Not HashMap?</h3>
+    <p>Regular HashMap is unordered — you can't ask "give me all keys between 9:00 and 11:00." You'd have to check every single key. TreeMap's sorted property makes range queries possible.</p>
+  </div>
+
+<pre><code><span class="kw">import</span> java.time.LocalTime;
+<span class="kw">import</span> java.util.*;
+
+<span class="kw">class</span> <span class="type">Order</span> {
+    <span class="type">String</span> orderId;
+    <span class="type">LocalTime</span> entryTime;
+
+    <span class="kw">public</span> <span class="fn">Order</span>(<span class="type">String</span> orderId, <span class="type">LocalTime</span> entryTime) {
+        <span class="kw">this</span>.orderId = orderId;
+        <span class="kw">this</span>.entryTime = entryTime;
+    }
+}
+
+<span class="kw">class</span> <span class="type">OrderStore</span> {
+    <span class="kw">private</span> <span class="type">TreeMap</span>&lt;<span class="type">LocalTime</span>, <span class="type">List</span>&lt;<span class="type">Order</span>&gt;&gt; ordersByTime = <span class="kw">new</span> TreeMap&lt;&gt;();
+
+    <span class="kw">public void</span> <span class="fn">addOrder</span>(<span class="type">Order</span> order) {
+        ordersByTime.<span class="fn">computeIfAbsent</span>(order.entryTime, k -> <span class="kw">new</span> ArrayList&lt;&gt;())
+                     .<span class="fn">add</span>(order);
+    }
+
+    <span class="kw">public</span> <span class="type">Collection</span>&lt;<span class="type">Order</span>&gt; <span class="fn">search</span>(<span class="type">LocalTime</span> startTime, <span class="type">LocalTime</span> endTime) {
+        <span class="type">List</span>&lt;<span class="type">Order</span>&gt; result = <span class="kw">new</span> ArrayList&lt;&gt;();
+
+        <span class="cmt">// subMap returns a view of entries with keys in [startTime, endTime]</span>
+        <span class="type">NavigableMap</span>&lt;<span class="type">LocalTime</span>, <span class="type">List</span>&lt;<span class="type">Order</span>&gt;&gt; subMap =
+            ordersByTime.<span class="fn">subMap</span>(startTime, <span class="kw">true</span>, endTime, <span class="kw">true</span>);
+
+        <span class="kw">for</span> (<span class="type">List</span>&lt;<span class="type">Order</span>&gt; orders : subMap.<span class="fn">values</span>()) {
+            result.<span class="fn">addAll</span>(orders);
+        }
+        <span class="kw">return</span> result;
+    }
+}</code></pre>
+  <div class="complexity"><strong>3. Time Complexity:</strong> O(log n + k) where n = total distinct times, k = number of orders in the range.<br>
+  Finding the range boundaries is O(log n); iterating results is O(k).</div>
+
+  <!-- Q5 Animation -->
+  <div class="anim-container" id="q5-anim">
+    <div class="anim-header">
+      <span>Step-by-Step Animation</span>
+      <div class="anim-controls">
+        <button onclick="q5Anim.reset()">Reset</button>
+        <button onclick="q5Anim.prev()">&#9664; Prev</button>
+        <span class="step-info" id="q5-step-info">0 / 0</span>
+        <button onclick="q5Anim.next()">Next &#9654;</button>
+        <button onclick="q5Anim.autoPlay()">Auto &#9654;&#9654;</button>
+      </div>
+    </div>
+    <div class="anim-panel">
+      <div class="anim-code" id="q5-code"></div>
+      <div class="anim-visual">
+        <div class="anim-narration" id="q5-narration">Click <strong>Next</strong> or <strong>Auto</strong> to start the animation.</div>
+        <div class="anim-state" id="q5-state"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────── Q6 ───────────────── -->
+<section class="question" id="q6">
+  <h2>Q6 — Database Schema for Online Shopping</h2>
+  <span class="badge badge-sql">SQL</span>
+  <p class="problem">
+    Design tables for: customers, orders, order items, shipping addresses.
+    Specify PKs, FKs, indexes, and write two queries.
+  </p>
+
+  <div class="explain">
+    <h3>Schema Design</h3>
+    <ul>
+      <li><strong>customers</strong> — one row per customer</li>
+      <li><strong>shipping_addresses</strong> — multiple addresses per customer</li>
+      <li><strong>orders</strong> — each order belongs to one customer, shipped to one address</li>
+      <li><strong>order_items</strong> — multiple items per order</li>
+    </ul>
+  </div>
+
+<pre><code><span class="cmt">-- Create the customers table to store basic customer information</span>
+<span class="sql-kw">CREATE TABLE</span> customers (
+    customer_id   <span class="sql-type">INT</span>          <span class="sql-kw">PRIMARY KEY AUTO_INCREMENT</span>,  <span class="cmt">-- Unique ID for each customer, auto-generates next number</span>
+    name          <span class="sql-type">VARCHAR(100)</span> <span class="sql-kw">NOT NULL</span>,                <span class="cmt">-- Customer's full name, cannot be empty</span>
+    email         <span class="sql-type">VARCHAR(150)</span> <span class="sql-kw">NOT NULL UNIQUE</span>,          <span class="cmt">-- Email address, must be unique (no duplicates), cannot be empty</span>
+    phone         <span class="sql-type">VARCHAR(20)</span>                               <span class="cmt">-- Phone number, optional (can be NULL)</span>
+);
+
+<span class="cmt">-- Create the shipping_addresses table to store multiple delivery addresses for each customer</span>
+<span class="sql-kw">CREATE TABLE</span> shipping_addresses (
+    address_id    <span class="sql-type">INT</span>          <span class="sql-kw">PRIMARY KEY AUTO_INCREMENT</span>,  <span class="cmt">-- Unique ID for each address</span>
+    customer_id   <span class="sql-type">INT</span>          <span class="sql-kw">NOT NULL</span>,                <span class="cmt">-- Links to customers table (which customer owns this address)</span>
+    street        <span class="sql-type">VARCHAR(255)</span>,                             <span class="cmt">-- Street address</span>
+    city          <span class="sql-type">VARCHAR(100)</span>,                             <span class="cmt">-- City name</span>
+    state         <span class="sql-type">VARCHAR(100)</span>,                             <span class="cmt">-- State/province</span>
+    zip_code      <span class="sql-type">VARCHAR(20)</span>,                              <span class="cmt">-- Postal/ZIP code</span>
+    country       <span class="sql-type">VARCHAR(100)</span>,                             <span class="cmt">-- Country name</span>
+    <span class="sql-kw">FOREIGN KEY</span> (customer_id) <span class="sql-kw">REFERENCES</span> customers(customer_id)  <span class="cmt">-- Ensures customer_id exists in customers table</span>
+);
+
+<span class="cmt">-- Create the orders table to store each customer's orders</span>
+<span class="sql-kw">CREATE TABLE</span> orders (
+    order_id      <span class="sql-type">INT</span>          <span class="sql-kw">PRIMARY KEY AUTO_INCREMENT</span>,  <span class="cmt">-- Unique ID for each order</span>
+    customer_id   <span class="sql-type">INT</span>          <span class="sql-kw">NOT NULL</span>,                <span class="cmt">-- Links to customers table (who placed this order)</span>
+    address_id    <span class="sql-type">INT</span>          <span class="sql-kw">NOT NULL</span>,                <span class="cmt">-- Links to shipping_addresses table (where to ship this order)</span>
+    order_date    <span class="sql-type">DATETIME</span>     <span class="sql-kw">DEFAULT CURRENT_TIMESTAMP</span>,  <span class="cmt">-- When the order was placed; automatically set to current date/time</span>
+    total_amount  <span class="sql-type">DECIMAL(10,2)</span>,                             <span class="cmt">-- Total price (10 digits, 2 after decimal: e.g., 12345678.99)</span>
+    <span class="sql-kw">FOREIGN KEY</span> (customer_id) <span class="sql-kw">REFERENCES</span> customers(customer_id),    <span class="cmt">-- Ensures customer_id exists</span>
+    <span class="sql-kw">FOREIGN KEY</span> (address_id)  <span class="sql-kw">REFERENCES</span> shipping_addresses(address_id)  <span class="cmt">-- Ensures address_id exists</span>
+);
+
+<span class="cmt">-- Create the order_items table to store individual products within each order</span>
+<span class="sql-kw">CREATE TABLE</span> order_items (
+    item_id       <span class="sql-type">INT</span>          <span class="sql-kw">PRIMARY KEY AUTO_INCREMENT</span>,  <span class="cmt">-- Unique ID for each line item</span>
+    order_id      <span class="sql-type">INT</span>          <span class="sql-kw">NOT NULL</span>,                <span class="cmt">-- Links to orders table (which order this item belongs to)</span>
+    product_name  <span class="sql-type">VARCHAR(200)</span>,                             <span class="cmt">-- Name of the product</span>
+    quantity      <span class="sql-type">INT</span>          <span class="sql-kw">NOT NULL DEFAULT</span> <span class="num">1</span>,        <span class="cmt">-- How many of this item (defaults to 1 if not specified)</span>
+    price         <span class="sql-type">DECIMAL(10,2)</span>,                             <span class="cmt">-- Price per unit</span>
+    <span class="sql-kw">FOREIGN KEY</span> (order_id) <span class="sql-kw">REFERENCES</span> orders(order_id)           <span class="cmt">-- Ensures order_id exists in orders table</span>
+);
+
+<span class="cmt">-- ═══ Indexes for faster lookups ═══</span>
+<span class="cmt">-- Index on orders.customer_id: speeds up queries like "find all orders for customer X"</span>
+<span class="sql-kw">CREATE INDEX</span> idx_orders_customer    <span class="sql-kw">ON</span> orders(customer_id);
+<span class="cmt">-- Index on shipping_addresses.customer_id: speeds up "find all addresses for customer X"</span>
+<span class="sql-kw">CREATE INDEX</span> idx_addresses_customer <span class="sql-kw">ON</span> shipping_addresses(customer_id);
+<span class="cmt">-- Index on order_items.order_id: speeds up "find all items in order X"</span>
+<span class="sql-kw">CREATE INDEX</span> idx_items_order        <span class="sql-kw">ON</span> order_items(order_id);</code></pre>
+
+  <div class="explain" style="margin-top:1.5rem;">
+    <h3>Query 1 — Customers who have NOT placed any order</h3>
+  </div>
+
+<pre><code><span class="cmt">-- Find customers who have never placed an order</span>
+<span class="sql-kw">SELECT</span> c.name, c.phone              <span class="cmt">-- Get customer name and phone</span>
+<span class="sql-kw">FROM</span>   customers c                  <span class="cmt">-- Start with all customers (alias 'c')</span>
+<span class="sql-kw">LEFT JOIN</span> orders o <span class="sql-kw">ON</span> c.customer_id = o.customer_id  <span class="cmt">-- Try to match each customer to their orders</span>
+                                      <span class="cmt">-- LEFT JOIN keeps ALL customers, even if no match in orders</span>
+<span class="sql-kw">WHERE</span>  o.order_id <span class="sql-kw">IS NULL</span>;           <span class="cmt">-- Filter: keep only rows where order_id is NULL (no order found)</span>
+                                      <span class="cmt">-- If order_id is NULL, it means this customer has 0 orders</span></code></pre>
+
+  <div class="explain" style="margin-top:1.5rem;">
+    <h3>Query 2 — Customers with a single order containing 5+ items</h3>
+  </div>
+
+<pre><code><span class="cmt">-- Find customers who have at least one order with 5 or more items in it</span>
+<span class="sql-kw">SELECT DISTINCT</span> c.name, c.email     <span class="cmt">-- Get unique customer names and emails (DISTINCT removes duplicates)</span>
+<span class="sql-kw">FROM</span>   customers c                  <span class="cmt">-- Start with customers table</span>
+<span class="sql-kw">JOIN</span>   orders o      <span class="sql-kw">ON</span> c.customer_id = o.customer_id  <span class="cmt">-- Match customers to their orders</span>
+<span class="sql-kw">JOIN</span>   order_items oi <span class="sql-kw">ON</span> o.order_id = oi.order_id      <span class="cmt">-- Match orders to their items</span>
+<span class="sql-kw">GROUP BY</span> c.customer_id, c.name, c.email, o.order_id  <span class="cmt">-- Group rows by customer AND order</span>
+                                      <span class="cmt">-- This creates one group per order, so we can count items per order</span>
+<span class="sql-kw">HAVING</span>   <span class="sql-fn">COUNT</span>(oi.item_id) >= <span class="num">5</span>;   <span class="cmt">-- Filter groups: keep only orders with 5+ items</span>
+                                      <span class="cmt">-- HAVING is like WHERE, but works on grouped data</span></code></pre>
+</section>
+
+<!-- ───────────────── Q7 ───────────────── -->
+<section class="question" id="q7">
+  <h2>Q7 — LRU Cache Implementation</h2>
+  <span class="badge badge-java">JAVA</span>
+  <p class="problem">
+    Implement an LRU Cache with O(1) <code>get</code> and <code>put</code> using a HashMap + Doubly Linked List.
+  </p>
+
+  <div class="explain">
+    <h3>Intuition</h3>
+    <p><strong>What is LRU?</strong> "Least Recently Used" — a caching strategy where we evict the item that hasn't been accessed for the longest time when the cache is full.</p>
+    <p><strong>Real-world example:</strong> Your browser cache. If your cache can hold 100 pages and you visit a 101st page, the browser deletes the page you visited longest ago.</p>
+    
+    <h3>The Challenge</h3>
+    <p>We need <strong>both</strong> operations to be O(1) (instant):</p>
+    <ul>
+      <li><strong>get(key):</strong> Find and return the value</li>
+      <li><strong>put(key, value):</strong> Insert or update, and if full, remove the least recently used item</li>
+    </ul>
+    <p>One data structure alone can't do this:</p>
+    <ul>
+      <li><strong>HashMap:</strong> O(1) lookup, but doesn't track access order</li>
+      <li><strong>Linked List:</strong> Can track order, but O(n) to find a specific item</li>
+    </ul>
+    <p><strong>Solution:</strong> Use BOTH together!</p>
+    
+    <h3>The Hybrid Data Structure</h3>
+    <p><strong>1. HashMap&lt;key, Node&gt;:</strong> Gives us O(1) lookup to find any node instantly</p>
+    <p><strong>2. Doubly Linked List:</strong> Maintains access order</p>
+    <ul>
+      <li><strong>Head</strong> (most recent): Items just accessed</li>
+      <li><strong>Tail</strong> (least recent): Items accessed longest ago</li>
+    </ul>
+    <pre style="font-size:.85rem;">
+head ←→ [recently used] ←→ [used earlier] ←→ [oldest] ←→ tail
+         (keep these)                        (evict this if full)
+    </pre>
+    
+    <h3>How Operations Work</h3>
+    
+    <h4>get(key):</h4>
+    <ol>
+      <li>Look up key in HashMap → get the node instantly (O(1))</li>
+      <li>If not found, return -1</li>
+      <li>If found: <strong>move the node to the front</strong> of the list (it's now most recently used)
+        <ul>
+          <li>Remove it from current position</li>
+          <li>Insert right after head</li>
+        </ul>
+      </li>
+      <li>Return the value</li>
+    </ol>
+    
+    <h4>put(key, value):</h4>
+    <ol>
+      <li><strong>If key exists:</strong>
+        <ul>
+          <li>Update its value</li>
+          <li>Move it to the front (most recently used)</li>
+        </ul>
+      </li>
+      <li><strong>If key is new:</strong>
+        <ul>
+          <li>If cache is full, remove the node at the tail (least recently used)</li>
+          <li>Create new node and insert at the front</li>
+          <li>Add to HashMap</li>
+        </ul>
+      </li>
+    </ol>
+    
+    <h3>Why Doubly Linked?</h3>
+    <p>We need <code>prev</code> and <code>next</code> pointers to remove a node in O(1) without scanning. To remove a node, we update:</p>
+    <ul>
+      <li><code>node.prev.next = node.next</code></li>
+      <li><code>node.next.prev = node.prev</code></li>
+    </ul>
+    <p>Single-linked list would require O(n) scan to find the previous node.</p>
+    
+    <h3>Sentinel Nodes (head/tail)</h3>
+    <p>We use dummy <code>head</code> and <code>tail</code> nodes to avoid null-pointer checks. They never store real data; they just mark boundaries.</p>
+  </div>
+
+<pre><code><span class="kw">import</span> java.util.HashMap;
+<span class="kw">import</span> java.util.Map;
+
+<span class="kw">class</span> <span class="type">LRUCache</span> {
+
+    <span class="kw">private class</span> <span class="type">Node</span> {
+        <span class="type">int</span> key, value;
+        <span class="type">Node</span> prev, next;
+        <span class="fn">Node</span>(<span class="type">int</span> k, <span class="type">int</span> v) { key = k; value = v; }
+    }
+
+    <span class="kw">private final</span> <span class="type">int</span> capacity;
+    <span class="kw">private final</span> <span class="type">Map</span>&lt;<span class="type">Integer</span>, <span class="type">Node</span>&gt; map;
+    <span class="kw">private final</span> <span class="type">Node</span> head, tail; <span class="cmt">// sentinel nodes</span>
+
+    <span class="kw">public</span> <span class="fn">LRUCache</span>(<span class="type">int</span> capacity) {
+        <span class="kw">this</span>.capacity = capacity;
+        map = <span class="kw">new</span> HashMap&lt;&gt;();
+        head = <span class="kw">new</span> <span class="fn">Node</span>(<span class="num">0</span>, <span class="num">0</span>);
+        tail = <span class="kw">new</span> <span class="fn">Node</span>(<span class="num">0</span>, <span class="num">0</span>);
+        head.next = tail;
+        tail.prev = head;
+    }
+
+    <span class="kw">public</span> <span class="type">int</span> <span class="fn">get</span>(<span class="type">int</span> key) {
+        <span class="kw">if</span> (!map.<span class="fn">containsKey</span>(key)) <span class="kw">return</span> -<span class="num">1</span>;
+        <span class="type">Node</span> node = map.<span class="fn">get</span>(key);
+        <span class="fn">remove</span>(node);
+        <span class="fn">insertAfterHead</span>(node);
+        <span class="kw">return</span> node.value;
+    }
+
+    <span class="kw">public void</span> <span class="fn">put</span>(<span class="type">int</span> key, <span class="type">int</span> value) {
+        <span class="kw">if</span> (map.<span class="fn">containsKey</span>(key)) {
+            <span class="type">Node</span> node = map.<span class="fn">get</span>(key);
+            node.value = value;
+            <span class="fn">remove</span>(node);
+            <span class="fn">insertAfterHead</span>(node);
+        } <span class="kw">else</span> {
+            <span class="kw">if</span> (map.<span class="fn">size</span>() == capacity) {
+                <span class="type">Node</span> lru = tail.prev;
+                <span class="fn">remove</span>(lru);
+                map.<span class="fn">remove</span>(lru.key);
+            }
+            <span class="type">Node</span> newNode = <span class="kw">new</span> <span class="fn">Node</span>(key, value);
+            map.<span class="fn">put</span>(key, newNode);
+            <span class="fn">insertAfterHead</span>(newNode);
+        }
+    }
+
+    <span class="kw">private void</span> <span class="fn">remove</span>(<span class="type">Node</span> node) {
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+    }
+
+    <span class="kw">private void</span> <span class="fn">insertAfterHead</span>(<span class="type">Node</span> node) {
+        node.next = head.next;
+        node.prev = head;
+        head.next.prev = node;
+        head.next = node;
+    }
+}</code></pre>
+  <div class="complexity"><strong>Time:</strong> O(1) for both <code>get</code> and <code>put</code> &nbsp;|&nbsp; <strong>Space:</strong> O(capacity)</div>
+</section>
+
+</div>
+
+<script>
+function AnimController(codeEl, narrationEl, stateEl, stepInfoEl, codeLines, steps) {
+  let idx = -1, timer = null;
+  codeEl.innerHTML = codeLines.map((l, i) =>
+    '<span class="aline" data-ln="' + i + '">' + l + '</span>'
+  ).join('');
+  function render() {
+    stepInfoEl.textContent = (idx + 1) + ' / ' + steps.length;
+    codeEl.querySelectorAll('.aline').forEach(el => el.classList.remove('highlight'));
+    if (idx < 0) {
+      narrationEl.innerHTML = 'Click <strong>Next</strong> or <strong>Auto</strong> to start.';
+      stateEl.innerHTML = '';
+      return;
+    }
+    const s = steps[idx];
+    if (s.lines) s.lines.forEach(ln => {
+      const el = codeEl.querySelector('[data-ln="' + ln + '"]');
+      if (el) { el.classList.add('highlight'); el.scrollIntoView({block:'nearest'}); }
+    });
+    narrationEl.innerHTML = s.narration;
+    stateEl.innerHTML = s.state;
+  }
+  render();
+  return {
+    next() { if (idx < steps.length - 1) { idx++; render(); } },
+    prev() { if (idx > 0) { idx--; render(); } },
+    reset() { clearInterval(timer); timer = null; idx = -1; render(); },
+    autoPlay() {
+      if (timer) { clearInterval(timer); timer = null; return; }
+      timer = setInterval(() => {
+        if (idx >= steps.length - 1) { clearInterval(timer); timer = null; return; }
+        idx++; render();
+      }, 1400);
+    }
+  };
+}
+
+/* ════════════════ Q4 ANIMATION DATA ════════════════ */
+const q4Code = [
+  'public static void print(Map<String,String> empToMgr) {',
+  '    Map<String, List<String>> reports = new HashMap<>();',
+  '    Set<String> allEmployees = new HashSet<>();',
+  '    Set<String> hasManager = new HashSet<>();',
+  '',
+  '    for (Map.Entry<String,String> e : empToMgr.entrySet()) {',
+  '        String emp = e.getKey();',
+  '        String mgr = e.getValue();',
+  '        allEmployees.add(emp);',
+  '        allEmployees.add(mgr);',
+  '        hasManager.add(emp);',
+  '        if (!reports.containsKey(mgr)) {',
+  '            reports.put(mgr, new ArrayList<>());',
+  '        }',
+  '        reports.get(mgr).add(emp);',
+  '    }',
+  '',
+  '    String ceo = null;',
+  '    for (String name : allEmployees) {',
+  '        if (!hasManager.contains(name)) { ceo = name; break; }',
+  '    }',
+  '',
+  '    Queue<String> queue = new LinkedList<>();',
+  '    queue.add(ceo);',
+  '    int level = 1;',
+  '',
+  '    while (!queue.isEmpty()) {',
+  '        int size = queue.size();',
+  '        List<String> currentLevel = new ArrayList<>();',
+  '',
+  '        for (int i = 0; i < size; i++) {',
+  '            String person = queue.poll();',
+  '            currentLevel.add(person);',
+  '            List<String> dr = reports.getOrDefault(person, Collections.emptyList());',
+  '            queue.addAll(dr);',
+  '        }',
+  '        Collections.sort(currentLevel);',
+  '        System.out.println("Level " + level + ": " + currentLevel);',
+  '        level++;',
+  '    }',
+  '}'
+];
+
+function nb(name, cls) { return '<span class="node-box ' + cls + '">' + name + '</span>'; }
+function sg(title, val) {
+  return '<div class="state-group"><h4>' + title + '</h4><div class="val">' + val + '</div></div>';
+}
+
+const q4InputData = [
+  ['Bob','Alice'],['Charlie','Alice'],['David','Alice'],
+  ['Eve','Bob'],['Frank','Bob']
+];
+const q4InputLabels = q4InputData.map(d => d[0] + ' → ' + d[1]);
+
+const q4Steps = [
+  { lines:[0], narration:'Enter <code>print()</code> with input: {Bob→Alice, Charlie→Alice, David→Alice, Eve→Bob, Frank→Bob}.',
+    state: sg('Input (empToMgr)', q4InputLabels.join(', ')) },
+  { lines:[1,2,3], narration:'Initialize three empty data structures: <code>reports</code> map, <code>allEmployees</code> set, <code>hasManager</code> set.',
+    state: sg('reports','{ }') + sg('allEmployees','{ }') + sg('hasManager','{ }') },
+  { lines:[5,6,7], narration:'<strong>Iteration 1:</strong> Process entry <code>Bob → Alice</code>. Extract <code>emp</code> = "Bob", <code>mgr</code> = "Alice".',
+    state: sg('Current Entry', 'emp = "Bob", mgr = "Alice"') },
+  { lines:[8,9,10], narration:'Add Bob and Alice to <code>allEmployees</code>. Add Bob to <code>hasManager</code> (he has a manager).',
+    state: sg('allEmployees','{Bob, Alice}') + sg('hasManager','{Bob}') + sg('reports','{ }') },
+  { lines:[11], narration:'<code>reports.containsKey("Alice")</code> is <strong>false</strong> — no list for Alice yet. Enter the <code>if</code> body.',
+    state: sg('Check', 'containsKey(Alice) → false') },
+  { lines:[12,13], narration:'<code>reports.put(Alice, new ArrayList&lt;&gt;())</code> — create an empty list for manager Alice.',
+    state: sg('reports','Alice → [ ]') },
+  { lines:[14], narration:'<code>reports.get(Alice).add(Bob)</code> — append Bob as Alice\'s direct report.',
+    state: sg('reports','Alice → [Bob]') },
+  { lines:[5,6,7], narration:'<strong>Iteration 2:</strong> Process entry <code>Charlie → Alice</code>.',
+    state: sg('Current Entry', 'emp = "Charlie", mgr = "Alice"') },
+  { lines:[8,9,10], narration:'Add Charlie (and Alice again) to sets; mark Charlie as having a manager.',
+    state: sg('allEmployees','{Bob, Alice, Charlie}') + sg('hasManager','{Bob, Charlie}') + sg('reports','Alice → [Bob]') },
+  { lines:[11], narration:'<code>containsKey("Alice")</code> is <strong>true</strong> — skip <code>put</code>; the <code>if</code> body does not run.',
+    state: sg('Check', 'containsKey(Alice) → true (skip put)') },
+  { lines:[14], narration:'<code>reports.get(Alice).add(Charlie)</code> — append Charlie to Alice\'s list.',
+    state: sg('reports','Alice → [Bob, Charlie]') },
+  { lines:[5,6,7], narration:'<strong>Iteration 3:</strong> Process entry <code>David → Alice</code>.',
+    state: sg('Current Entry', 'emp = "David", mgr = "Alice"') },
+  { lines:[8,9,10], narration:'Update <code>allEmployees</code> and <code>hasManager</code>.',
+    state: sg('allEmployees','{Bob, Alice, Charlie, David}') + sg('hasManager','{Bob, Charlie, David}') + sg('reports','Alice → [Bob, Charlie]') },
+  { lines:[11], narration:'<code>containsKey("Alice")</code> is still <strong>true</strong>.',
+    state: sg('Check', 'containsKey(Alice) → true') },
+  { lines:[14], narration:'<code>reports.get(Alice).add(David)</code>.',
+    state: sg('reports','Alice → [Bob, Charlie, David]') },
+  { lines:[5,6,7], narration:'<strong>Iteration 4:</strong> Process entry <code>Eve → Bob</code>.',
+    state: sg('Current Entry', 'emp = "Eve", mgr = "Bob"') },
+  { lines:[8,9,10], narration:'Add Eve to sets.',
+    state: sg('allEmployees','{Bob, Alice, Charlie, David, Eve}') + sg('hasManager','{Bob, Charlie, David, Eve}') + sg('reports','Alice → [Bob, Charlie, David]') },
+  { lines:[11], narration:'<code>containsKey("Bob")</code> is <strong>false</strong> — first time we see Bob as a manager key.',
+    state: sg('Check', 'containsKey(Bob) → false') },
+  { lines:[12,13], narration:'<code>put(Bob, new ArrayList&lt;&gt;())</code> — create Bob\'s report list.',
+    state: sg('reports','Alice → [...]<br>Bob → [ ]') },
+  { lines:[14], narration:'<code>reports.get(Bob).add(Eve)</code>.',
+    state: sg('reports','Alice → [Bob, Charlie, David]<br>Bob → [Eve]') },
+  { lines:[5,6,7], narration:'<strong>Iteration 5:</strong> Process entry <code>Frank → Bob</code>.',
+    state: sg('Current Entry', 'emp = "Frank", mgr = "Bob"') },
+  { lines:[8,9,10], narration:'Add Frank to sets. <strong>Build loop complete.</strong>',
+    state: sg('allEmployees','{Bob, Alice, Charlie, David, Eve, Frank}') + sg('hasManager','{Bob, Charlie, David, Eve, Frank}') + sg('reports','Alice → [Bob, Charlie, David]<br>Bob → [Eve]') },
+  { lines:[11], narration:'<code>containsKey("Bob")</code> is <strong>true</strong>.',
+    state: sg('Check', 'containsKey(Bob) → true') },
+  { lines:[14], narration:'<code>reports.get(Bob).add(Frank)</code> — final adjacency list.',
+    state: sg('reports','Alice → [Bob, Charlie, David]<br>Bob → [Eve, Frank]') },
+  { lines:[17,18,19], narration:'Find the CEO: iterate <code>allEmployees</code>; anyone <strong>not</strong> in <code>hasManager</code> is the root. Alice is not in <code>hasManager</code>.',
+    state: sg('CEO Found', nb('Alice','current') + ' — not in hasManager') },
+  { lines:[22,23,24], narration:'BFS setup: new queue, <code>add(ceo)</code>, <code>level = 1</code>.',
+    state: sg('Queue', nb('Alice','in-queue')) + sg('Level','1') + sg('Output','(empty)') },
+  { lines:[26,27,28], narration:'<strong>Level 1 round:</strong> queue not empty, <code>size = 1</code>, new <code>currentLevel</code> list.',
+    state: sg('Queue', nb('Alice','in-queue')) + sg('size','1') + sg('currentLevel','[ ]') },
+  { lines:[30,31,32], narration:'Inner loop: <code>poll()</code> Alice, add to <code>currentLevel</code>.',
+    state: sg('Queue', '(empty)') + sg('currentLevel','[' + nb('Alice','current') + ']') },
+  { lines:[33,34], narration:'<code>getOrDefault</code> gets Alice\'s report list [Bob, Charlie, David], <code>addAll</code> enqueues them.',
+    state: sg('directReports (dr)','[Bob, Charlie, David]') + sg('Queue', nb('Bob','in-queue') + nb('Charlie','in-queue') + nb('David','in-queue')) + sg('currentLevel','[' + nb('Alice','processed') + ']') },
+  { lines:[36,37,38], narration:'<code>Collections.sort(currentLevel)</code>, print line, <code>level++</code>.',
+    state: sg('Output','<div class="tree-level"><span class="lbl">Level 1:</span>' + nb('Alice','processed') + '</div>') + sg('Queue', nb('Bob','in-queue') + nb('Charlie','in-queue') + nb('David','in-queue')) },
+  { lines:[26,27,28], narration:'<strong>Level 2 round:</strong> <code>size = 3</code>.',
+    state: sg('Queue', nb('Bob','in-queue') + nb('Charlie','in-queue') + nb('David','in-queue')) + sg('size','3') + sg('currentLevel','[ ]') },
+  { lines:[30,31,32], narration:'i=0: poll Bob, add to <code>currentLevel</code>.',
+    state: sg('Queue', nb('Charlie','in-queue') + nb('David','in-queue')) + sg('currentLevel','[' + nb('Bob','current') + ']') },
+  { lines:[33,34], narration:'Bob\'s reports [Eve, Frank]: enqueue them.',
+    state: sg('Queue', nb('Charlie','in-queue') + nb('David','in-queue') + nb('Eve','in-queue') + nb('Frank','in-queue')) + sg('currentLevel','[' + nb('Bob','processed') + ']') },
+  { lines:[30,31,32], narration:'i=1: poll Charlie — no direct reports (<code>dr</code> empty).',
+    state: sg('Queue', nb('David','in-queue') + nb('Eve','in-queue') + nb('Frank','in-queue')) + sg('currentLevel','[' + nb('Bob','processed') + ', ' + nb('Charlie','current') + ']') },
+  { lines:[33,34], narration:'i=2: poll David — same, empty <code>dr</code>.',
+    state: sg('Queue', nb('Eve','in-queue') + nb('Frank','in-queue')) + sg('currentLevel','[' + nb('Bob','processed') + ', ' + nb('Charlie','processed') + ', ' + nb('David','current') + ']') },
+  { lines:[36,37,38], narration:'Sort names for output, print Level 2, increment level.',
+    state: sg('Output','<div class="tree-level"><span class="lbl">Level 1:</span>' + nb('Alice','processed') + '</div><div class="tree-level"><span class="lbl">Level 2:</span>' + nb('Bob','processed') + nb('Charlie','processed') + nb('David','processed') + '</div>') + sg('Queue', nb('Eve','in-queue') + nb('Frank','in-queue')) },
+  { lines:[26,27,28], narration:'<strong>Level 3 round:</strong> <code>size = 2</code>.',
+    state: sg('Queue', nb('Eve','in-queue') + nb('Frank','in-queue')) + sg('size','2') + sg('currentLevel','[ ]') },
+  { lines:[30,31,32,33,34], narration:'Poll Eve: no reports. Queue still has Frank.',
+    state: sg('Queue', nb('Frank','in-queue')) + sg('currentLevel','[' + nb('Eve','current') + ']') },
+  { lines:[30,31,32,33,34], narration:'Poll Frank: no reports. Queue empty.',
+    state: sg('Queue', '(empty)') + sg('currentLevel','[' + nb('Eve','processed') + ', ' + nb('Frank','current') + ']') },
+  { lines:[36,37,38], narration:'Sort, print Level 3, <code>level++</code>.',
+    state: sg('Output','<div class="tree-level"><span class="lbl">Level 1:</span>' + nb('Alice','processed') + '</div><div class="tree-level"><span class="lbl">Level 2:</span>' + nb('Bob','processed') + nb('Charlie','processed') + nb('David','processed') + '</div><div class="tree-level"><span class="lbl">Level 3:</span>' + nb('Eve','processed') + nb('Frank','processed') + '</div>') },
+  { lines:[26], narration:'<code>queue.isEmpty()</code> — exit <code>while</code>. <strong>BFS complete.</strong>',
+    state: sg('Final Output','<div class="tree-level"><span class="lbl">Level 1:</span>' + nb('Alice','processed') + '</div><div class="tree-level"><span class="lbl">Level 2:</span>' + nb('Bob','processed') + nb('Charlie','processed') + nb('David','processed') + '</div><div class="tree-level"><span class="lbl">Level 3:</span>' + nb('Eve','processed') + nb('Frank','processed') + '</div>') },
+];
+
+const q4Anim = AnimController(
+  document.getElementById('q4-code'),
+  document.getElementById('q4-narration'),
+  document.getElementById('q4-state'),
+  document.getElementById('q4-step-info'),
+  q4Code, q4Steps
+);
+
+/* ════════════════ Q5 ANIMATION DATA ════════════════ */
+const q5Code = [
+  'class OrderStore {',
+  '    TreeMap<LocalTime, List<Order>> ordersByTime = new TreeMap<>();',
+  '',
+  '    void addOrder(Order order) {',
+  '        ordersByTime.computeIfAbsent(order.entryTime, k -> new ArrayList<>())',
+  '                    .add(order);',
+  '    }',
+  '',
+  '    Collection<Order> search(LocalTime start, LocalTime end) {',
+  '        List<Order> result = new ArrayList<>();',
+  '',
+  '        NavigableMap<LocalTime, List<Order>> subMap =',
+  '            ordersByTime.subMap(start, true, end, true);',
+  '',
+  '        for (List<Order> orders : subMap.values()) {',
+  '            result.addAll(orders);',
+  '        }',
+  '        return result;',
+  '    }',
+  '}'
+];
+
+const orders = [
+  {id:'O314', time:'7:30'}, {id:'O345', time:'9:15'},
+  {id:'O124', time:'10:15'}, {id:'O873', time:'13:30'}
+];
+
+function tmBox(time, ids, cls) {
+  return '<span class="node-box ' + cls + '">' + time + ': ' + ids + '</span>';
+}
+
+const q5Steps = [
+  { lines:[0,1], narration:'Create an <code>OrderStore</code> with an empty <code>TreeMap</code>. Keys are times, values are lists of orders.',
+    state: sg('TreeMap (ordersByTime)','{ } — empty, sorted by time') },
+  { lines:[3,4,5], narration:'<strong>addOrder(O314, 7:30)</strong> — Insert order O314 at time 7:30. TreeMap creates a new list at key 7:30.',
+    state: sg('TreeMap', tmBox('7:30','[O314]','in-queue')) },
+  { lines:[3,4,5], narration:'<strong>addOrder(O345, 9:15)</strong> — Insert order O345 at time 9:15. TreeMap keeps keys sorted.',
+    state: sg('TreeMap (sorted by key)', tmBox('7:30','[O314]','in-queue') + ' ' + tmBox('9:15','[O345]','in-queue')) },
+  { lines:[3,4,5], narration:'<strong>addOrder(O124, 10:15)</strong> — Insert order O124 at time 10:15.',
+    state: sg('TreeMap (sorted)', tmBox('7:30','[O314]','in-queue') + ' ' + tmBox('9:15','[O345]','in-queue') + ' ' + tmBox('10:15','[O124]','in-queue')) },
+  { lines:[3,4,5], narration:'<strong>addOrder(O873, 13:30)</strong> — Insert order O873 at time 13:30. All 4 orders loaded.',
+    state: sg('TreeMap (sorted)', tmBox('7:30','[O314]','in-queue') + ' ' + tmBox('9:15','[O345]','in-queue') + ' ' + tmBox('10:15','[O124]','in-queue') + ' ' + tmBox('13:30','[O873]','in-queue')) },
+  { lines:[8], narration:'Call <code>search(9:00, 11:00)</code> — find all orders between 9:00 and 11:00.',
+    state: sg('TreeMap', tmBox('7:30','[O314]','in-queue') + ' ' + tmBox('9:15','[O345]','in-queue') + ' ' + tmBox('10:15','[O124]','in-queue') + ' ' + tmBox('13:30','[O873]','in-queue')) + sg('Search Range','startTime = 9:00, endTime = 11:00') },
+  { lines:[9], narration:'Create an empty result list.',
+    state: sg('result','[ ] — empty') + sg('Search Range','[9:00 ... 11:00]') },
+  { lines:[11,12], narration:'<code>subMap(9:00, true, 11:00, true)</code> — TreeMap performs O(log n) lookup to find the boundaries. Returns a <strong>view</strong> of entries with keys in [9:00, 11:00].',
+    state: sg('Full TreeMap', tmBox('7:30','[O314]','excluded') + ' ' + tmBox('9:15','[O345]','found') + ' ' + tmBox('10:15','[O124]','found') + ' ' + tmBox('13:30','[O873]','excluded')) + sg('subMap view', tmBox('9:15','[O345]','found') + ' ' + tmBox('10:15','[O124]','found')) },
+  { lines:[14,15], narration:'<strong>Iterate subMap, entry 1:</strong> Key 9:15 → orders = [O345]. Add O345 to result.',
+    state: sg('Current entry', tmBox('9:15','[O345]','current')) + sg('result','[' + nb('O345','found') + ']') },
+  { lines:[14,15], narration:'<strong>Iterate subMap, entry 2:</strong> Key 10:15 → orders = [O124]. Add O124 to result.',
+    state: sg('Current entry', tmBox('10:15','[O124]','current')) + sg('result','[' + nb('O345','found') + ', ' + nb('O124','found') + ']') },
+  { lines:[17], narration:'Return result. <strong>Search complete!</strong> Found 2 orders in range [9:00, 11:00].',
+    state: sg('Final Result','[' + nb('O345','found') + ', ' + nb('O124','found') + ']') +
+           sg('Visualization','<div class="tree-level"><span class="lbl" style="color:#94a3b8">7:30</span>' + nb('O314','excluded') + '</div>' +
+           '<div class="tree-level"><span class="lbl" style="color:#15803d">9:15 ✓</span>' + nb('O345','found') + '</div>' +
+           '<div class="tree-level"><span class="lbl" style="color:#15803d">10:15 ✓</span>' + nb('O124','found') + '</div>' +
+           '<div class="tree-level"><span class="lbl" style="color:#94a3b8">13:30</span>' + nb('O873','excluded') + '</div>') },
+];
+
+const q5Anim = AnimController(
+  document.getElementById('q5-code'),
+  document.getElementById('q5-narration'),
+  document.getElementById('q5-state'),
+  document.getElementById('q5-step-info'),
+  q5Code, q5Steps
+);
+</script>
+</body>
+</html>
