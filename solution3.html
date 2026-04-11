@@ -264,6 +264,191 @@
     <p><strong>The strategy:</strong> We need to create "relay stations" where we temporarily store bananas, reducing the total pile progressively as we make multiple trips.</p>
   </div>
 
+  <div class="explain" style="background: #f0f9ff; padding: 1.5rem; border-radius: 8px; border: 2px solid var(--accent);">
+    <h3 style="color: var(--accent); margin-bottom: 1rem;">🎬 Interactive Animation - Phase 1 (First 200km)</h3>
+    <p style="margin-bottom: 1rem;"><strong>Watch the camel transport 3,000 bananas!</strong> Click "Start Animation" to see how the camel makes multiple trips.</p>
+    
+    <div id="animation-container" style="background: white; padding: 1.5rem; border-radius: 8px; margin: 1rem 0; min-height: 300px; position: relative;">
+      <!-- Start Point -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <div style="text-align: center;">
+          <div style="font-size: 1rem; font-weight: bold; color: var(--green);">START</div>
+          <div style="font-size: 0.8rem; color: var(--muted);">0 km</div>
+        </div>
+        <div style="text-align: center;">
+          <div style="font-size: 1rem; font-weight: bold; color: #f59e0b;">RELAY 1</div>
+          <div style="font-size: 0.8rem; color: var(--muted);">200 km</div>
+        </div>
+        <div style="text-align: center;">
+          <div style="font-size: 1rem; font-weight: bold; color: #a78bfa;">RELAY 2</div>
+          <div style="font-size: 0.8rem; color: var(--muted);">533 km</div>
+        </div>
+        <div style="text-align: center;">
+          <div style="font-size: 1rem; font-weight: bold; color: var(--accent);">DEST</div>
+          <div style="font-size: 0.8rem; color: var(--muted);">1000 km</div>
+        </div>
+      </div>
+
+      <!-- Path -->
+      <div style="position: relative; height: 60px; background: linear-gradient(to right, #dcfce7 0%, #fef3c7 20%, #f3e8ff 53.3%, #dbeafe 100%); border-radius: 8px; margin-bottom: 1rem; overflow: hidden;">
+        <div id="camel" style="position: absolute; left: 0%; top: 50%; transform: translateY(-50%); font-size: 2rem; transition: left 1s ease-in-out;">
+          🐫
+        </div>
+        <!-- Markers -->
+        <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--green);"></div>
+        <div style="position: absolute; left: 20%; top: 0; bottom: 0; width: 2px; background: #f59e0b;"></div>
+        <div style="position: absolute; left: 53.3%; top: 0; bottom: 0; width: 2px; background: #a78bfa;"></div>
+        <div style="position: absolute; right: 0; top: 0; bottom: 0; width: 3px; background: var(--accent);"></div>
+      </div>
+
+      <!-- Info Display -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem; margin-bottom: 1rem;">
+        <div style="background: #f0fdf4; padding: 0.75rem; border-radius: 6px; text-align: center;">
+          <div style="font-size: 0.75rem; color: var(--muted); margin-bottom: 0.25rem;">At Start (0km)</div>
+          <div id="start-bananas" style="font-size: 1.2rem; font-weight: bold; color: var(--green);">3000 🍌</div>
+        </div>
+        <div style="background: #fef3c7; padding: 0.75rem; border-radius: 6px; text-align: center;">
+          <div style="font-size: 0.75rem; color: var(--muted); margin-bottom: 0.25rem;">Camel Carrying</div>
+          <div id="carrying-bananas" style="font-size: 1.2rem; font-weight: bold; color: #b45309;">0 🍌</div>
+        </div>
+        <div style="background: #fef3c7; padding: 0.75rem; border-radius: 6px; text-align: center;">
+          <div style="font-size: 0.75rem; color: var(--muted); margin-bottom: 0.25rem;">Relay 1 (200km)</div>
+          <div id="relay1-bananas" style="font-size: 1.2rem; font-weight: bold; color: #f59e0b;">0 🍌</div>
+        </div>
+        <div style="background: #f3e8ff; padding: 0.75rem; border-radius: 6px; text-align: center;">
+          <div style="font-size: 0.75rem; color: var(--muted); margin-bottom: 0.25rem;">Relay 2 (533km)</div>
+          <div id="relay2-bananas" style="font-size: 1.2rem; font-weight: bold; color: #a78bfa;">0 🍌</div>
+        </div>
+        <div style="background: #eff6ff; padding: 0.75rem; border-radius: 6px; text-align: center;">
+          <div style="font-size: 0.75rem; color: var(--muted); margin-bottom: 0.25rem;">Destination (1000km)</div>
+          <div id="dest-bananas" style="font-size: 1.2rem; font-weight: bold; color: var(--accent);">0 🍌</div>
+        </div>
+      </div>
+
+      <!-- Trip Counter -->
+      <div style="background: #f3e8ff; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
+        <div style="font-size: 0.9rem; color: var(--muted); margin-bottom: 0.5rem;">Current Action:</div>
+        <div id="trip-status" style="font-size: 1.1rem; font-weight: bold; color: #7c3aed;">Ready to start...</div>
+      </div>
+
+      <!-- Controls -->
+      <div style="display: flex; gap: 1rem; justify-content: center; align-items: center;">
+        <button id="prev-btn" onclick="prevStep()" style="background: var(--muted); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s;">
+          ◀ Previous
+        </button>
+        <div style="background: #f3e8ff; padding: 0.5rem 1rem; border-radius: 6px; font-weight: bold; color: #7c3aed; min-width: 100px; text-align: center;">
+          <span id="step-counter">Step 0 / 12</span>
+        </div>
+        <button id="next-btn" onclick="nextStep()" style="background: var(--accent); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s;">
+          Next ▶
+        </button>
+      </div>
+      <div style="text-align: center; margin-top: 1rem;">
+        <button id="reset-btn" onclick="resetAnimation()" style="background: transparent; color: var(--muted); border: 2px solid var(--muted); padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+          ↻ Reset to Start
+        </button>
+      </div>
+    </div>
+
+    <div style="background: #fef3c7; padding: 1rem; border-radius: 6px; border-left: 3px solid #f59e0b; margin-top: 1rem;">
+      <strong>💡 Complete Journey Breakdown:</strong>
+      <ul style="margin: 0.5rem 0 0 1.25rem; font-size: 0.9rem;">
+        <li><strong>Phase 1 (0→200km):</strong> 3 forward + 2 return trips = 5 trips × 200km = 1,000 bananas eaten → 2,000 left</li>
+        <li><strong>Phase 2 (200→533km):</strong> 2 forward + 1 return trip = 3 trips × 333km = 1,000 bananas eaten → 1,000 left</li>
+        <li><strong>Phase 3 (533→1000km):</strong> 1 forward trip = 467km = 467 bananas eaten → <strong>533 delivered!</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    let currentStep = 0;
+
+    const steps = [
+      // Phase 1: 0km to 200km (3,000 → 2,000 bananas)
+      { action: "🎬 Ready to start! The camel needs to travel 1000km with 3,000 bananas", start: 3000, carrying: 0, relay1: 0, relay2: 0, dest: 0, camelPos: 0 },
+      
+      // Trip 1
+      { action: "🐫 PHASE 1 - Trip 1: Loading 1,000 bananas at start", start: 2000, carrying: 1000, relay1: 0, relay2: 0, dest: 0, camelPos: 0 },
+      { action: "🐫 PHASE 1 - Trip 1: Walking to 200km (eating 200)", start: 2000, carrying: 800, relay1: 0, relay2: 0, dest: 0, camelPos: 20 },
+      { action: "🐫 PHASE 1 - Trip 1: Dropping 800 at Relay 1", start: 2000, carrying: 0, relay1: 800, relay2: 0, dest: 0, camelPos: 20 },
+      { action: "🐫 PHASE 1 - Return 1: Walking back (eating 200 from relay)", start: 2000, carrying: 0, relay1: 600, relay2: 0, dest: 0, camelPos: 0 },
+      
+      // Trip 2
+      { action: "🐫 PHASE 1 - Trip 2: Loading 1,000 bananas at start", start: 1000, carrying: 1000, relay1: 600, relay2: 0, dest: 0, camelPos: 0 },
+      { action: "🐫 PHASE 1 - Trip 2: Walking to 200km (eating 200)", start: 1000, carrying: 800, relay1: 600, relay2: 0, dest: 0, camelPos: 20 },
+      { action: "🐫 PHASE 1 - Trip 2: Dropping 800 at Relay 1", start: 1000, carrying: 0, relay1: 1400, relay2: 0, dest: 0, camelPos: 20 },
+      { action: "🐫 PHASE 1 - Return 2: Walking back (eating 200 from relay)", start: 1000, carrying: 0, relay1: 1200, relay2: 0, dest: 0, camelPos: 0 },
+      
+      // Trip 3
+      { action: "🐫 PHASE 1 - Trip 3: Loading final 1,000 bananas", start: 0, carrying: 1000, relay1: 1200, relay2: 0, dest: 0, camelPos: 0 },
+      { action: "🐫 PHASE 1 - Trip 3: Walking to 200km (eating 200)", start: 0, carrying: 800, relay1: 1200, relay2: 0, dest: 0, camelPos: 20 },
+      { action: "✅ PHASE 1 COMPLETE: 2,000 bananas at Relay 1 (200km)", start: 0, carrying: 0, relay1: 2000, relay2: 0, dest: 0, camelPos: 20 },
+      
+      // Phase 2: 200km to 533km (2,000 → 1,000 bananas)
+      { action: "🐫 PHASE 2 - Trip 1: Loading 1,000 from Relay 1", start: 0, carrying: 1000, relay1: 1000, relay2: 0, dest: 0, camelPos: 20 },
+      { action: "🐫 PHASE 2 - Trip 1: Walking to 533km (eating 333)", start: 0, carrying: 667, relay1: 1000, relay2: 0, dest: 0, camelPos: 53.3 },
+      { action: "🐫 PHASE 2 - Trip 1: Dropping 667 at Relay 2", start: 0, carrying: 0, relay1: 1000, relay2: 667, dest: 0, camelPos: 53.3 },
+      { action: "🐫 PHASE 2 - Return: Walking back to 200km (eating 333 from relay)", start: 0, carrying: 0, relay1: 1000, relay2: 334, dest: 0, camelPos: 20 },
+      
+      // Trip 2
+      { action: "🐫 PHASE 2 - Trip 2: Loading final 1,000 from Relay 1", start: 0, carrying: 1000, relay1: 0, relay2: 334, dest: 0, camelPos: 20 },
+      { action: "🐫 PHASE 2 - Trip 2: Walking to 533km (eating 333)", start: 0, carrying: 667, relay1: 0, relay2: 334, dest: 0, camelPos: 53.3 },
+      { action: "✅ PHASE 2 COMPLETE: 1,000 bananas at Relay 2 (533km)", start: 0, carrying: 0, relay1: 0, relay2: 1000, dest: 0, camelPos: 53.3 },
+      
+      // Phase 3: 533km to 1000km (1,000 → 533 bananas)
+      { action: "🐫 PHASE 3 - Final Journey: Loading 1,000 from Relay 2", start: 0, carrying: 1000, relay1: 0, relay2: 0, dest: 0, camelPos: 53.3 },
+      { action: "🐫 PHASE 3 - Walking to destination 1000km (eating 467)", start: 0, carrying: 533, relay1: 0, relay2: 0, dest: 0, camelPos: 100 },
+      { action: "🎉 JOURNEY COMPLETE! 533 bananas delivered to destination!", start: 0, carrying: 0, relay1: 0, relay2: 0, dest: 533, camelPos: 100 }
+    ];
+
+    function updateDisplay() {
+      const step = steps[currentStep];
+      
+      // Update displays
+      document.getElementById('start-bananas').textContent = step.start + ' 🍌';
+      document.getElementById('carrying-bananas').textContent = step.carrying + ' 🍌';
+      document.getElementById('relay1-bananas').textContent = step.relay1 + ' 🍌';
+      document.getElementById('relay2-bananas').textContent = step.relay2 + ' 🍌';
+      document.getElementById('dest-bananas').textContent = step.dest + ' 🍌';
+      document.getElementById('trip-status').textContent = step.action;
+      document.getElementById('camel').style.left = step.camelPos + '%';
+      document.getElementById('step-counter').textContent = 'Step ' + currentStep + ' / ' + (steps.length - 1);
+      
+      // Update button states
+      document.getElementById('prev-btn').disabled = currentStep === 0;
+      document.getElementById('prev-btn').style.opacity = currentStep === 0 ? '0.5' : '1';
+      document.getElementById('prev-btn').style.cursor = currentStep === 0 ? 'not-allowed' : 'pointer';
+      
+      document.getElementById('next-btn').disabled = currentStep === steps.length - 1;
+      document.getElementById('next-btn').style.opacity = currentStep === steps.length - 1 ? '0.5' : '1';
+      document.getElementById('next-btn').style.cursor = currentStep === steps.length - 1 ? 'not-allowed' : 'pointer';
+    }
+
+    function nextStep() {
+      if (currentStep < steps.length - 1) {
+        currentStep++;
+        updateDisplay();
+      }
+    }
+
+    function prevStep() {
+      if (currentStep > 0) {
+        currentStep--;
+        updateDisplay();
+      }
+    }
+
+    function resetAnimation() {
+      currentStep = 0;
+      updateDisplay();
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      updateDisplay();
+    });
+  </script>
+
   <div class="explain">
     <h3>Solution Strategy</h3>
     <p>We divide the journey into segments based on how many trips are needed:</p>
@@ -272,30 +457,69 @@
       <li><strong>Phase 2:</strong> Once we're down to 2,000 bananas, we need 2 trips</li>
       <li><strong>Phase 3:</strong> Once we're down to 1,000 bananas or less, we make 1 final trip</li>
     </ul>
+    <p><strong>Important:</strong> The camel needs to go back and forth to move all bananas forward until we have ≤1,000 bananas left.</p>
+  </div>
+
+  <div class="explain">
+    <h3>Understanding "One-Way Trips"</h3>
+    <p><strong>Think of it this way:</strong> Each time the camel walks 1 km (in any direction), it eats 1 banana.</p>
+    <p><strong>Phase 1 Example:</strong> To move 3,000 bananas from point A to point B (200 km away):</p>
+    <ol>
+      <li>🐫 Load 1,000 bananas → Walk forward 200km → Drop bananas → Walk back 200km (uses 400 bananas)</li>
+      <li>🐫 Load 1,000 bananas → Walk forward 200km → Drop bananas → Walk back 200km (uses 400 bananas)</li>
+      <li>🐫 Load 1,000 bananas → Walk forward 200km → Stay there (uses 200 bananas)</li>
+    </ol>
+    <p><strong>Total distance walked = 5 segments of 200km each:</strong></p>
+    <ul>
+      <li>Forward (trip 1): 200 km</li>
+      <li>Back (return 1): 200 km</li>
+      <li>Forward (trip 2): 200 km</li>
+      <li>Back (return 2): 200 km</li>
+      <li>Forward (trip 3): 200 km</li>
+      <li><strong>= 5 one-way trips × 200 km = 1,000 km total walked = 1,000 bananas eaten</strong></li>
+    </ul>
+    <p>Result: 3,000 - 1,000 = 2,000 bananas successfully moved 200km forward!</p>
   </div>
 
   <div class="explain">
     <h3>Detailed Calculation</h3>
     
     <h4>Phase 1: From 3,000 to 2,000 bananas (requires 5 one-way trips)</h4>
+    <p><strong>Why 5 one-way trips?</strong> To move 3,000 bananas forward, the camel needs to make 3 loads. Here's what happens:</p>
     <ul>
-      <li>We need to make 3 forward trips and 2 return trips = 5 one-way trips total</li>
-      <li>Cost per km: 5 bananas (1 per trip)</li>
+      <li><strong>Trip 1 (forward):</strong> Camel carries 1,000 bananas forward, drops some, returns</li>
+      <li><strong>Trip 2 (return):</strong> Camel walks back empty to get more bananas</li>
+      <li><strong>Trip 3 (forward):</strong> Camel carries 1,000 bananas forward, drops some, returns</li>
+      <li><strong>Trip 4 (return):</strong> Camel walks back empty to get the last load</li>
+      <li><strong>Trip 5 (forward):</strong> Camel carries final 1,000 bananas forward, stays there</li>
+      <li><strong>Total: 3 forward + 2 return = 5 one-way trips</strong></li>
+    </ul>
+    <p><strong>Cost calculation:</strong></p>
+    <ul>
+      <li>Cost per km: 5 bananas (the camel eats 1 banana per km for each of the 5 one-way trips)</li>
       <li>We want to reduce from 3,000 to 2,000 bananas = need to spend 1,000 bananas</li>
       <li>Distance: 1,000 ÷ 5 = <strong>200 km</strong></li>
-      <li>After 200 km, we have: 3,000 - (5 × 200) = 2,000 bananas</li>
+      <li>After 200 km, we have: 3,000 - (5 × 200) = 2,000 bananas at the relay point</li>
     </ul>
 
     <h4>Phase 2: From 2,000 to 1,000 bananas (requires 3 one-way trips)</h4>
+    <p><strong>Why 3 one-way trips?</strong> Now we only have 2,000 bananas, so we need 2 loads:</p>
     <ul>
-      <li>We need to make 2 forward trips and 1 return trip = 3 one-way trips total</li>
+      <li><strong>Trip 1 (forward):</strong> Camel carries 1,000 bananas forward, drops some, returns</li>
+      <li><strong>Trip 2 (return):</strong> Camel walks back empty to get the second load</li>
+      <li><strong>Trip 3 (forward):</strong> Camel carries final 1,000 bananas forward, stays there</li>
+      <li><strong>Total: 2 forward + 1 return = 3 one-way trips</strong></li>
+    </ul>
+    <p><strong>Cost calculation:</strong></p>
+    <ul>
       <li>Cost per km: 3 bananas</li>
       <li>We want to reduce from 2,000 to 1,000 bananas = need to spend 1,000 bananas</li>
       <li>Distance: 1,000 ÷ 3 = <strong>333.33 km</strong></li>
-      <li>After 333.33 km, we have: 2,000 - (3 × 333.33) = 1,000 bananas</li>
+      <li>After 333.33 km, we have: 2,000 - (3 × 333.33) = 1,000 bananas at the second relay point</li>
     </ul>
 
     <h4>Phase 3: Final journey with 1,000 bananas</h4>
+    <p><strong>Why 1 one-way trip?</strong> We now have exactly 1,000 bananas (one full load), so the camel just walks forward:</p>
     <ul>
       <li>Total distance covered so far: 200 + 333.33 = 533.33 km</li>
       <li>Remaining distance: 1,000 - 533.33 = 466.67 km</li>
@@ -597,28 +821,56 @@ Box Layout:
     <p>A more compact approach uses string encoding to check all three conditions with one set:</p>
   </div>
 
-<pre><code><span class="kw">public boolean</span> <span class="fn">isValidSudokuCompact</span>(<span class="type">char</span>[][] board) {
-    <span class="type">Set</span>&lt;<span class="type">String</span>&gt; seen = <span class="kw">new</span> HashSet&lt;&gt;();
-    
-    <span class="kw">for</span> (<span class="type">int</span> i = <span class="num">0</span>; i < <span class="num">9</span>; i++) {
-        <span class="kw">for</span> (<span class="type">int</span> j = <span class="num">0</span>; j < <span class="num">9</span>; j++) {
-            <span class="type">char</span> num = board[i][j];
-            <span class="kw">if</span> (num == <span class="str">'.'</span>) <span class="kw">continue</span>;
-            
-            <span class="cmt">// Create unique strings for row, column, and box</span>
-            <span class="type">String</span> rowKey = num + <span class="str">" in row "</span> + i;
-            <span class="type">String</span> colKey = num + <span class="str">" in col "</span> + j;
-            <span class="type">String</span> boxKey = num + <span class="str">" in box "</span> + (i/<span class="num">3</span>) + <span class="str">"-"</span> + (j/<span class="num">3</span>);
-            
-            <span class="cmt">// If any key already exists, duplicate found</span>
-            <span class="kw">if</span> (!seen.<span class="fn">add</span>(rowKey) || !seen.<span class="fn">add</span>(colKey) || !seen.<span class="fn">add</span>(boxKey)) {
-                <span class="kw">return false</span>;
-            }
-        }
+<pre id="sudoku-code-block" style="position: relative;"><code><span class="code-line" id="code-line-1"><span class="kw">public boolean</span> <span class="fn">isValidSudokuCompact</span>(<span class="type">char</span>[][] board) {</span>
+<span class="code-line" id="code-line-2">    <span class="type">Set</span>&lt;<span class="type">String</span>&gt; seen = <span class="kw">new</span> HashSet&lt;&gt;();</span>
+<span class="code-line" id="code-line-3">    </span>
+<span class="code-line" id="code-line-4">    <span class="kw">for</span> (<span class="type">int</span> i = <span class="num">0</span>; i < <span class="num">9</span>; i++) {</span>
+<span class="code-line" id="code-line-5">        <span class="kw">for</span> (<span class="type">int</span> j = <span class="num">0</span>; j < <span class="num">9</span>; j++) {</span>
+<span class="code-line" id="code-line-6">            <span class="type">char</span> num = board[i][j];</span>
+<span class="code-line" id="code-line-7">            <span class="kw">if</span> (num == <span class="str">'.'</span>) <span class="kw">continue</span>;</span>
+<span class="code-line" id="code-line-8">            </span>
+<span class="code-line" id="code-line-9">            <span class="cmt">// Create unique strings for row, column, and box</span></span>
+<span class="code-line" id="code-line-10">            <span class="type">String</span> rowKey = num + <span class="str">" in row "</span> + i;</span>
+<span class="code-line" id="code-line-11">            <span class="type">String</span> colKey = num + <span class="str">" in col "</span> + j;</span>
+<span class="code-line" id="code-line-12">            <span class="type">String</span> boxKey = num + <span class="str">" in box "</span> + (i/<span class="num">3</span>) + <span class="str">"-"</span> + (j/<span class="num">3</span>);</span>
+<span class="code-line" id="code-line-13">            </span>
+<span class="code-line" id="code-line-14">            <span class="cmt">// If any key already exists, duplicate found</span></span>
+<span class="code-line" id="code-line-15">            <span class="kw">if</span> (!seen.<span class="fn">add</span>(rowKey) || !seen.<span class="fn">add</span>(colKey) || !seen.<span class="fn">add</span>(boxKey)) {</span>
+<span class="code-line" id="code-line-16">                <span class="kw">return false</span>;</span>
+<span class="code-line" id="code-line-17">            }</span>
+<span class="code-line" id="code-line-18">        }</span>
+<span class="code-line" id="code-line-19">    }</span>
+<span class="code-line" id="code-line-20">    </span>
+<span class="code-line" id="code-line-21">    <span class="kw">return true</span>;</span>
+<span class="code-line" id="code-line-22">}</span></code></pre>
+
+<style>
+  .code-line {
+    display: block;
+    transition: background-color 0.3s ease, padding 0.3s ease;
+    padding: 2px 0;
+    border-radius: 3px;
+  }
+  
+  .code-line-highlight {
+    background-color: #fef3c7 !important;
+    padding: 2px 8px !important;
+    margin: 0 -8px;
+    box-shadow: 0 0 0 3px #f59e0b inset;
+    animation: pulse-highlight 0.6s ease-in-out;
+  }
+  
+  @keyframes pulse-highlight {
+    0%, 100% { 
+      background-color: #fef3c7;
+      box-shadow: 0 0 0 3px #f59e0b inset;
     }
-    
-    <span class="kw">return true</span>;
-}</code></pre>
+    50% { 
+      background-color: #fde047;
+      box-shadow: 0 0 0 4px #f59e0b inset;
+    }
+  }
+</style>
 
   <div class="explain">
     <h3>How the Encoding Works</h3>
@@ -630,6 +882,493 @@ Box Layout:
     </ul>
     <p>The <code>add()</code> method returns false if the element already exists, allowing us to detect duplicates immediately.</p>
   </div>
+
+  <div class="explain" style="background: #f0f9ff; padding: 1.5rem; border-radius: 8px; border: 2px solid var(--accent); margin-top: 1.5rem;">
+    <h3 style="color: var(--accent); margin-bottom: 1rem;">🎬 Interactive Animation - Encoded Keys Approach</h3>
+    <p style="margin-bottom: 1rem;"><strong>Watch how the algorithm validates a Sudoku board using encoded string keys!</strong> See how each cell creates three unique keys and how duplicates are detected.</p>
+    
+    <div id="sudoku-animation" style="background: white; padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+      <!-- Sudoku Grid -->
+      <div style="margin-bottom: 1.5rem;">
+        <h4 style="text-align: center; color: var(--accent); margin-bottom: 0.75rem;">Sudoku Board (9×9)</h4>
+        <div id="sudoku-grid" style="display: grid; grid-template-columns: repeat(9, 40px); gap: 2px; justify-content: center; background: #cbd5e1; padding: 2px; border: 3px solid #334155; max-width: fit-content; margin: 0 auto;">
+          <!-- Grid cells will be generated by JavaScript -->
+        </div>
+        <div style="text-align: center; margin-top: 0.75rem; font-size: 0.85rem; color: var(--muted);">
+          <span style="background: #fef3c7; padding: 2px 8px; border-radius: 4px; margin-right: 8px;">● Currently Processing</span>
+          <span style="background: #dcfce7; padding: 2px 8px; border-radius: 4px; margin-right: 8px;">● Valid (Added to Set)</span>
+          <span style="background: #fecaca; padding: 2px 8px; border-radius: 4px;">● Duplicate Found!</span>
+        </div>
+      </div>
+
+      <!-- Current Cell Info -->
+      <div style="background: #fef3c7; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; border-left: 4px solid #f59e0b;">
+        <div style="font-size: 0.9rem; font-weight: bold; color: #b45309; margin-bottom: 0.5rem;">Currently Processing:</div>
+        <div id="current-cell-info" style="font-size: 1.1rem; color: var(--text);">Click "Start" to begin validation...</div>
+      </div>
+
+      <!-- Encoded Keys Display -->
+      <div style="background: #eff6ff; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; border-left: 4px solid var(--accent);">
+        <div style="font-size: 0.9rem; font-weight: bold; color: var(--accent); margin-bottom: 0.5rem;">Generated Encoded Keys:</div>
+        <div id="encoded-keys" style="font-family: 'Fira Code', monospace; font-size: 0.9rem;">
+          <div id="row-key" style="margin: 0.25rem 0; color: var(--muted);">Row Key: <span style="color: #7c3aed; font-weight: bold;">-</span></div>
+          <div id="col-key" style="margin: 0.25rem 0; color: var(--muted);">Col Key: <span style="color: #7c3aed; font-weight: bold;">-</span></div>
+          <div id="box-key" style="margin: 0.25rem 0; color: var(--muted);">Box Key: <span style="color: #7c3aed; font-weight: bold;">-</span></div>
+        </div>
+      </div>
+
+      <!-- Set Contents (showing last 8 entries) -->
+      <div style="background: #f0fdf4; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; border-left: 4px solid var(--green);">
+        <div style="font-size: 0.9rem; font-weight: bold; color: var(--green); margin-bottom: 0.5rem;">
+          Set Contents: <span id="set-size" style="color: var(--accent);">0</span> keys stored
+        </div>
+        <div id="set-display" style="font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--muted); max-height: 120px; overflow-y: auto; background: white; padding: 0.5rem; border-radius: 4px;">
+          (empty)
+        </div>
+      </div>
+
+      <!-- Status Message -->
+      <div id="status-message" style="background: #f3e8ff; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; text-align: center;">
+        <div style="font-size: 1rem; font-weight: bold; color: #7c3aed;">Ready to validate Sudoku board</div>
+      </div>
+
+      <!-- Controls -->
+      <div style="display: flex; gap: 1rem; justify-content: center; align-items: center; flex-wrap: wrap;">
+        <button id="sudoku-start-btn" onclick="startSudokuValidation()" style="background: var(--accent); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer;">
+          ▶ Start Validation
+        </button>
+        <button id="sudoku-next-btn" onclick="nextSudokuStep()" disabled style="background: var(--green); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; opacity: 0.5;">
+          Next Step →
+        </button>
+        <button id="sudoku-auto-btn" onclick="toggleAutoPlay()" disabled style="background: #7c3aed; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; opacity: 0.5;">
+          ⏯ Auto Play
+        </button>
+        <button id="sudoku-reset-btn" onclick="resetSudokuValidation()" style="background: var(--muted); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer;">
+          ↻ Reset
+        </button>
+      </div>
+
+      <!-- Step Counter -->
+      <div style="text-align: center; margin-top: 1rem;">
+        <div style="background: #f3e8ff; padding: 0.5rem 1rem; border-radius: 6px; display: inline-block; font-weight: bold; color: #7c3aed;">
+          Step: <span id="sudoku-step-counter">0 / 0</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="background: #fef3c7; padding: 1rem; border-radius: 6px; border-left: 3px solid #f59e0b; margin-top: 1rem;">
+      <strong>💡 Key Advantages of This Approach:</strong>
+      <ul style="margin: 0.5rem 0 0 1.25rem; font-size: 0.9rem;">
+        <li><strong>Single HashSet:</strong> Only one data structure to manage instead of 27 separate sets</li>
+        <li><strong>Unique Encoding:</strong> String keys like "5 in row 4" ensure no collisions between different constraints</li>
+        <li><strong>Immediate Detection:</strong> <code>add()</code> returns false if key exists, allowing instant duplicate detection</li>
+        <li><strong>Clean Code:</strong> More concise and easier to understand than managing multiple arrays of sets</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    // Sample Sudoku board for demonstration (with a duplicate to catch)
+    const sudokuBoard = [
+      ['5','3','.','.','7','.','.','.','.'],
+      ['6','.','.','1','9','5','.','.','.'],
+      ['.','9','8','.','.','.','.','6','.'],
+      ['8','.','.','.','6','.','.','.','3'],
+      ['4','.','.','8','.','3','.','.','1'],
+      ['7','.','.','.','2','.','.','.','6'],
+      ['.','6','.','.','.','.','2','8','.'],
+      ['.','.','.','4','1','9','.','.','5'],
+      ['.','.','.','.','8','.','.','7','9']
+    ];
+
+    let sudokuCurrentStep = 0;
+    let sudokuSteps = [];
+    let sudokuSet = new Set();
+    let sudokuAutoPlayInterval = null;
+    let sudokuIsAutoPlaying = false;
+
+    // Generate all steps for the validation process
+    function generateSudokuSteps() {
+      sudokuSteps = [];
+      const tempSet = new Set();
+      
+      // Add initial step showing HashSet initialization
+      sudokuSteps.push({
+        row: -1,
+        col: -1,
+        num: '',
+        action: 'init',
+        message: 'Initializing: Creating empty HashSet to store seen keys',
+        rowKey: null,
+        colKey: null,
+        boxKey: null,
+        setSnapshot: new Set(),
+        codeLines: [1, 2] // public boolean isValidSudokuCompact(...) and Set<String> seen = new HashSet<>();
+      });
+      
+      for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+          const num = sudokuBoard[i][j];
+          
+          if (num === '.') {
+            sudokuSteps.push({
+              row: i,
+              col: j,
+              num: '.',
+              action: 'skip',
+              message: `Cell (${i}, ${j}): Empty cell, skipping...`,
+              rowKey: null,
+              colKey: null,
+              boxKey: null,
+              setSnapshot: new Set(tempSet),
+              codeLines: [6, 7] // char num = board[i][j]; if (num == '.') continue;
+            });
+            continue;
+          }
+          
+          const rowKey = `${num} in row ${i}`;
+          const colKey = `${num} in col ${j}`;
+          const boxKey = `${num} in box ${Math.floor(i/3)}-${Math.floor(j/3)}`;
+          
+          let isDuplicate = false;
+          let duplicateType = '';
+          
+          if (tempSet.has(rowKey)) {
+            isDuplicate = true;
+            duplicateType = 'row';
+          } else if (tempSet.has(colKey)) {
+            isDuplicate = true;
+            duplicateType = 'col';
+          } else if (tempSet.has(boxKey)) {
+            isDuplicate = true;
+            duplicateType = 'box';
+          }
+          
+          if (isDuplicate) {
+            sudokuSteps.push({
+              row: i,
+              col: j,
+              num: num,
+              action: 'duplicate',
+              message: `Cell (${i}, ${j}) = '${num}': DUPLICATE found in ${duplicateType}! Validation FAILED.`,
+              rowKey: rowKey,
+              colKey: colKey,
+              boxKey: boxKey,
+              duplicateType: duplicateType,
+              setSnapshot: new Set(tempSet),
+              codeLines: [6, 10, 11, 12, 15, 16] // Get num, create keys, check add() returns false, return false
+            });
+            break; // Stop validation on first duplicate
+          } else {
+            tempSet.add(rowKey);
+            tempSet.add(colKey);
+            tempSet.add(boxKey);
+            
+            sudokuSteps.push({
+              row: i,
+              col: j,
+              num: num,
+              action: 'add',
+              message: `Cell (${i}, ${j}) = '${num}': All 3 keys added successfully ✓`,
+              rowKey: rowKey,
+              colKey: colKey,
+              boxKey: boxKey,
+              setSnapshot: new Set(tempSet),
+              codeLines: [6, 10, 11, 12, 15] // Get num, create keys, add all to set
+            });
+          }
+        }
+      }
+      
+      // Add final step
+      if (sudokuSteps[sudokuSteps.length - 1].action !== 'duplicate') {
+        sudokuSteps.push({
+          row: -1,
+          col: -1,
+          num: '',
+          action: 'complete',
+          message: 'Validation complete! Board is VALID ✓',
+          rowKey: null,
+          colKey: null,
+          boxKey: null,
+          setSnapshot: new Set(tempSet),
+          codeLines: [21] // return true;
+        });
+      }
+    }
+
+    // Highlight code lines
+    function highlightCodeLines(lineNumbers) {
+      // Clear all previous highlights
+      for (let i = 1; i <= 22; i++) {
+        const line = document.getElementById(`code-line-${i}`);
+        if (line) {
+          line.classList.remove('code-line-highlight');
+        }
+      }
+      
+      // Highlight specified lines
+      if (lineNumbers && lineNumbers.length > 0) {
+        lineNumbers.forEach(lineNum => {
+          const line = document.getElementById(`code-line-${lineNum}`);
+          if (line) {
+            line.classList.add('code-line-highlight');
+          }
+        });
+        
+        // Scroll the code block into view if needed
+        const firstLine = document.getElementById(`code-line-${lineNumbers[0]}`);
+        if (firstLine) {
+          firstLine.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }
+    }
+
+    // Initialize the grid
+    function initSudokuGrid() {
+      const grid = document.getElementById('sudoku-grid');
+      grid.innerHTML = '';
+      
+      for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+          const cell = document.createElement('div');
+          cell.id = `cell-${i}-${j}`;
+          cell.style.cssText = `
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #1a1a1a;
+            ${(j % 3 === 2 && j !== 8) ? 'border-right: 3px solid #334155;' : ''}
+            ${(i % 3 === 2 && i !== 8) ? 'border-bottom: 3px solid #334155;' : ''}
+          `;
+          cell.textContent = sudokuBoard[i][j] === '.' ? '' : sudokuBoard[i][j];
+          grid.appendChild(cell);
+        }
+      }
+    }
+
+    // Update display for current step
+    function updateSudokuDisplay() {
+      if (sudokuCurrentStep >= sudokuSteps.length) return;
+      
+      const step = sudokuSteps[sudokuCurrentStep];
+      
+      // Highlight corresponding code lines
+      highlightCodeLines(step.codeLines);
+      
+      // Update step counter
+      document.getElementById('sudoku-step-counter').textContent = 
+        `${sudokuCurrentStep + 1} / ${sudokuSteps.length}`;
+      
+      // Clear all highlights
+      for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+          const cell = document.getElementById(`cell-${i}-${j}`);
+          cell.style.background = 'white';
+          cell.style.border = 'none';
+          if ((j % 3 === 2 && j !== 8)) cell.style.borderRight = '3px solid #334155';
+          if ((i % 3 === 2 && i !== 8)) cell.style.borderBottom = '3px solid #334155';
+        }
+      }
+      
+      // Highlight current cell
+      if (step.row >= 0 && step.col >= 0) {
+        const cell = document.getElementById(`cell-${step.row}-${step.col}`);
+        if (step.action === 'skip') {
+          cell.style.background = '#e5e7eb';
+        } else if (step.action === 'duplicate') {
+          cell.style.background = '#fecaca';
+          cell.style.border = '3px solid #dc2626';
+        } else if (step.action === 'add') {
+          cell.style.background = '#fef3c7';
+          cell.style.border = '3px solid #f59e0b';
+        }
+      }
+      
+      // Mark all previously processed cells as green
+      for (let s = 0; s < sudokuCurrentStep; s++) {
+        const prevStep = sudokuSteps[s];
+        if (prevStep.row >= 0 && prevStep.col >= 0 && prevStep.action === 'add') {
+          const cell = document.getElementById(`cell-${prevStep.row}-${prevStep.col}`);
+          cell.style.background = '#dcfce7';
+        }
+      }
+      
+      // Update current cell info
+      document.getElementById('current-cell-info').textContent = step.message;
+      
+      // Update encoded keys
+      if (step.action === 'skip') {
+        document.getElementById('row-key').innerHTML = 
+          'Row Key: <span style="color: #9ca3af; font-weight: bold;">(empty cell, no keys)</span>';
+        document.getElementById('col-key').innerHTML = 
+          'Col Key: <span style="color: #9ca3af; font-weight: bold;">(empty cell, no keys)</span>';
+        document.getElementById('box-key').innerHTML = 
+          'Box Key: <span style="color: #9ca3af; font-weight: bold;">(empty cell, no keys)</span>';
+      } else if (step.rowKey) {
+        const rowColor = (step.action === 'duplicate' && step.duplicateType === 'row') ? '#dc2626' : '#7c3aed';
+        const colColor = (step.action === 'duplicate' && step.duplicateType === 'col') ? '#dc2626' : '#7c3aed';
+        const boxColor = (step.action === 'duplicate' && step.duplicateType === 'box') ? '#dc2626' : '#7c3aed';
+        
+        document.getElementById('row-key').innerHTML = 
+          `Row Key: <span style="color: ${rowColor}; font-weight: bold;">"${step.rowKey}"</span>` +
+          (step.action === 'duplicate' && step.duplicateType === 'row' ? ' ❌ DUPLICATE!' : '');
+        document.getElementById('col-key').innerHTML = 
+          `Col Key: <span style="color: ${colColor}; font-weight: bold;">"${step.colKey}"</span>` +
+          (step.action === 'duplicate' && step.duplicateType === 'col' ? ' ❌ DUPLICATE!' : '');
+        document.getElementById('box-key').innerHTML = 
+          `Box Key: <span style="color: ${boxColor}; font-weight: bold;">"${step.boxKey}"</span>` +
+          (step.action === 'duplicate' && step.duplicateType === 'box' ? ' ❌ DUPLICATE!' : '');
+      } else {
+        document.getElementById('row-key').innerHTML = 'Row Key: <span style="color: #9ca3af; font-weight: bold;">-</span>';
+        document.getElementById('col-key').innerHTML = 'Col Key: <span style="color: #9ca3af; font-weight: bold;">-</span>';
+        document.getElementById('box-key').innerHTML = 'Box Key: <span style="color: #9ca3af; font-weight: bold;">-</span>';
+      }
+      
+      // Update set display (show last 10 entries)
+      const setArray = Array.from(step.setSnapshot);
+      document.getElementById('set-size').textContent = setArray.length;
+      
+      if (setArray.length === 0) {
+        document.getElementById('set-display').textContent = '(empty)';
+      } else {
+        const displayCount = Math.min(10, setArray.length);
+        const start = Math.max(0, setArray.length - displayCount);
+        const display = setArray.slice(start).map(key => `• ${key}`).join('\n');
+        document.getElementById('set-display').textContent = 
+          (start > 0 ? `... (${start} more entries)\n` : '') + display;
+      }
+      
+      // Update status message
+      const statusDiv = document.getElementById('status-message');
+      if (step.action === 'duplicate') {
+        statusDiv.innerHTML = '<div style="font-size: 1.1rem; font-weight: bold; color: #dc2626;">❌ VALIDATION FAILED - Duplicate Detected!</div>';
+        statusDiv.style.background = '#fee2e2';
+      } else if (step.action === 'complete') {
+        statusDiv.innerHTML = '<div style="font-size: 1.1rem; font-weight: bold; color: #16a34a;">✅ VALIDATION PASSED - Board is Valid!</div>';
+        statusDiv.style.background = '#dcfce7';
+      } else {
+        statusDiv.innerHTML = '<div style="font-size: 1rem; font-weight: bold; color: #7c3aed;">Validating board...</div>';
+        statusDiv.style.background = '#f3e8ff';
+      }
+      
+      // Update button states
+      const nextBtn = document.getElementById('sudoku-next-btn');
+      const autoBtn = document.getElementById('sudoku-auto-btn');
+      
+      if (sudokuCurrentStep >= sudokuSteps.length - 1) {
+        nextBtn.disabled = true;
+        nextBtn.style.opacity = '0.5';
+        nextBtn.style.cursor = 'not-allowed';
+        if (sudokuIsAutoPlaying) {
+          toggleAutoPlay(); // Stop auto play
+        }
+      } else {
+        if (!sudokuIsAutoPlaying) {
+          nextBtn.disabled = false;
+          nextBtn.style.opacity = '1';
+          nextBtn.style.cursor = 'pointer';
+        }
+      }
+    }
+
+    function startSudokuValidation() {
+      generateSudokuSteps();
+      sudokuCurrentStep = 0;
+      updateSudokuDisplay();
+      
+      document.getElementById('sudoku-start-btn').disabled = true;
+      document.getElementById('sudoku-start-btn').style.opacity = '0.5';
+      document.getElementById('sudoku-next-btn').disabled = false;
+      document.getElementById('sudoku-next-btn').style.opacity = '1';
+      document.getElementById('sudoku-next-btn').style.cursor = 'pointer';
+      document.getElementById('sudoku-auto-btn').disabled = false;
+      document.getElementById('sudoku-auto-btn').style.opacity = '1';
+      document.getElementById('sudoku-auto-btn').style.cursor = 'pointer';
+    }
+
+    function nextSudokuStep() {
+      if (sudokuCurrentStep < sudokuSteps.length - 1) {
+        sudokuCurrentStep++;
+        updateSudokuDisplay();
+      }
+    }
+
+    function toggleAutoPlay() {
+      sudokuIsAutoPlaying = !sudokuIsAutoPlaying;
+      const autoBtn = document.getElementById('sudoku-auto-btn');
+      const nextBtn = document.getElementById('sudoku-next-btn');
+      
+      if (sudokuIsAutoPlaying) {
+        autoBtn.textContent = '⏸ Pause';
+        nextBtn.disabled = true;
+        nextBtn.style.opacity = '0.5';
+        nextBtn.style.cursor = 'not-allowed';
+        
+        sudokuAutoPlayInterval = setInterval(() => {
+          if (sudokuCurrentStep < sudokuSteps.length - 1) {
+            nextSudokuStep();
+          } else {
+            toggleAutoPlay();
+          }
+        }, 800);
+      } else {
+        autoBtn.textContent = '⏯ Auto Play';
+        nextBtn.disabled = false;
+        nextBtn.style.opacity = '1';
+        nextBtn.style.cursor = 'pointer';
+        
+        if (sudokuAutoPlayInterval) {
+          clearInterval(sudokuAutoPlayInterval);
+          sudokuAutoPlayInterval = null;
+        }
+      }
+    }
+
+    function resetSudokuValidation() {
+      sudokuCurrentStep = 0;
+      sudokuSteps = [];
+      sudokuSet.clear();
+      
+      if (sudokuIsAutoPlaying) {
+        toggleAutoPlay();
+      }
+      
+      // Clear code highlights
+      highlightCodeLines([]);
+      
+      initSudokuGrid();
+      
+      document.getElementById('current-cell-info').textContent = 'Click "Start" to begin validation...';
+      document.getElementById('row-key').innerHTML = 'Row Key: <span style="color: #7c3aed; font-weight: bold;">-</span>';
+      document.getElementById('col-key').innerHTML = 'Col Key: <span style="color: #7c3aed; font-weight: bold;">-</span>';
+      document.getElementById('box-key').innerHTML = 'Box Key: <span style="color: #7c3aed; font-weight: bold;">-</span>';
+      document.getElementById('set-size').textContent = '0';
+      document.getElementById('set-display').textContent = '(empty)';
+      document.getElementById('sudoku-step-counter').textContent = '0 / 0';
+      
+      const statusDiv = document.getElementById('status-message');
+      statusDiv.innerHTML = '<div style="font-size: 1rem; font-weight: bold; color: #7c3aed;">Ready to validate Sudoku board</div>';
+      statusDiv.style.background = '#f3e8ff';
+      
+      document.getElementById('sudoku-start-btn').disabled = false;
+      document.getElementById('sudoku-start-btn').style.opacity = '1';
+      document.getElementById('sudoku-next-btn').disabled = true;
+      document.getElementById('sudoku-next-btn').style.opacity = '0.5';
+      document.getElementById('sudoku-auto-btn').disabled = true;
+      document.getElementById('sudoku-auto-btn').style.opacity = '0.5';
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      initSudokuGrid();
+    });
+  </script>
 </section>
 
 <!-- ───────────────── Q4 ───────────────── -->
@@ -853,61 +1592,54 @@ Window: "BANC" ✓ (has A, B, C) — length 4 (MINIMUM!)
         <span class="kw">return</span> <span class="str">""</span>;
     }
     
-    <span class="cmt">// Build frequency map for string t</span>
-    <span class="type">Map</span>&lt;<span class="type">Character</span>, <span class="type">Integer</span>&gt; targetMap = <span class="kw">new</span> HashMap&lt;&gt;();
+    <span class="cmt">// Frequency map for characters in t</span>
+    <span class="type">Map</span>&lt;<span class="type">Character</span>, <span class="type">Integer</span>&gt; map = <span class="kw">new</span> HashMap&lt;&gt;();
     <span class="kw">for</span> (<span class="type">char</span> c : t.<span class="fn">toCharArray</span>()) {
-        targetMap.<span class="fn">put</span>(c, targetMap.<span class="fn">getOrDefault</span>(c, <span class="num">0</span>) + <span class="num">1</span>);
+        map.<span class="fn">put</span>(c, map.<span class="fn">getOrDefault</span>(c, <span class="num">0</span>) + <span class="num">1</span>);
     }
-    
-    <span class="type">int</span> required = targetMap.<span class="fn">size</span>(); <span class="cmt">// Number of unique chars in t</span>
-    <span class="type">int</span> formed = <span class="num">0</span>; <span class="cmt">// How many unique chars in current window match frequency</span>
-    
-    <span class="cmt">// Window character counts</span>
-    <span class="type">Map</span>&lt;<span class="type">Character</span>, <span class="type">Integer</span>&gt; windowMap = <span class="kw">new</span> HashMap&lt;&gt;();
-    
-    <span class="cmt">// Result: [window length, left, right]</span>
-    <span class="type">int</span>[] result = {-<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>}; <span class="cmt">// -1 means no valid window found yet</span>
     
     <span class="type">int</span> left = <span class="num">0</span>, right = <span class="num">0</span>;
+    <span class="type">int</span> minLen = Integer.MAX_VALUE;
+    <span class="type">int</span> minStart = <span class="num">0</span>;
+    <span class="type">int</span> count = t.<span class="fn">length</span>(); <span class="cmt">// Total characters we need to match</span>
     
     <span class="kw">while</span> (right < s.<span class="fn">length</span>()) {
-        <span class="cmt">// Expand window by adding character at right</span>
         <span class="type">char</span> c = s.<span class="fn">charAt</span>(right);
-        windowMap.<span class="fn">put</span>(c, windowMap.<span class="fn">getOrDefault</span>(c, <span class="num">0</span>) + <span class="num">1</span>);
         
-        <span class="cmt">// Check if frequency of current char matches target frequency</span>
-        <span class="kw">if</span> (targetMap.<span class="fn">containsKey</span>(c) && 
-            windowMap.<span class="fn">get</span>(c).<span class="fn">intValue</span>() == targetMap.<span class="fn">get</span>(c).<span class="fn">intValue</span>()) {
-            formed++;
+        <span class="cmt">// If character is in t, decrement count</span>
+        <span class="kw">if</span> (map.<span class="fn">containsKey</span>(c)) {
+            <span class="kw">if</span> (map.<span class="fn">get</span>(c) > <span class="num">0</span>) {
+                count--;
+            }
+            map.<span class="fn">put</span>(c, map.<span class="fn">get</span>(c) - <span class="num">1</span>);
         }
+        right++;
         
-        <span class="cmt">// Contract window from left while condition is satisfied</span>
-        <span class="kw">while</span> (left <= right && formed == required) {
-            <span class="cmt">// Update result if this window is smaller</span>
-            <span class="kw">if</span> (result[<span class="num">0</span>] == -<span class="num">1</span> || right - left + <span class="num">1</span> < result[<span class="num">0</span>]) {
-                result[<span class="num">0</span>] = right - left + <span class="num">1</span>;
-                result[<span class="num">1</span>] = left;
-                result[<span class="num">2</span>] = right;
+        <span class="cmt">// When all characters are matched, try to shrink window</span>
+        <span class="kw">while</span> (count == <span class="num">0</span>) {
+            <span class="cmt">// Update minimum window</span>
+            <span class="kw">if</span> (right - left < minLen) {
+                minLen = right - left;
+                minStart = left;
             }
             
-            <span class="cmt">// Remove character at left from window</span>
             <span class="type">char</span> leftChar = s.<span class="fn">charAt</span>(left);
-            windowMap.<span class="fn">put</span>(leftChar, windowMap.<span class="fn">get</span>(leftChar) - <span class="num">1</span>);
-            
-            <span class="cmt">// If this character is in t and frequency no longer matches</span>
-            <span class="kw">if</span> (targetMap.<span class="fn">containsKey</span>(leftChar) && 
-                windowMap.<span class="fn">get</span>(leftChar) < targetMap.<span class="fn">get</span>(leftChar)) {
-                formed--;
+            <span class="kw">if</span> (map.<span class="fn">containsKey</span>(leftChar)) {
+                map.<span class="fn">put</span>(leftChar, map.<span class="fn">get</span>(leftChar) + <span class="num">1</span>);
+                <span class="kw">if</span> (map.<span class="fn">get</span>(leftChar) > <span class="num">0</span>) {
+                    count++;
+                }
             }
-            
-            left++; <span class="cmt">// Move left pointer forward</span>
+            left++;
         }
-        
-        right++; <span class="cmt">// Move right pointer forward</span>
     }
     
-    <span class="cmt">// Return the minimum window or empty string if not found</span>
-    <span class="kw">return</span> result[<span class="num">0</span>] == -<span class="num">1</span> ? <span class="str">""</span> : s.<span class="fn">substring</span>(result[<span class="num">1</span>], result[<span class="num">2</span>] + <span class="num">1</span>);
+    <span class="cmt">// If no valid window found, return empty string</span>
+    <span class="kw">if</span> (minLen == Integer.MAX_VALUE) {
+        <span class="kw">return</span> <span class="str">""</span>;
+    }
+    <span class="cmt">// Otherwise, return the substring from minStart with length minLen</span>
+    <span class="kw">return</span> s.<span class="fn">substring</span>(minStart, minStart + minLen);
 }</code></pre>
 
   <div class="complexity">
@@ -1060,11 +1792,92 @@ Window: "BANC" ✓ (has A, B, C) — length 4 (MINIMUM!)
 <span class="sql-kw">ORDER BY</span> s.name, c.club_name;</code></pre>
 
   <div class="explain">
-    <h3>Explanation</h3>
+    <h3>Step-by-Step Animation of Query 1</h3>
+    <p><strong>Sample Data:</strong></p>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+      <div>
+        <strong>students:</strong>
+        <table class="step-table" style="font-size: 0.8rem;">
+          <tr><th>student_id</th><th>name</th></tr>
+          <tr><td>1</td><td>Alice</td></tr>
+          <tr><td>2</td><td>Bob</td></tr>
+          <tr><td>3</td><td>Carol</td></tr>
+        </table>
+      </div>
+      <div>
+        <strong>student_clubs:</strong>
+        <table class="step-table" style="font-size: 0.8rem;">
+          <tr><th>student_id</th><th>club_id</th></tr>
+          <tr><td>1</td><td>101</td></tr>
+          <tr><td>1</td><td>102</td></tr>
+          <tr><td>2</td><td>101</td></tr>
+        </table>
+      </div>
+      <div>
+        <strong>clubs:</strong>
+        <table class="step-table" style="font-size: 0.8rem;">
+          <tr><th>club_id</th><th>club_name</th></tr>
+          <tr><td>101</td><td>Coding</td></tr>
+          <tr><td>102</td><td>Chess</td></tr>
+        </table>
+      </div>
+    </div>
+    
+    <p><strong>Step 1:</strong> <code>FROM students s</code> — Start with all students</p>
+    <table class="step-table" style="font-size: 0.85rem; margin-bottom: 1rem;">
+      <tr style="background: #e0f2fe;"><th>student_id</th><th>name</th></tr>
+      <tr><td>1</td><td>Alice</td></tr>
+      <tr><td>2</td><td>Bob</td></tr>
+      <tr><td>3</td><td>Carol</td></tr>
+    </table>
+
+    <p><strong>Step 2:</strong> <code>LEFT JOIN student_clubs sc ON s.student_id = sc.student_id</code></p>
+    <p style="font-size: 0.9rem; color: var(--muted);">Match students with their club memberships. Carol has no match, so NULL is added.</p>
+    <table class="step-table" style="font-size: 0.85rem; margin-bottom: 1rem;">
+      <tr style="background: #e0f2fe;"><th>student_id</th><th>name</th><th>club_id</th></tr>
+      <tr><td>1</td><td>Alice</td><td>101</td></tr>
+      <tr><td>1</td><td>Alice</td><td>102</td></tr>
+      <tr><td>2</td><td>Bob</td><td>101</td></tr>
+      <tr style="background: #fef3c7;"><td>3</td><td>Carol</td><td><em>NULL</em></td></tr>
+    </table>
+
+    <p><strong>Step 3:</strong> <code>LEFT JOIN clubs c ON sc.club_id = c.club_id</code></p>
+    <p style="font-size: 0.9rem; color: var(--muted);">Add club names by matching club_id. Carol's NULL club_id stays NULL.</p>
+    <table class="step-table" style="font-size: 0.85rem; margin-bottom: 1rem;">
+      <tr style="background: #e0f2fe;"><th>student_id</th><th>name</th><th>club_id</th><th>club_name</th></tr>
+      <tr><td>1</td><td>Alice</td><td>101</td><td>Coding</td></tr>
+      <tr><td>1</td><td>Alice</td><td>102</td><td>Chess</td></tr>
+      <tr><td>2</td><td>Bob</td><td>101</td><td>Coding</td></tr>
+      <tr style="background: #fef3c7;"><td>3</td><td>Carol</td><td><em>NULL</em></td><td><em>NULL</em></td></tr>
+    </table>
+
+    <p><strong>Step 4:</strong> <code>SELECT s.student_id, s.name AS student_name, c.club_name</code></p>
+    <p style="font-size: 0.9rem; color: var(--muted);">Pick only the columns we want.</p>
+    <table class="step-table" style="font-size: 0.85rem; margin-bottom: 1rem;">
+      <tr style="background: #16a34a; color: white;"><th>student_id</th><th>student_name</th><th>club_name</th></tr>
+      <tr><td>1</td><td>Alice</td><td>Coding</td></tr>
+      <tr><td>1</td><td>Alice</td><td>Chess</td></tr>
+      <tr><td>2</td><td>Bob</td><td>Coding</td></tr>
+      <tr style="background: #fef3c7;"><td>3</td><td>Carol</td><td><em>NULL</em></td></tr>
+    </table>
+
+    <p><strong>Step 5:</strong> <code>ORDER BY s.name, c.club_name</code> — Sort alphabetically</p>
+    <table class="step-table" style="font-size: 0.85rem;">
+      <tr style="background: #16a34a; color: white;"><th>student_id</th><th>student_name</th><th>club_name</th></tr>
+      <tr><td>1</td><td>Alice</td><td>Chess</td></tr>
+      <tr><td>1</td><td>Alice</td><td>Coding</td></tr>
+      <tr><td>2</td><td>Bob</td><td>Coding</td></tr>
+      <tr style="background: #fef3c7;"><td>3</td><td>Carol</td><td><em>NULL</em></td></tr>
+    </table>
+  </div>
+
+  <div class="explain">
+    <h3>Key Takeaways</h3>
     <ul>
       <li><strong>LEFT JOIN</strong> ensures all students appear, even if they're not in any club</li>
       <li>Students with no clubs will have <code>NULL</code> for <code>club_name</code></li>
       <li>Students in multiple clubs will appear multiple times (one row per club)</li>
+      <li>The highlighted yellow row shows Carol has no club membership</li>
     </ul>
   </div>
 
@@ -1083,13 +1896,102 @@ Window: "BANC" ✓ (has A, B, C) — length 4 (MINIMUM!)
 <span class="sql-kw">ORDER BY</span> events_in_2024 <span class="sql-kw">DESC</span>;</code></pre>
 
   <div class="explain">
-    <h3>Explanation</h3>
+    <h3>Step-by-Step Animation of Query 2</h3>
+    <p><strong>Sample Data:</strong></p>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+      <div>
+        <strong>clubs:</strong>
+        <table class="step-table" style="font-size: 0.8rem;">
+          <tr><th>club_id</th><th>club_name</th><th>president_id</th></tr>
+          <tr><td>1</td><td>Coding</td><td>101</td></tr>
+          <tr><td>2</td><td>Chess</td><td>102</td></tr>
+          <tr><td>3</td><td>Drama</td><td>103</td></tr>
+        </table>
+      </div>
+      <div>
+        <strong>students:</strong>
+        <table class="step-table" style="font-size: 0.8rem;">
+          <tr><th>student_id</th><th>name</th></tr>
+          <tr><td>101</td><td>Alice</td></tr>
+          <tr><td>102</td><td>Bob</td></tr>
+          <tr><td>103</td><td>Carol</td></tr>
+        </table>
+      </div>
+      <div>
+        <strong>events:</strong>
+        <table class="step-table" style="font-size: 0.8rem;">
+          <tr><th>event_id</th><th>club_id</th><th>event_date</th></tr>
+          <tr><td>1</td><td>1</td><td>2024-01-10</td></tr>
+          <tr><td>2</td><td>1</td><td>2024-02-15</td></tr>
+          <tr><td>3</td><td>2</td><td>2024-03-20</td></tr>
+          <tr><td>4</td><td>1</td><td>2023-12-01</td></tr>
+        </table>
+      </div>
+    </div>
+    
+    <p><strong>Step 1:</strong> <code>FROM clubs c</code> — Start with all clubs</p>
+    <table class="step-table" style="font-size: 0.85rem; margin-bottom: 1rem;">
+      <tr style="background: #e0f2fe;"><th>club_id</th><th>club_name</th><th>president_id</th></tr>
+      <tr><td>1</td><td>Coding</td><td>101</td></tr>
+      <tr><td>2</td><td>Chess</td><td>102</td></tr>
+      <tr><td>3</td><td>Drama</td><td>103</td></tr>
+    </table>
+
+    <p><strong>Step 2:</strong> <code>JOIN students s ON c.president_id = s.student_id</code></p>
+    <p style="font-size: 0.9rem; color: var(--muted);">Add president names by matching president_id with student_id.</p>
+    <table class="step-table" style="font-size: 0.85rem; margin-bottom: 1rem;">
+      <tr style="background: #e0f2fe;"><th>club_id</th><th>club_name</th><th>president_id</th><th>name</th></tr>
+      <tr><td>1</td><td>Coding</td><td>101</td><td>Alice</td></tr>
+      <tr><td>2</td><td>Chess</td><td>102</td><td>Bob</td></tr>
+      <tr><td>3</td><td>Drama</td><td>103</td><td>Carol</td></tr>
+    </table>
+
+    <p><strong>Step 3:</strong> <code>LEFT JOIN events e ON c.club_id = e.club_id AND YEAR(e.event_date) = 2024</code></p>
+    <p style="font-size: 0.9rem; color: var(--muted);">Add events, but ONLY from 2024. Event 4 (2023) is excluded. Drama club has no 2024 events.</p>
+    <table class="step-table" style="font-size: 0.85rem; margin-bottom: 1rem;">
+      <tr style="background: #e0f2fe;"><th>club_id</th><th>club_name</th><th>name</th><th>event_id</th><th>event_date</th></tr>
+      <tr><td>1</td><td>Coding</td><td>Alice</td><td>1</td><td>2024-01-10</td></tr>
+      <tr><td>1</td><td>Coding</td><td>Alice</td><td>2</td><td>2024-02-15</td></tr>
+      <tr><td>2</td><td>Chess</td><td>Bob</td><td>3</td><td>2024-03-20</td></tr>
+      <tr style="background: #fef3c7;"><td>3</td><td>Drama</td><td>Carol</td><td><em>NULL</em></td><td><em>NULL</em></td></tr>
+    </table>
+
+    <p><strong>Step 4:</strong> <code>GROUP BY c.club_id, c.club_name, s.name</code></p>
+    <p style="font-size: 0.9rem; color: var(--muted);">Combine rows by club. Now we can count events per club.</p>
+    <table class="step-table" style="font-size: 0.85rem; margin-bottom: 1rem;">
+      <tr style="background: #e0f2fe;"><th>club_id</th><th>club_name</th><th>name</th><th>event_ids</th></tr>
+      <tr><td>1</td><td>Coding</td><td>Alice</td><td>[1, 2]</td></tr>
+      <tr><td>2</td><td>Chess</td><td>Bob</td><td>[3]</td></tr>
+      <tr style="background: #fef3c7;"><td>3</td><td>Drama</td><td>Carol</td><td>[]</td></tr>
+    </table>
+
+    <p><strong>Step 5:</strong> <code>SELECT s.name AS president_name, c.club_name, COUNT(e.event_id) AS events_in_2024</code></p>
+    <p style="font-size: 0.9rem; color: var(--muted);">Count the events and select final columns. COUNT ignores NULL values.</p>
+    <table class="step-table" style="font-size: 0.85rem; margin-bottom: 1rem;">
+      <tr style="background: #16a34a; color: white;"><th>president_name</th><th>club_name</th><th>events_in_2024</th></tr>
+      <tr><td>Alice</td><td>Coding</td><td>2</td></tr>
+      <tr><td>Bob</td><td>Chess</td><td>1</td></tr>
+      <tr style="background: #fef3c7; color: black;"><td>Carol</td><td>Drama</td><td>0</td></tr>
+    </table>
+
+    <p><strong>Step 6:</strong> <code>ORDER BY events_in_2024 DESC</code> — Sort by event count (highest first)</p>
+    <table class="step-table" style="font-size: 0.85rem;">
+      <tr style="background: #16a34a; color: white;"><th>president_name</th><th>club_name</th><th>events_in_2024</th></tr>
+      <tr><td>Alice</td><td>Coding</td><td>2</td></tr>
+      <tr><td>Bob</td><td>Chess</td><td>1</td></tr>
+      <tr style="background: #fef3c7;"><td>Carol</td><td>Drama</td><td>0</td></tr>
+    </table>
+  </div>
+
+  <div class="explain">
+    <h3>Key Takeaways</h3>
     <ul>
       <li><strong>JOIN students</strong> to get president name from president_id</li>
       <li><strong>LEFT JOIN events</strong> to include clubs with zero events in 2024</li>
       <li>Filter year 2024 in the JOIN condition (not WHERE) to preserve clubs with 0 events</li>
       <li><strong>COUNT(e.event_id)</strong> counts events; returns 0 for clubs with no matching events</li>
       <li><strong>GROUP BY</strong> groups by club (and president) to aggregate event counts</li>
+      <li>The highlighted yellow row shows Drama club with 0 events is still included</li>
     </ul>
   </div>
 
@@ -1109,13 +2011,103 @@ Window: "BANC" ✓ (has A, B, C) — length 4 (MINIMUM!)
 <span class="sql-kw">ORDER BY</span> e.event_date, e.event_name, s.name;</code></pre>
 
   <div class="explain">
-    <h3>Explanation</h3>
+    <h3>Step-by-Step Animation of Query 3</h3>
+    <p><strong>Sample Data:</strong></p>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.75rem; margin: 1rem 0;">
+      <div>
+        <strong>events:</strong>
+        <table class="step-table" style="font-size: 0.75rem;">
+          <tr><th>event_id</th><th>event_name</th><th>club_id</th><th>event_date</th></tr>
+          <tr><td>1</td><td>Hackathon</td><td>101</td><td>2024-03-15</td></tr>
+          <tr><td>2</td><td>Social</td><td>102</td><td>2024-04-10</td></tr>
+        </table>
+      </div>
+      <div>
+        <strong>clubs:</strong>
+        <table class="step-table" style="font-size: 0.75rem;">
+          <tr><th>club_id</th><th>club_name</th></tr>
+          <tr><td>101</td><td>Coding</td></tr>
+          <tr><td>102</td><td>Drama</td></tr>
+        </table>
+      </div>
+      <div>
+        <strong>event_participants:</strong>
+        <table class="step-table" style="font-size: 0.75rem;">
+          <tr><th>event_id</th><th>student_id</th></tr>
+          <tr><td>1</td><td>1</td></tr>
+          <tr><td>1</td><td>2</td></tr>
+        </table>
+      </div>
+      <div>
+        <strong>students:</strong>
+        <table class="step-table" style="font-size: 0.75rem;">
+          <tr><th>student_id</th><th>name</th></tr>
+          <tr><td>1</td><td>Alice</td></tr>
+          <tr><td>2</td><td>Bob</td></tr>
+        </table>
+      </div>
+    </div>
+    
+    <p><strong>Step 1:</strong> <code>FROM events e</code> — Start with all events</p>
+    <table class="step-table" style="font-size: 0.85rem; margin-bottom: 1rem;">
+      <tr style="background: #e0f2fe;"><th>event_id</th><th>event_name</th><th>club_id</th><th>event_date</th></tr>
+      <tr><td>1</td><td>Hackathon</td><td>101</td><td>2024-03-15</td></tr>
+      <tr><td>2</td><td>Social</td><td>102</td><td>2024-04-10</td></tr>
+    </table>
+
+    <p><strong>Step 2:</strong> <code>JOIN clubs c ON e.club_id = c.club_id</code></p>
+    <p style="font-size: 0.9rem; color: var(--muted);">Add club names by matching club_id. Both events have clubs.</p>
+    <table class="step-table" style="font-size: 0.85rem; margin-bottom: 1rem;">
+      <tr style="background: #e0f2fe;"><th>event_id</th><th>event_name</th><th>event_date</th><th>club_name</th></tr>
+      <tr><td>1</td><td>Hackathon</td><td>2024-03-15</td><td>Coding</td></tr>
+      <tr><td>2</td><td>Social</td><td>2024-04-10</td><td>Drama</td></tr>
+    </table>
+
+    <p><strong>Step 3:</strong> <code>LEFT JOIN event_participants ep ON e.event_id = ep.event_id</code></p>
+    <p style="font-size: 0.9rem; color: var(--muted);">Add participants. Hackathon has 2, Social has none (NULL).</p>
+    <table class="step-table" style="font-size: 0.85rem; margin-bottom: 1rem;">
+      <tr style="background: #e0f2fe;"><th>event_id</th><th>event_name</th><th>event_date</th><th>club_name</th><th>student_id</th></tr>
+      <tr><td>1</td><td>Hackathon</td><td>2024-03-15</td><td>Coding</td><td>1</td></tr>
+      <tr><td>1</td><td>Hackathon</td><td>2024-03-15</td><td>Coding</td><td>2</td></tr>
+      <tr style="background: #fef3c7;"><td>2</td><td>Social</td><td>2024-04-10</td><td>Drama</td><td><em>NULL</em></td></tr>
+    </table>
+
+    <p><strong>Step 4:</strong> <code>LEFT JOIN students s ON ep.student_id = s.student_id</code></p>
+    <p style="font-size: 0.9rem; color: var(--muted);">Add student names. Social event has NULL student_id, so name is also NULL.</p>
+    <table class="step-table" style="font-size: 0.85rem; margin-bottom: 1rem;">
+      <tr style="background: #e0f2fe;"><th>event_name</th><th>event_date</th><th>club_name</th><th>student_id</th><th>name</th></tr>
+      <tr><td>Hackathon</td><td>2024-03-15</td><td>Coding</td><td>1</td><td>Alice</td></tr>
+      <tr><td>Hackathon</td><td>2024-03-15</td><td>Coding</td><td>2</td><td>Bob</td></tr>
+      <tr style="background: #fef3c7;"><td>Social</td><td>2024-04-10</td><td>Drama</td><td><em>NULL</em></td><td><em>NULL</em></td></tr>
+    </table>
+
+    <p><strong>Step 5:</strong> <code>SELECT e.event_name, e.event_date, c.club_name, s.name AS participant_name</code></p>
+    <p style="font-size: 0.9rem; color: var(--muted);">Pick only the columns we need.</p>
+    <table class="step-table" style="font-size: 0.85rem; margin-bottom: 1rem;">
+      <tr style="background: #16a34a; color: white;"><th>event_name</th><th>event_date</th><th>club_name</th><th>participant_name</th></tr>
+      <tr><td>Hackathon</td><td>2024-03-15</td><td>Coding</td><td>Alice</td></tr>
+      <tr><td>Hackathon</td><td>2024-03-15</td><td>Coding</td><td>Bob</td></tr>
+      <tr style="background: #fef3c7; color: black;"><td>Social</td><td>2024-04-10</td><td>Drama</td><td><em>NULL</em></td></tr>
+    </table>
+
+    <p><strong>Step 6:</strong> <code>ORDER BY e.event_date, e.event_name, s.name</code> — Sort by date, then event name, then participant</p>
+    <table class="step-table" style="font-size: 0.85rem;">
+      <tr style="background: #16a34a; color: white;"><th>event_name</th><th>event_date</th><th>club_name</th><th>participant_name</th></tr>
+      <tr><td>Hackathon</td><td>2024-03-15</td><td>Coding</td><td>Alice</td></tr>
+      <tr><td>Hackathon</td><td>2024-03-15</td><td>Coding</td><td>Bob</td></tr>
+      <tr style="background: #fef3c7;"><td>Social</td><td>2024-04-10</td><td>Drama</td><td><em>NULL</em></td></tr>
+    </table>
+  </div>
+
+  <div class="explain">
+    <h3>Key Takeaways</h3>
     <ul>
-      <li><strong>JOIN clubs</strong> to get the club name for each event</li>
+      <li><strong>JOIN clubs</strong> to get the club name for each event (regular JOIN because every event has a club)</li>
       <li><strong>LEFT JOIN event_participants</strong> ensures events with no participants are included</li>
       <li><strong>LEFT JOIN students</strong> to get participant names</li>
       <li>Events with no participants will have <code>NULL</code> for <code>participant_name</code></li>
       <li>Events with multiple participants will appear multiple times (one row per participant)</li>
+      <li>The highlighted yellow row shows Social event with no attendees is still included</li>
     </ul>
   </div>
 

@@ -639,6 +639,9 @@
     }
 
     <span class="cmt">// BFS level-by-level</span>
+    <span class="cmt">// reports map structure: Map&lt;String, List&lt;String&gt;&gt; reports = new HashMap&lt;&gt;();</span>
+    <span class="cmt">// Example: {"Alice" -> ["Bob", "Charlie", "David"], "Bob" -> ["Eve", "Frank", "Grace"],</span>
+    <span class="cmt">//           "Charlie" -> ["Helen", "Irene", "Jack"], "David" -> ["Karen", "Larry", "Mike"], ...}</span>
     <span class="type">Queue</span>&lt;<span class="type">String</span>&gt; queue = <span class="kw">new</span> LinkedList&lt;&gt;();
     queue.<span class="fn">add</span>(ceo);
     <span class="type">int</span> level = <span class="num">1</span>;
@@ -654,7 +657,6 @@
             queue.<span class="fn">addAll</span>(directReports);
         }
 
-        Collections.<span class="fn">sort</span>(currentLevel);
         System.out.<span class="fn">println</span>(<span class="str">"Level "</span> + level + <span class="str">": "</span> + String.<span class="fn">join</span>(<span class="str">" "</span>, currentLevel));
         level++;
     }
@@ -751,21 +753,23 @@ TreeMap {
 }
 
 <span class="kw">class</span> <span class="type">OrderStore</span> {
-    <span class="kw">private</span> <span class="type">TreeMap</span>&lt;<span class="type">LocalTime</span>, <span class="type">List</span>&lt;<span class="type">Order</span>&gt;&gt; ordersByTime = <span class="kw">new</span> TreeMap&lt;&gt;();
+    <span class="kw">private</span> <span class="type">TreeMap</span>&lt;<span class="type">LocalTime</span>, <span class="type">List</span>&lt;<span class="type">String</span>&gt;&gt; ordersByTime = <span class="kw">new</span> TreeMap&lt;&gt;();
 
     <span class="kw">public void</span> <span class="fn">addOrder</span>(<span class="type">Order</span> order) {
-        ordersByTime.<span class="fn">computeIfAbsent</span>(order.entryTime, k -> <span class="kw">new</span> ArrayList&lt;&gt;())
-                     .<span class="fn">add</span>(order);
+        <span class="kw">if</span> (!ordersByTime.<span class="fn">containsKey</span>(order.entryTime)) {
+            ordersByTime.<span class="fn">put</span>(order.entryTime, <span class="kw">new</span> ArrayList&lt;&gt;());
+        }
+        ordersByTime.<span class="fn">get</span>(order.entryTime).<span class="fn">add</span>(order.orderId);
     }
 
-    <span class="kw">public</span> <span class="type">Collection</span>&lt;<span class="type">Order</span>&gt; <span class="fn">search</span>(<span class="type">LocalTime</span> startTime, <span class="type">LocalTime</span> endTime) {
-        <span class="type">List</span>&lt;<span class="type">Order</span>&gt; result = <span class="kw">new</span> ArrayList&lt;&gt;();
+    <span class="kw">public</span> <span class="type">List</span>&lt;<span class="type">String</span>&gt; <span class="fn">search</span>(<span class="type">LocalTime</span> startTime, <span class="type">LocalTime</span> endTime) {
+        <span class="type">List</span>&lt;<span class="type">String</span>&gt; result = <span class="kw">new</span> ArrayList&lt;&gt;();
 
         <span class="cmt">// subMap returns a view of entries with keys in [startTime, endTime]</span>
-        <span class="type">NavigableMap</span>&lt;<span class="type">LocalTime</span>, <span class="type">List</span>&lt;<span class="type">Order</span>&gt;&gt; subMap =
+        <span class="type">NavigableMap</span>&lt;<span class="type">LocalTime</span>, <span class="type">List</span>&lt;<span class="type">String</span>&gt;&gt; subMap =
             ordersByTime.<span class="fn">subMap</span>(startTime, <span class="kw">true</span>, endTime, <span class="kw">true</span>);
 
-        <span class="kw">for</span> (<span class="type">List</span>&lt;<span class="type">Order</span>&gt; orders : subMap.<span class="fn">values</span>()) {
+        <span class="kw">for</span> (<span class="type">List</span>&lt;<span class="type">String</span>&gt; orders : subMap.<span class="fn">values</span>()) {
             result.<span class="fn">addAll</span>(orders);
         }
         <span class="kw">return</span> result;
@@ -1229,20 +1233,22 @@ const q4Anim = AnimController(
 /* ════════════════ Q5 ANIMATION DATA ════════════════ */
 const q5Code = [
   'class OrderStore {',
-  '    TreeMap<LocalTime, List<Order>> ordersByTime = new TreeMap<>();',
+  '    TreeMap<LocalTime, List<String>> ordersByTime = new TreeMap<>();',
   '',
   '    void addOrder(Order order) {',
-  '        ordersByTime.computeIfAbsent(order.entryTime, k -> new ArrayList<>())',
-  '                    .add(order);',
+  '        if (!ordersByTime.containsKey(order.entryTime)) {',
+  '            ordersByTime.put(order.entryTime, new ArrayList<>());',
+  '        }',
+  '        ordersByTime.get(order.entryTime).add(order.orderId);',
   '    }',
   '',
-  '    Collection<Order> search(LocalTime start, LocalTime end) {',
-  '        List<Order> result = new ArrayList<>();',
+  '    List<String> search(LocalTime start, LocalTime end) {',
+  '        List<String> result = new ArrayList<>();',
   '',
-  '        NavigableMap<LocalTime, List<Order>> subMap =',
+  '        NavigableMap<LocalTime, List<String>> subMap =',
   '            ordersByTime.subMap(start, true, end, true);',
   '',
-  '        for (List<Order> orders : subMap.values()) {',
+  '        for (List<String> orders : subMap.values()) {',
   '            result.addAll(orders);',
   '        }',
   '        return result;',

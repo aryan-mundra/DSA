@@ -481,22 +481,60 @@ Query: search("S1", 10:00, 11:00)
     <span class="kw">private</span> <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">TreeMap</span>&lt;<span class="type">LocalTime</span>, <span class="type">List</span>&lt;<span class="type">SensorReading</span>&gt;&gt;&gt; store = <span class="kw">new</span> HashMap&lt;&gt;();
 
     <span class="kw">public void</span> <span class="fn">addReading</span>(<span class="type">SensorReading</span> reading) {
-        <span class="cmt">// Get or create the TreeMap for this sensor</span>
+        <span class="cmt">/* LIVE EXAMPLE: Suppose we're adding Reading(sensorId="S1", timestamp=10:00, value=25.5)
+         * 
+         * GOAL: Store it in this structure:
+         * store = {
+         *   "S1" → TreeMap {
+         *     10:00 → List [Reading1, Reading2, ...]
+         *   }
+         * }
+         */</span>
+
+        <span class="cmt">// STEP 1: Check if sensor "S1" already has a TreeMap in our store</span>
         <span class="type">TreeMap</span>&lt;<span class="type">LocalTime</span>, <span class="type">List</span>&lt;<span class="type">SensorReading</span>&gt;&gt; sensorData = store.<span class="fn">get</span>(reading.sensorId);
+        
+        <span class="cmt">// STEP 2: If sensor doesn't exist yet (first time seeing "S1")</span>
         <span class="kw">if</span> (sensorData == <span class="kw">null</span>) {
+            <span class="cmt">// Create an empty TreeMap for this sensor</span>
             sensorData = <span class="kw">new</span> TreeMap&lt;&gt;();
+            
+            <span class="cmt">// Add it to main store: store.put("S1", new TreeMap)</span>
+            <span class="cmt">// Now store = { "S1" → TreeMap{} }</span>
             store.<span class="fn">put</span>(reading.sensorId, sensorData);
         }
+        <span class="cmt">// After this point, sensorData definitely exists and points to S1's TreeMap</span>
         
-        <span class="cmt">// Get or create the List for this timestamp</span>
+        <span class="cmt">// STEP 3: Now check if timestamp 10:00 exists in S1's TreeMap</span>
         <span class="type">List</span>&lt;<span class="type">SensorReading</span>&gt; readingsAtTime = sensorData.<span class="fn">get</span>(reading.timestamp);
+        
+        <span class="cmt">// STEP 4: If this timestamp doesn't exist yet (first reading at 10:00 for S1)</span>
         <span class="kw">if</span> (readingsAtTime == <span class="kw">null</span>) {
+            <span class="cmt">// Create an empty list for this timestamp</span>
             readingsAtTime = <span class="kw">new</span> ArrayList&lt;&gt;();
+            
+            <span class="cmt">// Add it to S1's TreeMap: sensorData.put(10:00, new ArrayList)</span>
+            <span class="cmt">// Now store = { "S1" → TreeMap{ 10:00 → [] } }</span>
             sensorData.<span class="fn">put</span>(reading.timestamp, readingsAtTime);
         }
+        <span class="cmt">// After this point, readingsAtTime definitely exists and points to the list at 10:00</span>
         
-        <span class="cmt">// Add the reading to the list</span>
+        <span class="cmt">// STEP 5: Add our reading to the list</span>
+        <span class="cmt">// readingsAtTime.add(Reading(S1, 10:00, 25.5))</span>
+        <span class="cmt">// Final: store = { "S1" → TreeMap{ 10:00 → [Reading(S1,10:00,25.5)] } }</span>
         readingsAtTime.<span class="fn">add</span>(reading);
+        
+        <span class="cmt">/* WHAT IF we add another reading at same time?
+         * Example: Reading(sensorId="S1", timestamp=10:00, value=30.2)
+         * 
+         * - Step 1: sensorData = store.get("S1") → Found! (TreeMap already exists)
+         * - Step 2: Skip (not null)
+         * - Step 3: readingsAtTime = sensorData.get(10:00) → Found! (List already exists)
+         * - Step 4: Skip (not null)
+         * - Step 5: Add to existing list
+         * 
+         * Result: store = { "S1" → TreeMap{ 10:00 → [Reading1, Reading2] } }
+         */</span>
     }
 
     <span class="kw">public</span> <span class="type">Collection</span>&lt;<span class="type">SensorReading</span>&gt; <span class="fn">search</span>(<span class="type">String</span> sensorId,
