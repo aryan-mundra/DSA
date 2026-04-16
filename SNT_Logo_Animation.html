@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SNT — Luxury Jewellery</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    overflow: hidden;
+    width: 100vw; height: 100vh;
+    background: #ffffff;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cinzel', Georgia, serif;
+  }
+
+  canvas#fx {
+    position: fixed; inset: 0; z-index: 2;
+    pointer-events: none;
+  }
+
+  /* ── 3D scene ── */
+  .scene {
+    perspective: 800px;
+    perspective-origin: 50% 45%;
+    z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .logo-wrapper {
+    transform-style: preserve-3d;
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+
+  .logo-wrapper.visible {
+    animation: revealIn 2.5s cubic-bezier(0.22, 1, 0.36, 1) forwards,
+               spinLoop 10s linear 2.5s infinite;
+  }
+
+  @keyframes revealIn {
+    0%   { opacity: 0; transform: scale3d(0.15,0.15,0.15) rotateY(0deg) rotateX(5deg); }
+    50%  { opacity: 1; transform: scale3d(0.7,0.7,0.7)    rotateY(0deg) rotateX(2deg); }
+    100% { opacity: 1; transform: scale3d(1,1,1)           rotateY(0deg) rotateX(2deg); }
+  }
+
+  @keyframes spinLoop {
+    0%   { transform: scale3d(1,1,1) rotateX(2deg) rotateY(0deg); }
+    100% { transform: scale3d(1,1,1) rotateX(2deg) rotateY(360deg); }
+  }
+
+  /* ── 3D text container ── */
+  .snt-3d {
+    position: relative;
+    transform-style: preserve-3d;
+    display: inline-block;
+  }
+
+  /* ── Front face: shiny gold with shimmer ── */
+  .snt-front {
+    font-size: clamp(80px, 14vw, 190px);
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    color: transparent;
+    background: linear-gradient(
+      170deg,
+      #fce4a8 0%,
+      #f5d97e 8%,
+      #d4a843 22%,
+      #c49632 32%,
+      #e8c44e 42%,
+      #fff6d5 50%,
+      #e8c44e 58%,
+      #c49632 68%,
+      #d4a843 78%,
+      #f5d97e 92%,
+      #fce4a8 100%
+    );
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmerGold 4s ease-in-out infinite;
+    position: relative;
+    z-index: 10;
+    transform: translateZ(25px);
+    filter: drop-shadow(0 0 20px rgba(212, 168, 67, 0.35))
+            drop-shadow(0 0 60px rgba(212, 168, 67, 0.15));
+  }
+
+  @keyframes shimmerGold {
+    0%   { background-position: 0% 0%; }
+    50%  { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
+  }
+
+  /* ── 3D depth: 50 layers creating thick extrusion ── */
+  .snt-depth-layer {
+    position: absolute;
+    top: 0; left: 0;
+    font-size: clamp(80px, 14vw, 190px);
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    font-family: 'Cinzel', Georgia, serif;
+    white-space: nowrap;
+    -webkit-text-fill-color: initial;
+    transform-style: preserve-3d;
+  }
+
+  /* ── Light sweep ── */
+  .light-sweep-wrap {
+    position: absolute; inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transform: translateZ(26px);
+    z-index: 11;
+  }
+  .light-sweep-wrap::after {
+    content: '';
+    position: absolute;
+    top: -30%; left: -70%;
+    width: 35%; height: 160%;
+    background: linear-gradient(
+      105deg,
+      transparent 30%,
+      rgba(255,255,255,0.5) 46%,
+      rgba(255,255,255,0.85) 50%,
+      rgba(255,255,255,0.5) 54%,
+      transparent 70%
+    );
+    animation: lightSweep 6s ease-in-out 4s infinite;
+  }
+  @keyframes lightSweep {
+    0%   { left: -70%; opacity: 0; }
+    8%   { opacity: 1; }
+    92%  { opacity: 1; }
+    100% { left: 130%; opacity: 0; }
+  }
+
+  /* ── Reflection below ── */
+  .reflection-wrap {
+    position: absolute;
+    left: 0; right: 0;
+    bottom: -8px;
+    transform-style: preserve-3d;
+    transform: scaleY(-0.45) translateZ(0px);
+    transform-origin: center top;
+    pointer-events: none;
+    opacity: 0.18;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, transparent 60%);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, transparent 60%);
+    filter: blur(2px);
+  }
+  .reflection-text {
+    font-size: clamp(80px, 14vw, 190px);
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    font-family: 'Cinzel', Georgia, serif;
+    background: linear-gradient(170deg, #fce4a8 0%, #d4a843 40%, #c49632 70%, #fce4a8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* ── Tagline ── */
+  .tagline {
+    position: fixed;
+    bottom: 7vh;
+    left: 50%; transform: translateX(-50%);
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: clamp(10px, 1.8vw, 18px);
+    letter-spacing: 0.5em;
+    color: #b8960b;
+    opacity: 0;
+    z-index: 3;
+    animation: fadeUp 1.8s ease 5s forwards;
+    text-transform: uppercase;
+  }
+  @keyframes fadeUp {
+    0%   { opacity: 0; transform: translateX(-50%) translateY(18px); }
+    100% { opacity: 0.65; transform: translateX(-50%) translateY(0); }
+  }
+
+  .vignette {
+    position: fixed; inset: 0; z-index: 0;
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(210,185,140,0.25) 100%);
+    pointer-events: none;
+  }
+
+  /* ── Floor line ── */
+  .floor-line {
+    position: fixed;
+    top: calc(50% + clamp(50px, 9vw, 120px));
+    left: 15%; right: 15%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,170,100,0.2) 30%, rgba(200,170,100,0.35) 50%, rgba(200,170,100,0.2) 70%, transparent);
+    z-index: 1;
+    opacity: 0;
+    animation: fadeUp 2s ease 4.5s forwards;
+  }
+</style>
+</head>
+<body>
+
+<div class="vignette"></div>
+<canvas id="fx"></canvas>
+<div class="floor-line"></div>
+
+<div class="scene">
+  <div class="logo-wrapper" id="logoWrapper">
+    <div class="snt-3d" id="snt3d">
+      <!-- Front face -->
+      <div class="snt-front">SNT</div>
+      <!-- Light sweep on front -->
+      <div class="light-sweep-wrap"></div>
+      <!-- Depth layers will be injected by JS -->
+      <!-- Reflection -->
+      <div class="reflection-wrap">
+        <div class="reflection-text">SNT</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tagline">Fine Jewellery</div>
+
+<script>
+(function () {
+  /* ───── 3D depth layers ───── */
+  const container = document.getElementById('snt3d');
+  const DEPTH_LAYERS = 50;
+  const sweepEl = container.querySelector('.light-sweep-wrap');
+  for (let i = 0; i < DEPTH_LAYERS; i++) {
+    const layer = document.createElement('div');
+    layer.className = 'snt-depth-layer';
+    layer.textContent = 'SNT';
+    const d = i / DEPTH_LAYERS;
+    const z = 24 - i * (50 / DEPTH_LAYERS);
+    const lf = 1 - d * 0.5;
+    const lr = Math.min(255, Math.round((150-d*60)*lf + (d>0.5?20:0)));
+    const lg = Math.min(255, Math.round((120-d*45)*lf));
+    const lb = Math.min(255, Math.round((40-d*15)*lf));
+    layer.style.cssText = `color:rgb(${lr},${lg},${lb});transform:translateZ(${z}px);z-index:${DEPTH_LAYERS-i}`;
+    container.insertBefore(layer, sweepEl);
+  }
+
+  /* ───── Canvas ───── */
+  const canvas = document.getElementById('fx');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+  function resize() { W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+
+  /* ───── Pre-render particle sprite ───── */
+  const SPR = 32;
+  const sprC = document.createElement('canvas');
+  sprC.width = SPR; sprC.height = SPR;
+  const sc = sprC.getContext('2d');
+  const sg = sc.createRadialGradient(SPR/2,SPR/2,0,SPR/2,SPR/2,SPR/2);
+  sg.addColorStop(0,'rgba(255,250,220,1)');
+  sg.addColorStop(0.25,'rgba(255,215,100,0.85)');
+  sg.addColorStop(0.6,'rgba(220,180,60,0.25)');
+  sg.addColorStop(1,'rgba(200,160,50,0)');
+  sc.fillStyle = sg; sc.fillRect(0,0,SPR,SPR);
+
+  /* ───── Pre-render trail sprite ───── */
+  const TRS = 12;
+  const trC = document.createElement('canvas');
+  trC.width = TRS; trC.height = TRS;
+  const tc = trC.getContext('2d');
+  const tg = tc.createRadialGradient(TRS/2,TRS/2,0,TRS/2,TRS/2,TRS/2);
+  tg.addColorStop(0,'rgba(255,215,100,0.5)');
+  tg.addColorStop(1,'rgba(255,215,100,0)');
+  tc.fillStyle = tg; tc.fillRect(0,0,TRS,TRS);
+
+  /* ───── Pre-render diamond glint sprite ───── */
+  const GLS = 64;
+  const glC = document.createElement('canvas');
+  glC.width = GLS; glC.height = GLS;
+  const glx = glC.getContext('2d');
+  const ghalf = GLS/2;
+  glx.translate(ghalf, ghalf);
+  const gg2 = glx.createRadialGradient(0,0,0,0,0,ghalf);
+  gg2.addColorStop(0,'rgba(255,255,255,1)');
+  gg2.addColorStop(0.06,'rgba(255,252,240,0.9)');
+  gg2.addColorStop(0.2,'rgba(255,230,170,0.12)');
+  gg2.addColorStop(1,'rgba(255,210,100,0)');
+  glx.fillStyle = gg2; glx.fillRect(-ghalf,-ghalf,GLS,GLS);
+  glx.globalCompositeOperation = 'lighter';
+  for (let r = 0; r < 2; r++) {
+    glx.save(); glx.rotate(r * Math.PI/4);
+    glx.fillStyle = 'rgba(255,255,250,0.6)';
+    glx.fillRect(-0.8,-ghalf,1.6,GLS);
+    glx.fillRect(-ghalf,-0.8,GLS,1.6);
+    glx.restore();
+  }
+  glx.setTransform(1,0,0,1,0,0);
+
+  /* ───── Pre-render soft dust sprite ───── */
+  const DSZ = 20;
+  const dsC = document.createElement('canvas');
+  dsC.width = DSZ; dsC.height = DSZ;
+  const dsc = dsC.getContext('2d');
+  const dsg = dsc.createRadialGradient(DSZ/2,DSZ/2,0,DSZ/2,DSZ/2,DSZ/2);
+  dsg.addColorStop(0,'rgba(255,225,150,0.5)');
+  dsg.addColorStop(0.4,'rgba(255,210,120,0.15)');
+  dsg.addColorStop(1,'rgba(255,200,100,0)');
+  dsc.fillStyle = dsg; dsc.fillRect(0,0,DSZ,DSZ);
+
+  /* ───── Sample text shape (dense, big for mobile) ───── */
+  function getTextPixels() {
+    const tmp = document.createElement('canvas');
+    const fontSize = W * 0.28;
+    tmp.width = W; tmp.height = H;
+    const t = tmp.getContext('2d');
+    t.fillStyle = '#fff';
+    t.font = `900 ${fontSize}px "Playfair Display SC", Georgia, serif`;
+    t.textAlign = 'center';
+    t.textBaseline = 'middle';
+    try { t.letterSpacing = `${fontSize * 0.12}px`; } catch(e) {}
+    t.fillText('SNT', W/2, H/2);
+    const data = t.getImageData(0,0,W,H).data;
+    const pts = [];
+    for (let y = 0; y < H; y++)
+      for (let x = 0; x < W; x++)
+        if (data[(y*W+x)*4+3] > 128) pts.push(x, y);
+    return pts;
+  }
+
+  const rawT = getTextPixels();
+  const totalPts = rawT.length / 2;
+  const PC = Math.min(totalPts, 12000);
+
+  const idxArr = Array.from({length:totalPts},(_,i)=>i);
+  for (let i = idxArr.length-1; i > 0; i--) {
+    const j = Math.random()*(i+1)|0;
+    [idxArr[i],idxArr[j]] = [idxArr[j],idxArr[i]];
+  }
+
+  /* Flat SoA particle arrays */
+  const pSX=new Float32Array(PC), pSY=new Float32Array(PC);
+  const pTX=new Float32Array(PC), pTY=new Float32Array(PC);
+  const pWX=new Float32Array(PC), pWY=new Float32Array(PC);
+  const pDel=new Float32Array(PC), pSz=new Float32Array(PC);
+  const pCX=new Float32Array(PC), pCY=new Float32Array(PC);
+  const pAl=new Float32Array(PC);
+  const TL=4;
+  const pTrX=new Float32Array(PC*TL), pTrY=new Float32Array(PC*TL);
+  const pTrI=new Uint8Array(PC);
+
+  for (let i = 0; i < PC; i++) {
+    const idx = idxArr[i];
+    const ang = Math.random()*Math.PI*2;
+    const rad = 30 + Math.random()*Math.min(W,H)*0.4;
+    pSX[i] = W/2 + Math.cos(ang)*rad + (Math.random()-0.5)*60;
+    pSY[i] = H/2 + Math.sin(ang)*rad + (Math.random()-0.5)*60;
+    pTX[i] = rawT[idx*2]; pTY[i] = rawT[idx*2+1];
+    pWX[i] = (Math.random()-0.5)*70;
+    pWY[i] = (Math.random()-0.5)*70;
+    pDel[i] = Math.random()*0.35;
+    pSz[i] = 0.4 + Math.random()*1.4;
+    pCX[i] = pSX[i]; pCY[i] = pSY[i];
+    for (let j=0;j<TL;j++) { pTrX[i*TL+j]=pSX[i]; pTrY[i*TL+j]=pSY[i]; }
+  }
+
+  function updateParticles(prog) {
+    for (let i=0;i<PC;i++) {
+      const p=Math.max(0,Math.min(1,(prog-pDel[i])/(1-pDel[i])));
+      const e=p<0.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
+      const wf=1-e;
+      const mx=(pSX[i]+pTX[i])*0.5+pWX[i]*wf;
+      const my=(pSY[i]+pTY[i])*0.5+pWY[i]*wf;
+      const ie=1-e;
+      const cx=ie*ie*pSX[i]+2*ie*e*mx+e*e*pTX[i];
+      const cy=ie*ie*pSY[i]+2*ie*e*my+e*e*pTY[i];
+      const ti=pTrI[i];
+      pTrX[i*TL+ti]=cx; pTrY[i*TL+ti]=cy;
+      pTrI[i]=(ti+1)%TL;
+      pCX[i]=cx; pCY[i]=cy;
+      pAl[i]=Math.min(1,p*2.8)*(e<0.93?1:Math.max(0,(1-e)/0.07));
+    }
+  }
+
+  function drawParticles() {
+    for (let i=0;i<PC;i++) {
+      const a=pAl[i]; if(a<=0.01)continue;
+      const sz=pSz[i], ds=sz*2.8, base=i*TL, head=pTrI[i];
+      for (let j=0;j<TL;j++) {
+        const idx=(head+j)%TL, frac=(j+1)/TL, tsz=sz*frac*1.3;
+        ctx.globalAlpha=a*0.12*frac;
+        ctx.drawImage(trC, pTrX[base+idx]-tsz, pTrY[base+idx]-tsz, tsz*2, tsz*2);
+      }
+      ctx.globalAlpha=a;
+      ctx.drawImage(sprC, pCX[i]-ds, pCY[i]-ds, ds*2, ds*2);
+    }
+    ctx.globalAlpha=1;
+  }
+
+  /* ───── Diamond glints (sharp flash on text area) ───── */
+  const GN = 20;
+  const glXa=new Float32Array(GN), glYa=new Float32Array(GN);
+  const glSza=new Float32Array(GN), glLf=new Float32Array(GN), glML=new Float32Array(GN);
+  const glWait=new Float32Array(GN);
+
+  function resetGlint(i) {
+    glXa[i]=W*0.2+Math.random()*W*0.6;
+    glYa[i]=H*0.3+Math.random()*H*0.3;
+    glSza[i]=8+Math.random()*16;
+    glLf[i]=0;
+    glML[i]=0.25+Math.random()*0.5;
+    glWait[i]=0.5+Math.random()*3;
+  }
+  for (let i=0;i<GN;i++) resetGlint(i);
+
+  function drawGlints(dt) {
+    for (let i=0;i<GN;i++) {
+      glWait[i]-=dt;
+      if (glWait[i]>0) continue;
+      glLf[i]+=dt;
+      if (glLf[i]>glML[i]) { resetGlint(i); continue; }
+      const t=glLf[i]/glML[i];
+      const flash=t<0.25?t/0.25:Math.pow(1-(t-0.25)/0.75,2.5);
+      const sz=glSza[i]*(0.4+flash*0.6);
+      ctx.globalAlpha=flash*0.85;
+      ctx.drawImage(glC, glXa[i]-sz, glYa[i]-sz, sz*2, sz*2);
+    }
+    ctx.globalAlpha=1;
+  }
+
+  /* ───── Soft golden dust (elegant slow drift) ───── */
+  const DN = 35;
+  const dXa=new Float32Array(DN), dYa=new Float32Array(DN);
+  const dSza=new Float32Array(DN), dAla=new Float32Array(DN);
+  const dVxa=new Float32Array(DN), dVya=new Float32Array(DN);
+  const dPha=new Float32Array(DN), dFd=new Float32Array(DN);
+
+  for (let i=0;i<DN;i++) {
+    dXa[i]=Math.random()*W; dYa[i]=Math.random()*H;
+    dSza[i]=2+Math.random()*4;
+    dAla[i]=0.04+Math.random()*0.12;
+    dVxa[i]=(Math.random()-0.5)*0.12;
+    dVya[i]=-0.06-Math.random()*0.12;
+    dPha[i]=Math.random()*Math.PI*2;
+    dFd[i]=0;
+  }
+
+  function drawDust(time, dt, active) {
+    const target = active ? 1 : 0;
+    for (let i=0;i<DN;i++) {
+      dFd[i]+=(target-dFd[i])*dt*1.5;
+      dXa[i]+=dVxa[i]+Math.sin(time*0.4+dPha[i])*0.06;
+      dYa[i]+=dVya[i];
+      if(dYa[i]<-20){dYa[i]=H+20;dXa[i]=Math.random()*W;}
+      if(dXa[i]<-20)dXa[i]=W+20;
+      if(dXa[i]>W+20)dXa[i]=-20;
+      const a=dAla[i]*dFd[i]; if(a<0.003)continue;
+      const s=dSza[i];
+      ctx.globalAlpha=a;
+      ctx.drawImage(dsC, dXa[i]-s, dYa[i]-s, s*2, s*2);
+    }
+    ctx.globalAlpha=1;
+  }
+
+  /* ───── Animation loop ───── */
+  const GATHER=4000, PAUSE=600;
+  let t0=-1, prev=-1, textShown=false;
+
+  function frame(now) {
+    requestAnimationFrame(frame);
+    if(t0<0){t0=now;prev=now;}
+    const dt=Math.min((now-prev)/1000,0.05);
+    prev=now;
+    const el=now-t0;
+    const time=el/1000;
+
+    ctx.clearRect(0,0,W,H);
+
+    /* formation particles */
+    if (el < GATHER+PAUSE+1200) {
+      updateParticles(Math.min(1,el/GATHER));
+      drawParticles();
+    }
+
+    /* reveal text */
+    if (!textShown && el > GATHER+PAUSE) {
+      textShown=true;
+      document.getElementById('logoWrapper').classList.add('visible');
+    }
+
+    /* post-render: diamond glints */
+    const postActive = el > GATHER+PAUSE+1800;
+    if (postActive) drawGlints(dt);
+
+    /* floating dust (fades in after text) */
+    drawDust(time, dt, postActive);
+
+    /* subtle warm glow behind text */
+    if (postActive) {
+      const ga=0.035+Math.sin(time*0.6)*0.012;
+      const grd=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,W*0.18);
+      grd.addColorStop(0,`rgba(255,215,100,${ga})`);
+      grd.addColorStop(0.6,`rgba(255,205,80,${ga*0.2})`);
+      grd.addColorStop(1,'rgba(255,200,60,0)');
+      ctx.fillStyle=grd;
+      ctx.fillRect(0,0,W,H);
+    }
+  }
+
+  requestAnimationFrame(frame);
+  window.addEventListener('resize', resize);
+})();
+</script>
+</body>
+</html>
