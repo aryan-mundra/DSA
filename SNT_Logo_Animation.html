@@ -38,18 +38,25 @@
 
   .logo-wrapper.visible {
     animation: revealIn 2.5s cubic-bezier(0.22, 1, 0.36, 1) forwards,
-               spinLoop 10s linear 2.5s infinite;
+               floatSpin 20s ease-in-out 2.5s infinite;
   }
 
   @keyframes revealIn {
     0%   { opacity: 0; transform: scale3d(0.15,0.15,0.15) rotateY(0deg) rotateX(5deg); }
     50%  { opacity: 1; transform: scale3d(0.7,0.7,0.7)    rotateY(0deg) rotateX(2deg); }
-    100% { opacity: 1; transform: scale3d(1,1,1)           rotateY(0deg) rotateX(2deg); }
+    100% { opacity: 1; transform: scale3d(1,1,1)           rotateY(0deg) rotateX(2deg) translateY(0px); }
   }
 
-  @keyframes spinLoop {
-    0%   { transform: scale3d(1,1,1) rotateX(2deg) rotateY(0deg); }
-    100% { transform: scale3d(1,1,1) rotateX(2deg) rotateY(360deg); }
+  @keyframes floatSpin {
+    0%   { transform: scale3d(1,1,1)       rotateX(2deg) rotateY(0deg)   translateY(0px); }
+    12%  { transform: scale3d(1.02,1.02,1.02) rotateX(1deg) rotateY(90deg)  translateY(-6px); }
+    25%  { transform: scale3d(1,1,1)       rotateX(3deg) rotateY(180deg) translateY(0px); }
+    37%  { transform: scale3d(0.98,0.98,0.98) rotateX(1deg) rotateY(270deg) translateY(5px); }
+    50%  { transform: scale3d(1,1,1)       rotateX(2deg) rotateY(360deg) translateY(0px); }
+    62%  { transform: scale3d(1.015,1.015,1.015) rotateX(1deg) rotateY(450deg) translateY(-5px); }
+    75%  { transform: scale3d(1,1,1)       rotateX(3deg) rotateY(540deg) translateY(0px); }
+    87%  { transform: scale3d(0.985,0.985,0.985) rotateX(1deg) rotateY(630deg) translateY(4px); }
+    100% { transform: scale3d(1,1,1)       rotateX(2deg) rotateY(720deg) translateY(0px); }
   }
 
   /* ── 3D text container ── */
@@ -165,24 +172,6 @@
     -webkit-text-fill-color: transparent;
   }
 
-  /* ── Tagline ── */
-  .tagline {
-    position: fixed;
-    bottom: 7vh;
-    left: 50%; transform: translateX(-50%);
-    font-family: 'Cinzel', Georgia, serif;
-    font-size: clamp(10px, 1.8vw, 18px);
-    letter-spacing: 0.5em;
-    color: #b8960b;
-    opacity: 0;
-    z-index: 3;
-    animation: fadeUp 1.8s ease 5s forwards;
-    text-transform: uppercase;
-  }
-  @keyframes fadeUp {
-    0%   { opacity: 0; transform: translateX(-50%) translateY(18px); }
-    100% { opacity: 0.65; transform: translateX(-50%) translateY(0); }
-  }
 
   .vignette {
     position: fixed; inset: 0; z-index: 0;
@@ -199,7 +188,11 @@
     background: linear-gradient(90deg, transparent, rgba(200,170,100,0.2) 30%, rgba(200,170,100,0.35) 50%, rgba(200,170,100,0.2) 70%, transparent);
     z-index: 1;
     opacity: 0;
-    animation: fadeUp 2s ease 4.5s forwards;
+    animation: floorFade 2s ease 4.5s forwards;
+  }
+  @keyframes floorFade {
+    0%   { opacity: 0; }
+    100% { opacity: 0.65; }
   }
 </style>
 </head>
@@ -225,10 +218,60 @@
   </div>
 </div>
 
-<div class="tagline">Fine Jewellery</div>
 
 <script>
 (function () {
+  /* ───── Procedural marble background ───── */
+  (function generateMarble() {
+    const mW = 512, mH = 512;
+    const mc = document.createElement('canvas');
+    mc.width = mW; mc.height = mH;
+    const mx = mc.getContext('2d');
+    mx.fillStyle = '#ffffff';
+    mx.fillRect(0, 0, mW, mH);
+
+    function noise(x, y, seed) {
+      const n = Math.sin(x * 12.9898 + y * 78.233 + seed) * 43758.5453;
+      return n - Math.floor(n);
+    }
+
+    for (let oct = 0; oct < 4; oct++) {
+      const veins = 3 + oct * 2;
+      const seed = oct * 100;
+      for (let v = 0; v < veins; v++) {
+        mx.beginPath();
+        let x = Math.random() * mW;
+        let y = oct % 2 === 0 ? 0 : Math.random() * mH;
+        mx.moveTo(x, y);
+        const steps = 60 + Math.random() * 40;
+        for (let s = 0; s < steps; s++) {
+          const n = noise(x * 0.01, y * 0.01, seed + v);
+          const angle = (n - 0.5) * Math.PI * 0.8 + (oct % 2 === 0 ? Math.PI/2 : Math.PI * 0.3);
+          x += Math.cos(angle) * (mW / steps * 1.2);
+          y += Math.sin(angle) * (mH / steps * 1.2);
+          mx.lineTo(x, y);
+        }
+        const alpha = 0.02 + Math.random() * 0.03;
+        const width = 0.5 + Math.random() * 1.5;
+        mx.strokeStyle = `rgba(180,170,155,${alpha})`;
+        mx.lineWidth = width;
+        mx.stroke();
+
+        if (Math.random() > 0.5) {
+          mx.strokeStyle = `rgba(200,190,175,${alpha * 0.5})`;
+          mx.lineWidth = width * 3;
+          mx.filter = 'blur(2px)';
+          mx.stroke();
+          mx.filter = 'none';
+        }
+      }
+    }
+
+    document.body.style.backgroundImage = `url(${mc.toDataURL()})`;
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundColor = '#ffffff';
+  })();
+
   /* ───── 3D depth layers ───── */
   const container = document.getElementById('snt3d');
   const DEPTH_LAYERS = 50;
@@ -267,15 +310,23 @@
   sg.addColorStop(1,'rgba(200,160,50,0)');
   sc.fillStyle = sg; sc.fillRect(0,0,SPR,SPR);
 
-  /* ───── Pre-render trail sprite ───── */
-  const TRS = 12;
-  const trC = document.createElement('canvas');
-  trC.width = TRS; trC.height = TRS;
-  const tc = trC.getContext('2d');
-  const tg = tc.createRadialGradient(TRS/2,TRS/2,0,TRS/2,TRS/2,TRS/2);
-  tg.addColorStop(0,'rgba(255,215,100,0.5)');
-  tg.addColorStop(1,'rgba(255,215,100,0)');
-  tc.fillStyle = tg; tc.fillRect(0,0,TRS,TRS);
+  /* ───── Pre-render comet trail sprite (elongated teardrop) ───── */
+  const CMW = 48, CMH = 16;
+  const cmC = document.createElement('canvas');
+  cmC.width = CMW; cmC.height = CMH;
+  const cmc = cmC.getContext('2d');
+  const cmg = cmc.createLinearGradient(0, CMH/2, CMW, CMH/2);
+  cmg.addColorStop(0, 'rgba(255,210,80,0)');
+  cmg.addColorStop(0.5, 'rgba(255,225,120,0.3)');
+  cmg.addColorStop(0.85, 'rgba(255,240,180,0.7)');
+  cmg.addColorStop(1, 'rgba(255,252,230,1)');
+  cmc.fillStyle = cmg;
+  cmc.beginPath();
+  cmc.moveTo(0, CMH/2);
+  cmc.quadraticCurveTo(CMW*0.4, 0, CMW, CMH/2);
+  cmc.quadraticCurveTo(CMW*0.4, CMH, 0, CMH/2);
+  cmc.closePath();
+  cmc.fill();
 
   /* ───── Pre-render diamond glint sprite ───── */
   const GLS = 64;
@@ -352,36 +403,57 @@
   const pTrX=new Float32Array(PC*TL), pTrY=new Float32Array(PC*TL);
   const pTrI=new Uint8Array(PC);
 
+  /* Spiral angle + radius per particle for vortex start */
+  const pSpAng = new Float32Array(PC);
+  const pSpRad = new Float32Array(PC);
+  const pSpSpd = new Float32Array(PC);
+
   for (let i = 0; i < PC; i++) {
     const idx = idxArr[i];
-    const ang = Math.random()*Math.PI*2;
-    const rad = 30 + Math.random()*Math.min(W,H)*0.4;
-    pSX[i] = W/2 + Math.cos(ang)*rad + (Math.random()-0.5)*60;
-    pSY[i] = H/2 + Math.sin(ang)*rad + (Math.random()-0.5)*60;
     pTX[i] = rawT[idx*2]; pTY[i] = rawT[idx*2+1];
-    pWX[i] = (Math.random()-0.5)*70;
-    pWY[i] = (Math.random()-0.5)*70;
-    pDel[i] = Math.random()*0.35;
-    pSz[i] = 0.4 + Math.random()*1.4;
+
+    /* start from screen edges in a spread-out ring */
+    const edgeAng = Math.random() * Math.PI * 2;
+    const edgeR = Math.max(W, H) * 0.55 + Math.random() * 200;
+    pSX[i] = W/2 + Math.cos(edgeAng) * edgeR;
+    pSY[i] = H/2 + Math.sin(edgeAng) * edgeR;
+
+    /* spiral params: each particle spirals differently */
+    pSpAng[i] = edgeAng;
+    pSpRad[i] = edgeR;
+    pSpSpd[i] = 2.5 + Math.random() * 3.5;
+
+    pDel[i] = Math.random() * 0.2;
+    pSz[i] = 0.4 + Math.random() * 1.4;
     pCX[i] = pSX[i]; pCY[i] = pSY[i];
+    pAl[i] = 0;
     for (let j=0;j<TL;j++) { pTrX[i*TL+j]=pSX[i]; pTrY[i*TL+j]=pSY[i]; }
   }
 
   function updateParticles(prog) {
     for (let i=0;i<PC;i++) {
-      const p=Math.max(0,Math.min(1,(prog-pDel[i])/(1-pDel[i])));
-      const e=p<0.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
-      const wf=1-e;
-      const mx=(pSX[i]+pTX[i])*0.5+pWX[i]*wf;
-      const my=(pSY[i]+pTY[i])*0.5+pWY[i]*wf;
-      const ie=1-e;
-      const cx=ie*ie*pSX[i]+2*ie*e*mx+e*e*pTX[i];
-      const cy=ie*ie*pSY[i]+2*ie*e*my+e*e*pTY[i];
-      const ti=pTrI[i];
-      pTrX[i*TL+ti]=cx; pTrY[i*TL+ti]=cy;
-      pTrI[i]=(ti+1)%TL;
-      pCX[i]=cx; pCY[i]=cy;
-      pAl[i]=Math.min(1,p*2.8)*(e<0.93?1:Math.max(0,(1-e)/0.07));
+      const p = Math.max(0, Math.min(1, (prog - pDel[i]) / (1 - pDel[i])));
+      /* smooth ease that holds a spiral then snaps to target */
+      const e = p < 0.5 ? 2*p*p : 1 - Math.pow(-2*p+2, 2)/2;
+
+      /* spiral: angle advances, radius shrinks toward target */
+      const spiralAngle = pSpAng[i] + p * pSpSpd[i] * Math.PI;
+      const spiralR = pSpRad[i] * (1 - e);
+
+      /* blend between spiral position and final target */
+      const snapBlend = Math.pow(e, 1.8);
+      const spiralX = W/2 + Math.cos(spiralAngle) * spiralR;
+      const spiralY = H/2 + Math.sin(spiralAngle) * spiralR;
+      const cx = spiralX + (pTX[i] - spiralX) * snapBlend;
+      const cy = spiralY + (pTY[i] - spiralY) * snapBlend;
+
+      const ti = pTrI[i];
+      pTrX[i*TL+ti] = cx; pTrY[i*TL+ti] = cy;
+      pTrI[i] = (ti+1) % TL;
+      pCX[i] = cx; pCY[i] = cy;
+
+      /* fade: appear quickly, stay visible, fade at very end */
+      pAl[i] = Math.min(1, p*3) * (e < 0.92 ? 1 : Math.max(0, (1-e)/0.08));
     }
   }
 
@@ -389,11 +461,25 @@
     for (let i=0;i<PC;i++) {
       const a=pAl[i]; if(a<=0.01)continue;
       const sz=pSz[i], ds=sz*2.8, base=i*TL, head=pTrI[i];
-      for (let j=0;j<TL;j++) {
-        const idx=(head+j)%TL, frac=(j+1)/TL, tsz=sz*frac*1.3;
-        ctx.globalAlpha=a*0.12*frac;
-        ctx.drawImage(trC, pTrX[base+idx]-tsz, pTrY[base+idx]-tsz, tsz*2, tsz*2);
+
+      /* comet trail: draw oriented along direction of motion */
+      const prevIdx = (head + TL - 1) % TL;
+      const dx = pCX[i] - pTrX[base+prevIdx];
+      const dy = pCY[i] - pTrY[base+prevIdx];
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist > 1.5) {
+        const angle = Math.atan2(dy, dx);
+        const cLen = Math.min(dist * 1.2, sz * 12);
+        const cWid = sz * 2;
+        ctx.save();
+        ctx.translate(pCX[i], pCY[i]);
+        ctx.rotate(angle);
+        ctx.globalAlpha = a * 0.55;
+        ctx.drawImage(cmC, -cLen, -cWid/2, cLen, cWid);
+        ctx.restore();
       }
+
+      /* main particle head */
       ctx.globalAlpha=a;
       ctx.drawImage(sprC, pCX[i]-ds, pCY[i]-ds, ds*2, ds*2);
     }
@@ -465,8 +551,69 @@
     ctx.globalAlpha=1;
   }
 
+  /* ───── Pre-render shockwave ring sprite ───── */
+  const RNG = 256;
+  const rngC = document.createElement('canvas');
+  rngC.width = RNG; rngC.height = RNG;
+  const rngx = rngC.getContext('2d');
+  const rHalf = RNG/2;
+  const ringOuter = rngx.createRadialGradient(rHalf,rHalf,rHalf*0.7,rHalf,rHalf,rHalf);
+  ringOuter.addColorStop(0, 'rgba(255,220,100,0)');
+  ringOuter.addColorStop(0.3, 'rgba(255,230,140,0.4)');
+  ringOuter.addColorStop(0.5, 'rgba(255,240,180,0.7)');
+  ringOuter.addColorStop(0.7, 'rgba(255,245,200,0.4)');
+  ringOuter.addColorStop(1, 'rgba(255,220,100,0)');
+  rngx.fillStyle = ringOuter;
+  rngx.fillRect(0,0,RNG,RNG);
+
+  const SW_COUNT = 3;
+  const swLife = new Float32Array(SW_COUNT);
+  const swActive = new Uint8Array(SW_COUNT);
+  const swDelay = [0, 0.15, 0.35];
+  const SW_DUR = 1.2;
+  let swTriggered = false;
+  let swStartTime = 0;
+
+  function triggerShockwave(time) {
+    swTriggered = true;
+    swStartTime = time;
+    for (let i=0;i<SW_COUNT;i++) { swLife[i]=0; swActive[i]=1; }
+  }
+
+  function drawShockwave(time) {
+    if (!swTriggered) return;
+    const elapsed = time - swStartTime;
+    let anyActive = false;
+    for (let i=0;i<SW_COUNT;i++) {
+      if (!swActive[i]) continue;
+      const t = (elapsed - swDelay[i]) / SW_DUR;
+      if (t < 0) { anyActive=true; continue; }
+      if (t > 1) { swActive[i]=0; continue; }
+      anyActive = true;
+      const expand = Math.pow(t, 0.5);
+      const fade = t < 0.3 ? t/0.3 : Math.pow(1-(t-0.3)/0.7, 2);
+      const sz = Math.max(W,H) * 0.6 * expand;
+      ctx.globalAlpha = fade * 0.6;
+      ctx.drawImage(rngC, W/2-sz, H/2-sz, sz*2, sz*2);
+    }
+    if (!anyActive) swTriggered = false;
+    ctx.globalAlpha = 1;
+  }
+
+  /* ───── Pre-render golden pulse sprite ───── */
+  const PLS = 256;
+  const plC = document.createElement('canvas');
+  plC.width = PLS; plC.height = PLS;
+  const plx = plC.getContext('2d');
+  const plg = plx.createRadialGradient(PLS/2,PLS/2,0,PLS/2,PLS/2,PLS/2);
+  plg.addColorStop(0,'rgba(255,240,180,0.7)');
+  plg.addColorStop(0.15,'rgba(255,220,120,0.4)');
+  plg.addColorStop(0.4,'rgba(255,200,80,0.1)');
+  plg.addColorStop(1,'rgba(255,190,60,0)');
+  plx.fillStyle = plg; plx.fillRect(0,0,PLS,PLS);
+
   /* ───── Animation loop ───── */
-  const GATHER=4000, PAUSE=600;
+  const INTRO=800, GATHER=4500, PAUSE=500;
   let t0=-1, prev=-1, textShown=false;
 
   function frame(now) {
@@ -479,26 +626,40 @@
 
     ctx.clearRect(0,0,W,H);
 
-    /* formation particles */
-    if (el < GATHER+PAUSE+1200) {
-      updateParticles(Math.min(1,el/GATHER));
+    /* ── Phase 0: golden light pulse expanding from center ── */
+    if (el < INTRO + 600) {
+      const ip = Math.min(1, el / INTRO);
+      const expand = Math.pow(ip, 0.4);
+      const fade = ip < 0.6 ? ip/0.6 : Math.max(0, 1 - (ip-0.6)/0.4);
+      const sz = Math.max(W,H) * 0.3 * expand;
+      ctx.globalAlpha = fade * 0.8;
+      ctx.drawImage(plC, W/2-sz, H/2-sz, sz*2, sz*2);
+      ctx.globalAlpha = 1;
+    }
+
+    /* ── Phase 1: spiral vortex formation ── */
+    const particleStart = INTRO * 0.5;
+    if (el > particleStart && el < INTRO+GATHER+PAUSE+1200) {
+      const gatherEl = el - particleStart;
+      updateParticles(Math.min(1, gatherEl/GATHER));
       drawParticles();
     }
 
-    /* reveal text */
-    if (!textShown && el > GATHER+PAUSE) {
+    /* ── Reveal 3D text + fire shockwave ── */
+    if (!textShown && el > INTRO+GATHER+PAUSE) {
       textShown=true;
       document.getElementById('logoWrapper').classList.add('visible');
+      triggerShockwave(time);
     }
 
-    /* post-render: diamond glints */
-    const postActive = el > GATHER+PAUSE+1800;
-    if (postActive) drawGlints(dt);
+    /* shockwave rings */
+    drawShockwave(time);
 
-    /* floating dust (fades in after text) */
+    /* ── Post-render effects ── */
+    const postActive = el > INTRO+GATHER+PAUSE+1800;
+    if (postActive) drawGlints(dt);
     drawDust(time, dt, postActive);
 
-    /* subtle warm glow behind text */
     if (postActive) {
       const ga=0.035+Math.sin(time*0.6)*0.012;
       const grd=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,W*0.18);
