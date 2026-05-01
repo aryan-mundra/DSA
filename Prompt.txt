@@ -1,0 +1,22 @@
+Show me my job application status from Gmail in an interactive UI tracker.
+
+Search for emails related to job applications (applications, interviews, recruiters, offers, rejections) and organize them by:
+
+* Active interviews (scheduled/completed, awaiting feedback)
+* Under review (applications submitted, awaiting response)
+* Rejected applications
+* Incomplete applications
+* Recruiter outreach
+* Past interviews
+
+Display in a clean list view with:
+
+* Summary statistics at the top
+* Company name, position, job number, dates
+* Interview schedules if applicable
+* Current status with color-coded badges
+* Recruiter contact info where available
+* Search and filter functionality
+* Action buttons for follow-ups
+
+Use my Gmail connector to fetch the data.
