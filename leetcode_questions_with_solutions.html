@@ -289,6 +289,8 @@
         .array-cell.window { border-color: #48bb78; background: #f0fff4; }
         .array-cell.highlight { border-color: #ed8936; background: #fffaf0; }
         .array-cell.found { border-color: #38a169; background: #c6f6d5; transform: scale(1.15); }
+        /* LC 560: elements already folded into running sum (before current index) */
+        .array-cell.ps-covered { border-color: #90cdf4; background: #ebf8ff; }
         .array-cell.eliminated { border-color: #e2e8f0; background: #f7fafc; color: #cbd5e0; }
         .array-cell.pushed { border-color: #667eea; background: #e9d8fd; }
         .array-cell.popped { border-color: #fc8181; background: #fff5f5; }
@@ -326,6 +328,66 @@
             font-size: 0.85em;
             font-style: italic;
         }
+
+        /* LC 560 – Subarray Sum Equals K: map as a simple 2-column table */
+        .prefixsum-map-wrap {
+            margin-top: 8px;
+            padding: 10px 12px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+        .prefixsum-map-title {
+            font-size: 0.82em;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 8px;
+        }
+        .prefixsum-map-table {
+            width: 100%;
+            max-width: 320px;
+            margin: 0 auto;
+            border-collapse: collapse;
+            font-size: 0.88em;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+        .prefixsum-map-table th,
+        .prefixsum-map-table td {
+            border: 1px solid #cbd5e0;
+            padding: 6px 14px;
+            text-align: center;
+        }
+        .prefixsum-map-table thead th {
+            background: #edf2f7;
+            color: #2d3748;
+            font-weight: 600;
+            font-family: inherit;
+        }
+        .prefixsum-map-table tbody tr:nth-child(even) { background: #fff; }
+        .prefixsum-map-table tbody tr:nth-child(odd) { background: #f7fafc; }
+        .prefixsum-map-table tbody tr.prefixsum-map-row-hit {
+            background: #ebf4ff !important;
+            box-shadow: inset 0 0 0 2px #667eea;
+        }
+        .prefixsum-map-empty {
+            color: #718096;
+            font-style: italic;
+            font-size: 0.9em;
+        }
+
+        /* Sum / prefix animations — short “mental model” line above the array */
+        .viz-formula-strip {
+            margin: 10px auto 0;
+            max-width: 640px;
+            padding: 10px 14px;
+            background: linear-gradient(135deg, #ebf4ff 0%, #f0fff4 100%);
+            border: 1px solid #bee3f8;
+            border-radius: 8px;
+            font-size: 0.88em;
+            line-height: 1.45;
+            color: #2d3748;
+        }
+        .viz-formula-strip strong { color: #2c5282; }
 
         /* LC 424 – Longest Repeating Character Replacement */
         .lrc-concept-box {
@@ -2423,6 +2485,127 @@
             margin: 0;
             border-radius: 0;
             border-left: none;
+        }
+        .collapsible-content > .lc560-collapsible-insight {
+            margin: 0;
+            border: none;
+            border-radius: 0;
+        }
+        .lc560-insight-body {
+            padding: 16px 20px 20px;
+            font-size: 0.95em;
+            line-height: 1.65;
+            color: #2d3748;
+        }
+        .lc560-insight-body h4 {
+            margin: 16px 0 8px;
+            font-size: 1.02em;
+            font-weight: 700;
+            color: #1a202c;
+        }
+        .lc560-insight-body h4:first-child { margin-top: 0; }
+        .lc560-insight-body p { margin: 6px 0; }
+        .lc560-insight-body .lc560-formula {
+            margin: 10px 0;
+            padding: 10px 14px;
+            background: #f7fafc;
+            border-left: 3px solid #667eea;
+            border-radius: 0 6px 6px 0;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.9em;
+        }
+        /* LC 560 — question strip (after solution code) */
+        .collapsible-toggle.lc560-q-toggle {
+            margin-top: 12px;
+            background: linear-gradient(135deg, #e6f4ff 0%, #ebf8ff 100%);
+            border-color: #90cdf4;
+            justify-content: flex-start;
+        }
+        .collapsible-toggle.lc560-q-toggle:hover {
+            border-color: #63b3ed;
+            background: linear-gradient(135deg, #dbeafe 0%, #e0f2fe 100%);
+        }
+        .collapsible-toggle.lc560-q-toggle .toggle-label::before {
+            content: '?';
+            color: #e53e3e;
+            font-weight: 900;
+            font-size: 1.2em;
+            line-height: 1;
+            margin-right: 10px;
+        }
+
+        /* LC 238 – Product Except Self: LEFT / RIGHT grid (reference diagram) */
+        .pa-visual {
+            margin: 12px auto 8px;
+            max-width: 640px;
+        }
+        .pa-formula {
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.05em;
+            color: #276749;
+            margin-bottom: 14px;
+            line-height: 1.45;
+        }
+        .pa-formula code { background: #c6f6d5; padding: 2px 6px; border-radius: 4px; color: #22543d; }
+        .pa-grid-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0 auto 12px;
+            font-size: 0.95em;
+        }
+        .pa-grid-table th,
+        .pa-grid-table td {
+            border: 2px solid #e53e3e;
+            padding: 8px 10px;
+            text-align: center;
+            min-width: 44px;
+        }
+        .pa-corner { background: #fff5f5; color: #742a2a; }
+        .pa-idx-head { background: #fff5f5; font-weight: 700; color: #742a2a; }
+        .pa-row-nums th { background: #ebf8ff; color: #2c5282; }
+        .pa-row-nums td {
+            background: #ebf8ff;
+            color: #2b6cb0;
+            font-weight: 700;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+        .pa-row-left th { background: #fff5f5; color: #822727; font-weight: 700; }
+        .pa-row-left td {
+            color: #9b2c2c;
+            font-weight: 700;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.78em;
+            line-height: 1.35;
+            word-break: break-word;
+            min-width: 52px;
+        }
+        .pa-row-right th { background: #fffaf0; color: #c05621; font-weight: 700; }
+        .pa-row-right td {
+            color: #dd6b20;
+            font-weight: 700;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.78em;
+            line-height: 1.35;
+            word-break: break-word;
+            min-width: 52px;
+        }
+        .pa-row-result th { background: #f0fff4; color: #276749; font-weight: 700; }
+        .pa-row-result td {
+            background: #f0fff4;
+            color: #276749;
+            font-weight: 700;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+        .pa-grid-table td.pa-col-focus {
+            box-shadow: inset 0 0 0 3px #667eea;
+            background: #fefcbf !important;
+        }
+        .pa-grid-table tr.pa-row-nums td.pa-col-focus { background: #fefcbf !important; color: #744210; }
+
+        /* LC 325 — map panel under animation (reuses prefix-sum table look) */
+        .maxsizek-map-wrap {
+            margin-top: 10px;
         }
 
         /* Touch-friendly tap targets */
@@ -4629,7 +4812,7 @@ int numberOfSubstrings(String s) {
             <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,2,3], sumRange(0,2) → 6</pre></div>
         </div>
         <div class="animation-box" id="anim-rangesumq">
-            <h3>Range Sum Query Animation (nums=[-2,0,3,-5,2,-1])</h3>
+            <h3>Range Sum Query — Immutable (LC 303)</h3>
             <div class="controls">
                 <button class="btn-play" onclick="animRangeSumQ('play')">Play</button>
                 <button class="btn-step" onclick="animRangeSumQ('step')">Step</button>
@@ -4640,8 +4823,12 @@ int numberOfSubstrings(String s) {
             <div style="text-align:center;">
                 <p style="font-weight:bold; margin-bottom:5px;">nums[]</p>
                 <div class="array-container" id="rangesumq-nums"></div>
-                <p style="font-weight:bold; margin:10px 0 5px;">prefix[]</p>
+                <p style="font-weight:bold; margin:10px 0 5px;">prefix[] (length n+1, prefix[0]=0)</p>
                 <div class="array-container" id="rangesumq-prefix"></div>
+            </div>
+            <div class="sw-commentary" id="rangesumq-commentary">
+                <div class="sw-commentary-label">Commentary</div>
+                <div class="sw-commentary-text" id="rangesumq-commentary-text">Click <strong>Step</strong> or <strong>Play</strong>. We build a prefix array so each range sum is one subtraction — see why the index is <code>right + 1</code>, not <code>right − left</code>.</div>
             </div>
             <div class="result-box" id="rangesumq-result">Building prefix array...</div>
         </div>
@@ -4686,7 +4873,11 @@ int sumRange(int left, int right) {
             </div>
             <div class="step-info" id="findpivot-info">Click Play or Step to start</div>
             <div class="array-container" id="findpivot-array"></div>
-            <div class="result-box" id="findpivot-result">totalSum=? | leftSum=0</div>
+            <div class="sw-commentary" id="findpivot-commentary">
+                <div class="sw-commentary-label">Commentary</div>
+                <div class="sw-commentary-text" id="findpivot-commentary-text">Click <strong>Step</strong> or <strong>Play</strong>. We need the sum strictly left of <code>i</code> to equal the sum strictly right of <code>i</code>.</div>
+            </div>
+            <div class="result-box" id="findpivot-result">Building: totalSum, then scan with rightSum…</div>
         </div>
         <div class="solution">
             <h3>Solution (Java-style Pseudocode):</h3>
@@ -4694,10 +4885,13 @@ int sumRange(int left, int right) {
 int pivotIndex(int[] nums) {
     int totalSum = 0;
     for (int num : nums) totalSum += num;
+
     int leftSum = 0;
     for (int i = 0; i &lt; nums.length; i++) {
-        if (leftSum == totalSum - leftSum - nums[i])
-            return i;
+        int rightSum = totalSum - leftSum - nums[i];
+
+        if (leftSum == rightSum) return i;
+
         leftSum += nums[i];
     }
     return -1;
@@ -4728,10 +4922,11 @@ Explanation: Subarrays [1,2] and [3]</pre></div>
         </div>
 
         <div class="animation-box" id="anim-prefixsum">
-            <h3>Step-by-Step Animation (nums=[1,2,1,1,1], k=3)</h3>
+            <h3>Subarray Sum Equals K — walkthrough (nums = [1, 1, 1], k = 2)</h3>
             <div class="legend">
-                <div class="legend-item"><div class="legend-color" style="background:#ebf4ff; border-color:#667eea;"></div> Current Index</div>
-                <div class="legend-item"><div class="legend-color" style="background:#c6f6d5; border-color:#38a169;"></div> Found Subarray</div>
+                <div class="legend-item"><div class="legend-color" style="background:#ebf8ff; border-color:#90cdf4;"></div> Already in prefix sum</div>
+                <div class="legend-item"><div class="legend-color" style="background:#ebf4ff; border-color:#667eea;"></div> Current index</div>
+                <div class="legend-item"><div class="legend-color" style="background:#c6f6d5; border-color:#38a169;"></div> Subarray summing to k (this step)</div>
             </div>
             <div class="controls">
                 <button class="btn-play" onclick="animPrefixSum('play')">Play</button>
@@ -4741,7 +4936,21 @@ Explanation: Subarrays [1,2] and [3]</pre></div>
             </div>
             <div class="step-info" id="prefixsum-info">Click Play or Step to start</div>
             <div class="array-container" id="prefixsum-array"></div>
-            <div class="result-box" id="prefixsum-result">prefixSum = 0 | map = {0:1} | count = 0</div>
+            <div id="prefixsum-formula" style="margin:10px 0;padding:10px 12px;background:#fffbeb;border:1px solid #f6e05e;border-radius:8px;font-size:0.9em;text-align:center;color:#744210;">Target <code>k</code> = <strong>2</strong> · Running <code>sum</code> = <strong>0</strong> · Look for <code>sum − k</code> = <strong>—</strong></div>
+            <div class="prefixsum-map-wrap" id="prefixsum-map-wrap">
+                <div class="prefixsum-map-title">Map: prefix sum → how many times seen</div>
+                <table class="prefixsum-map-table" role="grid" aria-label="Prefix sum frequencies">
+                    <thead>
+                        <tr><th>Prefix sum</th><th>Count</th></tr>
+                    </thead>
+                    <tbody id="prefixsum-map-tbody"></tbody>
+                </table>
+            </div>
+            <div class="sw-commentary" id="prefixsum-commentary">
+                <div class="sw-commentary-label">Commentary</div>
+                <div class="sw-commentary-text" id="prefixsum-commentary-text">Click <strong>Step</strong> or <strong>Play</strong>. Watch <code>sum</code>, the value <code>sum − k</code>, and how the map answers “have we seen that prefix before?”</div>
+            </div>
+            <div class="result-box" id="prefixsum-result">count = 0 | map stores prefix sums seen so far</div>
         </div>
 
         <div class="solution">
@@ -4768,6 +4977,23 @@ int subarraySum(int[] nums, int k) {
             </pre>
             <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
         </div>
+
+        <div class="lc560-collapsible-insight">
+            <div class="lc560-insight-body">
+                <h4>🔑 What does <code>sum</code> represent?</h4>
+                <p>At any point:</p>
+                <p><code>sum</code> = prefix sum from index <strong>0</strong> through the <strong>current</strong> index (inclusive).</p>
+                <h4>🎯 What are we trying to find?</h4>
+                <p>We want the number of subarrays whose <strong>sum equals <code>k</code></strong> (<code>k</code> is the target sum).</p>
+                <p>Using prefix sums, if <code>sum(j)</code> is the prefix sum up to index <code>j</code> and <code>sum(i)</code> is the prefix sum up to index <code>i</code> (with <code>i &lt; j</code>):</p>
+                <div class="lc560-formula">sum(j) − sum(i) = k</div>
+                <p>Rearrange:</p>
+                <div class="lc560-formula">sum(i) = sum(j) − k</div>
+                <p>So at the current end index <code>j</code>, if the map already has the key <code>sum − k</code> (where <code>sum</code> is <code>sum(j)</code>), that many earlier prefix positions <code>i</code> give a subarray <code>(i+1)..j</code> with sum exactly <code>k</code>.</p>
+                <h4>💡 Why <code>map.containsKey(sum − k)</code>?</h4>
+                <p>That check is exactly: <strong>“Have I seen a prefix sum equal to <code>(current sum − k)</code> before?”</strong> Each stored count is how many such subarrays end at the current index. <code>k</code> stays the fixed target sum for the whole problem.</p>
+            </div>
+        </div>
     </div>
 
     <!-- Product of Array Except Self -->
@@ -4785,12 +5011,7 @@ int subarraySum(int[] nums, int k) {
         </div>
 
         <div class="animation-box" id="anim-prodarray">
-            <h3>Step-by-Step Animation (nums=[1,2,3,4])</h3>
-            <div class="legend">
-                <div class="legend-item"><div class="legend-color" style="background:#feebc8; border-color:#ed8936;"></div> Prefix Pass (left-to-right)</div>
-                <div class="legend-item"><div class="legend-color" style="background:#bee3f8; border-color:#3182ce;"></div> Suffix Pass (right-to-left)</div>
-                <div class="legend-item"><div class="legend-color" style="background:#c6f6d5; border-color:#38a169;"></div> Final Answer</div>
-            </div>
+            <h3>Product except self — LEFT × RIGHT grid (nums = [3, 4, 6, 1, 2])</h3>
             <div class="controls">
                 <button class="btn-play" onclick="animProdArray('play')">Play</button>
                 <button class="btn-step" onclick="animProdArray('step')">Step</button>
@@ -4798,13 +5019,12 @@ int subarraySum(int[] nums, int k) {
                 <button class="btn-reset" onclick="animProdArray('reset')">Reset</button>
             </div>
             <div class="step-info" id="prodarray-info">Click Play or Step to start</div>
-            <div style="text-align:center;">
-                <p style="font-weight:bold; margin-bottom:5px;">nums[]</p>
-                <div class="array-container" id="prodarray-nums"></div>
-                <p style="font-weight:bold; margin:15px 0 5px;">answer[]</p>
-                <div class="array-container" id="prodarray-answer"></div>
+            <div class="pa-visual" id="prodarray-visual"></div>
+            <div class="sw-commentary" id="prodarray-commentary">
+                <div class="sw-commentary-label">Commentary</div>
+                <div class="sw-commentary-text" id="prodarray-commentary-text">Click <strong>Step</strong> or <strong>Play</strong>. Fill the LEFT row (products strictly left of each index), then RIGHT (strictly right), then multiply row-wise for <code>result</code>.</div>
             </div>
-            <div class="result-box" id="prodarray-result">Phase: Prefix | suffixProduct = 1</div>
+            <div class="result-box" id="prodarray-result">Build LEFT → RIGHT → result</div>
         </div>
 
         <div class="solution">
@@ -4816,13 +5036,13 @@ int[] productExceptSelf(int[] nums) {
     
     // Pass 1: Prefix products (left to right)
     answer[0] = 1;
-    for (int i = 1; i < n; i++) {
+    for (int i = 1; i &lt; n; i++) {
         answer[i] = answer[i - 1] * nums[i - 1];
     }
     
     // Pass 2: Multiply by suffix products (right to left)
     int suffixProduct = 1;
-    for (int i = n - 1; i >= 0; i--) {
+    for (int i = n - 1; i &gt;= 0; i--) {
         answer[i] = answer[i] * suffixProduct;
         suffixProduct *= nums[i];
     }
@@ -4894,7 +5114,8 @@ int findMaxLength(int[] nums) {
             <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [-2,-1,2,1], k = 1  |  Output: 2</pre></div>
         </div>
         <div class="animation-box" id="anim-maxsizek">
-            <h3>Max Size Subarray Sum=K Animation (nums=[1,-1,5,-2,3], k=3)</h3>
+            <h3>Max Size Subarray Sum = K (nums = [1, -1, 5, -2, 3], k = 3)</h3>
+            <p style="margin:4px 0 10px;font-size:0.88em;color:#4a5568;line-height:1.45;">The <strong>two-column table</strong> under the array is the running <strong>map</strong> (prefix sum → earliest index). <strong>Commentary</strong> below it highlights the main ideas on selected steps.</p>
             <div class="controls">
                 <button class="btn-play" onclick="animMaxSizeK('play')">Play</button>
                 <button class="btn-step" onclick="animMaxSizeK('step')">Step</button>
@@ -4903,6 +5124,19 @@ int findMaxLength(int[] nums) {
             </div>
             <div class="step-info" id="maxsizek-info">Click Play or Step to start</div>
             <div class="array-container" id="maxsizek-array"></div>
+            <div class="prefixsum-map-wrap maxsizek-map-wrap" id="maxsizek-map-wrap">
+                <div class="prefixsum-map-title">Map: prefix sum → earliest index (only first time we see each sum)</div>
+                <table class="prefixsum-map-table" role="grid" aria-label="Prefix sum to index map">
+                    <thead>
+                        <tr><th>Prefix sum</th><th>Earliest index</th></tr>
+                    </thead>
+                    <tbody id="maxsizek-map-tbody"></tbody>
+                </table>
+            </div>
+            <div class="sw-commentary" id="maxsizek-commentary">
+                <div class="sw-commentary-label">Commentary</div>
+                <div class="sw-commentary-text" id="maxsizek-commentary-text">Click <strong>Step</strong> or <strong>Play</strong>. The map stores the <em>first</em> index where each prefix sum appeared so <code>i − map.get(sum − k)</code> is a valid window length.</div>
+            </div>
             <div class="result-box" id="maxsizek-result">sum=0 | maxLen=0 | map={0:-1}</div>
         </div>
         <div class="solution">
@@ -4949,6 +5183,15 @@ int maxSubArrayLen(int[] nums, int k) {
             </div>
             <div class="step-info" id="divbyk-info">Click Play or Step to start</div>
             <div class="array-container" id="divbyk-array"></div>
+            <div class="viz-formula-strip" id="divbyk-strip"><strong>Mental model:</strong> Two prefix sums with the same remainder (mod k) differ by a multiple of k — that gap is exactly a valid subarray.</div>
+            <div class="prefixsum-map-wrap">
+                <div class="prefixsum-map-title">Map: remainder r = (running prefix sum mod k) → how many earlier prefixes had remainder r</div>
+                <table class="prefixsum-map-table"><thead><tr><th>Remainder r</th><th>Count</th></tr></thead><tbody id="divbyk-map-tbody"></tbody></table>
+            </div>
+            <div class="sw-commentary" id="divbyk-commentary">
+                <div class="sw-commentary-label">Commentary</div>
+                <div class="sw-commentary-text" id="divbyk-commentary-text">Use <strong>Step</strong> or <strong>Play</strong> to see each prefix remainder and why the count jumps.</div>
+            </div>
             <div class="result-box" id="divbyk-result">sum=0 | count=0 | map={0:1}</div>
         </div>
         <div class="solution">
@@ -4993,6 +5236,15 @@ int subarraysDivByK(int[] nums, int k) {
             </div>
             <div class="step-info" id="contsubsum-info">Click Play or Step to start</div>
             <div class="array-container" id="contsubsum-array"></div>
+            <div class="viz-formula-strip" id="contsubsum-strip"><strong>Mental model:</strong> Same remainder (mod k) as an earlier prefix → the subarray in between has sum ≡ 0 (mod k). We need length ≥ 2, so compare indices.</div>
+            <div class="prefixsum-map-wrap">
+                <div class="prefixsum-map-title">Map: remainder r → index of the <em>first</em> prefix with that remainder (only stored once)</div>
+                <table class="prefixsum-map-table"><thead><tr><th>Remainder r</th><th>First index</th></tr></thead><tbody id="contsubsum-map-tbody"></tbody></table>
+            </div>
+            <div class="sw-commentary" id="contsubsum-commentary">
+                <div class="sw-commentary-label">Commentary</div>
+                <div class="sw-commentary-text" id="contsubsum-commentary-text">Use <strong>Step</strong> or <strong>Play</strong> to see when a repeat remainder gives a length-≥2 multiple-of-k subarray.</div>
+            </div>
             <div class="result-box" id="contsubsum-result">sum%k=0 | map={0:-1}</div>
         </div>
         <div class="solution">
@@ -5040,6 +5292,15 @@ boolean checkSubarraySum(int[] nums, int k) {
             </div>
             <div class="step-info" id="makesumdiv-info">Click Play or Step to start</div>
             <div class="array-container" id="makesumdiv-array"></div>
+            <div class="viz-formula-strip" id="makesumdiv-strip"><strong>Mental model:</strong> Let totalMod = (sum of whole array) mod p. Removing a subarray changes the total by that subarray’s sum — we need that change to cancel totalMod, so we hunt a subarray whose sum ≡ totalMod (mod p).</div>
+            <div class="prefixsum-map-wrap">
+                <div class="prefixsum-map-title">Map: prefix remainder (mod p) → last index where we saw it (for shortest window)</div>
+                <table class="prefixsum-map-table"><thead><tr><th>Prefix mod p</th><th>Index i</th></tr></thead><tbody id="makesumdiv-map-tbody"></tbody></table>
+            </div>
+            <div class="sw-commentary" id="makesumdiv-commentary">
+                <div class="sw-commentary-label">Commentary</div>
+                <div class="sw-commentary-text" id="makesumdiv-commentary-text">Use <strong>Step</strong> or <strong>Play</strong> to see why <code>need = (sum − totalMod + p) % p</code> picks the right earlier prefix.</div>
+            </div>
             <div class="result-box" id="makesumdiv-result">totalMod=? | sum=0 | minLen=n</div>
         </div>
         <div class="solution">
@@ -5089,6 +5350,11 @@ int minSubarray(int[] nums, int p) {
             </div>
             <div class="step-info" id="rangesum2d-info">Click Play or Step to start</div>
             <div class="array-container" id="rangesum2d-grid" style="display:flex; gap:2px; flex-wrap:wrap; max-width:250px; margin:auto;"></div>
+            <div class="viz-formula-strip" id="rangesum2d-strip"><strong>Mental model:</strong> Each cell in the prefix grid stores the sum of the rectangle from the top-left corner to that cell. A query subtracts the three “outside” rectangles so only the asked rectangle remains.</div>
+            <div class="sw-commentary" id="rangesum2d-commentary">
+                <div class="sw-commentary-label">Commentary</div>
+                <div class="sw-commentary-text" id="rangesum2d-commentary-text">Use <strong>Step</strong> or <strong>Play</strong> to see inclusion–exclusion on the prefix table.</div>
+            </div>
             <div class="result-box" id="rangesum2d-result">Building 2D prefix sum...</div>
         </div>
         <div class="solution">
@@ -5133,6 +5399,11 @@ int sumRegion(int r1, int c1, int r2, int c2) {
             </div>
             <div class="step-info" id="matblock-info">Click Play or Step to start</div>
             <div class="array-container" id="matblock-grid" style="display:flex; gap:2px; flex-wrap:wrap; max-width:250px; margin:auto;"></div>
+            <div class="viz-formula-strip" id="matblock-strip"><strong>Mental model:</strong> Build the same 2D prefix table, then each answer cell is the sum over a square block — read that block with one inclusion–exclusion on the prefix grid (clamped to the matrix edges).</div>
+            <div class="sw-commentary" id="matblock-commentary">
+                <div class="sw-commentary-label">Commentary</div>
+                <div class="sw-commentary-text" id="matblock-commentary-text">Use <strong>Step</strong> or <strong>Play</strong> to see the highlighted block for each output cell.</div>
+            </div>
             <div class="result-box" id="matblock-result">Building prefix sum then querying blocks...</div>
         </div>
         <div class="solution">
@@ -5180,6 +5451,11 @@ int[][] matrixBlockSum(int[][] mat, int k) {
             </div>
             <div class="step-info" id="rangeadd-info">Click Play or Step to start</div>
             <div class="array-container" id="rangeadd-array"></div>
+            <div class="viz-formula-strip" id="rangeadd-strip"><strong>Mental model:</strong> Don’t add val to every index in the range. Record <code>+val</code> at the start and <code>−val</code> just past the end — then one left-to-right pass turns those “edges” into the real array.</div>
+            <div class="sw-commentary" id="rangeadd-commentary">
+                <div class="sw-commentary-label">Commentary</div>
+                <div class="sw-commentary-text" id="rangeadd-commentary-text">Use <strong>Step</strong> or <strong>Play</strong> to see the diff array become the final values after the prefix pass.</div>
+            </div>
             <div class="result-box" id="rangeadd-result">diff = [0,0,0,0,0]</div>
         </div>
         <div class="solution">
@@ -5223,6 +5499,11 @@ int[] getModifiedArray(int length, int[][] updates) {
             </div>
             <div class="step-info" id="corpflight-info">Click Play or Step to start</div>
             <div class="array-container" id="corpflight-array"></div>
+            <div class="viz-formula-strip" id="corpflight-strip"><strong>Mental model:</strong> Same as range addition on a timeline of flights: add seats from the first flight day, subtract right after the last day, then prefix-sum to get seats per day.</div>
+            <div class="sw-commentary" id="corpflight-commentary">
+                <div class="sw-commentary-label">Commentary</div>
+                <div class="sw-commentary-text" id="corpflight-commentary-text">Use <strong>Step</strong> or <strong>Play</strong> to see each booking as two boundary updates.</div>
+            </div>
             <div class="result-box" id="corpflight-result">diff = [0,0,0,0,0,0]</div>
         </div>
         <div class="solution">
@@ -5266,6 +5547,11 @@ int[] corpFlightBookings(int[][] bookings, int n) {
             </div>
             <div class="step-info" id="carpool-info">Click Play or Step to start</div>
             <div class="array-container" id="carpool-array"></div>
+            <div class="viz-formula-strip" id="carpool-strip"><strong>Mental model:</strong> Pick-ups and drop-offs are +/− on a stops timeline. Scan stops in order while accumulating “passengers on board” — if it ever exceeds capacity, the schedule is impossible.</div>
+            <div class="sw-commentary" id="carpool-commentary">
+                <div class="sw-commentary-label">Commentary</div>
+                <div class="sw-commentary-text" id="carpool-commentary-text">Use <strong>Step</strong> or <strong>Play</strong> to see the running load after each stop.</div>
+            </div>
             <div class="result-box" id="carpool-result">diff = [0,0,...] | passengers = 0</div>
         </div>
         <div class="solution">
@@ -12818,6 +13104,27 @@ function updateSlidingCommentary(prefix, state, snapshots, step, intro) {
             }
         }
     }
+}
+
+/** Render integer-key map as 2-column table (remainder → count or index). highlightKey row gets .prefixsum-map-row-hit */
+function renderIntegerMapTable(tbodyId, map, highlightKey) {
+    const tbody = document.getElementById(tbodyId);
+    if (!tbody) return;
+    const keys = Object.keys(map || {}).map(Number).filter(k => !Number.isNaN(k)).sort((a, b) => a - b);
+    if (!keys.length) {
+        tbody.innerHTML = '<tr><td colspan="2" class="prefixsum-map-empty">(empty)</td></tr>';
+        return;
+    }
+    const hk = highlightKey === undefined || highlightKey === null || highlightKey === '' ? null : Number(highlightKey);
+    tbody.innerHTML = keys.map(k => {
+        const isHit = hk !== null && !Number.isNaN(hk) && k === hk;
+        return `<tr class="${isHit ? 'prefixsum-map-row-hit' : ''}"><td>${k}</td><td>${map[k]}</td></tr>`;
+    }).join('');
+}
+
+function setVizFormulaStrip(elementId, html) {
+    const el = document.getElementById(elementId);
+    if (el && html != null) el.innerHTML = html;
 }
 
 // Generic animation state manager
@@ -21513,9 +21820,46 @@ function animWb2(action) {
 }
 
 
-// ===== 11. PREFIX SUM ANIMATION =====
+// ===== 11. PREFIX SUM / SUBARRAY SUM EQUALS K (LC 560) =====
 const psState = createAnimState();
-const psArr = [1,2,1,1,1], psK = 3;
+const psArr = [1, 1, 1], psK = 2;
+
+function psEndingSubarrayAt(idx) {
+    let acc = 0;
+    for (let j = idx; j >= 0; j--) {
+        acc += psArr[j];
+        if (acc === psK) return [j, idx];
+    }
+    return null;
+}
+
+function renderPrefixSumMapPanel(map, highlightKey) {
+    const tbody = document.getElementById('prefixsum-map-tbody');
+    if (!tbody) return;
+    const entries = Object.entries(map).sort((a, b) => Number(a[0]) - Number(b[0]));
+    const hk = highlightKey != null && highlightKey !== '' ? Number(highlightKey) : null;
+    if (!entries.length) {
+        tbody.innerHTML = '<tr><td colspan="2" class="prefixsum-map-empty">(no entries)</td></tr>';
+        return;
+    }
+    tbody.innerHTML = entries
+        .map(([k, v]) => {
+            const keyNum = Number(k);
+            const hit = hk !== null && !Number.isNaN(hk) && keyNum === hk;
+            return `<tr class="${hit ? 'prefixsum-map-row-hit' : ''}"><td>${k}</td><td>${v}</td></tr>`;
+        })
+        .join('');
+}
+
+function updatePrefixSumFormula(snap) {
+    const f = document.getElementById('prefixsum-formula');
+    if (!f) return;
+    const showNeed = snap.idx >= 0 && snap.need !== undefined && snap.need !== null;
+    const needStr = showNeed ? String(snap.need) : '—';
+    f.innerHTML = `Target <code>k</code> = <strong>${psK}</strong> &nbsp;·&nbsp; Running <code>sum</code> (prefix 0…i) = <strong>${snap.sum}</strong> &nbsp;·&nbsp; Check map for <code>sum − k</code> = <strong>${needStr}</strong>`;
+}
+
+const prefixsumIntro = `Click <strong>Step</strong> or <strong>Play</strong>. Each step updates <code>sum</code>, then asks: “Have we seen prefix sum <code>sum − k</code> before?” That count is how many subarrays ending here sum to <code>k</code>.`;
 
 function initPrefixSum() {
     const cont = document.getElementById('prefixsum-array');
@@ -21524,151 +21868,369 @@ function initPrefixSum() {
     psState.snapshots = [];
     buildPrefixSumSnapshots();
     document.getElementById('prefixsum-info').textContent = 'Click Play or Step to start';
-    document.getElementById('prefixsum-result').textContent = 'prefixSum = 0 | map = {0:1} | count = 0';
+    document.getElementById('prefixsum-result').textContent = `count = 0 | map starts with {0:1} (empty prefix before index 0)`;
+    renderPrefixSumMapPanel({ 0: 1 }, null);
+    updatePrefixSumFormula({ idx: -1, sum: 0, need: null });
+    updateSlidingCommentary('prefixsum', psState, [], -1, prefixsumIntro);
     highlightLines('code-prefixsum', []);
 }
 
 function buildPrefixSumSnapshots() {
     const s = psState.snapshots;
-    let map = {0:1}, sum = 0, count = 0;
-    s.push({idx:-1,sum:0,count:0,map:{...map},found:false,lines:[0],msg:'Call <code>subarraySum(nums, 3)</code>.'});
-    s.push({idx:-1,sum:0,count:0,map:{...map},found:false,lines:[1],msg:'<code>HashMap map = new HashMap()</code>.'});
-    s.push({idx:-1,sum:0,count:0,map:{...map},found:false,lines:[2],msg:'<code>map.put(0, 1)</code>. Prefix sum 0 occurs once.'});
-    s.push({idx:-1,sum:0,count:0,map:{...map},found:false,lines:[3],msg:'<code>int count=0, sum=0</code>.'});
+    let map = { 0: 1 }, sum = 0, count = 0;
+    s.push({
+        idx: -1, sum: 0, count: 0, map: { ...map }, need: null, found: false, lines: [0],
+        msg: `Call <code>subarraySum(nums, ${psK})</code> on <code>[${psArr.join(',')}]</code>.`,
+        commentary: `<strong>Goal:</strong> count contiguous subarrays whose sum is <strong>${psK}</strong>. Brute force would try every range; instead we scan once and use a map from <em>prefix sum</em> → how many times we saw it.`
+    });
+    s.push({ idx: -1, sum: 0, count: 0, map: { ...map }, need: null, found: false, lines: [1], msg: '<code>HashMap map = new HashMap()</code>.' });
+    s.push({
+        idx: -1, sum: 0, count: 0, map: { ...map }, need: null, found: false, lines: [2],
+        msg: '<code>map.put(0, 1)</code> — one way to have prefix sum 0 before reading any element.',
+        commentary: `We start with <code>map[0] = 1</code> so a subarray from index <strong>0</strong> is recognized when the running sum first hits <strong>${psK}</strong> (because <code>sum − k = 0</code>).`
+    });
+    s.push({ idx: -1, sum: 0, count: 0, map: { ...map }, need: null, found: false, lines: [3], msg: '<code>int count = 0, sum = 0</code>.' });
     for (let i = 0; i < psArr.length; i++) {
-        s.push({idx:i,sum,count,map:{...map},found:false,lines:[5],msg:`<code>for</code>: num=nums[${i}]=${psArr[i]}.`});
+        s.push({ idx: i, sum, count, map: { ...map }, need: null, found: false, lines: [5], msg: `<strong>Next element:</strong> <code>nums[${i}] = ${psArr[i]}</code>.` });
         sum += psArr[i];
-        s.push({idx:i,sum,count,map:{...map},found:false,lines:[6],msg:`<code>sum += ${psArr[i]}</code>. sum=${sum}.`});
-        let need = sum - psK;
-        let found = map[need] || 0;
-        if (found > 0) {
-            s.push({idx:i,sum,count,map:{...map},found:true,lines:[9],msg:`<code>map.containsKey(sum-k=${need})</code> → true (${found} times).`});
-            count += found;
-            s.push({idx:i,sum,count,map:{...map},found:true,lines:[10],msg:`<code>count += map.get(${need})</code> = ${found}. count=${count}.`});
+        const need = sum - psK;
+        s.push({
+            idx: i, sum, count, map: { ...map }, need, found: false, lines: [6],
+            msg: `<code>sum += nums[${i}]</code> → running prefix sum <code>sum = ${sum}</code> (sum of <code>nums[0..${i}]</code>).`
+        });
+        s.push({
+            idx: i, sum, count, map: { ...map }, need, found: false, lines: [8, 9],
+            msg: `If some earlier prefix had sum <strong>${need}</strong> (= <code>sum − k = ${sum} − ${psK}</code>), then the slice <em>after</em> that prefix up to index <strong>${i}</strong> sums to <strong>${psK}</strong>.`,
+            commentary: `<strong>Key identity:</strong> let prefix sum up to <code>i</code> be <code>sum</code>. If prefix sum up to <code>j−1</code> was <code>sum − k</code>, then <code>nums[j..i]</code> sums to <code>k</code>. The map tells us how many such <code>j</code> exist.`
+        });
+        const prev = map[need] || 0;
+        if (prev > 0) {
+            const range = psEndingSubarrayAt(i);
+            const subLo = range ? range[0] : i;
+            const subHi = range ? range[1] : i;
+            s.push({
+                idx: i, sum, count, map: { ...map }, need, found: true, subLo, subHi, lines: [9],
+                msg: `<code>map.containsKey(${need})</code> → <strong>yes</strong> (count <code>${prev}</code>). So <strong>${prev}</strong> subarray(s) ending at index <strong>${i}</strong> sum to <code>${psK}</code>.`
+            });
+            count += prev;
+            s.push({
+                idx: i, sum, count, map: { ...map }, need, found: true, subLo, subHi, lines: [10],
+                msg: `<code>count += map.get(${need})</code> → <code>count = ${count}</code>. Example range with sum ${psK}: indices <strong>${subLo}–${subHi}</strong>.`
+            });
         } else {
-            s.push({idx:i,sum,count,map:{...map},found:false,lines:[9],msg:`<code>map.containsKey(sum-k=${need})</code> → false.`});
+            s.push({
+                idx: i, sum, count, map: { ...map }, need, found: false, lines: [9],
+                msg: `<code>map.containsKey(${need})</code> → <strong>no</strong>. No prefix seen with sum <code>${need}</code>, so no subarray ending at <strong>${i}</strong> sums to <code>${psK}</code> yet.`
+            });
         }
         map[sum] = (map[sum] || 0) + 1;
-        s.push({idx:i,sum,count,map:{...map},found:false,lines:[13],msg:`<code>map.put(${sum}, ${map[sum]})</code>.`});
+        s.push({
+            idx: i, sum, count, map: { ...map }, need, found: false, lines: [13],
+            msg: `<code>map.put(${sum}, ${map[sum]})</code> — prefix sum <strong>${sum}</strong> has now been seen <strong>${map[sum]}</strong> time(s).`
+        });
     }
-    s.push({idx:-1,sum,count,map:{...map},found:false,lines:[16],msg:`<code>return count</code> = ${count}. Done!`});
+    s.push({
+        idx: -1, sum, count, map: { ...map }, need: null, found: false, lines: [16],
+        msg: `<code>return count</code> → <strong>${count}</strong> (matches test case: two subarrays <code>[1,1]</code> at 0–1 and 1–2).`,
+        commentary: `<strong>Answer: ${count}.</strong> One linear pass; the map holds at most <code>O(n)</code> different prefix sums.`
+    });
 }
 
 function renderPrefixSum() {
     const st = psState.step;
     if (st < 0) { initPrefixSum(); return; }
-    const snap = psState.snapshots[Math.min(st, psState.snapshots.length-1)];
-    psArr.forEach((v,i) => {
+    const snap = psState.snapshots[Math.min(st, psState.snapshots.length - 1)];
+    psArr.forEach((v, i) => {
         const el = document.getElementById(`ps-${i}`);
         el.className = 'array-cell';
-        if (i === snap.idx) el.classList.add('active');
-        if (i <= snap.idx) el.classList.add(snap.found ? 'found' : 'window');
+        if (snap.idx >= 0) {
+            if (i < snap.idx) el.classList.add('ps-covered');
+            if (i === snap.idx) el.classList.add('active');
+        }
+        if (snap.subLo !== undefined && snap.subHi !== undefined && i >= snap.subLo && i <= snap.subHi) el.classList.add('found');
     });
-    document.getElementById('prefixsum-info').innerHTML = snap.msg + `<span class="step-counter">Step ${st+1}/${psState.snapshots.length}</span>`;
-    let mapStr = Object.entries(snap.map).map(([k,v]) => `${k}:${v}`).join(', ');
-    document.getElementById('prefixsum-result').textContent = `prefixSum = ${snap.sum} | map = {${mapStr}} | count = ${snap.count}`;
+    document.getElementById('prefixsum-info').innerHTML = snap.msg + `<span class="step-counter">Step ${st + 1}/${psState.snapshots.length}</span>`;
+    const mapStr = Object.entries(snap.map).map(([k, v]) => `${k}:${v}`).join(', ');
+    document.getElementById('prefixsum-result').textContent = `count = ${snap.count} | map = {${mapStr}}`;
+    const mapHighlight = snap.idx >= 0 && snap.need != null ? snap.need : null;
+    renderPrefixSumMapPanel(snap.map, mapHighlight);
+    updatePrefixSumFormula(snap);
     highlightLines('code-prefixsum', getPrefixSumLines(snap));
+    updateSlidingCommentary('prefixsum', psState, psState.snapshots, st, prefixsumIntro);
 }
 
 function animPrefixSum(action) {
-    if (action === 'reset') { clearInterval(psState.timer); psState.playing=false; initPrefixSum(); return; }
+    if (action === 'reset') { clearInterval(psState.timer); psState.playing = false; initPrefixSum(); return; }
     if (action === 'prev') { psState.step = Math.max(0, psState.step - 1); renderPrefixSum(); return; }
     if (action === 'step') { psState.step = Math.min(psState.step + 1, psState.snapshots.length - 1); renderPrefixSum(); return; }
     if (action === 'play') {
-        if (psState.playing) { clearInterval(psState.timer); psState.playing=false; return; }
+        if (psState.playing) { clearInterval(psState.timer); psState.playing = false; return; }
         psState.playing = true;
         psState.timer = setInterval(() => {
             psState.step++;
-            if (psState.step >= psState.snapshots.length) { clearInterval(psState.timer); psState.playing=false; return; }
+            if (psState.step >= psState.snapshots.length) { clearInterval(psState.timer); psState.playing = false; return; }
             renderPrefixSum();
-        }, 1400);
+        }, 1100);
     }
 }
 
-// ===== 12. PRODUCT OF ARRAY EXCEPT SELF ANIMATION =====
+// ===== 12. PRODUCT OF ARRAY EXCEPT SELF ANIMATION (LC 238) — LEFT / RIGHT grid =====
 const paState = createAnimState();
-const paArr = [1,2,3,4];
+const paArr = [3, 4, 6, 1, 2];
+
+const prodarrayIntro = `Click <strong>Step</strong> or <strong>Play</strong>. <strong>LEFT</strong> / <strong>RIGHT</strong> show factors multiplied out (e.g. <code>3*4*6</code>), not the single number; <code>result</code> is still the numeric answer.`;
+
+function paNullRow() {
+    return paArr.map(() => null);
+}
+
+function paPrecomputeLRR(nums) {
+    const n = nums.length;
+    const left = nums.map((_, i) => {
+        if (i === 0) return '';
+        return nums.slice(0, i).join('*');
+    });
+    const right = nums.map((_, i) => {
+        if (i >= n - 1) return '';
+        return nums.slice(i + 1).join('*');
+    });
+    const result = nums.map((_, i) => {
+        let L = 1;
+        for (let j = 0; j < i; j++) L *= nums[j];
+        let R = 1;
+        for (let j = i + 1; j < n; j++) R *= nums[j];
+        return String(L * R);
+    });
+    return { left, right, result };
+}
+
+function paFmtMult(s) {
+    return s === '' || s === null ? '1' : String(s);
+}
+
+function buildPaGridTableHtml() {
+    const idxHead =
+        '<tr><th class="pa-corner" scope="col"></th>' +
+        paArr.map((_, i) => `<th class="pa-idx-head" scope="col">${i}</th>`).join('') +
+        '</tr>';
+    const numsRow =
+        '<tr class="pa-row-nums"><th scope="row">nums</th>' +
+        paArr.map((v, i) => `<td id="pa-td-nums-${i}">${v}</td>`).join('') +
+        '</tr>';
+    const leftRow =
+        '<tr class="pa-row-left"><th scope="row">LEFT</th>' +
+        paArr.map((_, i) => `<td id="pa-td-left-${i}">—</td>`).join('') +
+        '</tr>';
+    const rightRow =
+        '<tr class="pa-row-right"><th scope="row">RIGHT</th>' +
+        paArr.map((_, i) => `<td id="pa-td-right-${i}">—</td>`).join('') +
+        '</tr>';
+    const resRow =
+        '<tr class="pa-row-result"><th scope="row">result</th>' +
+        paArr.map((_, i) => `<td id="pa-td-res-${i}">—</td>`).join('') +
+        '</tr>';
+    return (
+        '<div class="pa-formula"><code>result[i]</code> = (multiply all on <strong>left</strong>) × (multiply all on <strong>right</strong>)</div>' +
+        '<table class="pa-grid-table" role="grid" aria-label="Left, right, and result products by index">' +
+        idxHead +
+        numsRow +
+        leftRow +
+        rightRow +
+        resRow +
+        '</table>'
+    );
+}
 
 function initProdArray() {
-    const numsCont = document.getElementById('prodarray-nums');
-    numsCont.innerHTML = paArr.map((v,i) => `<div class="array-cell" id="pa-n-${i}">${v}<span class="idx">${i}</span></div>`).join('');
-    const ansCont = document.getElementById('prodarray-answer');
-    ansCont.innerHTML = paArr.map((_,i) => `<div class="array-cell" id="pa-a-${i}">-<span class="idx">${i}</span></div>`).join('');
+    const vis = document.getElementById('prodarray-visual');
+    if (vis) vis.innerHTML = buildPaGridTableHtml();
     paState.step = -1;
     paState.snapshots = [];
     buildProdArraySnapshots();
     document.getElementById('prodarray-info').textContent = 'Click Play or Step to start';
-    document.getElementById('prodarray-result').textContent = 'Phase: Prefix | suffixProduct = 1';
+    document.getElementById('prodarray-result').textContent = 'nums = [3, 4, 6, 1, 2] — LEFT/RIGHT as factor chains → numeric result';
+    updateSlidingCommentary('prodarray', paState, [], -1, prodarrayIntro);
     highlightLines('code-prodarray', []);
 }
 
 function buildProdArraySnapshots() {
     const s = paState.snapshots;
-    let n = paArr.length;
-    let answer = new Array(n).fill(0);
-    s.push({answer:[...answer],idx:-1,phase:'prefix',suffix:1,lines:[0],msg:'Call <code>productExceptSelf(nums)</code>.'});
-    s.push({answer:[...answer],idx:-1,phase:'prefix',suffix:1,lines:[1],msg:`<code>int n = nums.length</code> = ${n}.`});
-    s.push({answer:[...answer],idx:-1,phase:'prefix',suffix:1,lines:[2],msg:'<code>int[] answer = new int[n]</code>.'});
-    answer[0] = 1;
-    s.push({answer:[...answer],idx:0,phase:'prefix',suffix:1,lines:[5],msg:'<code>answer[0] = 1</code>.'});
-    for (let i = 1; i < n; i++) {
-        s.push({answer:[...answer],idx:i,phase:'prefix',suffix:1,lines:[6],msg:`<code>for</code>: i=${i} &lt; ${n} → true.`});
-        answer[i] = answer[i-1] * paArr[i-1];
-        s.push({answer:[...answer],idx:i,phase:'prefix',suffix:1,lines:[7],msg:`<code>answer[${i}] = answer[${i-1}] * nums[${i-1}]</code> = ${answer[i-1]/paArr[i-1]} × ${paArr[i-1]} = ${answer[i]}.`});
+    const n = paArr.length;
+    const { left: Lf, right: Rf, result: Qf } = paPrecomputeLRR(paArr);
+    s.push({
+        phase: 'intro',
+        left: paNullRow(),
+        right: paNullRow(),
+        res: paNullRow(),
+        focusCol: null,
+        lines: [0],
+        msg: 'Each <strong>column</strong> is an index. <strong>nums</strong> is given. We fill <strong>LEFT</strong> / <strong>RIGHT</strong> as <em>factor chains</em> (e.g. <code>3*4</code>, <code>3*4*6</code>), then <strong>result</strong> with the numeric product (empty side ⇒ factor <strong>1</strong>).',
+        commentary: '<strong>Same picture as the reference:</strong> no division — only products of everything on one side times everything on the other.'
+    });
+    for (let k = 0; k < n; k++) {
+        const left = paArr.map((_, j) => (j <= k ? Lf[j] : null));
+        s.push({
+            phase: 'left',
+            left,
+            right: paNullRow(),
+            res: paNullRow(),
+            focusCol: k,
+            lines: k === 0 ? [5] : [7],
+            msg:
+                k === 0
+                    ? '<strong>LEFT[0]</strong> stays empty: nothing is left of index 0 (use factor <strong>1</strong> when multiplying).'
+                    : `<strong>LEFT[${k}]</strong> = multiply <code>nums[0..${k - 1}]</code> → <strong><code>${Lf[k]}</code></strong>.`
+        });
     }
-    s.push({answer:[...answer],idx:-1,phase:'prefix',suffix:1,lines:[6],msg:`<code>for</code>: i=${n} → false. Prefix pass done.`});
-    let suf = 1;
-    s.push({answer:[...answer],idx:-1,phase:'suffix',suffix:1,lines:[11],msg:'<code>int suffixProduct = 1</code>.'});
-    for (let i = n-1; i >= 0; i--) {
-        s.push({answer:[...answer],idx:i,phase:'suffix',suffix:suf,lines:[12],msg:`<code>for</code>: i=${i} &gt;= 0 → true.`});
-        let before = answer[i];
-        answer[i] = answer[i] * suf;
-        s.push({answer:[...answer],idx:i,phase:'suffix',suffix:suf,lines:[13],msg:`<code>answer[${i}] = ${before} * ${suf}</code> = ${answer[i]}.`});
-        suf *= paArr[i];
-        s.push({answer:[...answer],idx:i,phase:'suffix',suffix:suf,lines:[14],msg:`<code>suffixProduct *= nums[${i}]=${paArr[i]}</code>. suffixProduct=${suf}.`});
+    s.push({
+        phase: 'leftDone',
+        left: [...Lf],
+        right: paNullRow(),
+        res: paNullRow(),
+        focusCol: null,
+        lines: [8],
+        msg: '<strong>LEFT</strong> row complete — each cell lists the factors multiplied on the <em>left</em> (e.g. <code>3*4</code>, <code>3*4*6</code>), not the collapsed product.',
+        commentary: '<strong>Left row = pass 1 idea.</strong> The code still stores one number per cell; the grid spells out which factors that number is.'
+    });
+    for (let k = 0; k < n; k++) {
+        const right = paArr.map((_, j) => (j <= k ? Rf[j] : null));
+        s.push({
+            phase: 'right',
+            left: [...Lf],
+            right,
+            res: paNullRow(),
+            focusCol: k,
+            lines: k === 0 ? [11, 12] : [14],
+            msg:
+                k === n - 1
+                    ? `<strong>RIGHT[${n - 1}]</strong> stays empty: nothing is right of the last index (factor <strong>1</strong>).`
+                    : `<strong>RIGHT[${k}]</strong> = multiply <code>nums[${k + 1}..${n - 1}]</code> → <strong><code>${Rf[k]}</code></strong>.`
+        });
     }
-    s.push({answer:[...answer],idx:-1,phase:'done',suffix:suf,lines:[17],msg:`<code>return answer</code> = [${answer.join(',')}]. Done!`});
+    s.push({
+        phase: 'rightDone',
+        left: [...Lf],
+        right: [...Rf],
+        res: paNullRow(),
+        focusCol: null,
+        lines: [15],
+        msg: '<strong>RIGHT</strong> row complete — each cell lists factors on the <em>right</em> (e.g. <code>6*1*2</code>, <code>1*2</code>, <code>2</code>).',
+        commentary: '<strong>Right row = suffix side.</strong> The second loop multiplies these into the answer from the right.'
+    });
+    for (let k = 0; k < n; k++) {
+        const res = paArr.map((_, j) => (j <= k ? Qf[j] : null));
+        s.push({
+            phase: 'multiply',
+            left: [...Lf],
+            right: [...Rf],
+            res,
+            focusCol: k,
+            lines: [13],
+            msg: `<strong>result[${k}]</strong> = (${paFmtMult(Lf[k])}) × (${paFmtMult(Rf[k])}) = <strong>${Qf[k]}</strong>.`
+        });
+    }
+    s.push({
+        phase: 'done',
+        left: [...Lf],
+        right: [...Rf],
+        res: [...Qf],
+        focusCol: null,
+        lines: [17],
+        msg: `<strong>Final:</strong> <code>[${Qf.join(', ')}]</code> — matches the diagram (product except self at each index).`,
+        commentary: '<strong>Same as the code below:</strong> two O(n) passes, O(1) extra space besides the output array.'
+    });
+}
+
+function paCellText(v) {
+    if (v === null || v === undefined) return '—';
+    return v === '' ? '\u00a0' : String(v);
 }
 
 function renderProdArray() {
     const st = paState.step;
-    if (st < 0) { initProdArray(); return; }
-    const snap = paState.snapshots[Math.min(st, paState.snapshots.length-1)];
-    paArr.forEach((v,i) => {
-        const ne = document.getElementById(`pa-n-${i}`);
-        ne.className = 'array-cell';
-        if (i === snap.idx) ne.classList.add('active');
-        const ae = document.getElementById(`pa-a-${i}`);
-        ae.className = 'array-cell';
-        ae.textContent = snap.answer[i];
-        if (snap.phase === 'prefix' && i <= snap.idx) ae.classList.add('highlight');
-        if (snap.phase === 'suffix' && i >= snap.idx) ae.classList.add('right-ptr');
-        if (snap.phase === 'done') ae.classList.add('found');
-        if (i === snap.idx) ae.classList.add('active');
-    });
-    document.getElementById('prodarray-info').innerHTML = snap.msg + `<span class="step-counter">Step ${st+1}/${paState.snapshots.length}</span>`;
-    document.getElementById('prodarray-result').textContent = `Phase: ${snap.phase} | suffixProduct = ${snap.suffix}`;
+    if (st < 0) {
+        initProdArray();
+        return;
+    }
+    const snap = paState.snapshots[Math.min(st, paState.snapshots.length - 1)];
+    const n = paArr.length;
+    for (let i = 0; i < n; i++) {
+        const lc = document.getElementById(`pa-td-left-${i}`);
+        const rc = document.getElementById(`pa-td-right-${i}`);
+        const ec = document.getElementById(`pa-td-res-${i}`);
+        const nc = document.getElementById(`pa-td-nums-${i}`);
+        if (lc) {
+            lc.textContent = paCellText(snap.left[i]);
+            lc.classList.toggle('pa-col-focus', snap.focusCol === i);
+        }
+        if (rc) {
+            rc.textContent = paCellText(snap.right[i]);
+            rc.classList.toggle('pa-col-focus', snap.focusCol === i);
+        }
+        if (ec) {
+            ec.textContent = paCellText(snap.res[i]);
+            ec.classList.toggle('pa-col-focus', snap.focusCol === i);
+        }
+        if (nc) nc.classList.toggle('pa-col-focus', snap.focusCol === i);
+    }
+    document.getElementById('prodarray-info').innerHTML = snap.msg + `<span class="step-counter">Step ${st + 1}/${paState.snapshots.length}</span>`;
+    let rb =
+        snap.phase === 'intro'
+            ? 'Intro'
+            : snap.phase === 'left' || snap.phase === 'leftDone'
+              ? 'LEFT row'
+              : snap.phase === 'right' || snap.phase === 'rightDone'
+                ? 'RIGHT row'
+                : snap.phase === 'multiply'
+                  ? 'result = LEFT × RIGHT'
+                  : 'Done';
+    if (snap.phase === 'done') rb += ` → [${snap.res.join(', ')}]`;
+    document.getElementById('prodarray-result').textContent = rb;
     highlightLines('code-prodarray', getProdArrayLines(snap));
+    updateSlidingCommentary('prodarray', paState, paState.snapshots, st, prodarrayIntro);
 }
 
 function animProdArray(action) {
-    if (action === 'reset') { clearInterval(paState.timer); paState.playing=false; initProdArray(); return; }
-    if (action === 'prev') { paState.step = Math.max(0, paState.step - 1); renderProdArray(); return; }
-    if (action === 'step') { paState.step = Math.min(paState.step + 1, paState.snapshots.length - 1); renderProdArray(); return; }
+    if (action === 'reset') {
+        clearInterval(paState.timer);
+        paState.playing = false;
+        initProdArray();
+        return;
+    }
+    if (action === 'prev') {
+        paState.step = Math.max(0, paState.step - 1);
+        renderProdArray();
+        return;
+    }
+    if (action === 'step') {
+        paState.step = Math.min(paState.step + 1, paState.snapshots.length - 1);
+        renderProdArray();
+        return;
+    }
     if (action === 'play') {
-        if (paState.playing) { clearInterval(paState.timer); paState.playing=false; return; }
+        if (paState.playing) {
+            clearInterval(paState.timer);
+            paState.playing = false;
+            return;
+        }
         paState.playing = true;
         paState.timer = setInterval(() => {
             paState.step++;
-            if (paState.step >= paState.snapshots.length) { clearInterval(paState.timer); paState.playing=false; return; }
+            if (paState.step >= paState.snapshots.length) {
+                clearInterval(paState.timer);
+                paState.playing = false;
+                return;
+            }
             renderProdArray();
-        }, 1400);
+        }, 1100);
     }
 }
 
 // ===== RANGE SUM QUERY - IMMUTABLE ANIMATION =====
 const rsqState = createAnimState();
 const rsqArr = [-2,0,3,-5,2,-1];
+const rangesumqIntro = `Click <strong>Step</strong> or <strong>Play</strong>. <code>prefix[k]</code> = sum of the first <code>k</code> elements of <code>nums</code> (so <code>prefix[0]=0</code>). Range <code>[L..R]</code> inclusive uses <code>prefix[R+1] − prefix[L]</code>.`;
+
 function initRangeSumQ() {
     const c1 = document.getElementById('rangesumq-nums');
     c1.innerHTML = rsqArr.map((v,i)=>`<div class="array-cell" id="rsqn-${i}">${v}<span class="idx">${i}</span></div>`).join('');
@@ -21677,21 +22239,45 @@ function initRangeSumQ() {
     rsqState.step = -1; rsqState.snapshots = [];
     const s = rsqState.snapshots;
     let prefix = new Array(rsqArr.length+1).fill(0);
-    s.push({prefix:[...prefix],cur:-1,lines:[0],msg:'<code>int[] prefix</code> declared.'});
-    s.push({prefix:[...prefix],cur:-1,lines:[1],msg:'<code>NumArray(nums)</code> called.'});
-    s.push({prefix:[...prefix],cur:-1,lines:[2],msg:'<code>prefix = new int[7]</code> (all zeros).'});
+    s.push({prefix:[...prefix],cur:-1,query:null,lines:[0],msg:'<code>int[] prefix</code> declared.', commentary:''});
+    s.push({prefix:[...prefix],cur:-1,query:null,lines:[1],msg:'<code>NumArray(nums)</code> called.', commentary:''});
+    s.push({
+        prefix:[...prefix],cur:-1,query:null,lines:[2],msg:'<code>prefix = new int[7]</code> (all zeros).',
+        commentary:`<strong>Why length n+1?</strong> <code>prefix[0] = 0</code> means “sum before any element.” Then <code>prefix[i+1]</code> stores the sum of <code>nums[0]</code> … <code>nums[i]</code> — the <code>+1</code> lines up prefix indices with “how many nums counted.”`
+    });
     for (let i = 0; i < rsqArr.length; i++) {
-        s.push({prefix:[...prefix],cur:i,lines:[3],msg:`<code>for</code>: i=${i} &lt; ${rsqArr.length} → true.`});
+        s.push({prefix:[...prefix],cur:i,query:null,lines:[3],msg:`<code>for</code>: i=${i} &lt; ${rsqArr.length} → true.`, commentary:''});
         prefix[i+1] = prefix[i] + rsqArr[i];
-        s.push({prefix:[...prefix],cur:i,lines:[4],msg:`<code>prefix[${i+1}] = prefix[${i}] + nums[${i}]</code> = ${prefix[i]} + ${rsqArr[i]} = ${prefix[i+1]}.`});
+        s.push({
+            prefix:[...prefix],cur:i,query:null,lines:[4],msg:`<code>prefix[${i+1}] = prefix[${i}] + nums[${i}]</code> = ${prefix[i]} + ${rsqArr[i]} = ${prefix[i+1]}.`,
+            commentary: i === 0
+                ? `<strong>Fill rule:</strong> each cell is the running total; after the loop, <code>prefix[j]</code> = sum of <code>nums[0..j-1]</code>.`
+                : ''
+        });
     }
-    s.push({prefix:[...prefix],cur:-1,lines:[3],msg:`<code>for</code>: i=${rsqArr.length} → false. Prefix built!`});
-    s.push({prefix:[...prefix],cur:-1,lines:[7],msg:'Query: <code>sumRange(0, 2)</code>.'});
-    s.push({prefix:[...prefix],cur:-1,lines:[8],msg:`<code>prefix[3] - prefix[0]</code> = ${prefix[3]} - ${prefix[0]} = ${prefix[3]-prefix[0]}.`});
-    s.push({prefix:[...prefix],cur:-1,lines:[7],msg:'Query: <code>sumRange(2, 5)</code>.'});
-    s.push({prefix:[...prefix],cur:-1,lines:[8],msg:`<code>prefix[6] - prefix[2]</code> = ${prefix[6]} - ${prefix[2]} = ${prefix[6]-prefix[2]}. Done!`});
+    s.push({
+        prefix:[...prefix],cur:-1,query:null,lines:[3],msg:`<code>for</code>: i=${rsqArr.length} → false. Prefix built!`,
+        commentary:`<strong>Queries are O(1):</strong> one subtraction on <code>prefix</code> per <code>sumRange</code>.`
+    });
+    s.push({
+        prefix:[...prefix],cur:-1,query:{L:0,R:2},lines:[7],msg:'Query: <code>sumRange(0, 2)</code>.',
+        commentary:`<strong>Inclusive range [L..R]</strong>: sum through index <code>R</code> is stored at <code>prefix[R+1]</code> (because <code>prefix[k]</code> sums exactly <code>k</code> nums). Subtract <code>prefix[L]</code> to remove nums before <code>L</code>.`
+    });
+    s.push({
+        prefix:[...prefix],cur:-1,query:{L:0,R:2},lines:[8],msg:`<code>prefix[3] - prefix[0]</code> = ${prefix[3]} - ${prefix[0]} = ${prefix[3]-prefix[0]}.`,
+        commentary:`<strong>Why <code>right + 1</code> and not <code>right − left</code>?</strong> We need <em>two prefix totals</em>, not a span length. <code>right − left</code> counts steps between indices; it is not <code>prefix[right] − prefix[left]</code> (that would drop <code>nums[right]</code>). The correct pair is <code>prefix[right+1] − prefix[left]</code> — end inclusive, start exclusive.`
+    });
+    s.push({
+        prefix:[...prefix],cur:-1,query:{L:2,R:5},lines:[7],msg:'Query: <code>sumRange(2, 5)</code>.',
+        commentary:`Same idea: sum through index <code>5</code> → <code>prefix[6]</code>; remove prefix up to (but not including) index <code>2</code> → subtract <code>prefix[2]</code>.`
+    });
+    s.push({
+        prefix:[...prefix],cur:-1,query:{L:2,R:5},lines:[8],msg:`<code>prefix[6] - prefix[2]</code> = ${prefix[6]} - ${prefix[2]} = ${prefix[6]-prefix[2]}. Done!`,
+        commentary:`<strong>Pattern:</strong> <code>sumRange(L,R) = prefix[R+1] − prefix[L]</code> — remember <code>R+1</code> on the left term because of the shifted prefix indexing.`
+    });
     document.getElementById('rangesumq-info').textContent = 'Click Play or Step to start';
     document.getElementById('rangesumq-result').textContent = 'Building prefix array...';
+    updateSlidingCommentary('rangesumq', rsqState, [], -1, rangesumqIntro);
     highlightLines('code-rangesumq', []);
 }
 function renderRangeSumQ() {
@@ -21699,9 +22285,18 @@ function renderRangeSumQ() {
     if (st < 0) { initRangeSumQ(); return; }
     const snap = rsqState.snapshots[Math.min(st, rsqState.snapshots.length-1)];
     rsqArr.forEach((v,i)=>{const el=document.getElementById(`rsqn-${i}`);el.className='array-cell';if(i===snap.cur)el.classList.add('current');});
-    document.getElementById('rangesumq-prefix').innerHTML = snap.prefix.map((v,i)=>`<div class="array-cell" style="background:${i>0&&i-1===snap.cur?'#c6f6d5':'#f7fafc'}">${v}<span class="idx">${i}</span></div>`).join('');
+    const q = snap.query;
+    document.getElementById('rangesumq-prefix').innerHTML = snap.prefix.map((v,i)=>{
+        let bg = '#f7fafc';
+        if (snap.cur >= 0 && i > 0 && i - 1 === snap.cur) bg = '#c6f6d5';
+        if (q && (i === q.L || i === q.R + 1)) bg = '#fef3c7';
+        return `<div class="array-cell" style="background:${bg}">${v}<span class="idx">${i}</span></div>`;
+    }).join('');
     document.getElementById('rangesumq-info').innerHTML = snap.msg + `<span class="step-counter">Step ${st+1}/${rsqState.snapshots.length}</span>`;
-    document.getElementById('rangesumq-result').textContent = `prefix = [${snap.prefix.join(',')}]`;
+    let res = `prefix = [${snap.prefix.join(',')}]`;
+    if (q) res = `sum nums[${q.L}..${q.R}] = prefix[${q.R + 1}] − prefix[${q.L}] = ${snap.prefix[q.R + 1]} − ${snap.prefix[q.L]} = ${snap.prefix[q.R + 1] - snap.prefix[q.L]}`;
+    document.getElementById('rangesumq-result').textContent = res;
+    updateSlidingCommentary('rangesumq', rsqState, rsqState.snapshots, st, rangesumqIntro);
     highlightLines('code-rangesumq', getRangeSumQLines(snap));
 }
 function animRangeSumQ(action) {
@@ -21714,42 +22309,85 @@ function animRangeSumQ(action) {
 // ===== FIND PIVOT INDEX ANIMATION =====
 const fpState = createAnimState();
 const fpArr = [1,7,3,6,5,6];
+const findpivotIntro = `Click <strong>Step</strong> or <strong>Play</strong>. One pass sums the whole array; a second pass checks each index in O(1) using <code>leftSum</code> and <code>rightSum</code>.`;
 function initFindPivot() {
     const c = document.getElementById('findpivot-array');
     c.innerHTML = fpArr.map((v,i)=>`<div class="array-cell" id="fp-${i}">${v}<span class="idx">${i}</span></div>`).join('');
     fpState.step = -1; fpState.snapshots = [];
     const s = fpState.snapshots;
-    let totalSum = fpArr.reduce((a,b)=>a+b,0);
-    s.push({cur:-1,leftSum:0,totalSum:0,lines:[0],msg:'Call <code>pivotIndex(nums)</code>.'});
-    s.push({cur:-1,leftSum:0,totalSum:0,lines:[1],msg:'<code>int totalSum = 0</code>.'});
-    s.push({cur:-1,leftSum:0,totalSum:totalSum,lines:[2],msg:`<code>for (num : nums) totalSum += num</code>. totalSum=${totalSum}.`});
-    let leftSum = 0;
-    s.push({cur:-1,leftSum:0,totalSum,lines:[3],msg:'<code>int leftSum = 0</code>.'});
-    for (let i = 0; i < fpArr.length; i++) {
-        s.push({cur:i,leftSum,totalSum,lines:[4],msg:`<code>for</code>: i=${i} &lt; ${fpArr.length} → true.`});
-        let rightSum = totalSum - leftSum - fpArr[i];
-        if (leftSum === rightSum) {
-            s.push({cur:i,leftSum,totalSum,found:true,lines:[5],msg:`<code>if leftSum=${leftSum} == totalSum-leftSum-nums[${i}]=${rightSum}</code> → true!`});
-            s.push({cur:i,leftSum,totalSum,found:true,lines:[6],msg:`<code>return ${i}</code>. Pivot found at index ${i}!`});
-            break;
-        } else {
-            s.push({cur:i,leftSum,totalSum,lines:[5],msg:`<code>if leftSum=${leftSum} == ${rightSum}</code> → false.`});
+    s.push({
+        cur:-1,leftSum:0,totalSum:0,totIdx:-1,lines:[0],msg:'Call <code>pivotIndex(nums)</code>.',
+        commentary:'<strong>Pivot</strong> = index where sum strictly <em>left</em> equals sum strictly <em>right</em> (the middle value is excluded from both sides).'
+    });
+    s.push({cur:-1,leftSum:0,totalSum:0,totIdx:-1,lines:[1],msg:'<code>int totalSum = 0</code>.'});
+    let totalSum = 0;
+    for (let j = 0; j < fpArr.length; j++) {
+        totalSum += fpArr[j];
+        const step = {
+            cur:-1,leftSum:0,totalSum,totIdx:j,lines:[2],
+            msg:`<code>for (num : nums)</code>: add <code>nums[${j}] = ${fpArr[j]}</code> → <code>totalSum = ${totalSum}</code>.`
+        };
+        if (j === 0) {
+            step.commentary = '<strong>First pass:</strong> add every element once so we know the full array sum for later.';
         }
+        s.push(step);
+    }
+    let leftSum = 0;
+    s.push({
+        cur:-1,leftSum:0,totalSum,totIdx:-1,lines:[4],msg:'<code>int leftSum = 0</code>.',
+        commentary:'<strong>Second pass:</strong> grow <code>leftSum</code> as you move. For each <code>i</code>, the right side is <code>totalSum − leftSum − nums[i]</code> — no inner loop over the rest of the array.'
+    });
+    for (let i = 0; i < fpArr.length; i++) {
+        s.push({cur:i,leftSum,totalSum,totIdx:-1,lines:[5],msg:`<code>for</code>: i=${i} &lt; ${fpArr.length} → true.`});
+        const rightSum = totalSum - leftSum - fpArr[i];
+        s.push({
+            cur:i,leftSum,totalSum,rightSum,totIdx:-1,lines:[6],
+            msg:`<code>int rightSum = totalSum - leftSum - nums[${i}]</code> = ${totalSum} − ${leftSum} − ${fpArr[i]} = <strong>${rightSum}</strong>.`
+        });
+        if (leftSum === rightSum) {
+            s.push({
+                cur:i,leftSum,totalSum,rightSum,totIdx:-1,found:true,lines:[8],
+                msg:`<code>if (leftSum == rightSum)</code> → <strong>true</strong>. <code>return ${i}</code> — pivot index.`,
+                commentary:'<strong>Found it.</strong> Left and right sums match, so this index is the pivot. If we never see a match, the answer is <code>-1</code>.'
+            });
+            break;
+        }
+        s.push({
+            cur:i,leftSum,totalSum,rightSum,totIdx:-1,lines:[8],
+            msg:`<code>if (leftSum == rightSum)</code> → false (${leftSum} ≠ ${rightSum}).`
+        });
         leftSum += fpArr[i];
-        s.push({cur:i,leftSum,totalSum,lines:[7],msg:`<code>leftSum += nums[${i}]</code> = ${fpArr[i]}. leftSum=${leftSum}.`});
+        s.push({
+            cur:i,leftSum,totalSum,rightSum,totIdx:-1,lines:[10],
+            msg:`<code>leftSum += nums[${i}]</code> → <code>leftSum = ${leftSum}</code>.`
+        });
     }
     document.getElementById('findpivot-info').textContent = 'Click Play or Step to start';
-    document.getElementById('findpivot-result').textContent = `totalSum=? | leftSum=0`;
+    document.getElementById('findpivot-result').textContent = 'Building: totalSum, then scan with rightSum…';
     highlightLines('code-findpivot', []);
+    updateSlidingCommentary('findpivot', fpState, [], -1, findpivotIntro);
 }
 function renderFindPivot() {
     const st = fpState.step;
     if (st < 0) { initFindPivot(); return; }
     const snap = fpState.snapshots[Math.min(st, fpState.snapshots.length-1)];
-    fpArr.forEach((v,i)=>{const el=document.getElementById(`fp-${i}`);el.className='array-cell';if(i===snap.cur){el.classList.add('current');if(snap.found)el.style.background='#c6f6d5';else el.style.background='';}else el.style.background='';});
+    fpArr.forEach((v,i)=>{
+        const el = document.getElementById(`fp-${i}`);
+        el.className = 'array-cell';
+        if (snap.totIdx === i) el.classList.add('highlight');
+        if (i === snap.cur) {
+            el.classList.add('current');
+            if (snap.found) el.style.background = '#c6f6d5';
+            else el.style.background = '';
+        } else {
+            el.style.background = '';
+        }
+    });
     document.getElementById('findpivot-info').innerHTML = snap.msg + `<span class="step-counter">Step ${st+1}/${fpState.snapshots.length}</span>`;
-    document.getElementById('findpivot-result').textContent = `totalSum=${snap.totalSum} | leftSum=${snap.leftSum}`;
+    const rs = snap.rightSum !== undefined && snap.rightSum !== null ? ` | rightSum=${snap.rightSum}` : '';
+    document.getElementById('findpivot-result').textContent = `totalSum=${snap.totalSum} | leftSum=${snap.leftSum}${rs}`;
     highlightLines('code-findpivot', getFindPivotLines(snap));
+    updateSlidingCommentary('findpivot', fpState, fpState.snapshots, st, findpivotIntro);
 }
 function animFindPivot(action) {
     if(action==='reset'){clearInterval(fpState.timer);fpState.playing=false;initFindPivot();return;}
@@ -21807,62 +22445,266 @@ function animContArray(action) {
     if(action==='play'){if(caState.playing){clearInterval(caState.timer);caState.playing=false;return;}caState.playing=true;caState.timer=setInterval(()=>{caState.step++;if(caState.step>=caState.snapshots.length){clearInterval(caState.timer);caState.playing=false;return;}renderContArray();},900);}
 }
 
-// ===== MAX SIZE SUBARRAY SUM EQUALS K ANIMATION =====
+// ===== MAX SIZE SUBARRAY SUM EQUALS K ANIMATION (LC 325) =====
 const mskState = createAnimState();
-const mskArr = [1,-1,5,-2,3], mskK = 3;
-function initMaxSizeK() {
-    const c = document.getElementById('maxsizek-array');
-    c.innerHTML = mskArr.map((v,i)=>`<div class="array-cell" id="msk-${i}">${v}<span class="idx">${i}</span></div>`).join('');
-    mskState.step = -1; mskState.snapshots = [];
+const mskArr = [1, -1, 5, -2, 3];
+const mskK = 3;
+
+const maxsizekIntro = `Click <strong>Step</strong> or <strong>Play</strong>. The table is the <strong>map</strong>: each prefix sum → the <em>first</em> index where it appeared. When <code>sum − k</code> is in the map, candidate length is <code>i − map.get(sum − k)</code>.`;
+
+function renderMaxSizeKMapPanel(map, highlightKey) {
+    const tbody = document.getElementById('maxsizek-map-tbody');
+    if (!tbody) return;
+    const entries = Object.entries(map).sort((a, b) => Number(a[0]) - Number(b[0]));
+    const hk = highlightKey != null && highlightKey !== '' ? Number(highlightKey) : null;
+    if (!entries.length) {
+        tbody.innerHTML = '<tr><td colspan="2" class="prefixsum-map-empty">(no entries)</td></tr>';
+        return;
+    }
+    tbody.innerHTML = entries
+        .map(([k, v]) => {
+            const keyNum = Number(k);
+            const hit = hk !== null && !Number.isNaN(hk) && keyNum === hk;
+            return `<tr class="${hit ? 'prefixsum-map-row-hit' : ''}"><td>${k}</td><td>${v}</td></tr>`;
+        })
+        .join('');
+}
+
+function buildMaxSizeKSnapshots() {
     const s = mskState.snapshots;
-    let map = {0:-1}, maxLen = 0, sum = 0;
-    s.push({cur:-1,sum:0,maxLen:0,map:{...map},lines:[0],msg:'Call <code>maxSubArrayLen(nums, 3)</code>.'});
-    s.push({cur:-1,sum:0,maxLen:0,map:{...map},lines:[1],msg:'<code>Map map = new HashMap()</code>.'});
-    s.push({cur:-1,sum:0,maxLen:0,map:{...map},lines:[2],msg:'<code>map.put(0, -1)</code>.'});
-    s.push({cur:-1,sum:0,maxLen:0,map:{...map},lines:[3],msg:'<code>int maxLen=0, sum=0</code>.'});
+    let map = { 0: -1 };
+    let maxLen = 0;
+    let sum = 0;
+    s.push({
+        cur: -1,
+        sum: 0,
+        maxLen: 0,
+        map: { ...map },
+        mapHighlight: null,
+        target: null,
+        rangeLo: null,
+        rangeHi: null,
+        lines: [0],
+        msg: `Call <code>maxSubArrayLen(nums, ${mskK})</code> on <code>[${mskArr.join(', ')}]</code>.`,
+        commentary: `<strong>Goal:</strong> longest subarray with sum exactly <strong>${mskK}</strong>. Store <code>map[prefixSum] = earliest index</code> so a hit on <code>sum − k</code> gives length <code>i − storedIndex</code>.`
+    });
+    s.push({ cur: -1, sum: 0, maxLen: 0, map: { ...map }, mapHighlight: null, target: null, rangeLo: null, rangeHi: null, lines: [1], msg: '<code>Map map = new HashMap()</code>.' });
+    s.push({
+        cur: -1,
+        sum: 0,
+        maxLen: 0,
+        map: { ...map },
+        mapHighlight: null,
+        target: null,
+        rangeLo: null,
+        rangeHi: null,
+        lines: [2],
+        msg: '<code>map.put(0, -1)</code> — prefix sum <strong>0</strong> “before” index 0 so a subarray starting at 0 can be measured.',
+        commentary: 'Index <strong>−1</strong> is a sentinel: if later <code>sum === k</code>, length is <code>i − (−1) = i + 1</code>, i.e. the whole prefix <code>0..i</code>.'
+    });
+    s.push({ cur: -1, sum: 0, maxLen: 0, map: { ...map }, mapHighlight: null, target: null, rangeLo: null, rangeHi: null, lines: [3], msg: '<code>int maxLen = 0, sum = 0</code>.' });
     for (let i = 0; i < mskArr.length; i++) {
-        s.push({cur:i,sum,maxLen,map:{...map},lines:[4],msg:`<code>for</code>: i=${i} &lt; ${mskArr.length} → true.`});
+        s.push({
+            cur: i,
+            sum,
+            maxLen,
+            map: { ...map },
+            mapHighlight: null,
+            target: null,
+            rangeLo: null,
+            rangeHi: null,
+            lines: [4],
+            msg: `<strong>Index <code>${i}</code>:</strong> <code>nums[${i}] = ${mskArr[i]}</code>.`
+        });
         sum += mskArr[i];
-        s.push({cur:i,sum,maxLen,map:{...map},lines:[5],msg:`<code>sum += nums[${i}]</code> = ${mskArr[i]}. sum=${sum}.`});
-        let target = sum - mskK;
+        const target = sum - mskK;
+        s.push({
+            cur: i,
+            sum,
+            maxLen,
+            map: { ...map },
+            mapHighlight: null,
+            target,
+            rangeLo: null,
+            rangeHi: null,
+            lines: [5],
+            msg: `<code>sum += nums[${i}]</code> → running prefix <code>sum = ${sum}</code>. Look up <code>sum − k</code> = <strong>${sum} − ${mskK} = ${target}</strong>.`
+        });
         if (map[target] !== undefined) {
-            let oldMax = maxLen;
+            const oldMax = maxLen;
+            const startIdx = map[target];
             maxLen = Math.max(maxLen, i - map[target]);
-            s.push({cur:i,sum,maxLen,map:{...map},lines:[6],msg:`<code>map.containsKey(sum-k=${target})</code> → true (at index ${map[target]}).`});
-            s.push({cur:i,sum,maxLen,map:{...map},lines:[7],msg:`<code>maxLen = Math.max(${oldMax}, ${i}-${map[target]}=${i-map[target]})</code> = ${maxLen}.`});
+            s.push({
+                cur: i,
+                sum,
+                maxLen,
+                map: { ...map },
+                mapHighlight: target,
+                target,
+                rangeLo: startIdx + 1,
+                rangeHi: i,
+                lines: [6],
+                msg: `<code>map.containsKey(${target})</code> → <strong>yes</strong> (first seen at index <strong>${startIdx}</strong>). Subarray from <strong>${startIdx + 1}</strong> to <strong>${i}</strong> sums to <code>${mskK}</code>.`,
+                commentary: '<strong>Why length works:</strong> prefix up to <code>startIdx</code> plus the subarray after it equals prefix up to <code>i</code>. Subtracting the two prefix positions leaves exactly the window sum <code>k</code>.'
+            });
+            s.push({
+                cur: i,
+                sum,
+                maxLen,
+                map: { ...map },
+                mapHighlight: target,
+                target,
+                rangeLo: startIdx + 1,
+                rangeHi: i,
+                lines: [7],
+                msg: `<code>maxLen = max(${oldMax}, ${i} − ${startIdx})</code> = <strong>${maxLen}</strong>.`
+            });
         } else {
-            s.push({cur:i,sum,maxLen,map:{...map},lines:[6],msg:`<code>map.containsKey(sum-k=${target})</code> → false.`});
+            s.push({
+                cur: i,
+                sum,
+                maxLen,
+                map: { ...map },
+                mapHighlight: target,
+                target,
+                rangeLo: null,
+                rangeHi: null,
+                lines: [6],
+                msg: `<code>map.containsKey(${target})</code> → <strong>no</strong> — no earlier prefix with sum <code>${target}</code>, so no subarray ending at <strong>${i}</strong> sums to <code>${mskK}</code>.`
+            });
         }
         if (map[sum] === undefined) {
-            s.push({cur:i,sum,maxLen,map:{...map},lines:[8],msg:`<code>!map.containsKey(${sum})</code> → true.`});
+            s.push({
+                cur: i,
+                sum,
+                maxLen,
+                map: { ...map },
+                mapHighlight: null,
+                target,
+                rangeLo: null,
+                rangeHi: null,
+                lines: [8],
+                msg: `<code>!map.containsKey(${sum})</code> → <strong>true</strong> — record first occurrence of this prefix sum.`
+            });
             map[sum] = i;
-            s.push({cur:i,sum,maxLen,map:{...map},lines:[9],msg:`<code>map.put(${sum}, ${i})</code>.`});
+            s.push({
+                cur: i,
+                sum,
+                maxLen,
+                map: { ...map },
+                mapHighlight: null,
+                target,
+                rangeLo: null,
+                rangeHi: null,
+                lines: [9],
+                msg: `<code>map.put(${sum}, ${i})</code>.`
+            });
         } else {
-            s.push({cur:i,sum,maxLen,map:{...map},lines:[8],msg:`<code>!map.containsKey(${sum})</code> → false. Keep earliest index.`});
+            s.push({
+                cur: i,
+                sum,
+                maxLen,
+                map: { ...map },
+                mapHighlight: null,
+                target,
+                rangeLo: null,
+                rangeHi: null,
+                lines: [8],
+                msg: `<code>!map.containsKey(${sum})</code> → <strong>false</strong> — keep the <em>earlier</em> index for <code>${sum}</code> (longer window if we hit later).`
+            });
         }
     }
-    s.push({cur:-1,sum,maxLen,map:{...map},lines:[11],msg:`<code>return maxLen</code> = ${maxLen}. Done!`});
+    s.push({
+        cur: -1,
+        sum,
+        maxLen,
+        map: { ...map },
+        mapHighlight: null,
+        target: null,
+        rangeLo: null,
+        rangeHi: null,
+        lines: [11],
+        msg: `<code>return maxLen</code> → <strong>${maxLen}</strong> (subarray <code>[1,-1,5,-2]</code> has sum ${mskK} and length 4).`,
+        commentary: `<strong>Answer: ${maxLen}.</strong> One pass, map size O(n).`
+    });
+}
+
+function initMaxSizeK() {
+    const c = document.getElementById('maxsizek-array');
+    c.innerHTML = mskArr.map((v, i) => `<div class="array-cell" id="msk-${i}">${v}<span class="idx">${i}</span></div>`).join('');
+    mskState.step = -1;
+    mskState.snapshots = [];
+    buildMaxSizeKSnapshots();
     document.getElementById('maxsizek-info').textContent = 'Click Play or Step to start';
-    document.getElementById('maxsizek-result').textContent = 'sum=0 | maxLen=0 | map={0:-1}';
+    document.getElementById('maxsizek-result').textContent = `sum=0 | maxLen=0 | k=${mskK} | map={0:-1}`;
+    renderMaxSizeKMapPanel({ 0: -1 }, null);
+    updateSlidingCommentary('maxsizek', mskState, [], -1, maxsizekIntro);
     highlightLines('code-maxsizek', []);
 }
+
 function renderMaxSizeK() {
     const st = mskState.step;
-    if (st < 0) { initMaxSizeK(); return; }
-    const snap = mskState.snapshots[Math.min(st, mskState.snapshots.length-1)];
-    mskArr.forEach((v,i)=>{const el=document.getElementById(`msk-${i}`);el.className='array-cell';if(i===snap.cur)el.classList.add('current');});
-    document.getElementById('maxsizek-info').innerHTML = snap.msg + `<span class="step-counter">Step ${st+1}/${mskState.snapshots.length}</span>`;
-    document.getElementById('maxsizek-result').textContent = `sum=${snap.sum} | maxLen=${snap.maxLen}`;
+    if (st < 0) {
+        initMaxSizeK();
+        return;
+    }
+    const snap = mskState.snapshots[Math.min(st, mskState.snapshots.length - 1)];
+    mskArr.forEach((v, i) => {
+        const el = document.getElementById(`msk-${i}`);
+        el.className = 'array-cell';
+        if (snap.cur === i) el.classList.add('current');
+        if (snap.rangeLo != null && snap.rangeHi != null && i >= snap.rangeLo && i <= snap.rangeHi) el.classList.add('found');
+    });
+    document.getElementById('maxsizek-info').innerHTML = snap.msg + `<span class="step-counter">Step ${st + 1}/${mskState.snapshots.length}</span>`;
+    const mapStr = Object.entries(snap.map)
+        .sort((a, b) => Number(a[0]) - Number(b[0]))
+        .map(([k, v]) => `${k}:${v}`)
+        .join(', ');
+    document.getElementById('maxsizek-result').textContent = `sum=${snap.sum} | maxLen=${snap.maxLen} | k=${mskK} | map={${mapStr}}`;
+    const hk = snap.mapHighlight != null && snap.mapHighlight !== undefined ? snap.mapHighlight : null;
+    renderMaxSizeKMapPanel(snap.map, hk);
     highlightLines('code-maxsizek', getMaxSizeKLines(snap));
+    updateSlidingCommentary('maxsizek', mskState, mskState.snapshots, st, maxsizekIntro);
 }
+
 function animMaxSizeK(action) {
-    if(action==='reset'){clearInterval(mskState.timer);mskState.playing=false;initMaxSizeK();return;}
-    if(action==='prev'){mskState.step=Math.max(0,mskState.step-1);renderMaxSizeK();return;}
-    if(action==='step'){mskState.step=Math.min(mskState.step+1,mskState.snapshots.length-1);renderMaxSizeK();return;}
-    if(action==='play'){if(mskState.playing){clearInterval(mskState.timer);mskState.playing=false;return;}mskState.playing=true;mskState.timer=setInterval(()=>{mskState.step++;if(mskState.step>=mskState.snapshots.length){clearInterval(mskState.timer);mskState.playing=false;return;}renderMaxSizeK();},900);}
+    if (action === 'reset') {
+        clearInterval(mskState.timer);
+        mskState.playing = false;
+        initMaxSizeK();
+        return;
+    }
+    if (action === 'prev') {
+        mskState.step = Math.max(0, mskState.step - 1);
+        renderMaxSizeK();
+        return;
+    }
+    if (action === 'step') {
+        mskState.step = Math.min(mskState.step + 1, mskState.snapshots.length - 1);
+        renderMaxSizeK();
+        return;
+    }
+    if (action === 'play') {
+        if (mskState.playing) {
+            clearInterval(mskState.timer);
+            mskState.playing = false;
+            return;
+        }
+        mskState.playing = true;
+        mskState.timer = setInterval(() => {
+            mskState.step++;
+            if (mskState.step >= mskState.snapshots.length) {
+                clearInterval(mskState.timer);
+                mskState.playing = false;
+                return;
+            }
+            renderMaxSizeK();
+        }, 1000);
+    }
 }
 
 // ===== SUBARRAY SUMS DIVISIBLE BY K ANIMATION =====
+const divbykIntro = '<p>Follow the <strong>running remainder</strong> (prefix sum mod k) and the <strong>frequency map</strong>. Each time a remainder repeats, every earlier occurrence starts one new subarray whose sum is divisible by k.</p>';
 const dbkState = createAnimState();
 const dbkArr = [4,5,0,-2,-3,1], dbkK = 5;
 function initDivByK() {
@@ -21871,25 +22713,27 @@ function initDivByK() {
     dbkState.step = -1; dbkState.snapshots = [];
     const s = dbkState.snapshots;
     let map = {0:1}, sum = 0, count = 0;
-    s.push({cur:-1,sum:0,count:0,map:{...map},lines:[0],msg:'Call <code>subarraysDivByK(nums, 5)</code>.'});
-    s.push({cur:-1,sum:0,count:0,map:{...map},lines:[1],msg:'<code>Map map = new HashMap()</code>.'});
-    s.push({cur:-1,sum:0,count:0,map:{...map},lines:[2],msg:'<code>map.put(0, 1)</code>.'});
-    s.push({cur:-1,sum:0,count:0,map:{...map},lines:[3],msg:'<code>int sum=0, count=0</code>.'});
+    s.push({cur:-1,sum:0,count:0,map:{...map},mapHighlight:null,lines:[0],commentary:'<p><strong>Goal:</strong> Count subarrays whose sum is a multiple of k — without enumerating all subarrays.</p>',msg:`Call <code>subarraysDivByK(nums, ${dbkK})</code>.`});
+    s.push({cur:-1,sum:0,count:0,map:{...map},mapHighlight:0,lines:[1],msg:'<code>Map map = new HashMap()</code>.'});
+    s.push({cur:-1,sum:0,count:0,map:{...map},mapHighlight:0,lines:[2],commentary:'<p>We pretend there is an <strong>empty prefix</strong> with remainder 0 (count 1). That lets subarrays starting at index 0 count when the remainder returns to 0.</p>',msg:'<code>map.put(0, 1)</code>.'});
+    s.push({cur:-1,sum:0,count:0,map:{...map},mapHighlight:0,lines:[3],msg:'<code>int sum=0, count=0</code>.'});
     for (let idx = 0; idx < dbkArr.length; idx++) {
         let num = dbkArr[idx];
-        s.push({cur:idx,sum,count,map:{...map},lines:[4],msg:`<code>for</code>: num=nums[${idx}]=${num}.`});
+        s.push({cur:idx,sum,count,map:{...map},mapHighlight:null,lines:[4],msg:`<code>for</code>: num=nums[${idx}]=${num}.`});
         sum = ((sum + num) % dbkK + dbkK) % dbkK;
-        s.push({cur:idx,sum,count,map:{...map},lines:[5],msg:`<code>sum = ((sum+${num}) % ${dbkK} + ${dbkK}) % ${dbkK}</code> = ${sum}.`});
+        s.push({cur:idx,sum,count,map:{...map},mapHighlight:sum,lines:[5],commentary:`<p><strong>Update:</strong> extend the prefix by nums[${idx}]; normalized remainder is <strong>${sum}</strong> (always in <code>0..k-1</code> so negatives behave).</p>`,msg:`<code>sum = ((sum+${num}) % ${dbkK} + ${dbkK}) % ${dbkK}</code> = ${sum}.`});
         let prev = map[sum] || 0;
         count += prev;
-        s.push({cur:idx,sum,count,map:{...map},lines:[6],msg:`<code>count += map.getOrDefault(${sum}, 0)</code> = ${prev}. count=${count}.`});
+        s.push({cur:idx,sum,count,map:{...map},mapHighlight:sum,lines:[6],commentary:`<p><strong>Why count jumps:</strong> the map already had remainder <strong>${sum}</strong> → <strong>${prev}</strong> earlier prefix(s). Each pairs with the current end to form a subarray whose sum ≡ 0 (mod k).</p>`,msg:`<code>count += map.getOrDefault(${sum}, 0)</code> = ${prev}. count=${count}.`});
         map[sum] = (map[sum]||0) + 1;
-        s.push({cur:idx,sum,count,map:{...map},lines:[7],msg:`<code>map.put(${sum}, ${map[sum]})</code>.`});
+        s.push({cur:idx,sum,count,map:{...map},mapHighlight:sum,lines:[7],commentary:'<p><strong>Record</strong> this prefix’s remainder so future positions can pair with it.</p>',msg:`<code>map.put(${sum}, ${map[sum]})</code>.`});
     }
-    s.push({cur:-1,sum,count,map:{...map},lines:[9],msg:`<code>return count</code> = ${count}. Done!`});
+    s.push({cur:-1,sum,count,map:{...map},mapHighlight:null,lines:[9],commentary:`<p><strong>Answer:</strong> ${count} subarrays — every “remainder reunion” adds as many new valid windows as prior matches.</p>`,msg:`<code>return count</code> = ${count}. Done!`});
     document.getElementById('divbyk-info').textContent = 'Click Play or Step to start';
     document.getElementById('divbyk-result').textContent = 'sum=0 | count=0 | map={0:1}';
     highlightLines('code-divbyk', []);
+    renderIntegerMapTable('divbyk-map-tbody', {0:1}, null);
+    updateSlidingCommentary('divbyk', dbkState, [], -1, divbykIntro);
 }
 function renderDivByK() {
     const st = dbkState.step;
@@ -21899,6 +22743,13 @@ function renderDivByK() {
     document.getElementById('divbyk-info').innerHTML = snap.msg + `<span class="step-counter">Step ${st+1}/${dbkState.snapshots.length}</span>`;
     document.getElementById('divbyk-result').textContent = `sum%${dbkK}=${snap.sum} | count=${snap.count}`;
     highlightLines('code-divbyk', getDivByKLines(snap));
+    renderIntegerMapTable('divbyk-map-tbody', snap.map, snap.mapHighlight);
+    updateSlidingCommentary('divbyk', dbkState, dbkState.snapshots, st, divbykIntro);
+    let strip = '<strong>Watch:</strong> when the highlighted row in the map already has a count, that count is how many new divisible subarrays end at the current index.';
+    if (snap.lines && snap.lines.includes(6) && snap.cur >= 0) strip = `<strong>Cause → effect:</strong> remainder <code>${snap.sum}</code> was seen before in the map → add that many to <code>count</code> (each earlier prefix forms one valid subarray ending here).`;
+    else if (snap.lines && snap.lines.includes(5) && snap.cur >= 0) strip = `<strong>After adding nums[${snap.cur}]:</strong> running remainder is <code>${snap.sum}</code>. Next we ask how many earlier prefixes had this same remainder.`;
+    else if (snap.cur < 0) strip = '<strong>Mental model:</strong> two prefixes with the same remainder (mod k) differ by a multiple of k — the subarray between them is what we count.';
+    setVizFormulaStrip('divbyk-strip', strip);
 }
 function animDivByK(action) {
     if(action==='reset'){clearInterval(dbkState.timer);dbkState.playing=false;initDivByK();return;}
@@ -21908,6 +22759,7 @@ function animDivByK(action) {
 }
 
 // ===== CONTINUOUS SUBARRAY SUM ANIMATION =====
+const contsubsumIntro = '<p>We need a subarray of length <strong>≥ 2</strong> whose sum is a multiple of k. Matching <strong>remainders</strong> (mod k) mark two prefix endpoints; the gap is a candidate — we only keep the <strong>first</strong> index per remainder so distance is maximized.</p>';
 const cssState = createAnimState();
 const cssArr = [23,2,4,6,7], cssK = 6;
 function initContSubSum() {
@@ -21916,34 +22768,36 @@ function initContSubSum() {
     cssState.step = -1; cssState.snapshots = [];
     const s = cssState.snapshots;
     let map = {0:-1}, sum = 0;
-    s.push({cur:-1,sum:0,map:{...map},lines:[0],msg:'Call <code>checkSubarraySum(nums, 6)</code>.'});
-    s.push({cur:-1,sum:0,map:{...map},lines:[1],msg:'<code>Map map = new HashMap()</code>.'});
-    s.push({cur:-1,sum:0,map:{...map},lines:[2],msg:'<code>map.put(0, -1)</code>.'});
-    s.push({cur:-1,sum:0,map:{...map},lines:[3],msg:'<code>int sum = 0</code>.'});
+    s.push({cur:-1,sum:0,map:{...map},mapHighlight:null,lines:[0],commentary:'<p><strong>Goal:</strong> Is there a contiguous piece of length at least 2 whose sum ≡ 0 (mod k)?</p>',msg:`Call <code>checkSubarraySum(nums, ${cssK})</code>.`});
+    s.push({cur:-1,sum:0,map:{...map},mapHighlight:0,lines:[1],msg:'<code>Map map = new HashMap()</code>.'});
+    s.push({cur:-1,sum:0,map:{...map},mapHighlight:0,lines:[2],commentary:'<p>Map key <strong>0</strong> → index <strong>−1</strong> (“before the array”). That makes subarrays starting at index 0 behave like gaps from an imaginary prefix.</p>',msg:'<code>map.put(0, -1)</code>.'});
+    s.push({cur:-1,sum:0,map:{...map},mapHighlight:null,lines:[3],msg:'<code>int sum = 0</code>.'});
     let found = false;
     for (let i = 0; i < cssArr.length; i++) {
-        s.push({cur:i,sum,map:{...map},lines:[4],msg:`<code>for</code>: i=${i} &lt; ${cssArr.length} → true.`});
+        s.push({cur:i,sum,map:{...map},mapHighlight:null,lines:[4],msg:`<code>for</code>: i=${i} &lt; ${cssArr.length} → true.`});
         sum = ((sum + cssArr[i]) % cssK + cssK) % cssK;
-        s.push({cur:i,sum,map:{...map},lines:[5],msg:`<code>sum = ((sum+${cssArr[i]}) % ${cssK} + ${cssK}) % ${cssK}</code> = ${sum}.`});
+        s.push({cur:i,sum,map:{...map},mapHighlight:sum,lines:[5],commentary:`<p><strong>Prefix remainder</strong> after index ${i} is <strong>${sum}</strong>. If we saw this remainder before, the subarray strictly between those indices sums to a multiple of k.</p>`,msg:`<code>sum = ((sum+${cssArr[i]}) % ${cssK} + ${cssK}) % ${cssK}</code> = ${sum}.`});
         if (map[sum] !== undefined) {
             let dist = i - map[sum];
-            s.push({cur:i,sum,map:{...map},lines:[6],msg:`<code>map.containsKey(${sum})</code> → true (at index ${map[sum]}).`});
+            s.push({cur:i,sum,map:{...map},mapHighlight:sum,lines:[6],commentary:`<p><strong>Match:</strong> same remainder as at index <strong>${map[sum]}</strong> → candidate gap length = <strong>${dist}</strong>.</p>`,msg:`<code>map.containsKey(${sum})</code> → true (at index ${map[sum]}).`});
             if (dist >= 2) {
-                s.push({cur:i,sum,map:{...map},found:true,lines:[7],msg:`<code>if ${i} - ${map[sum]} = ${dist} &gt;= 2</code> → true. <code>return true</code>!`});
+                s.push({cur:i,sum,map:{...map},found:true,mapHighlight:sum,lines:[7],commentary:`<p><strong>Valid:</strong> length ${dist} ≥ 2, so we found a good subarray. The “trick” is purely: same mod → divisible sum between two prefixes.</p>`,msg:`<code>if ${i} - ${map[sum]} = ${dist} &gt;= 2</code> → true. <code>return true</code>!`});
                 found = true; break;
             } else {
-                s.push({cur:i,sum,map:{...map},lines:[7],msg:`<code>if ${dist} &gt;= 2</code> → false. Too short.`});
+                s.push({cur:i,sum,map:{...map},mapHighlight:sum,lines:[7],commentary:'<p>Remainder repeated but gap is only 1 element — problem asks length ≥ 2, so we skip updating the map (keep the earlier index).</p>',msg:`<code>if ${dist} &gt;= 2</code> → false. Too short.`});
             }
         } else {
-            s.push({cur:i,sum,map:{...map},lines:[6],msg:`<code>map.containsKey(${sum})</code> → false.`});
+            s.push({cur:i,sum,map:{...map},mapHighlight:sum,lines:[6],msg:`<code>map.containsKey(${sum})</code> → false.`});
             map[sum] = i;
-            s.push({cur:i,sum,map:{...map},lines:[9],msg:`<code>map.put(${sum}, ${i})</code>.`});
+            s.push({cur:i,sum,map:{...map},mapHighlight:sum,lines:[9],commentary:'<p><strong>First time</strong> this remainder appears — remember this index for future matches.</p>',msg:`<code>map.put(${sum}, ${i})</code>.`});
         }
     }
-    if (!found) s.push({cur:-1,sum,map:{...map},lines:[11],msg:'<code>return false</code>. No valid subarray found.'});
+    if (!found) s.push({cur:-1,sum,map:{...map},mapHighlight:null,lines:[11],commentary:'<p>No index pair gave a long enough multiple-of-k window.</p>',msg:'<code>return false</code>. No valid subarray found.'});
     document.getElementById('contsubsum-info').textContent = 'Click Play or Step to start';
     document.getElementById('contsubsum-result').textContent = 'sum%k=0 | map={0:-1}';
     highlightLines('code-contsubsum', []);
+    renderIntegerMapTable('contsubsum-map-tbody', {0:-1}, 0);
+    updateSlidingCommentary('contsubsum', cssState, [], -1, contsubsumIntro);
 }
 function renderContSubSum() {
     const st = cssState.step;
@@ -21953,6 +22807,12 @@ function renderContSubSum() {
     document.getElementById('contsubsum-info').innerHTML = snap.msg + `<span class="step-counter">Step ${st+1}/${cssState.snapshots.length}</span>`;
     document.getElementById('contsubsum-result').textContent = `sum%${cssK}=${snap.sum} | map={${Object.entries(snap.map).map(([k,v])=>k+':'+v).join(',')}}`;
     highlightLines('code-contsubsum', getContSubSumLines(snap));
+    renderIntegerMapTable('contsubsum-map-tbody', snap.map, snap.mapHighlight);
+    updateSlidingCommentary('contsubsum', cssState, cssState.snapshots, st, contsubsumIntro);
+    let strip = '<strong>Watch:</strong> a repeat remainder means “sum from after the old prefix to here” is ≡ 0 (mod k). Check length ≥ 2.';
+    if (snap.lines && snap.lines.includes(6) && snap.mapHighlight != null && snap.cur >= 0) strip = `<strong>Lookup:</strong> does remainder <code>${snap.sum}</code> exist in the map? If yes, compare index distance for the length rule.`;
+    if (snap.found) strip = '<strong>Found:</strong> two prefixes with the same remainder far enough apart → the subarray between them sums to a multiple of k with length ≥ 2.';
+    setVizFormulaStrip('contsubsum-strip', strip);
 }
 function animContSubSum(action) {
     if(action==='reset'){clearInterval(cssState.timer);cssState.playing=false;initContSubSum();return;}
@@ -21962,6 +22822,7 @@ function animContSubSum(action) {
 }
 
 // ===== MAKE SUM DIVISIBLE BY P ANIMATION =====
+const makesumdivIntro = '<p>Let <code>totalMod = (sum of whole array) mod p</code>. Removing a subarray subtracts its sum from the total. We need the remaining sum ≡ 0 (mod p), so the removed part must sum to ≡ <code>totalMod</code>. Prefix map finds the <strong>shortest</strong> such window using <code>need = (prefixMod − totalMod + p) % p</code>.</p>';
 const msdState = createAnimState();
 const msdArr = [3,1,4,2], msdP = 6;
 function initMakeSumDiv() {
@@ -21970,36 +22831,38 @@ function initMakeSumDiv() {
     msdState.step = -1; msdState.snapshots = [];
     const s = msdState.snapshots;
     let totalMod = msdArr.reduce((a,b)=>a+b,0) % msdP;
-    s.push({cur:-1,sum:0,minLen:msdArr.length,map:{},lines:[0],msg:'Call <code>minSubarray(nums, 6)</code>.'});
-    s.push({cur:-1,sum:0,minLen:msdArr.length,map:{},lines:[1],msg:'<code>int totalMod = 0</code>.'});
-    s.push({cur:-1,sum:0,minLen:msdArr.length,map:{},lines:[2],msg:`<code>for (num : nums) totalMod = (totalMod+num)%p</code>. totalMod=${totalMod}.`});
-    s.push({cur:-1,sum:0,minLen:msdArr.length,map:{},lines:[3],msg:`<code>if totalMod==0 return 0</code>: ${totalMod}==0 → false.`});
+    s.push({cur:-1,sum:0,minLen:msdArr.length,totalMod:null,map:{},mapHighlight:null,lines:[0],commentary:'<p><strong>Setup:</strong> we will compare “how much the whole array is off” vs prefix remainders to find a removable block.</p>',msg:`Call <code>minSubarray(nums, ${msdP})</code>.`});
+    s.push({cur:-1,sum:0,minLen:msdArr.length,totalMod:null,map:{},mapHighlight:null,lines:[1],msg:'<code>int totalMod = 0</code>.'});
+    s.push({cur:-1,sum:0,minLen:msdArr.length,totalMod,map:{},mapHighlight:null,lines:[2],commentary:`<p><strong>Whole array</strong> sums to something ≡ <strong>${totalMod}</strong> (mod p). Removing a subarray with sum ≡ ${totalMod} fixes divisibility.</p>`,msg:`<code>for (num : nums) totalMod = (totalMod+num)%p</code>. totalMod=${totalMod}.`});
+    s.push({cur:-1,sum:0,minLen:msdArr.length,totalMod,map:{},mapHighlight:null,lines:[3],msg:`<code>if totalMod==0 return 0</code>: ${totalMod}==0 → false.`});
     let map = {0:-1}, sum = 0, minLen = msdArr.length;
-    s.push({cur:-1,sum:0,minLen,map:{},lines:[4],msg:'<code>Map map = new HashMap()</code>.'});
-    s.push({cur:-1,sum:0,minLen,map:{...map},lines:[5],msg:'<code>map.put(0, -1)</code>.'});
-    s.push({cur:-1,sum:0,minLen,map:{...map},lines:[6],msg:'<code>int sum=0, minLen=nums.length</code>.'});
+    s.push({cur:-1,sum:0,minLen,totalMod,map:{},mapHighlight:null,lines:[4],msg:'<code>Map map = new HashMap()</code>.'});
+    s.push({cur:-1,sum:0,minLen,totalMod,map:{...map},mapHighlight:0,lines:[5],commentary:'<p>Map stores prefix remainder → index (same idea as subarray sum problems).</p>',msg:'<code>map.put(0, -1)</code>.'});
+    s.push({cur:-1,sum:0,minLen,totalMod,map:{...map},mapHighlight:null,lines:[6],msg:'<code>int sum=0, minLen=nums.length</code>.'});
     for (let i = 0; i < msdArr.length; i++) {
-        s.push({cur:i,sum,minLen,map:{...map},lines:[7],msg:`<code>for</code>: i=${i} &lt; ${msdArr.length} → true.`});
+        s.push({cur:i,sum,minLen,totalMod,map:{...map},mapHighlight:null,lines:[7],msg:`<code>for</code>: i=${i} &lt; ${msdArr.length} → true.`});
         sum = (sum + msdArr[i]) % msdP;
-        s.push({cur:i,sum,minLen,map:{...map},lines:[8],msg:`<code>sum = (sum+${msdArr[i]}) % ${msdP}</code> = ${sum}.`});
+        s.push({cur:i,sum,minLen,totalMod,map:{...map},mapHighlight:sum,lines:[8],commentary:`<p><strong>Running prefix</strong> mod p is now <strong>${sum}</strong>. We ask which earlier prefix to cut away so the removed segment sums to ≡ totalMod.</p>`,msg:`<code>sum = (sum+${msdArr[i]}) % ${msdP}</code> = ${sum}.`});
         let need = (sum - totalMod + msdP) % msdP;
-        s.push({cur:i,sum,minLen,map:{...map},lines:[9],msg:`<code>int need = (${sum}-${totalMod}+${msdP}) % ${msdP}</code> = ${need}.`});
+        s.push({cur:i,sum,minLen,totalMod,need,map:{...map},mapHighlight:need,lines:[9],commentary:`<p><strong>Why need?</strong> If prefix at j has remainder <code>need</code>, then sum(j+1..i) ≡ sum<sub>i</sub> − sum<sub>j</sub> ≡ totalMod — exactly the subarray we can remove.</p>`,msg:`<code>int need = (${sum}-${totalMod}+${msdP}) % ${msdP}</code> = ${need}.`});
         if (map[need] !== undefined) {
             let oldMin = minLen;
             minLen = Math.min(minLen, i - map[need]);
-            s.push({cur:i,sum,minLen,map:{...map},lines:[10],msg:`<code>map.containsKey(${need})</code> → true (at index ${map[need]}).`});
-            s.push({cur:i,sum,minLen,map:{...map},lines:[11],msg:`<code>minLen = Math.min(${oldMin}, ${i}-${map[need]}=${i-map[need]})</code> = ${minLen}.`});
+            s.push({cur:i,sum,minLen,totalMod,need,map:{...map},mapHighlight:need,lines:[10],commentary:`<p><strong>Hit:</strong> we saw remainder <code>${need}</code> at index <strong>${map[need]}</strong> → candidate removal length <strong>${i - map[need]}</strong>.</p>`,msg:`<code>map.containsKey(${need})</code> → true (at index ${map[need]}).`});
+            s.push({cur:i,sum,minLen,totalMod,need,map:{...map},mapHighlight:need,lines:[11],commentary:'<p>Keep the globally shortest valid removal window.</p>',msg:`<code>minLen = Math.min(${oldMin}, ${i}-${map[need]}=${i-map[need]})</code> = ${minLen}.`});
         } else {
-            s.push({cur:i,sum,minLen,map:{...map},lines:[10],msg:`<code>map.containsKey(${need})</code> → false.`});
+            s.push({cur:i,sum,minLen,totalMod,need,map:{...map},mapHighlight:need,lines:[10],msg:`<code>map.containsKey(${need})</code> → false.`});
         }
         map[sum] = i;
-        s.push({cur:i,sum,minLen,map:{...map},lines:[12],msg:`<code>map.put(${sum}, ${i})</code>.`});
+        s.push({cur:i,sum,minLen,totalMod,map:{...map},mapHighlight:sum,lines:[12],commentary:'<p>Record this prefix remainder for future <code>need</code> lookups.</p>',msg:`<code>map.put(${sum}, ${i})</code>.`});
     }
     let ans = minLen === msdArr.length ? -1 : minLen;
-    s.push({cur:-1,sum,minLen,map:{...map},lines:[14],msg:`<code>return ${minLen}==${msdArr.length} ? -1 : ${minLen}</code> = ${ans}. Done!`});
+    s.push({cur:-1,sum,minLen,totalMod,map:{...map},mapHighlight:null,lines:[14],commentary:`<p><strong>Result:</strong> shortest removable subarray has length <strong>${ans}</strong> (or −1 if impossible).</p>`,msg:`<code>return ${minLen}==${msdArr.length} ? -1 : ${minLen}</code> = ${ans}. Done!`});
     document.getElementById('makesumdiv-info').textContent = 'Click Play or Step to start';
     document.getElementById('makesumdiv-result').textContent = `totalMod=? | sum=0 | minLen=${msdArr.length}`;
     highlightLines('code-makesumdiv', []);
+    renderIntegerMapTable('makesumdiv-map-tbody', {}, null);
+    updateSlidingCommentary('makesumdiv', msdState, [], -1, makesumdivIntro);
 }
 function renderMakeSumDiv() {
     const st = msdState.step;
@@ -22007,8 +22870,15 @@ function renderMakeSumDiv() {
     const snap = msdState.snapshots[Math.min(st, msdState.snapshots.length-1)];
     msdArr.forEach((v,i)=>{const el=document.getElementById(`msd-${i}`);el.className='array-cell';if(i===snap.cur)el.classList.add('current');});
     document.getElementById('makesumdiv-info').innerHTML = snap.msg + `<span class="step-counter">Step ${st+1}/${msdState.snapshots.length}</span>`;
-    document.getElementById('makesumdiv-result').textContent = `sum%p=${snap.sum} | minLen=${snap.minLen}`;
+    const tm = snap.totalMod != null ? snap.totalMod : '?';
+    document.getElementById('makesumdiv-result').textContent = `totalMod=${tm} | sum%p=${snap.sum} | minLen=${snap.minLen}`;
     highlightLines('code-makesumdiv', getMakeSumDivLines(snap));
+    renderIntegerMapTable('makesumdiv-map-tbody', snap.map, snap.mapHighlight);
+    updateSlidingCommentary('makesumdiv', msdState, msdState.snapshots, st, makesumdivIntro);
+    let strip = '<strong>Formula tie-in:</strong> <code>need = (sum − totalMod + p) % p</code> picks the earlier prefix remainder such that the segment after it sums to what we must remove.';
+    if (snap.need != null && snap.lines && snap.lines.includes(9)) strip = `<strong>Visual:</strong> current prefix mod = <code>${snap.sum}</code>, totalMod = <code>${snap.totalMod}</code> → look up <code>need=${snap.need}</code> in the map (highlighted row).`;
+    else if (snap.totalMod != null && snap.cur < 0 && snap.lines && snap.lines[0] <= 3) strip = `<strong>Anchor:</strong> whole array ≡ <code>${snap.totalMod}</code> (mod p). Any removable block must sum to the same residue.`;
+    setVizFormulaStrip('makesumdiv-strip', strip);
 }
 function animMakeSumDiv(action) {
     if(action==='reset'){clearInterval(msdState.timer);msdState.playing=false;initMakeSumDiv();return;}
@@ -22018,6 +22888,7 @@ function animMakeSumDiv(action) {
 }
 
 // ===== RANGE SUM QUERY 2D ANIMATION =====
+const rangesum2dIntro = '<p>Build a table one cell larger (padding row/column of zeros). Each cell stores the sum of the <strong>rectangle from the top-left</strong> to that corner. A query subtracts three “outside” blocks and adds back the double-subtracted corner — classic 2D inclusion–exclusion.</p>';
 const rs2dState = createAnimState();
 const rs2dMat = [[1,2,3],[4,5,6],[7,8,9]];
 function initRangeSum2D() {
@@ -22026,24 +22897,26 @@ function initRangeSum2D() {
     rs2dState.step = -1; rs2dState.snapshots = [];
     const s = rs2dState.snapshots;
     let prefix = Array.from({length:4},()=>new Array(4).fill(0));
-    s.push({prefix:prefix.map(r=>[...r]),cur:[-1,-1],lines:[0],msg:'<code>int[][] prefix</code> declared.'});
-    s.push({prefix:prefix.map(r=>[...r]),cur:[-1,-1],lines:[1],msg:'<code>NumMatrix(matrix)</code> called.'});
-    s.push({prefix:prefix.map(r=>[...r]),cur:[-1,-1],lines:[2],msg:'<code>int m = matrix.length, n = matrix[0].length</code>. m=3, n=3.'});
-    s.push({prefix:prefix.map(r=>[...r]),cur:[-1,-1],lines:[3],msg:'<code>prefix = new int[m+1][n+1]</code> = new int[4][4].'});
+    s.push({phase:'init',prefix:prefix.map(r=>[...r]),cur:[-1,-1],lines:[0],commentary:'<p>We will fill a <strong>prefix sum grid</strong> so any axis-aligned rectangle sum becomes O(1).</p>',msg:'<code>int[][] prefix</code> declared.'});
+    s.push({phase:'init',prefix:prefix.map(r=>[...r]),cur:[-1,-1],lines:[1],msg:'<code>NumMatrix(matrix)</code> called.'});
+    s.push({phase:'init',prefix:prefix.map(r=>[...r]),cur:[-1,-1],lines:[2],msg:'<code>int m = matrix.length, n = matrix[0].length</code>. m=3, n=3.'});
+    s.push({phase:'init',prefix:prefix.map(r=>[...r]),cur:[-1,-1],lines:[3],msg:'<code>prefix = new int[m+1][n+1]</code> = new int[4][4].'});
     for (let i = 1; i <= 3; i++) {
         for (let j = 1; j <= 3; j++) {
-            s.push({prefix:prefix.map(r=>[...r]),cur:[i-1,j-1],lines:[4],msg:`<code>for</code>: i=${i} &lt;= 3 → true.`});
-            s.push({prefix:prefix.map(r=>[...r]),cur:[i-1,j-1],lines:[5],msg:`<code>for</code>: j=${j} &lt;= 3 → true.`});
+            s.push({phase:'build',prefix:prefix.map(r=>[...r]),cur:[i-1,j-1],lines:[4],msg:`<code>for</code>: i=${i} &lt;= 3 → true.`});
+            s.push({phase:'build',prefix:prefix.map(r=>[...r]),cur:[i-1,j-1],lines:[5],msg:`<code>for</code>: j=${j} &lt;= 3 → true.`});
             prefix[i][j] = rs2dMat[i-1][j-1] + prefix[i-1][j] + prefix[i][j-1] - prefix[i-1][j-1];
-            s.push({prefix:prefix.map(r=>[...r]),cur:[i-1,j-1],lines:[6],msg:`<code>prefix[${i}][${j}] = ${rs2dMat[i-1][j-1]}+${prefix[i-1][j]}+${prefix[i][j-1]}-${prefix[i-1][j-1]}</code> = ${prefix[i][j]}.`});
+            const isFirst = i === 1 && j === 1;
+            s.push({phase:'build',prefix:prefix.map(r=>[...r]),cur:[i-1,j-1],lines:[6],commentary: isFirst ? '<p><strong>Cell rule:</strong> add the cell’s value plus the prefix above and left, minus the top-left overlap (already counted twice).</p>' : undefined,msg:`<code>prefix[${i}][${j}] = ${rs2dMat[i-1][j-1]}+${prefix[i-1][j]}+${prefix[i][j-1]}-${prefix[i-1][j-1]}</code> = ${prefix[i][j]}.`});
         }
     }
-    s.push({prefix:prefix.map(r=>[...r]),cur:[-1,-1],lines:[8],msg:'Prefix sum built! Query: <code>sumRegion(1,1,2,2)</code>.'});
+    s.push({phase:'done',prefix:prefix.map(r=>[...r]),cur:[-1,-1],lines:[8],commentary:'<p>Query rectangle (1,1)–(2,2) in 0-based coordinates. On the prefix grid that is corners (2,2) down to (3,3) in 1-based padded indices.</p>',msg:'Prefix sum built! Query: <code>sumRegion(1,1,2,2)</code>.'});
     let ans = prefix[3][3] - prefix[1][3] - prefix[3][1] + prefix[1][1];
-    s.push({prefix:prefix.map(r=>[...r]),cur:[-1,-1],lines:[9],msg:`<code>prefix[3][3]-prefix[1][3]-prefix[3][1]+prefix[1][1]</code> = ${prefix[3][3]}-${prefix[1][3]}-${prefix[3][1]}+${prefix[1][1]} = ${ans}. Done!`});
+    s.push({phase:'query',prefix:prefix.map(r=>[...r]),cur:[-1,-1],lines:[9],commentary:`<p><strong>Inclusion–exclusion:</strong> big rectangle to (r2,c2) minus strips above and left of the query, plus the top-left corner cell that was subtracted twice → <strong>${ans}</strong>.</p>`,msg:`<code>prefix[3][3]-prefix[1][3]-prefix[3][1]+prefix[1][1]</code> = ${prefix[3][3]}-${prefix[1][3]}-${prefix[3][1]}+${prefix[1][1]} = ${ans}. Done!`});
     document.getElementById('rangesum2d-info').textContent = 'Click Play or Step to start';
     document.getElementById('rangesum2d-result').textContent = 'Building 2D prefix sum...';
     highlightLines('code-rangesum2d', []);
+    updateSlidingCommentary('rangesum2d', rs2dState, [], -1, rangesum2dIntro);
 }
 function renderRangeSum2D() {
     const st = rs2dState.step;
@@ -22053,6 +22926,11 @@ function renderRangeSum2D() {
     document.getElementById('rangesum2d-info').innerHTML = snap.msg + `<span class="step-counter">Step ${st+1}/${rs2dState.snapshots.length}</span>`;
     document.getElementById('rangesum2d-result').textContent = `prefix built: last row=[${snap.prefix[3].join(',')}]`;
     highlightLines('code-rangesum2d', getRangeSum2DLines(snap));
+    updateSlidingCommentary('rangesum2d', rs2dState, rs2dState.snapshots, st, rangesum2dIntro);
+    let strip = '<strong>While building:</strong> green cell = corner being filled; value = matrix + top + left − overlap.';
+    if (snap.phase === 'query') strip = '<strong>Query trick:</strong> answer = bottom-right prefix − two strips outside the rectangle + top-left patch (add back once). Same pattern as LC 304 / 1314.';
+    if (snap.phase === 'done') strip = '<strong>Next:</strong> we switch from “fill prefix” to “read a rectangle” using four prefix lookups.';
+    setVizFormulaStrip('rangesum2d-strip', strip);
 }
 function animRangeSum2D(action) {
     if(action==='reset'){clearInterval(rs2dState.timer);rs2dState.playing=false;initRangeSum2D();return;}
@@ -22062,6 +22940,7 @@ function animRangeSum2D(action) {
 }
 
 // ===== MATRIX BLOCK SUM ANIMATION =====
+const matblockIntro = '<p>Same 2D prefix idea as range sum: first build <code>prefix</code>. For each cell, the answer is the sum over a square neighborhood (clamped to the matrix). Read that rectangle with one inclusion–exclusion — no naive nested loops over the block.</p>';
 const mbState = createAnimState();
 const mbMat = [[1,2,3],[4,5,6],[7,8,9]], mbK_ = 1;
 function initMatBlock() {
@@ -22070,42 +22949,60 @@ function initMatBlock() {
     mbState.step = -1; mbState.snapshots = [];
     const s = mbState.snapshots;
     let prefix = Array.from({length:4},()=>new Array(4).fill(0));
-    s.push({result:null,cur:[-1,-1],lines:[0],msg:'Call <code>matrixBlockSum(mat, 1)</code>.'});
-    s.push({result:null,cur:[-1,-1],lines:[1],msg:'<code>int m = mat.length, n = mat[0].length</code>. m=3, n=3.'});
-    s.push({result:null,cur:[-1,-1],lines:[2],msg:'<code>int[][] prefix = new int[m+1][n+1]</code> = new int[4][4].'});
+    s.push({phase:'init',result:null,block:null,cur:[-1,-1],lines:[0],commentary:'<p><strong>Two phases:</strong> build prefix grid, then for each output cell sum the k-neighborhood via four prefix reads.</p>',msg:'Call <code>matrixBlockSum(mat, 1)</code>.'});
+    s.push({phase:'init',result:null,block:null,cur:[-1,-1],lines:[1],msg:'<code>int m = mat.length, n = mat[0].length</code>. m=3, n=3.'});
+    s.push({phase:'init',result:null,block:null,cur:[-1,-1],lines:[2],msg:'<code>int[][] prefix = new int[m+1][n+1]</code> = new int[4][4].'});
     for (let i = 1; i <= 3; i++) {
         for (let j = 1; j <= 3; j++) {
-            s.push({result:null,cur:[i-1,j-1],lines:[3],msg:`<code>for</code>: i=${i} &lt;= 3 → true.`});
-            s.push({result:null,cur:[i-1,j-1],lines:[4],msg:`<code>for</code>: j=${j} &lt;= 3 → true.`});
+            s.push({phase:'prefix',result:null,block:null,cur:[i-1,j-1],lines:[3],msg:`<code>for</code>: i=${i} &lt;= 3 → true.`});
+            s.push({phase:'prefix',result:null,block:null,cur:[i-1,j-1],lines:[4],msg:`<code>for</code>: j=${j} &lt;= 3 → true.`});
             prefix[i][j] = mbMat[i-1][j-1]+prefix[i-1][j]+prefix[i][j-1]-prefix[i-1][j-1];
-            s.push({result:null,cur:[i-1,j-1],lines:[5],msg:`<code>prefix[${i}][${j}] = ${mbMat[i-1][j-1]}+${prefix[i-1][j]}+${prefix[i][j-1]}-${prefix[i-1][j-1]}</code> = ${prefix[i][j]}.`});
+            const isFirst = i === 1 && j === 1;
+            s.push({phase:'prefix',result:null,block:null,cur:[i-1,j-1],lines:[5],commentary: isFirst ? '<p>Identical recurrence to LC 304 — each prefix cell is sum of the rectangle from the origin.</p>' : undefined,msg:`<code>prefix[${i}][${j}] = ${mbMat[i-1][j-1]}+${prefix[i-1][j]}+${prefix[i][j-1]}-${prefix[i-1][j-1]}</code> = ${prefix[i][j]}.`});
         }
     }
     let result = Array.from({length:3},()=>new Array(3).fill(0));
-    s.push({result:null,cur:[-1,-1],lines:[6],msg:'<code>int[][] result = new int[m][n]</code> = new int[3][3].'});
+    s.push({phase:'answer',result:null,block:null,cur:[-1,-1],lines:[6],commentary:'<p>Now each <code>result[i][j]</code> will become the sum of all mat cells within k of (i,j).</p>',msg:'<code>int[][] result = new int[m][n]</code> = new int[3][3].'});
     for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
             let r1=Math.max(0,i-mbK_),c1=Math.max(0,j-mbK_),r2=Math.min(2,i+mbK_),c2=Math.min(2,j+mbK_);
-            s.push({result:result.map(r=>[...r]),cur:[i,j],lines:[7],msg:`<code>for</code>: i=${i} &lt; 3 → true.`});
-            s.push({result:result.map(r=>[...r]),cur:[i,j],lines:[8],msg:`<code>for</code>: j=${j} &lt; 3 → true.`});
-            s.push({result:result.map(r=>[...r]),cur:[i,j],lines:[9],msg:`Bounds: r1=${r1}, c1=${c1}, r2=${r2}, c2=${c2}.`});
+            s.push({phase:'answer',result:result.map(r=>[...r]),block:{r1,c1,r2,c2},cur:[i,j],lines:[7],msg:`<code>for</code>: i=${i} &lt; 3 → true.`});
+            s.push({phase:'answer',result:result.map(r=>[...r]),block:{r1,c1,r2,c2},cur:[i,j],lines:[8],msg:`<code>for</code>: j=${j} &lt; 3 → true.`});
+            s.push({phase:'answer',result:result.map(r=>[...r]),block:{r1,c1,r2,c2},cur:[i,j],lines:[9],commentary:`<p><strong>Highlighted region</strong> on the matrix: rows ${r1}–${r2}, cols ${c1}–${c2} (clamped block around (${i},${j})).</p>`,msg:`Bounds: r1=${r1}, c1=${c1}, r2=${r2}, c2=${c2}.`});
             result[i][j] = prefix[r2+1][c2+1]-prefix[r1][c2+1]-prefix[r2+1][c1]+prefix[r1][c1];
-            s.push({result:result.map(r=>[...r]),cur:[i,j],lines:[10],msg:`<code>result[${i}][${j}] = ${prefix[r2+1][c2+1]}-${prefix[r1][c2+1]}-${prefix[r2+1][c1]}+${prefix[r1][c1]}</code> = ${result[i][j]}.`});
+            s.push({phase:'answer',result:result.map(r=>[...r]),block:{r1,c1,r2,c2},cur:[i,j],lines:[10],commentary:'<p>Four prefix lookups = sum of that rectangle — same algebra as a 2D range query.</p>',msg:`<code>result[${i}][${j}] = ${prefix[r2+1][c2+1]}-${prefix[r1][c2+1]}-${prefix[r2+1][c1]}+${prefix[r1][c1]}</code> = ${result[i][j]}.`});
         }
     }
-    s.push({result:result.map(r=>[...r]),cur:[-1,-1],lines:[12],msg:`<code>return result</code>. Done! result=[[${result[0]}],[${result[1]}],[${result[2]}]].`});
+    s.push({phase:'done',result:result.map(r=>[...r]),block:null,cur:[-1,-1],lines:[12],commentary:'<p>Every entry filled by one rectangle sum — that is why k can be large without blowing up time.</p>',msg:`<code>return result</code>. Done! result=[[${result[0]}],[${result[1]}],[${result[2]}]].`});
     document.getElementById('matblock-info').textContent = 'Click Play or Step to start';
     document.getElementById('matblock-result').textContent = 'Building prefix sum then querying blocks...';
     highlightLines('code-matblock', []);
+    updateSlidingCommentary('matblock', mbState, [], -1, matblockIntro);
 }
 function renderMatBlock() {
     const st = mbState.step;
     if (st < 0) { initMatBlock(); return; }
     const snap = mbState.snapshots[Math.min(st, mbState.snapshots.length-1)];
-    mbMat.flat().forEach((v,i)=>{const el=document.getElementById(`mb-${i}`);el.className='array-cell';el.style.width='50px';if(snap.cur[0]===Math.floor(i/3)&&snap.cur[1]===i%3)el.style.background='#fefcbf';else el.style.background='';});
+    mbMat.flat().forEach((v,i)=>{
+        const r = Math.floor(i/3), c = i % 3;
+        const el=document.getElementById(`mb-${i}`);
+        el.className='array-cell';
+        el.style.width='50px';
+        let bg = '';
+        if (snap.block && r >= snap.block.r1 && r <= snap.block.r2 && c >= snap.block.c1 && c <= snap.block.c2) {
+            bg = (r === snap.cur[0] && c === snap.cur[1]) ? '#faf089' : '#c6f6d5';
+        } else if (snap.cur[0] === r && snap.cur[1] === c) bg = '#fefcbf';
+        el.style.background = bg;
+    });
     document.getElementById('matblock-info').innerHTML = snap.msg + `<span class="step-counter">Step ${st+1}/${mbState.snapshots.length}</span>`;
     document.getElementById('matblock-result').textContent = snap.result?`result=[[${snap.result[0]}],[${snap.result[1]}],[${snap.result[2]}]]`:'Building prefix...';
     highlightLines('code-matblock', getMatBlockLines(snap));
+    updateSlidingCommentary('matblock', mbState, mbState.snapshots, st, matblockIntro);
+    let strip = '<strong>Yellow</strong> = current (i,j). <strong>Green</strong> = cells included in the block sum for that center (k=1 here).';
+    if (snap.phase === 'prefix') strip = '<strong>Phase 1:</strong> building the 2D prefix table cell by cell (same overlap fix as LC 304).';
+    if (snap.phase === 'answer' && snap.block) strip = `<strong>Phase 2:</strong> center (${snap.cur[0]},${snap.cur[1]}) → sum the highlighted rectangle via prefix[r2+1][c2+1] − strips + corner.`;
+    if (snap.phase === 'done') strip = '<strong>Done:</strong> each answer cell is one inclusion–exclusion read — O(1) per cell after O(mn) build.';
+    setVizFormulaStrip('matblock-strip', strip);
 }
 function animMatBlock(action) {
     if(action==='reset'){clearInterval(mbState.timer);mbState.playing=false;initMatBlock();return;}
@@ -22115,6 +23012,7 @@ function animMatBlock(action) {
 }
 
 // ===== RANGE ADDITION ANIMATION =====
+const rangeaddIntro = '<p>Instead of adding <code>val</code> to every index in <code>[start,end]</code>, mark <strong>+val</strong> at <code>start</code> and <strong>−val</strong> just past <code>end</code>. A left-to-right pass turns those “jumps” into the real final values — the classic <strong>difference array</strong>.</p>';
 const raState = createAnimState();
 const raLen = 5, raUpd = [[1,3,2],[2,4,3],[0,2,-2]];
 function initRangeAdd() {
@@ -22123,38 +23021,44 @@ function initRangeAdd() {
     raState.step = -1; raState.snapshots = [];
     const s = raState.snapshots;
     let diff = new Array(raLen).fill(0);
-    s.push({diff:[...diff],lines:[0],msg:'Call <code>getModifiedArray(5, updates)</code>.'});
-    s.push({diff:[...diff],lines:[1],msg:'<code>int[] diff = new int[5]</code> (all zeros).'});
+    s.push({phase:'init',diff:[...diff],scanIdx:null,lines:[0],commentary:'<p>We will show the <strong>diff</strong> array morph into the final array after a prefix sweep.</p>',msg:`Call <code>getModifiedArray(${raLen}, updates)</code>.`});
+    s.push({phase:'diff',diff:[...diff],scanIdx:null,lines:[1],commentary:'<p>All zeros — updates will only touch a few boundary cells first.</p>',msg:`<code>int[] diff = new int[${raLen}]</code> (all zeros).`});
     for (let ui = 0; ui < raUpd.length; ui++) {
         let u = raUpd[ui];
-        s.push({diff:[...diff],lines:[2],msg:`<code>for</code>: update [${u[0]},${u[1]},${u[2]}].`});
+        s.push({phase:'diff',diff:[...diff],scanIdx:u[0],lines:[2],commentary:`<p><strong>Range ${ui+1}:</strong> add ${u[2]} to indices ${u[0]}..${u[1]} — record only the edges of that interval on the diff line.</p>`,msg:`<code>for</code>: update [${u[0]},${u[1]},${u[2]}].`});
         diff[u[0]] += u[2];
-        s.push({diff:[...diff],lines:[3],msg:`<code>diff[${u[0]}] += ${u[2]}</code> = ${diff[u[0]]}.`});
+        s.push({phase:'diff',diff:[...diff],scanIdx:u[0],lines:[3],commentary:'<p><strong>Cause:</strong> from this index onward, running sum should increase — so stamp +val here.</p>',msg:`<code>diff[${u[0]}] += ${u[2]}</code> = ${diff[u[0]]}.`});
         if (u[1] + 1 < raLen) {
             diff[u[1]+1] -= u[2];
-            s.push({diff:[...diff],lines:[4],msg:`<code>diff[${u[1]+1}] -= ${u[2]}</code> = ${diff[u[1]+1]}. (${u[1]}+1=${u[1]+1} &lt; ${raLen})`});
+            s.push({phase:'diff',diff:[...diff],scanIdx:u[1]+1,lines:[4],commentary:'<p><strong>Effect:</strong> cancel the increment after the range ends — the “−val” cap turns a flat plateau into exactly one segment.</p>',msg:`<code>diff[${u[1]+1}] -= ${u[2]}</code> = ${diff[u[1]+1]}. (${u[1]}+1=${u[1]+1} &lt; ${raLen})`});
         } else {
-            s.push({diff:[...diff],lines:[4],msg:`<code>if ${u[1]+1} &lt; ${raLen}</code> → false. Skip.`});
+            s.push({phase:'diff',diff:[...diff],scanIdx:null,lines:[4],msg:`<code>if ${u[1]+1} &lt; ${raLen}</code> → false. Skip.`});
         }
     }
     for (let i = 1; i < raLen; i++) {
-        s.push({diff:[...diff],lines:[6],msg:`<code>for</code>: i=${i}.`});
+        s.push({phase:'prefix',diff:[...diff],scanIdx:i,lines:[6],commentary:'<p><strong>Prefix pass:</strong> each cell absorbs all boundary marks to its left — that materializes the range additions.</p>',msg:`<code>for</code>: i=${i}.`});
         diff[i] += diff[i-1];
-        s.push({diff:[...diff],lines:[7],msg:`<code>diff[${i}] += diff[${i-1}]</code> = ${diff[i]}.`});
+        s.push({phase:'prefix',diff:[...diff],scanIdx:i,lines:[7],msg:`<code>diff[${i}] += diff[${i-1}]</code> = ${diff[i]}.`});
     }
-    s.push({diff:[...diff],lines:[8],msg:`<code>return diff</code> = [${diff.join(',')}]. Done!`});
+    s.push({phase:'done',diff:[...diff],scanIdx:null,lines:[8],commentary:'<p>After the sweep, <code>diff</code> holds the final array — same pattern as flight bookings and car pooling.</p>',msg:`<code>return diff</code> = [${diff.join(',')}]. Done!`});
     document.getElementById('rangeadd-info').textContent = 'Click Play or Step to start';
     document.getElementById('rangeadd-result').textContent = 'diff = [0,0,0,0,0]';
     highlightLines('code-rangeadd', []);
+    updateSlidingCommentary('rangeadd', raState, [], -1, rangeaddIntro);
 }
 function renderRangeAdd() {
     const st = raState.step;
     if (st < 0) { initRangeAdd(); return; }
     const snap = raState.snapshots[Math.min(st, raState.snapshots.length-1)];
-    snap.diff.forEach((v,i)=>{const el=document.getElementById(`ra-${i}`);el.innerHTML=`${v}<span class="idx">${i}</span>`;el.className='array-cell';if(v!==0)el.style.background='#ebf4ff';else el.style.background='';});
+    snap.diff.forEach((v,i)=>{const el=document.getElementById(`ra-${i}`);el.innerHTML=`${v}<span class="idx">${i}</span>`;el.className='array-cell';let bg='';if(snap.scanIdx===i)bg='#faf089';else if(v!==0)bg='#ebf4ff';el.style.background=bg;el.style.boxShadow=snap.scanIdx===i?'0 0 0 2px #d69e2e':'none';});
     document.getElementById('rangeadd-info').innerHTML = snap.msg + `<span class="step-counter">Step ${st+1}/${raState.snapshots.length}</span>`;
     document.getElementById('rangeadd-result').textContent = `diff = [${snap.diff.join(',')}]`;
     highlightLines('code-rangeadd', getRangeAddLines(snap));
+    updateSlidingCommentary('rangeadd', raState, raState.snapshots, st, rangeaddIntro);
+    let strip = '<strong>Blue tint</strong> = non-zero diff marker. <strong>Gold outline</strong> = index being written or scanned.';
+    if (snap.phase === 'prefix') strip = '<strong>Prefix step:</strong> diff[i] += diff[i−1] spreads every earlier “step” to the right — that is how ranges become flat plateaus.';
+    if (snap.phase === 'done') strip = '<strong>Same trick family:</strong> LC 1109 (flights), 1094 (carpool), 370 — boundary marks + prefix = final timeline values.';
+    setVizFormulaStrip('rangeadd-strip', strip);
 }
 function animRangeAdd(action) {
     if(action==='reset'){clearInterval(raState.timer);raState.playing=false;initRangeAdd();return;}
@@ -22164,6 +23068,7 @@ function animRangeAdd(action) {
 }
 
 // ===== CORPORATE FLIGHT BOOKINGS ANIMATION =====
+const corpflightIntro = '<p>Think of each flight day as a slot on a line. A booking <code>[first, last, seats]</code> adds seats on every day from <code>first</code> through <code>last</code>. Mark <strong>+seats</strong> at day <code>first−1</code> (0-based) and <strong>−seats</strong> right after <code>last</code>, then prefix — same diff-array story as range addition.</p>';
 const cfState = createAnimState();
 const cfBook = [[1,2,10],[2,3,20],[2,5,25]], cfN = 5;
 function initCorpFlight() {
@@ -22172,34 +23077,40 @@ function initCorpFlight() {
     cfState.step = -1; cfState.snapshots = [];
     const s = cfState.snapshots;
     let diff = new Array(cfN+1).fill(0);
-    s.push({diff:[...diff],lines:[0],msg:'Call <code>corpFlightBookings(bookings, 5)</code>.'});
-    s.push({diff:[...diff],lines:[1],msg:'<code>int[] diff = new int[6]</code> (n+1).'});
+    s.push({phase:'init',diff:[...diff],scanIdx:null,lines:[0],commentary:'<p>Length <code>n+1</code> so we can place a cancel mark after the last flight without bounds issues.</p>',msg:`Call <code>corpFlightBookings(bookings, ${cfN})</code>.`});
+    s.push({phase:'diff',diff:[...diff],scanIdx:null,lines:[1],msg:'<code>int[] diff = new int[6]</code> (n+1).'});
     for (let bi = 0; bi < cfBook.length; bi++) {
         let b = cfBook[bi];
-        s.push({diff:[...diff],lines:[2],msg:`<code>for</code>: booking [${b[0]},${b[1]},${b[2]}].`});
+        s.push({phase:'diff',diff:[...diff],scanIdx:b[0]-1,lines:[2],commentary:`<p><strong>Booking ${bi+1}:</strong> flights ${b[0]}..${b[1]} each gain <strong>${b[2]}</strong> seats — two boundary updates only.</p>`,msg:`<code>for</code>: booking [${b[0]},${b[1]},${b[2]}].`});
         diff[b[0]-1] += b[2];
-        s.push({diff:[...diff],lines:[3],msg:`<code>diff[${b[0]-1}] += ${b[2]}</code> = ${diff[b[0]-1]}. (flight ${b[0]}, 0-indexed=${b[0]-1})`});
+        s.push({phase:'diff',diff:[...diff],scanIdx:b[0]-1,lines:[3],commentary:'<p><strong>Start</strong> of the active range (0-based index): add seats here so the prefix carries them forward.</p>',msg:`<code>diff[${b[0]-1}] += ${b[2]}</code> = ${diff[b[0]-1]}. (flight ${b[0]}, 0-indexed=${b[0]-1})`});
         diff[b[1]] -= b[2];
-        s.push({diff:[...diff],lines:[4],msg:`<code>diff[${b[1]}] -= ${b[2]}</code> = ${diff[b[1]]}.`});
+        s.push({phase:'diff',diff:[...diff],scanIdx:b[1],lines:[4],commentary:'<p><strong>Day after last</strong> included flight: subtract to stop the running total — mirrors “end+1” in range addition.</p>',msg:`<code>diff[${b[1]}] -= ${b[2]}</code> = ${diff[b[1]]}.`});
     }
     for (let i = 1; i < cfN; i++) {
-        s.push({diff:[...diff],lines:[6],msg:`<code>for</code>: i=${i}.`});
+        s.push({phase:'prefix',diff:[...diff],scanIdx:i,lines:[6],commentary:'<p>Prefix along days turns boundary marks into per-day seat totals.</p>',msg:`<code>for</code>: i=${i}.`});
         diff[i] += diff[i-1];
-        s.push({diff:[...diff],lines:[7],msg:`<code>diff[${i}] += diff[${i-1}]</code> = ${diff[i]}.`});
+        s.push({phase:'prefix',diff:[...diff],scanIdx:i,lines:[7],msg:`<code>diff[${i}] += diff[${i-1}]</code> = ${diff[i]}.`});
     }
-    s.push({diff:[...diff],lines:[8],msg:`<code>return</code> [${diff.slice(0,cfN).join(',')}]. Done!`});
+    s.push({phase:'done',diff:[...diff],scanIdx:null,lines:[8],commentary:'<p>First <code>n</code> cells are answers; extra cell was only a sentinel for cancellations.</p>',msg:`<code>return</code> [${diff.slice(0,cfN).join(',')}]. Done!`});
     document.getElementById('corpflight-info').textContent = 'Click Play or Step to start';
     document.getElementById('corpflight-result').textContent = 'diff = [0,0,0,0,0,0]';
     highlightLines('code-corpflight', []);
+    updateSlidingCommentary('corpflight', cfState, [], -1, corpflightIntro);
 }
 function renderCorpFlight() {
     const st = cfState.step;
     if (st < 0) { initCorpFlight(); return; }
     const snap = cfState.snapshots[Math.min(st, cfState.snapshots.length-1)];
-    snap.diff.forEach((v,i)=>{const el=document.getElementById(`cf-${i}`);el.innerHTML=`${v}<span class="idx">${i}</span>`;el.className='array-cell';if(v!==0)el.style.background='#ebf4ff';else el.style.background='';});
+    snap.diff.forEach((v,i)=>{const el=document.getElementById(`cf-${i}`);el.innerHTML=`${v}<span class="idx">${i}</span>`;el.className='array-cell';let bg='';if(snap.scanIdx===i)bg='#faf089';else if(v!==0)bg='#ebf4ff';el.style.background=bg;el.style.boxShadow=snap.scanIdx===i?'0 0 0 2px #d69e2e':'none';});
     document.getElementById('corpflight-info').innerHTML = snap.msg + `<span class="step-counter">Step ${st+1}/${cfState.snapshots.length}</span>`;
     document.getElementById('corpflight-result').textContent = `diff = [${snap.diff.join(',')}]`;
     highlightLines('code-corpflight', getCorpFlightLines(snap));
+    updateSlidingCommentary('corpflight', cfState, cfState.snapshots, st, corpflightIntro);
+    let strip = '<strong>Gold</strong> = boundary being updated. After all bookings, the prefix pass reveals seats per day.';
+    if (snap.phase === 'prefix') strip = '<strong>Why prefix?</strong> Each +seats “starts a plateau”; −seats ends it. Walking left-to-right yields the height (seats) each day.';
+    if (snap.phase === 'done') strip = '<strong>Same core as LC 370:</strong> range add on a timeline; flights are just labeled days.';
+    setVizFormulaStrip('corpflight-strip', strip);
 }
 function animCorpFlight(action) {
     if(action==='reset'){clearInterval(cfState.timer);cfState.playing=false;initCorpFlight();return;}
@@ -22209,6 +23120,7 @@ function animCorpFlight(action) {
 }
 
 // ===== CAR POOLING ANIMATION =====
+const carpoolIntro = '<p>Each trip adds people at pick-up stop and removes them at drop-off (they leave when the car reaches the drop-off). A <strong>diff on stops</strong> records those events; scanning stops while accumulating passengers checks capacity — same “boundary + prefix” intuition as bookings, but we compare load to <code>capacity</code> instead of printing totals.</p>';
 const cpState = createAnimState();
 const cpTrips = [[2,1,5],[3,3,7]], cpCap = 5;
 function initCarPool() {
@@ -22218,44 +23130,50 @@ function initCarPool() {
     cpState.step = -1; cpState.snapshots = [];
     const s = cpState.snapshots;
     let diff = new Array(maxStop).fill(0);
-    s.push({diff:[...diff],passengers:0,lines:[0],msg:'Call <code>carPooling(trips, 5)</code>.'});
-    s.push({diff:[...diff],passengers:0,lines:[1],msg:'<code>int[] diff = new int[1001]</code>.'});
+    s.push({phase:'init',diff:[...diff],passengers:0,stopIdx:null,lines:[0],commentary:'<p>We only need enough stops to cover the demo trips; pink/green cells will show pick-ups and drop-offs.</p>',msg:`Call <code>carPooling(trips, ${cpCap})</code>.`});
+    s.push({phase:'diff',diff:[...diff],passengers:0,stopIdx:null,lines:[1],msg:'<code>int[] diff = new int[1001]</code>.'});
     for (let ti = 0; ti < cpTrips.length; ti++) {
         let t = cpTrips[ti];
-        s.push({diff:[...diff],passengers:0,lines:[2],msg:`<code>for</code>: trip [${t[0]},${t[1]},${t[2]}] (${t[0]} passengers, ${t[1]}→${t[2]}).`});
+        s.push({phase:'diff',diff:[...diff],passengers:0,stopIdx:t[1],lines:[2],commentary:`<p><strong>Trip ${ti+1}:</strong> ${t[0]} people board before driving from stop ${t[1]}; they all leave by stop ${t[2]}.</p>`,msg:`<code>for</code>: trip [${t[0]},${t[1]},${t[2]}] (${t[0]} passengers, ${t[1]}→${t[2]}).`});
         diff[t[1]] += t[0];
-        s.push({diff:[...diff],passengers:0,lines:[3],msg:`<code>diff[${t[1]}] += ${t[0]}</code> = ${diff[t[1]]}. Pick up at stop ${t[1]}.`});
+        s.push({phase:'diff',diff:[...diff],passengers:0,stopIdx:t[1],lines:[3],commentary:'<p><strong>Pick-up edge:</strong> +passengers at <code>from</code> — load increases when we reach this stop.</p>',msg:`<code>diff[${t[1]}] += ${t[0]}</code> = ${diff[t[1]]}. Pick up at stop ${t[1]}.`});
         diff[t[2]] -= t[0];
-        s.push({diff:[...diff],passengers:0,lines:[4],msg:`<code>diff[${t[2]}] -= ${t[0]}</code> = ${diff[t[2]]}. Drop off at stop ${t[2]}.`});
+        s.push({phase:'diff',diff:[...diff],passengers:0,stopIdx:t[2],lines:[4],commentary:'<p><strong>Drop-off edge:</strong> −passengers at <code>to</code> — they exit when we arrive here (not after completing the leg).</p>',msg:`<code>diff[${t[2]}] -= ${t[0]}</code> = ${diff[t[2]]}. Drop off at stop ${t[2]}.`});
     }
     let passengers = 0;
-    s.push({diff:[...diff],passengers:0,lines:[5],msg:'<code>int passengers = 0</code>.'});
+    s.push({phase:'scan',diff:[...diff],passengers:0,stopIdx:null,lines:[5],commentary:'<p>Now walk stops in order: running sum of <code>diff</code> equals people on board between events.</p>',msg:'<code>int passengers = 0</code>.'});
     let failed = false;
     for (let i = 0; i < maxStop; i++) {
         if (diff[i] === 0 && i > 0) continue;
-        s.push({diff:[...diff],passengers,lines:[6],msg:`<code>for</code>: stop ${i}, diff[${i}]=${diff[i]}.`});
+        s.push({phase:'scan',diff:[...diff],passengers,stopIdx:i,lines:[6],msg:`<code>for</code>: stop ${i}, diff[${i}]=${diff[i]}.`});
         passengers += diff[i];
-        s.push({diff:[...diff],passengers,lines:[7],msg:`<code>passengers += ${diff[i]}</code> = ${passengers}.`});
+        s.push({phase:'scan',diff:[...diff],passengers,stopIdx:i,lines:[7],commentary:`<p><strong>Load after stop ${i}:</strong> add the event at this stop to the running total.</p>`,msg:`<code>passengers += ${diff[i]}</code> = ${passengers}.`});
         if (passengers > cpCap) {
-            s.push({diff:[...diff],passengers,lines:[8],msg:`<code>if ${passengers} &gt; ${cpCap}</code> → true. <code>return false</code>!`});
+            s.push({phase:'scan',diff:[...diff],passengers,stopIdx:i,lines:[8],commentary:`<p><strong>Violation:</strong> need ${passengers} seats but capacity is ${cpCap} → schedule impossible.</p>`,msg:`<code>if ${passengers} &gt; ${cpCap}</code> → true. <code>return false</code>!`});
             failed = true; break;
         } else {
-            s.push({diff:[...diff],passengers,lines:[8],msg:`<code>if ${passengers} &gt; ${cpCap}</code> → false. OK.`});
+            s.push({phase:'scan',diff:[...diff],passengers,stopIdx:i,lines:[8],msg:`<code>if ${passengers} &gt; ${cpCap}</code> → false. OK.`});
         }
     }
-    if (!failed) s.push({diff:[...diff],passengers,lines:[10],msg:'<code>return true</code>. All passengers fit! Done!'});
+    if (!failed) s.push({phase:'done',diff:[...diff],passengers,stopIdx:null,lines:[10],commentary:'<p>Never exceeded capacity — diff timeline + prefix check succeeded.</p>',msg:'<code>return true</code>. All passengers fit! Done!'});
     document.getElementById('carpool-info').textContent = 'Click Play or Step to start';
     document.getElementById('carpool-result').textContent = `diff = [0,...] | passengers = 0 | capacity = ${cpCap}`;
     highlightLines('code-carpool', []);
+    updateSlidingCommentary('carpool', cpState, [], -1, carpoolIntro);
 }
 function renderCarPool() {
     const st = cpState.step;
     if (st < 0) { initCarPool(); return; }
     const snap = cpState.snapshots[Math.min(st, cpState.snapshots.length-1)];
-    snap.diff.forEach((v,i)=>{const el=document.getElementById(`cp-${i}`);if(!el)return;el.innerHTML=`${v}<span class="idx">${i}</span>`;el.className='array-cell';if(v>0)el.style.background='#fed7d7';else if(v<0)el.style.background='#c6f6d5';else el.style.background='';});
+    snap.diff.forEach((v,i)=>{const el=document.getElementById(`cp-${i}`);if(!el)return;el.innerHTML=`${v}<span class="idx">${i}</span>`;el.className='array-cell';let bg='';if(snap.stopIdx===i)bg='#faf089';else if(v>0)bg='#fed7d7';else if(v<0)bg='#c6f6d5';el.style.background=bg;el.style.boxShadow=snap.stopIdx===i?'0 0 0 2px #d69e2e':'none';});
     document.getElementById('carpool-info').innerHTML = snap.msg + `<span class="step-counter">Step ${st+1}/${cpState.snapshots.length}</span>`;
     document.getElementById('carpool-result').textContent = `passengers=${snap.passengers} | capacity=${cpCap}`;
     highlightLines('code-carpool', getCarPoolLines(snap));
+    updateSlidingCommentary('carpool', cpState, cpState.snapshots, st, carpoolIntro);
+    let strip = '<strong>Red tint</strong> = pick-up (+), <strong>green</strong> = drop-off (−). <strong>Gold</strong> = stop being processed in the scan.';
+    if (snap.phase === 'scan') strip = '<strong>Scan story:</strong> walk stops 0..max; after each event application, if load &gt; capacity, return false — O(stops) after O(trips) marking.';
+    if (snap.lines && snap.lines.includes(8) && snap.passengers > cpCap) strip = '<strong>Why false here:</strong> after the second pick-up the car would need more than 5 seats — the diff timeline made that visible before any code.';
+    setVizFormulaStrip('carpool-strip', strip);
 }
 function animCarPool(action) {
     if(action==='reset'){clearInterval(cpState.timer);cpState.playing=false;initCarPool();return;}
@@ -24715,6 +25633,19 @@ function setupCollapsibleSections() {
         }
         if (solution) {
             wrapInCollapsible(solution, '\uD83D\uDCBB Optimised Solution / Pseudocode', 'solution');
+        }
+        const lc560Insight = card.querySelector('.lc560-collapsible-insight');
+        if (lc560Insight) {
+            wrapInCollapsible(
+                lc560Insight,
+                'Why are we doing prefixSum \u2212 k in the code?',
+                'lc560-insight'
+            );
+            const wrap = lc560Insight.parentElement;
+            if (wrap && wrap.classList.contains('collapsible-content')) {
+                const tgl = wrap.previousElementSibling;
+                if (tgl && tgl.classList.contains('collapsible-toggle')) tgl.classList.add('lc560-q-toggle');
+            }
         }
     });
 }

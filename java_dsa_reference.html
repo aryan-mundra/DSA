@@ -694,7 +694,7 @@ ArrayList&lt;String&gt; list = new ArrayList&lt;&gt;(Arrays.asList(array));
 int[] arr = {1, 2, 3};
 ArrayList&lt;Integer&gt; list = Arrays.stream(arr)
     .boxed()
-    .collect(Collectors.toCollection(ArrayList::new));</code></pre>
+    .collect(Collectors.toCollection(() -&gt; new ArrayList&lt;&gt;()));</code></pre>
 <h4>ArrayList &rarr; Array</h4>
 <pre><code>String[] array = list.toArray(new String[0]);
 
@@ -712,7 +712,7 @@ int[] array = list.stream().mapToInt(i -&gt; i).toArray();</code></pre>
 
 System.out.println(list);                     <span class="cmt">// [1, 2, 3, 4, 5]</span>
 list.forEach(num -&gt; System.out.println(num)); <span class="cmt">// each on new line</span>
-list.stream().forEach(System.out::println);   <span class="cmt">// method reference</span></code></pre>
+list.stream().forEach(n -&gt; System.out.println(n));   <span class="cmt">// lambda</span></code></pre>
 </div></div>
 
 <div class="card" data-tags="list empty check isEmpty size">
@@ -889,7 +889,7 @@ stack.clear();</code></pre>
 
 <span class="cmt">// Join with delimiter</span>
 String str = stack.stream()
-    .map(String::valueOf)
+    .map(n -&gt; String.valueOf(n))
     .collect(Collectors.joining(", "));
 
 <span class="cmt">// Pop all (destructive, top→bottom)</span>
@@ -1001,7 +1001,7 @@ if (set.contains(20)) {
 String[] array = set.toArray(new String[0]);
 
 <span class="cmt">// Using Stream</span>
-String[] array = set.stream().toArray(String[]::new);</code></pre>
+String[] array = set.stream().toArray(n -&gt; new String[n]);</code></pre>
 </div></div>
 
 <div class="card" data-tags="set consecutive sequence longest streak">
@@ -1087,7 +1087,7 @@ for (String key : map.keySet()) {
 }
 
 <span class="cmt">// Stream</span>
-map.keySet().stream().forEach(System.out::println);</code></pre>
+map.keySet().stream().forEach(k -&gt; System.out.println(k));</code></pre>
 </div></div>
 
 <div class="card" data-tags="hashmap values iterate only">
@@ -1101,7 +1101,7 @@ map.keySet().stream().forEach(System.out::println);</code></pre>
 }
 
 <span class="cmt">// Stream</span>
-map.values().stream().forEach(System.out::println);</code></pre>
+map.values().stream().forEach(v -&gt; System.out.println(v));</code></pre>
 </div></div>
 
 <div class="card" data-tags="hashmap getOrDefault frequency count character">
@@ -2026,8 +2026,8 @@ int sum = nums.stream()
     .reduce(0, (total, num) -&gt; total + num);
 <span class="cmt">// 0 + 1 = 1, then 1 + 2 = 3, then 3 + 3 = 6, then 6 + 4 = 10, then 10 + 5 = 15</span>
 
-<span class="cmt">// Shorter using Integer::sum</span>
-int sum = nums.stream().reduce(0, Integer::sum);
+<span class="cmt">// Same one-liner with lambda:</span>
+int sum = nums.stream().reduce(0, (a, b) -&gt; a + b);
 <span class="cmt">// Result: 15</span></code></pre>
 
 <h4>Product of all numbers</h4>
@@ -2045,7 +2045,7 @@ if (max.isPresent()) {
 }
 
 <span class="cmt">// Or simpler:</span>
-Optional&lt;Integer&gt; max = nums.stream().max(Integer::compareTo);</code></pre>
+Optional&lt;Integer&gt; max = nums.stream().max((a, b) -&gt; a.compareTo(b));</code></pre>
 
 <h4>Concatenate strings</h4>
 <pre><code>List&lt;String&gt; words = Arrays.asList("Hello", " ", "World");
@@ -2057,7 +2057,7 @@ String result = words.stream()
 <h4>Sum of even numbers only</h4>
 <pre><code>int sumOfEvens = nums.stream()
     .filter(n -&gt; n % 2 == 0)
-    .reduce(0, Integer::sum);
+    .reduce(0, (a, b) -&gt; a + b);
 <span class="cmt">// Filter to [2, 4], then sum = 6</span></code></pre>
 
 <div class="note">&#128681; <strong>Identity values:</strong> Sum→0, Product→1, String concat→"", Max→Integer.MIN_VALUE</div>
@@ -2073,11 +2073,11 @@ String result = words.stream()
 <div class="comparison">
 <div class="comp-bad"><div class="comp-label">WRONG</div>
 <pre><code>Stream&lt;Integer&gt; stream = nums.stream();
-stream.forEach(System.out::println);
+stream.forEach(n -&gt; System.out.println(n));
 stream.count();  <span class="cmt">// ❌ ERROR! Stream already used</span></code></pre></div>
 <div class="comp-good"><div class="comp-label">RIGHT</div>
 <pre><code><span class="cmt">// Create new stream for each operation</span>
-nums.stream().forEach(System.out::println);
+nums.stream().forEach(n -&gt; System.out.println(n));
 long count = nums.stream().count();  <span class="cmt">// ✅</span></code></pre></div>
 </div>
 
@@ -2271,9 +2271,9 @@ words.sort(
         .thenComparing(s -&gt; s)
 );
 
-<span class="cmt">// Or even simpler with method references:</span>
+<span class="cmt">// Or with comparingInt + natural order (lambdas):</span>
 words.sort(
-    Comparator.comparingInt(String::length)
+    Comparator.comparingInt(s -&gt; s.length())
         .thenComparing(Comparator.naturalOrder())
 );</code></pre>
 
@@ -2339,7 +2339,7 @@ people.sort(Comparator.comparingInt(p -&gt; p.age));</code></pre>
 
 <h4>.reversed() — Flip the order</h4>
 <pre><code><span class="cmt">// Sort by length descending</span>
-words.sort(Comparator.comparingInt(String::length).reversed());
+words.sort(Comparator.comparingInt(s -&gt; s.length()).reversed());
 
 <span class="cmt">// Sort by age descending</span>
 people.sort(Comparator.comparingInt(p -&gt; p.age).reversed());</code></pre>
@@ -2617,7 +2617,7 @@ class MyClass implements Greeting {
 list.forEach(System.out::println);
 
 <span class="cmt">// Instead of: x -> x.length()</span>
-list.stream().map(String::length);
+list.stream().map(s -&gt; s.length());
 
 <span class="cmt">// Instead of: (a,b) -> Integer.compare(a,b)</span>
 list.sort(Integer::compare);</code></pre>
@@ -2754,7 +2754,7 @@ text.stripTrailing();  <span class="cmt">// "  Hello World"</span>
 
 <span class="cmt">// lines: Split by line breaks</span>
 String multiline = "Line1\nLine2\nLine3";
-multiline.lines().forEach(System.out::println);</code></pre>
+multiline.lines().forEach(line -&gt; System.out.println(line));</code></pre>
 
 <h4>2. File Methods (Easy file operations!)</h4>
 <pre><code><span class="cmt">// Read entire file to String</span>
@@ -4177,12 +4177,12 @@ const streamProblems=[
   ]},
   {tabName:'P3: Sum prices > 100',title:'Sum of prices greater than 100',input:[100,50,200,75,150],ops:[
     {code:'.filter(p → p > 100)',type:'filter',test:p=>p>100,explain:(p,pass)=>`<span class="v">${p}</span> > 100? → ${pass?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`},
-    {code:'.reduce(0, Integer::sum)',type:'reduce',identity:0,combine:(a,b)=>a+b,explain:(acc,v)=>`Accumulator: <span class="v">${acc}</span> + <span class="v">${v}</span> = <span class="v">${acc+v}</span>`}
+    {code:'.reduce(0, (a, b) -> a + b)',type:'reduce',identity:0,combine:(a,b)=>a+b,explain:(acc,v)=>`Accumulator: <span class="v">${acc}</span> + <span class="v">${v}</span> = <span class="v">${acc+v}</span>`}
   ]},
   {tabName:'P4: Sum squares of evens',title:'Sum of squares of even numbers',input:[1,2,3,4,5,6,7,8,9,10],ops:[
     {code:'.filter(n → n % 2 == 0)',type:'filter',test:n=>n%2===0,explain:(n,p)=>`<span class="v">${n}</span> % 2 = ${n%2} → ${p?'<span class="ok">EVEN ✓</span>':'<span class="no">ODD ✗</span>'}`},
     {code:'.map(n → n * n)',type:'map',transform:n=>n*n,explain:(n,r)=>`<span class="v">${n}</span> × ${n} = <span class="v">${r}</span>`},
-    {code:'.reduce(0, Integer::sum)',type:'reduce',identity:0,combine:(a,b)=>a+b,explain:(acc,v)=>`<span class="v">${acc}</span> + <span class="v">${v}</span> = <span class="v">${acc+v}</span>`}
+    {code:'.reduce(0, (a, b) -> a + b)',type:'reduce',identity:0,combine:(a,b)=>a+b,explain:(acc,v)=>`<span class="v">${acc}</span> + <span class="v">${v}</span> = <span class="v">${acc+v}</span>`}
   ]},
   {tabName:'P5: String joining',title:'Join names starting with A or B',input:["Alice","Bob","Charlie","David"],ops:[
     {code:'.filter(n → n.startsWith("A") || n.startsWith("B"))',type:'filter',test:n=>n.startsWith("A")||n.startsWith("B"),explain:(n,p)=>`<span class="v">"${n}"</span> starts with A or B? → ${p?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`},
@@ -4195,7 +4195,7 @@ const streamProblems=[
     {code:'.sorted(Comparator.reverseOrder())',type:'sorted',compareFn:(a,b)=>b-a,
      explain:(a,b,r,sw)=>`Descending: <span class="v">${b}</span> vs <span class="v">${a}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`},
     {code:'.map(n → n * 2)',type:'map',transform:n=>n*2,explain:(n,r)=>`<span class="v">${n}</span> × 2 = <span class="v">${r}</span>`},
-    {code:'.reduce(0, Integer::sum)',type:'reduce',identity:0,combine:(a,b)=>a+b,explain:(acc,v)=>`<span class="v">${acc}</span> + <span class="v">${v}</span> = <span class="v">${acc+v}</span>`}
+    {code:'.reduce(0, (a, b) -> a + b)',type:'reduce',identity:0,combine:(a,b)=>a+b,explain:(acc,v)=>`<span class="v">${acc}</span> + <span class="v">${v}</span> = <span class="v">${acc+v}</span>`}
   ]},
 
   {tabName:'P7: Multi-filter chain',title:'Even numbers > 5 and < 50, squared',input:[2,8,3,15,42,60,7,24,11,36],ops:[
@@ -4223,7 +4223,7 @@ const streamProblems=[
   {tabName:'P10: Max after transform',title:'Find longest word length after filtering',input:["hi","strawberry","cat","watermelon","go","blueberry","pineapple"],ops:[
     {code:'.filter(w → w.length() > 3)',type:'filter',test:w=>w.length>3,explain:(w,p)=>`<span class="v">"${w}"</span> length=${w.length} > 3? → ${p?'<span class="ok">KEEP ✓</span>':'<span class="no">REMOVE ✗</span>'}`},
     {code:'.map(w → w.length())',type:'map',transform:w=>w.length,explain:(w,r)=>`<span class="v">"${w}"</span> → length = <span class="v">${r}</span>`},
-    {code:'.max(Integer::compareTo)',type:'max',compareFn:(a,b)=>a-b}
+    {code:'.max((a, b) -> a.compareTo(b))',type:'max',compareFn:(a,b)=>a-b}
   ]},
 
   {tabName:'P11: FlatMap concept',title:'Distinct chars from filtered words, sorted',input:["apple","ant","ball","bat","cat"],ops:[
@@ -4237,7 +4237,7 @@ const streamProblems=[
   {tabName:'P12: Salary pipeline',title:'Avg salary of high-earners (filter → map → reduce)',input:[45000,72000,38000,91000,55000,120000,63000,87000],ops:[
     {code:'.filter(s → s >= 60000)',type:'filter',test:s=>s>=60000,explain:(s,p)=>`<span class="v">$${s.toLocaleString()}</span> ≥ $60,000? → ${p?'<span class="ok">HIGH EARNER ✓</span>':'<span class="no">BELOW THRESHOLD ✗</span>'}`},
     {code:'.map(s → s / 1000)',type:'map',transform:s=>s/1000,explain:(s,r)=>`<span class="v">$${s.toLocaleString()}</span> → <span class="v">${r}K</span> (in thousands)`},
-    {code:'.reduce(0, Integer::sum)',type:'reduce',identity:0,combine:(a,b)=>a+b,explain:(acc,v)=>`Running total: <span class="v">${acc}K</span> + <span class="v">${v}K</span> = <span class="v">${acc+v}K</span>`}
+    {code:'.reduce(0, (a, b) -> a + b)',type:'reduce',identity:0,combine:(a,b)=>a+b,explain:(acc,v)=>`Running total: <span class="v">${acc}K</span> + <span class="v">${v}K</span> = <span class="v">${acc+v}K</span>`}
   ]},
 
   {tabName:'P13: Chained transforms',title:'Triple pipeline: filter → map → map → filter → count',input:[1,2,3,4,5,6,7,8,9,10,11,12],ops:[
@@ -4259,7 +4259,7 @@ const streamProblems=[
   {tabName:'P15: E-commerce',title:'Discounted prices of expensive items, total savings',input:[{name:"Laptop",price:999},{name:"Mouse",price:29},{name:"Monitor",price:450},{name:"Keyboard",price:75},{name:"Headset",price:199},{name:"Webcam",price:89}],ops:[
     {code:'.filter(p → p.price > 100)',type:'filter',test:p=>p.price>100,explain:(p,pass)=>`<span class="v">${p.name} ($${p.price})</span> > $100? → ${pass?'<span class="ok">EXPENSIVE ✓</span>':'<span class="no">CHEAP ✗</span>'}`},
     {code:'.map(p → p.price * 0.2)',type:'map',transform:p=>Math.round(p.price*0.2),explain:(p,r)=>`<span class="v">${typeof p==='object'?p.name:p}</span>: 20% of $${typeof p==='object'?p.price:p} = <span class="v">$${r}</span> saved`},
-    {code:'.reduce(0, Integer::sum)',type:'reduce',identity:0,combine:(a,b)=>a+b,explain:(acc,v)=>`Total savings: <span class="v">$${acc}</span> + <span class="v">$${v}</span> = <span class="v">$${acc+v}</span>`}
+    {code:'.reduce(0, (a, b) -> a + b)',type:'reduce',identity:0,combine:(a,b)=>a+b,explain:(acc,v)=>`Total savings: <span class="v">$${acc}</span> + <span class="v">$${v}</span> = <span class="v">$${acc+v}</span>`}
   ]},
 
   /* ── STREAMS PROGRAMMING & SCENARIOS ── */
