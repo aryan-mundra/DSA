@@ -2225,6 +2225,8 @@
             .animation-box h3 { font-size: 1em; flex-wrap: wrap; }
             .brute-force-section { padding: 14px; margin: 10px 0; }
             .brute-force-section pre { font-size: 0.82em; padding: 12px; }
+            .intuition-section { padding: 14px; margin: 10px 0; }
+            .qa-section { padding: 14px; margin: 10px 0; }
 
             .controls { gap: 6px; }
             .controls button { padding: 7px 12px; font-size: 0.82em; }
@@ -2296,6 +2298,10 @@
             .brute-force-section { padding: 10px; margin: 8px 0; border-radius: 6px; }
             .brute-force-section pre { font-size: 0.75em; padding: 8px; }
             .brute-force-section h3 { font-size: 0.9em; }
+            .intuition-section { padding: 10px; margin: 8px 0; border-radius: 6px; }
+            .intuition-section h4 { font-size: 0.88em; }
+            .qa-section { padding: 12px; margin: 8px 0; border-radius: 6px; }
+            .qa-section h4 { font-size: 0.88em; }
 
             .controls { gap: 5px; }
             .controls button { padding: 6px 10px; font-size: 0.78em; flex: 1 1 auto; min-width: 0; }
@@ -2409,6 +2415,53 @@
         }
         .brute-force-section .complexity h4 { color: #c53030; }
 
+        /* ===== INTUITION SECTION (optional per question) ===== */
+        .intuition-section {
+            background: #ebf8ff;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #3182ce;
+            margin: 15px 0;
+        }
+        .intuition-section h4 {
+            color: #2c5282;
+            margin: 14px 0 8px;
+            font-size: 1em;
+        }
+        .intuition-section h4:first-child { margin-top: 0; }
+        .intuition-section p, .intuition-section li {
+            color: #2d3748;
+            line-height: 1.65;
+            font-size: 0.95em;
+        }
+        .intuition-section ul { margin: 8px 0 0 1.2em; padding: 0; }
+        .intuition-section li { margin-bottom: 6px; }
+
+        /* ===== Q/A (per-question interview notes) ===== */
+        .qa-section {
+            background: #fffaf0;
+            padding: 16px 18px;
+            border-radius: 8px;
+            border-left: 4px solid #dd6b20;
+            margin: 15px 0;
+        }
+        .qa-section h4 {
+            color: #c05621;
+            margin: 0 0 10px;
+            font-size: 1em;
+        }
+        .qa-section .qa-q {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+            line-height: 1.55;
+        }
+        .qa-section .qa-a {
+            color: #2d3748;
+            line-height: 1.65;
+            font-size: 0.95em;
+        }
+
         /* ===== COLLAPSIBLE SECTION TOGGLE ===== */
         .collapsible-toggle {
             display: flex;
@@ -2482,6 +2535,11 @@
             border-left: none;
         }
         .collapsible-content > .brute-force-section {
+            margin: 0;
+            border-radius: 0;
+            border-left: none;
+        }
+        .collapsible-content > .intuition-section {
             margin: 0;
             border-radius: 0;
             border-left: none;
@@ -10511,6 +10569,20 @@ List&lt;List&lt;Integer&gt;&gt; zigzagLevelOrder(TreeNode root) {
 Output: [1,3,4]</pre></div>
             <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [1,2]  |  Output: [1,2]</pre></div>
         </div>
+        <div class="intuition-section">
+            <h4>Right side se dekhna</h4>
+            <p>Main tree ke right side par khada hoon. Mujhe woh values chahiye jo main upar se neeche tak dekh sakta hoon. Matlab simple hai: har depth level par mujhe sirf us level ka <strong>rightmost</strong> node matter karta hai.</p>
+            <h4>First instinct</h4>
+            <p>Level order (BFS) natural lagta hai: main level by level process karta hoon, aur har level par left se right jaate hue jo <strong>last</strong> value dikhegi, wahi right side view hogi.</p>
+            <h4>BFS approach</h4>
+            <ul>
+                <li>Ek queue use karo, root se start karo.</li>
+                <li>Jab tak queue empty nahi hai, tab tak loop chalao. Har iteration ke start par queue ka size batata hai ki current level mein kitne nodes hain.</li>
+                <li>Main utne nodes dequeue karta hoon; aur us level par jo <strong>last</strong> node dequeue hota hai, wahi right se visible hota hai, toh uski value answer mein add kar deta hoon.</li>
+            </ul>
+            <h4>Complexity</h4>
+            <p><strong>Time:</strong> O(n) kyunki har node ek baar visit hota hai.<br><strong>Space:</strong> O(tree ki width) queue ke liye, worst case mein O(n) (jab last level full ho).</p>
+        </div>
         <div class="animation-box" id="anim-rsview">
             <h3>Right Side View BFS Animation</h3>
             <div class="controls">
@@ -10564,8 +10636,17 @@ List&lt;Integer&gt; rightSideView(TreeNode root) {
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [3,9,20,null,null,15,7]  |  Output: 3</pre></div>
             <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [1,null,2]  |  Output: 2</pre></div>
         </div>
+        <div class="intuition-section">
+            <h4>Problem kya hai</h4>
+            <p>Humein tree ki <strong>maximum depth</strong> nikalni hai, matlab root se leke kisi bhi leaf tak ka longest path (in terms of nodes).</p>
+            <h4>BFS (level order) — oral / iterative angle</h4>
+            <p>Agar interviewer bole iterative batao, toh: ek queue use karenge, level by level traverse karenge, aur <strong>har level complete hone pe depth increment</strong> karenge.</p>
+            <p><em>Orally:</em> &ldquo;Main level order traversal use kar sakta hoon. Har level ke nodes ko process karunga, aur jitne levels traverse hue utna hi depth hoga.&rdquo;</p>
+            <h4>Complexity</h4>
+            <p><strong>Time:</strong> O(N) (har node ek baar visit hota hai).<br><strong>Space:</strong> O(N) queue worst case (level order).</p>
+        </div>
         <div class="animation-box" id="anim-maxdepth">
-            <h3>Max Depth DFS Animation</h3>
+            <h3>Max Depth BFS Animation</h3>
             <div class="controls">
                 <button class="btn-play" onclick="animMaxDepth('play')">Play</button>
                 <button class="btn-step" onclick="animMaxDepth('step')">Step</button>
@@ -10585,12 +10666,22 @@ List&lt;Integer&gt; rightSideView(TreeNode root) {
             <pre id="code-maxdepth">
 int maxDepth(TreeNode root) {
     if (root == null) return 0;
-    int left = maxDepth(root.left);
-    int right = maxDepth(root.right);
-    return 1 + Math.max(left, right);
+    Queue&lt;TreeNode&gt; queue = new LinkedList&lt;&gt;();
+    queue.offer(root);
+    int depth = 0;
+    while (!queue.isEmpty()) {
+        int size = queue.size();
+        depth++;
+        for (int i = 0; i &lt; size; i++) {
+            TreeNode node = queue.poll();
+            if (node.left != null) queue.offer(node.left);
+            if (node.right != null) queue.offer(node.right);
+        }
+    }
+    return depth;
 }
             </pre>
-            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(h)</p></div>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
         </div>
     </div>
 
@@ -10606,6 +10697,14 @@ int maxDepth(TreeNode root) {
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [1,2,3,4,5]  |  Output: 3 (path 4→2→1→3 or 5→2→1→3)</pre></div>
             <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [1,2]  |  Output: 1</pre></div>
+        </div>
+        <div class="intuition-section">
+            <p>Is problem mein humein tree ka <strong>diameter</strong> nikalna hai, matlab kisi bhi do nodes ke beech ka longest path (in <strong>edges</strong>).</p>
+            <p>Main isko <strong>DFS recursion</strong> se solve karunga. Idea yeh hai ki har node pe main uske left subtree ka height aur right subtree ka height nikalunga. Aur us node ke through jo longest path jaa sakta hai, woh hoga <code>leftHeight + rightHeight</code>.</p>
+            <p>Toh main ek <strong>global variable</strong> maintain karunga <code>maxDiameter</code>, jisme har node pe check karunga ki <code>leftHeight + rightHeight</code> kya current max se bada hai.</p>
+            <p>Saath hi, recursion mein main height return karunga: <code>height = 1 + max(leftHeight, rightHeight)</code>. Base case: agar node null hai toh height = 0. End mein jo global <code>maxDiameter</code> hai wahi answer hoga.</p>
+            <h4>Complexity</h4>
+            <p><strong>Time</strong> O(N) hai kyunki har node ek baar visit hota hai, aur <strong>space</strong> O(H) recursion stack ke liye.</p>
         </div>
         <div class="animation-box" id="anim-diameter">
             <h3>Diameter DFS Animation</h3>
@@ -10656,6 +10755,21 @@ int height(TreeNode node) {
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [3,9,20,null,null,15,7]  |  Output: true</pre></div>
             <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [1,2,2,3,3,null,null,4,4]  |  Output: false</pre></div>
         </div>
+        <div class="intuition-section">
+            <p>Is problem mein humein check karna hai ki binary tree <strong>height-balanced</strong> hai ya nahi. Balanced ka matlab hai ki har node ke liye left aur right subtree ke height ka difference <strong>1 se zyada nahi</strong> hona chahiye.</p>
+            <p>Main isko <strong>DFS recursion</strong> se solve karunga in a single pass. Har node pe main uske left aur right subtree ka height nikalunga. Agar kisi bhi node pe difference <code>|leftHeight - rightHeight| &gt; 1</code> ho jaata hai, toh main turant signal kar dunga ki tree balanced nahi hai.</p>
+            <p>Optimization ke liye main height function ko modify karunga &mdash; agar subtree balanced hai toh height return karega, warna <strong>-1</strong> return karega as a flag.</p>
+            <h4>Flow</h4>
+            <ul>
+                <li>Agar node null hai &rarr; height = 0</li>
+                <li>Left aur right height nikalo</li>
+                <li>Agar kisi ne -1 return kiya ya difference &gt; 1 hai &rarr; return -1</li>
+                <li>Warna return <code>1 + max(leftHeight, rightHeight)</code></li>
+            </ul>
+            <p>End mein check karunga ki root ka result -1 hai ya nahi.</p>
+            <h4>Complexity</h4>
+            <p><strong>Time</strong> O(N) hai (har node ek baar), aur <strong>space</strong> O(H) recursion stack ke liye.</p>
+        </div>
         <div class="animation-box" id="anim-balanced">
             <h3>Balanced Check Animation</h3>
             <div class="controls">
@@ -10690,6 +10804,11 @@ int checkHeight(TreeNode node) {
             </pre>
             <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(h)</p></div>
         </div>
+        <div class="qa-section">
+            <h4>Q/A</h4>
+            <p class="qa-q">If we want a balanced tree, why are we not checking <code>left - right == 0</code>? Why are we using <code>|left - right| &gt; 1</code> instead?</p>
+            <p class="qa-a">Here &ldquo;balanced&rdquo; means <strong>height-balanced</strong> as in the problem statement: at every node, left and right subtree <strong>heights may differ by at most 1</strong>. So a difference of <strong>0</strong> (same height) <em>and</em> <strong>1</strong> (one side one level taller) are both fine. Requiring <code>left - right == 0</code> would mean both subtrees must always have the <em>exact</em> same height &mdash; that is stricter than the definition and would mark many valid trees as unbalanced (for example a root whose left subtree has height 1 and right has height 2). We only fail when the gap is <strong>2 or more</strong>, which is exactly what <code>Math.abs(left - right) &gt; 1</code> detects.</p>
+        </div>
     </div>
 
     <!-- Same Tree (LC 100) -->
@@ -10705,8 +10824,22 @@ int checkHeight(TreeNode node) {
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: p = [1,2,3], q = [1,2,3]  |  Output: true</pre></div>
             <div class="test-case"><h4>Test Case 2:</h4><pre>Input: p = [1,2], q = [1,null,2]  |  Output: false</pre></div>
         </div>
+        <div class="intuition-section">
+            <p>So for this problem, I&rsquo;m thinking of solving it using <strong>level order traversal (BFS)</strong>.</p>
+            <p>Main kya karunga ki dono trees ke liye separately ek level order traversal run karunga. Traversal ke time par sirf node values store nahi karunga, balki agar koi child missing hai toh usko explicitly <strong>null</strong> ke form mein list mein add karunga.</p>
+            <p>Iska reason ye hai ki agar hum nulls include nahi karte, toh tree ka structure lose ho jata hai. Do different structure wale trees bhi same list de sakte hain.</p>
+            <h4>Steps</h4>
+            <ul>
+                <li>Ek helper function banaunga jo ek tree ko level order mein traverse kare aur ek list return kare.</li>
+                <li>Traversal ke time: agar node present hai &rarr; uski value add karunga; agar node null hai &rarr; list mein null add karunga.</li>
+                <li>Isse tree ka exact structure + values dono capture ho jayenge; phir dono trees ke liye do lists mil jayengi.</li>
+                <li>Finally, main dono lists ko compare karunga &mdash; agar equal hain toh trees same hain, warna nahi.</li>
+            </ul>
+            <h4>Complexity</h4>
+            <p><strong>Time</strong> O(n) hogi because har node ek baar visit ho raha hai.<br><strong>Space</strong> O(n) hogi due to queue and storing the lists.</p>
+        </div>
         <div class="animation-box" id="anim-sametree">
-            <h3>Same Tree Check Animation</h3>
+            <h3>Same Tree (BFS serialize + compare) Animation</h3>
             <div class="controls">
                 <button class="btn-play" onclick="animSameTree('play')">Play</button>
                 <button class="btn-step" onclick="animSameTree('step')">Step</button>
@@ -10734,14 +10867,28 @@ int checkHeight(TreeNode node) {
             <h3>Solution (Java-style Pseudocode):</h3>
             <pre id="code-sametree">
 boolean isSameTree(TreeNode p, TreeNode q) {
-    if (p == null &amp;&amp; q == null) return true;
-    if (p == null || q == null) return false;
-    if (p.val != q.val) return false;
-    return isSameTree(p.left, q.left)
-        &amp;&amp; isSameTree(p.right, q.right);
+    List&lt;Integer&gt; listP = buildLevelOrder(p);
+    List&lt;Integer&gt; listQ = buildLevelOrder(q);
+    return listP.equals(listQ);
+}
+List&lt;Integer&gt; buildLevelOrder(TreeNode root) {
+    List&lt;Integer&gt; out = new ArrayList&lt;&gt;();
+    Queue&lt;TreeNode&gt; q = new LinkedList&lt;&gt;();
+    if (root != null) q.offer(root);
+    while (!q.isEmpty()) {
+        TreeNode n = q.poll();
+        if (n == null) {
+            out.add(null);
+            continue;
+        }
+        out.add(n.val);
+        q.offer(n.left);
+        q.offer(n.right);
+    }
+    return out;
 }
             </pre>
-            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(h)</p></div>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
         </div>
     </div>
 
@@ -10758,8 +10905,38 @@ boolean isSameTree(TreeNode p, TreeNode q) {
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [1,2,2,3,4,4,3]  |  Output: true</pre></div>
             <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [1,2,2,null,3,null,3]  |  Output: false</pre></div>
         </div>
+        <div class="intuition-section">
+            <p><strong>Iterative angle (BFS / queue):</strong> Haan, isko hum <strong>queue</strong> se bhi solve kar sakte hain &mdash; recursion ki jagah nodes ko <strong>pairs</strong> mein compare karenge.</p>
+            <h4>Core idea</h4>
+            <p>Queue mein hum aise nodes push karenge jo <strong>mirror positions</strong> represent karte hain (left subtree ka node ↔ right subtree ka corresponding mirror node).</p>
+            <h4>Steps</h4>
+            <p>Start mein root ke left aur right ko queue mein pair ki tarah daal do:</p>
+            <pre style="background:#f7fafc;padding:10px 12px;border-radius:6px;font-size:0.88em;margin:8px 0;">queue.offer(root.left);
+queue.offer(root.right);</pre>
+            <p>Jab tak queue empty nahi, har iteration pe <strong>do nodes ek saath</strong> nikaalo:</p>
+            <pre style="background:#f7fafc;padding:10px 12px;border-radius:6px;font-size:0.88em;margin:8px 0;">TreeNode n1 = queue.poll();
+TreeNode n2 = queue.poll();</pre>
+            <h4>Comparison logic</h4>
+            <ul>
+                <li>Dono <code>null</code> → theek, aage badho ✔️</li>
+                <li>Ek <code>null</code>, ek non-null → symmetric nahi ❌</li>
+                <li>Values match nahi → symmetric nahi ❌</li>
+            </ul>
+            <h4>Mirror order (important)</h4>
+            <p>Agar current pair valid hai, next comparisons queue mein <strong>mirror order</strong> mein daalo taaki har level par mirror hi check ho:</p>
+            <p><em>Left ka left</em> ↔ <em>Right ka right</em> &nbsp; aur &nbsp; <em>Left ka right</em> ↔ <em>Right ka left</em>:</p>
+            <pre style="background:#f7fafc;padding:10px 12px;border-radius:6px;font-size:0.88em;margin:8px 0;">queue.offer(n1.left);
+queue.offer(n2.right);
+
+queue.offer(n1.right);
+queue.offer(n2.left);</pre>
+            <p>Yeh ensure karta hai ki hum har level par <strong>mirror comparison</strong> hi kar rahe hain.</p>
+            <h4>End condition</h4>
+            <p>Poora traversal ho gaya aur kahin mismatch nahi mila → tree <strong>symmetric</strong> hai.</p>
+            <p style="margin-top:14px;padding-top:12px;border-top:1px solid #bee3f8;font-size:0.92em;"><strong>Neeche pseudocode:</strong> Wahi <strong>iterative queue</strong> flow jo upar describe hai (animation bhi isi ke steps follow karti hai).</p>
+        </div>
         <div class="animation-box" id="anim-symmetric">
-            <h3>Symmetric Check Animation</h3>
+            <h3>Symmetric Tree (BFS queue) Animation</h3>
             <div class="controls">
                 <button class="btn-play" onclick="animSymmetric('play')">Play</button>
                 <button class="btn-step" onclick="animSymmetric('step')">Step</button>
@@ -10778,17 +10955,25 @@ boolean isSameTree(TreeNode p, TreeNode q) {
             <h3>Solution (Java-style Pseudocode):</h3>
             <pre id="code-symmetric">
 boolean isSymmetric(TreeNode root) {
-    return isMirror(root.left, root.right);
-}
-boolean isMirror(TreeNode t1, TreeNode t2) {
-    if (t1 == null &amp;&amp; t2 == null) return true;
-    if (t1 == null || t2 == null) return false;
-    return (t1.val == t2.val)
-        &amp;&amp; isMirror(t1.left, t2.right)
-        &amp;&amp; isMirror(t1.right, t2.left);
+    if (root == null) return true;
+    Queue&lt;TreeNode&gt; queue = new LinkedList&lt;&gt;();
+    queue.offer(root.left);
+    queue.offer(root.right);
+    while (!queue.isEmpty()) {
+        TreeNode n1 = queue.poll();
+        TreeNode n2 = queue.poll();
+        if (n1 == null &amp;&amp; n2 == null) continue;
+        if (n1 == null || n2 == null) return false;
+        if (n1.val != n2.val) return false;
+        queue.offer(n1.left);
+        queue.offer(n2.right);
+        queue.offer(n1.right);
+        queue.offer(n2.left);
+    }
+    return true;
 }
             </pre>
-            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(h)</p></div>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
         </div>
     </div>
 
@@ -10805,8 +10990,27 @@ boolean isMirror(TreeNode t1, TreeNode t2) {
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [3,4,5,1,2], subRoot = [4,1,2]  |  Output: true</pre></div>
             <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [3,4,5,1,2,null,null,null,null,0], subRoot = [4,1,2]  |  Output: false</pre></div>
         </div>
+        <div class="intuition-section">
+            <p><strong>Iterative approach (BFS):</strong> Main ek <strong>queue</strong> use karke poore <code>root</code> tree ko traverse karunga, aur <strong>har node ko potential starting point</strong> treat karunga.</p>
+            <h4>Steps</h4>
+            <ul>
+                <li>Queue mein <code>root</code> daal do.</li>
+                <li>Jab tak queue empty nahi: ek <code>node</code> nikalo (<code>poll</code>).</li>
+                <li>Agar <code>node.val</code> <code>subRoot</code> ke root ki value se match karti hai → <code>isSameTree(node, subRoot)</code> call karo.</li>
+                <li>Agar yeh <code>true</code> de → seedha <code>true</code> return (mil gaya subtree).</li>
+                <li>Warna traversal continue: current node ke <code>left</code> aur <code>right</code> (non-null) children queue mein <code>offer</code> karo.</li>
+            </ul>
+            <h4>Important insight</h4>
+            <p>Har node candidate hai, lekin <strong>expensive</strong> poora subtree compare tabhi karte hain jab <strong>root value match</strong> ho &mdash; yeh chhota optimization hai.</p>
+            <h4><code>isSameTree</code> (short)</h4>
+            <p>Do trees ko <strong>structure + values</strong> se compare karta hai (recursive: dono null → true; ek null → false; values alag → false; warna left-left aur right-right).</p>
+            <p><strong>True</strong> tabhi jab poora subtree <code>subRoot</code> se exact match ho.</p>
+            <h4>Complexity</h4>
+            <p><strong>Time:</strong> worst case <code>O(N &times; M)</code> (<code>N</code> = main tree nodes, <code>M</code> = <code>subRoot</code> nodes; har match try par <code>isSameTree</code>).<br><strong>Space:</strong> <code>O(N)</code> queue + <code>isSameTree</code> recursion <code>O(M)</code> stack.</p>
+            <p style="margin-top:10px;"><strong>One-liner:</strong> Main tree par BFS chalata hoon; jahan value <code>subRoot</code> root jaisi mile, wahan <code>isSameTree</code> se poora subtree verify kar deta hoon.</p>
+        </div>
         <div class="animation-box" id="anim-subtree">
-            <h3>Subtree Check Animation</h3>
+            <h3>Subtree of Another Tree (BFS) Animation</h3>
             <div class="controls">
                 <button class="btn-play" onclick="animSubtree('play')">Play</button>
                 <button class="btn-step" onclick="animSubtree('step')">Step</button>
@@ -10836,9 +11040,16 @@ boolean isMirror(TreeNode t1, TreeNode t2) {
             <pre id="code-subtree">
 boolean isSubtree(TreeNode root, TreeNode subRoot) {
     if (root == null) return false;
-    if (isSameTree(root, subRoot)) return true;
-    return isSubtree(root.left, subRoot)
-        || isSubtree(root.right, subRoot);
+    if (subRoot == null) return true;
+    Queue&lt;TreeNode&gt; queue = new LinkedList&lt;&gt;();
+    queue.offer(root);
+    while (!queue.isEmpty()) {
+        TreeNode node = queue.poll();
+        if (node.val == subRoot.val &amp;&amp; isSameTree(node, subRoot)) return true;
+        if (node.left != null) queue.offer(node.left);
+        if (node.right != null) queue.offer(node.right);
+    }
+    return false;
 }
 boolean isSameTree(TreeNode p, TreeNode q) {
     if (p == null &amp;&amp; q == null) return true;
@@ -10848,7 +11059,7 @@ boolean isSameTree(TreeNode p, TreeNode q) {
         &amp;&amp; isSameTree(p.right, q.right);
 }
             </pre>
-            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(m·n) | <strong>Space:</strong> O(h)</p></div>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n·m) worst case | <strong>Space:</strong> O(n) queue + O(m) recursion stack for <code>isSameTree</code></p></div>
         </div>
     </div>
 
@@ -10866,8 +11077,26 @@ boolean isSameTree(TreeNode p, TreeNode q) {
 Output: [4,7,2,9,6,3,1]</pre></div>
             <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [2,1,3]  |  Output: [2,3,1]</pre></div>
         </div>
+        <div class="intuition-section">
+            <p><strong>Iterative BFS:</strong> Main <strong>queue</strong> use kar raha hoon &mdash; yeh <strong>level-order</strong> traversal jaisa hai: tree ko level by level process karte hain, har node ko exactly <strong>ek baar</strong> visit karte hain.</p>
+            <h4>Queue ka matlab</h4>
+            <p>Queue mein jo nodes hain = &ldquo;jinpe abhi kaam karna baaki hai.&rdquo;</p>
+            <h4>Process loop</h4>
+            <p>Jab tak queue empty nahi: ek <code>node</code> <code>poll</code> karo, us par operation karo.</p>
+            <h4>Core operation (har node par)</h4>
+            <pre style="background:#f7fafc;padding:10px 12px;border-radius:6px;font-size:0.88em;margin:8px 0;">TreeNode temp = node.left;
+node.left = node.right;
+node.right = temp;</pre>
+            <p>Matlab is node ke <strong>left / right child pointers swap</strong> ho jaate hain (children ulte).</p>
+            <h4>Swap ke baad queue mein kyun push?</h4>
+            <p>Swap se sirf current node fix nahi hota &mdash; neeche wale subtrees ko bhi invert karna hai. Isliye swap ke baad <code>if (node.left != null) queue.offer(node.left)</code> aur <code>if (node.right != null) queue.offer(node.right)</code> &mdash; ab jo <strong>naye</strong> left/right ban gaye unko process karne ke liye.</p>
+            <h4>Key insight</h4>
+            <p><strong>Queue</strong> = kaunse nodes abhi process hone baaki hain. <strong>Swap</strong> = har node par local inversion. Dono milkar poora tree step-by-step invert ho jaata hai.</p>
+            <h4>Complexity</h4>
+            <p><strong>Time</strong> O(N) &mdash; har node ek baar. <strong>Space</strong> O(N) &mdash; queue (wide tree par worst).</p>
+        </div>
         <div class="animation-box" id="anim-invert">
-            <h3>Invert Tree Animation</h3>
+            <h3>Invert Binary Tree (BFS) Animation</h3>
             <div class="controls">
                 <button class="btn-play" onclick="animInvert('play')">Play</button>
                 <button class="btn-step" onclick="animInvert('step')">Step</button>
@@ -10887,14 +11116,20 @@ Output: [4,7,2,9,6,3,1]</pre></div>
             <pre id="code-invert">
 TreeNode invertTree(TreeNode root) {
     if (root == null) return null;
-    TreeNode left = invertTree(root.left);
-    TreeNode right = invertTree(root.right);
-    root.left = right;
-    root.right = left;
+    Queue&lt;TreeNode&gt; queue = new LinkedList&lt;&gt;();
+    queue.offer(root);
+    while (!queue.isEmpty()) {
+        TreeNode node = queue.poll();
+        TreeNode temp = node.left;
+        node.left = node.right;
+        node.right = temp;
+        if (node.left != null) queue.offer(node.left);
+        if (node.right != null) queue.offer(node.right);
+    }
     return root;
 }
             </pre>
-            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(h)</p></div>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
         </div>
     </div>
 
@@ -18725,33 +18960,34 @@ const mdState = createAnimState();
 function initMaxDepth(){
     ['md-0','md-1','md-2','md-3','md-4'].forEach(id=>{document.getElementById(id).className='tree-node';});
     mdState.step=-1;const s=mdState.snapshots=[];
-    s.push({current:'md-0',visited:[],lines:[0],msg:'Call <code>maxDepth(3)</code>',resultText:'depth = ?'});
-    s.push({current:'md-0',visited:[],lines:[1],msg:'<code>3 != null</code> → continue',resultText:'depth = ?'});
-    s.push({current:'md-1',visited:[],lines:[2],msg:'<code>left = maxDepth(9)</code> — go left',resultText:'depth = ?'});
-    s.push({current:'md-1',visited:[],lines:[1],msg:'<code>9 != null</code> → continue',resultText:'depth = ?'});
-    s.push({current:'md-1',visited:[],lines:[2],msg:'<code>left = maxDepth(null)</code> — go left',resultText:'depth = ?'});
-    s.push({current:'md-1',visited:[],lines:[1],msg:'<code>null == null</code> → return 0. left = 0',resultText:'depth = ?'});
-    s.push({current:'md-1',visited:[],lines:[3],msg:'<code>right = maxDepth(null)</code> — go right',resultText:'depth = ?'});
-    s.push({current:'md-1',visited:[],lines:[1],msg:'<code>null == null</code> → return 0. right = 0',resultText:'depth = ?'});
-    s.push({current:'md-1',visited:['md-1'],lines:[4],msg:'<code>return 1 + max(0,0) = 1</code>. Depth at 9 = 1',resultText:'depth(9) = 1'});
-    s.push({current:'md-2',visited:['md-1'],lines:[3],msg:'<code>right = maxDepth(20)</code> — go right',resultText:'depth = ?'});
-    s.push({current:'md-2',visited:['md-1'],lines:[1],msg:'<code>20 != null</code> → continue',resultText:'depth = ?'});
-    s.push({current:'md-3',visited:['md-1'],lines:[2],msg:'<code>left = maxDepth(15)</code> — go left',resultText:'depth = ?'});
-    s.push({current:'md-3',visited:['md-1'],lines:[1],msg:'<code>15 != null</code> → continue',resultText:'depth = ?'});
-    s.push({current:'md-3',visited:['md-1'],lines:[2],msg:'<code>left = maxDepth(null)</code> — go left',resultText:'depth = ?'});
-    s.push({current:'md-3',visited:['md-1'],lines:[1],msg:'<code>null == null</code> → return 0. left = 0',resultText:'depth = ?'});
-    s.push({current:'md-3',visited:['md-1'],lines:[3],msg:'<code>right = maxDepth(null)</code> — go right',resultText:'depth = ?'});
-    s.push({current:'md-3',visited:['md-1'],lines:[1],msg:'<code>null == null</code> → return 0. right = 0',resultText:'depth = ?'});
-    s.push({current:'md-3',visited:['md-1','md-3'],lines:[4],msg:'<code>return 1 + max(0,0) = 1</code>. Depth at 15 = 1',resultText:'depth(15) = 1'});
-    s.push({current:'md-4',visited:['md-1','md-3'],lines:[3],msg:'<code>right = maxDepth(7)</code>',resultText:'depth = ?'});
-    s.push({current:'md-4',visited:['md-1','md-3'],lines:[1],msg:'<code>7 != null</code> → continue',resultText:'depth = ?'});
-    s.push({current:'md-4',visited:['md-1','md-3'],lines:[2],msg:'<code>left = maxDepth(null)</code> — go left',resultText:'depth = ?'});
-    s.push({current:'md-4',visited:['md-1','md-3'],lines:[1],msg:'<code>null == null</code> → return 0. left = 0',resultText:'depth = ?'});
-    s.push({current:'md-4',visited:['md-1','md-3'],lines:[3],msg:'<code>right = maxDepth(null)</code> — go right',resultText:'depth = ?'});
-    s.push({current:'md-4',visited:['md-1','md-3'],lines:[1],msg:'<code>null == null</code> → return 0. right = 0',resultText:'depth = ?'});
-    s.push({current:'md-4',visited:['md-1','md-3','md-4'],lines:[4],msg:'<code>return 1 + max(0,0) = 1</code>. Depth at 7 = 1',resultText:'depth(7) = 1'});
-    s.push({current:'md-2',visited:['md-1','md-3','md-4','md-2'],lines:[4],msg:'<code>return 1 + max(1,1) = 2</code>. Depth at 20 = 2',resultText:'depth(20) = 2'});
-    s.push({current:'md-0',visited:['md-1','md-3','md-4','md-2','md-0'],lines:[4],msg:'<code>return 1 + max(1,2) = 3</code>. Max depth = 3',resultText:'depth = 3'});
+    s.push({current:null,visited:[],queued:['md-0'],lines:[0],msg:'Call <code>maxDepth(root)</code> where root = 3',resultText:'depth = 0 | queue: [3]'});
+    s.push({current:null,visited:[],queued:['md-0'],lines:[1],msg:'<code>root != null</code> → continue',resultText:'depth = 0'});
+    s.push({current:null,visited:[],queued:['md-0'],lines:[2,3],msg:'Create queue, <code>queue.offer(3)</code>',resultText:'queue: [3]'});
+    s.push({current:null,visited:[],queued:['md-0'],lines:[4],msg:'<code>depth = 0</code>',resultText:'depth = 0'});
+    s.push({current:null,visited:[],queued:['md-0'],lines:[5],msg:'<code>while (!queue.isEmpty())</code> → true',resultText:'queue: [3]'});
+    s.push({current:null,visited:[],queued:['md-0'],lines:[6],msg:'<code>size = queue.size()</code> → 1 node at this level',resultText:'size = 1'});
+    s.push({current:null,visited:[],queued:['md-0'],lines:[7],msg:'Finished a level → <code>depth++</code> → <b>1</b>',resultText:'depth = 1'});
+    s.push({current:'md-0',visited:[],queued:['md-1','md-2'],lines:[8,9],msg:'Process level: poll <b>3</b>',resultText:'depth = 1'});
+    s.push({current:'md-0',visited:['md-0'],queued:['md-1','md-2'],lines:[10,11],msg:'Enqueue children <b>9</b> and <b>20</b>',resultText:'queue: [9,20]'});
+    s.push({current:null,visited:['md-0'],queued:['md-1','md-2'],lines:[12],msg:'End <code>for</code> — level at root done',resultText:'queue: [9,20]'});
+    s.push({current:null,visited:['md-0'],queued:['md-1','md-2'],lines:[5],msg:'Queue not empty → next level',resultText:'queue: [9,20]'});
+    s.push({current:null,visited:['md-0'],queued:['md-1','md-2'],lines:[6],msg:'<code>size = 2</code> (two nodes on level 1)',resultText:'size = 2'});
+    s.push({current:null,visited:['md-0'],queued:['md-1','md-2'],lines:[7],msg:'<code>depth++</code> → <b>2</b>',resultText:'depth = 2'});
+    s.push({current:'md-1',visited:['md-0'],queued:['md-2'],lines:[9],msg:'Poll <b>9</b> — no children to enqueue',resultText:'depth = 2'});
+    s.push({current:'md-1',visited:['md-0','md-1'],queued:['md-2'],lines:[10,11],msg:'Skip offers for missing children',resultText:'queue: [20]'});
+    s.push({current:'md-2',visited:['md-0','md-1'],queued:['md-3','md-4'],lines:[9],msg:'Poll <b>20</b>',resultText:'depth = 2'});
+    s.push({current:'md-2',visited:['md-0','md-1'],queued:['md-3','md-4'],lines:[10,11],msg:'Enqueue <b>15</b> and <b>7</b>',resultText:'queue: [15,7]'});
+    s.push({current:null,visited:['md-0','md-1','md-2'],queued:['md-3','md-4'],lines:[12],msg:'End <code>for</code> — level 1 done',resultText:'queue: [15,7]'});
+    s.push({current:null,visited:['md-0','md-1','md-2'],queued:['md-3','md-4'],lines:[5],msg:'Queue not empty',resultText:'queue: [15,7]'});
+    s.push({current:null,visited:['md-0','md-1','md-2'],queued:['md-3','md-4'],lines:[6],msg:'<code>size = 2</code> (level of leaves)',resultText:'size = 2'});
+    s.push({current:null,visited:['md-0','md-1','md-2'],queued:['md-3','md-4'],lines:[7],msg:'<code>depth++</code> → <b>3</b>',resultText:'depth = 3'});
+    s.push({current:'md-3',visited:['md-0','md-1','md-2'],queued:['md-4'],lines:[9],msg:'Poll <b>15</b>',resultText:'depth = 3'});
+    s.push({current:'md-3',visited:['md-0','md-1','md-2','md-3'],queued:['md-4'],lines:[10,11],msg:'No children for 15',resultText:'queue: [7]'});
+    s.push({current:'md-4',visited:['md-0','md-1','md-2','md-3'],queued:[],lines:[9],msg:'Poll <b>7</b>',resultText:'depth = 3'});
+    s.push({current:'md-4',visited:['md-0','md-1','md-2','md-3','md-4'],queued:[],lines:[10,11],msg:'No children for 7',resultText:'queue: []'});
+    s.push({current:null,visited:['md-0','md-1','md-2','md-3','md-4'],queued:[],lines:[12],msg:'End <code>for</code> — leaf level done',resultText:'queue: []'});
+    s.push({current:null,visited:['md-0','md-1','md-2','md-3','md-4'],queued:[],lines:[5],msg:'<code>while</code> condition false — queue empty',resultText:'queue: []'});
+    s.push({current:null,visited:['md-0','md-1','md-2','md-3','md-4'],queued:[],lines:[14],msg:'<code>return depth</code> → max depth = <b>3</b> ✓',resultText:'depth = 3'});
     document.getElementById('maxdepth-info').textContent='Click Play or Step to start';
     document.getElementById('maxdepth-result').textContent='depth = 0';highlightLines('code-maxdepth',[]);
 }
@@ -18850,24 +19086,23 @@ const stState = createAnimState();
 function initSameTree(){
     ['stp-0','stp-1','stp-2','stq-0','stq-1','stq-2'].forEach(id=>{document.getElementById(id).className='tree-node';});
     stState.step=-1;const s=stState.snapshots=[];
-    s.push({current:'stp-0',visited:[],lines:[0],msg:'Call <code>isSameTree(p=1, q=1)</code>',resultText:'comparing...'});
-    s.push({current:'stp-0',visited:[],lines:[1],msg:'<code>p != null, q != null</code> → not both null',resultText:'comparing...'});
-    s.push({current:'stp-0',visited:[],lines:[2],msg:'<code>p != null, q != null</code> → neither is solely null',resultText:'comparing...'});
-    s.push({current:'stp-0',visited:[],lines:[3],msg:'<code>p.val=1 == q.val=1</code> → values match',resultText:'comparing...'});
-    s.push({current:'stp-1',visited:['stp-0','stq-0'],lines:[4],msg:'<code>isSameTree(p.left=2, q.left=2)</code>',resultText:'comparing...'});
-    s.push({current:'stp-1',visited:['stp-0','stq-0'],lines:[3],msg:'<code>p.val=2 == q.val=2</code> → match',resultText:'comparing...'});
-    s.push({current:'stp-1',visited:['stp-0','stq-0'],lines:[4],msg:'<code>isSameTree(p.left, q.left)</code> — left children',resultText:'comparing...'});
-    s.push({current:'stp-1',visited:['stp-0','stq-0'],lines:[1],msg:'<code>p == null &amp;&amp; q == null</code> → return true',resultText:'comparing...'});
-    s.push({current:'stp-1',visited:['stp-0','stq-0'],lines:[5],msg:'<code>isSameTree(p.right, q.right)</code> — right children',resultText:'comparing...'});
-    s.push({current:'stp-1',visited:['stp-0','stq-0'],lines:[1],msg:'<code>p == null &amp;&amp; q == null</code> → return true',resultText:'comparing...'});
-    s.push({current:'stp-1',visited:['stp-0','stq-0','stp-1','stq-1'],lines:[5],msg:'Node 2 subtree matches → true',resultText:'comparing...'});
-    s.push({current:'stp-2',visited:['stp-0','stq-0','stp-1','stq-1'],lines:[5],msg:'<code>isSameTree(p.right=3, q.right=3)</code>',resultText:'comparing...'});
-    s.push({current:'stp-2',visited:['stp-0','stq-0','stp-1','stq-1'],lines:[3],msg:'<code>p.val=3 == q.val=3</code> → match',resultText:'comparing...'});
-    s.push({current:'stp-2',visited:['stp-0','stq-0','stp-1','stq-1'],lines:[4],msg:'<code>isSameTree(p.left, q.left)</code> — left children',resultText:'comparing...'});
-    s.push({current:'stp-2',visited:['stp-0','stq-0','stp-1','stq-1'],lines:[1],msg:'<code>p == null &amp;&amp; q == null</code> → return true',resultText:'comparing...'});
-    s.push({current:'stp-2',visited:['stp-0','stq-0','stp-1','stq-1'],lines:[5],msg:'<code>isSameTree(p.right, q.right)</code> — right children',resultText:'comparing...'});
-    s.push({current:'stp-2',visited:['stp-0','stq-0','stp-1','stq-1'],lines:[1],msg:'<code>p == null &amp;&amp; q == null</code> → return true',resultText:'comparing...'});
-    s.push({current:null,visited:['stp-0','stq-0','stp-1','stq-1','stp-2','stq-2'],lines:[5],msg:'All nodes match → <code>return true</code>. Trees are identical!',resultText:'isSameTree = true'});
+    s.push({current:null,visited:[],lines:[0],msg:'Call <code>isSameTree(p, q)</code>',resultText:'listP = ? | listQ = ?'});
+    s.push({current:null,visited:[],lines:[1],msg:'<code>listP = buildLevelOrder(p)</code> — BFS; missing children become <code>null</code> in the queue',resultText:'Building listP...'});
+    s.push({current:'stp-0',visited:[],lines:[8],msg:'Root of <b>p</b> not null → <code>q.offer(root)</code>',resultText:'queue: [1]'});
+    s.push({current:'stp-0',visited:[],lines:[9,10],msg:'While not empty: <code>poll</code> → visit node <b>1</b>',resultText:'listP = [1]'});
+    s.push({current:'stp-0',visited:['stp-0'],lines:[15,16,17],msg:'Append <code>1</code>, enqueue left &amp; right (including <code>null</code> placeholders)',resultText:'queue: [2,3,...]'});
+    s.push({current:'stp-1',visited:['stp-0'],lines:[10,11,15,16,17],msg:'Poll <b>2</b> → append value, enqueue its children',resultText:'listP = [1,2,...]'});
+    s.push({current:'stp-2',visited:['stp-0','stp-1'],lines:[10,11,15,16,17],msg:'Poll <b>3</b> → append value, enqueue its children',resultText:'listP = [1,2,3,...]'});
+    s.push({current:null,visited:['stp-0','stp-1','stp-2'],lines:[11,12],msg:'Poll <code>null</code> markers → <code>out.add(null)</code> until queue drains (shape encoded)',resultText:'listP = (full level order + nulls)'});
+    s.push({current:null,visited:['stp-0','stp-1','stp-2'],lines:[19],msg:'<code>return out</code> — serialization of <b>p</b> complete',resultText:'listP done'});
+    s.push({current:null,visited:['stp-0','stp-1','stp-2'],lines:[2],msg:'<code>listQ = buildLevelOrder(q)</code> — same BFS rules on tree <b>q</b>',resultText:'Building listQ...'});
+    s.push({current:'stq-0',visited:['stp-0','stp-1','stp-2'],lines:[8,9,10],msg:'Offer root of <b>q</b>, poll <b>1</b>',resultText:'listQ = [1]'});
+    s.push({current:'stq-0',visited:['stp-0','stp-1','stp-2','stq-0'],lines:[15,16,17],msg:'Enqueue children of <b>1</b> on <b>q</b>',resultText:'listQ = [1,...]'});
+    s.push({current:'stq-1',visited:['stp-0','stp-1','stp-2','stq-0'],lines:[10,15],msg:'Process node <b>2</b> on <b>q</b>',resultText:'listQ = [1,2,...]'});
+    s.push({current:'stq-2',visited:['stp-0','stp-1','stp-2','stq-0','stq-1'],lines:[10,15],msg:'Process node <b>3</b> on <b>q</b>',resultText:'listQ = [1,2,3,...]'});
+    s.push({current:null,visited:['stp-0','stp-1','stp-2','stq-0','stq-1','stq-2'],lines:[11,12],msg:'Drain <code>null</code> slots — same pattern as <b>p</b>',resultText:'listQ = (full level order + nulls)'});
+    s.push({current:null,visited:['stp-0','stp-1','stp-2','stq-0','stq-1','stq-2'],lines:[19],msg:'<code>return out</code> for <b>q</b>',resultText:'listQ done'});
+    s.push({current:null,visited:['stp-0','stp-1','stp-2','stq-0','stq-1','stq-2'],lines:[3],msg:'<code>listP.equals(listQ)</code> — identical structure &amp; values',resultText:'isSameTree = true'});
     document.getElementById('sametree-info').textContent='Click Play or Step to start';
     document.getElementById('sametree-result').textContent='comparing...';highlightLines('code-sametree',[]);
 }
@@ -18879,24 +19114,23 @@ const symState = createAnimState();
 function initSymmetric(){
     ['sym-0','sym-1','sym-2','sym-3','sym-4','sym-5','sym-6'].forEach(id=>{document.getElementById(id).className='tree-node';});
     symState.step=-1;const s=symState.snapshots=[];
-    s.push({current:'sym-0',visited:[],lines:[0],msg:'Call <code>isSymmetric(root=1)</code>',resultText:'checking...'});
-    s.push({current:'sym-0',visited:['sym-0'],lines:[1],msg:'Call <code>isMirror(root.left=2, root.right=2)</code>',resultText:'checking...'});
-    s.push({current:'sym-1',visited:['sym-0'],lines:[4],msg:'<code>t1 != null, t2 != null</code> → continue',resultText:'checking...'});
-    s.push({current:'sym-1',visited:['sym-0'],lines:[5],msg:'Neither solely null → continue',resultText:'checking...'});
-    s.push({current:'sym-1',visited:['sym-0'],lines:[6],msg:'<code>t1.val=2 == t2.val=2</code> → match',resultText:'checking...'});
-    s.push({current:'sym-3',visited:['sym-0'],lines:[7],msg:'<code>isMirror(t1.left=3, t2.right=3)</code>',resultText:'checking...'});
-    s.push({current:'sym-3',visited:['sym-0'],lines:[6],msg:'<code>t1.val=3 == t2.val=3</code> → match',resultText:'checking...'});
-    s.push({current:'sym-3',visited:['sym-0'],lines:[7],msg:'<code>isMirror(t1.left, t2.right)</code>',resultText:'checking...'});
-    s.push({current:'sym-3',visited:['sym-0'],lines:[4],msg:'<code>t1 == null &amp;&amp; t2 == null</code> → return true',resultText:'checking...'});
-    s.push({current:'sym-3',visited:['sym-0','sym-3','sym-6'],lines:[8],msg:'<code>isMirror(t1.right, t2.left)</code>',resultText:'checking...'});
-    s.push({current:'sym-3',visited:['sym-0','sym-3','sym-6'],lines:[4],msg:'<code>t1 == null &amp;&amp; t2 == null</code> → return true',resultText:'checking...'});
-    s.push({current:'sym-4',visited:['sym-0','sym-3','sym-6'],lines:[8],msg:'<code>isMirror(t1.right=4, t2.left=4)</code>',resultText:'checking...'});
-    s.push({current:'sym-4',visited:['sym-0','sym-3','sym-6'],lines:[6],msg:'<code>t1.val=4 == t2.val=4</code> → match',resultText:'checking...'});
-    s.push({current:'sym-4',visited:['sym-0','sym-3','sym-6'],lines:[7],msg:'<code>isMirror(t1.left, t2.right)</code>',resultText:'checking...'});
-    s.push({current:'sym-4',visited:['sym-0','sym-3','sym-6'],lines:[4],msg:'<code>t1 == null &amp;&amp; t2 == null</code> → return true',resultText:'checking...'});
-    s.push({current:'sym-4',visited:['sym-0','sym-3','sym-6','sym-4','sym-5'],lines:[8],msg:'<code>isMirror(t1.right, t2.left)</code>',resultText:'checking...'});
-    s.push({current:'sym-4',visited:['sym-0','sym-3','sym-6','sym-4','sym-5'],lines:[4],msg:'<code>t1 == null &amp;&amp; t2 == null</code> → return true',resultText:'checking...'});
-    s.push({current:null,visited:['sym-0','sym-1','sym-2','sym-3','sym-4','sym-5','sym-6'],lines:[6],msg:'All mirror checks pass → tree IS symmetric!',resultText:'isSymmetric = true'});
+    s.push({current:'sym-0',visited:[],lines:[0],msg:'Call <code>isSymmetric(root=1)</code>',resultText:'queue: []'});
+    s.push({current:'sym-0',visited:['sym-0'],lines:[1],msg:'<code>root != null</code> → continue',resultText:'queue: []'});
+    s.push({current:null,visited:['sym-0'],queued:['sym-1','sym-2'],lines:[2,3,4],msg:'Create queue; <code>offer(root.left)</code> &amp; <code>offer(root.right)</code> — first mirror pair',resultText:'queue: [2, 2]'});
+    s.push({current:null,visited:['sym-0'],queued:['sym-1','sym-2'],lines:[5],msg:'<code>while (!queue.isEmpty())</code> → true',resultText:'queue: [2, 2]'});
+    s.push({current:'sym-1',visited:['sym-0'],queued:['sym-2'],lines:[6,7],msg:'Poll <code>n1</code> = left <b>2</b>, <code>n2</code> = right <b>2</b>',resultText:'comparing (2, 2)'});
+    s.push({current:'sym-1',visited:['sym-0','sym-1','sym-2'],lines:[8,9,10],msg:'Null checks OK; <code>n1.val == n2.val</code> ✓',resultText:'pair OK'});
+    s.push({current:null,visited:['sym-0','sym-1','sym-2'],queued:['sym-3','sym-6','sym-4','sym-5'],lines:[11,12,13,14],msg:'Enqueue mirrors: <code>n1.left</code>↔<code>n2.right</code>, <code>n1.right</code>↔<code>n2.left</code> → [3,3,4,4]',resultText:'queue: [3, 3, 4, 4]'});
+    s.push({current:null,visited:['sym-0','sym-1','sym-2'],queued:['sym-3','sym-6','sym-4','sym-5'],lines:[5],msg:'Queue not empty — next iteration',resultText:'queue: [3, 3, 4, 4]'});
+    s.push({current:'sym-3',visited:['sym-0','sym-1','sym-2'],queued:['sym-6','sym-4','sym-5'],lines:[6,7],msg:'Poll <code>n1</code>=<b>3</b>, <code>n2</code>=<b>3</b> (mirror under the two <b>2</b>s)',resultText:'queue: [4, 4]'});
+    s.push({current:'sym-3',visited:['sym-0','sym-1','sym-2','sym-3','sym-6'],lines:[8,9,10],msg:'<code>3 == 3</code> ✓',resultText:'pair OK'});
+    s.push({current:null,visited:['sym-0','sym-1','sym-2','sym-3','sym-6'],queued:['sym-4','sym-5'],lines:[11,12,13,14],msg:'Enqueue four child slots (leaves → <code>null</code>s)',resultText:'queue: [4,4 + nulls...]'});
+    s.push({current:'sym-4',visited:['sym-0','sym-1','sym-2','sym-3','sym-6'],queued:['sym-5'],lines:[6,7],msg:'Poll <code>n1</code>=<b>4</b>, <code>n2</code>=<b>4</b>',resultText:'...'});
+    s.push({current:'sym-4',visited:['sym-0','sym-1','sym-2','sym-3','sym-4','sym-5','sym-6'],lines:[8,9,10],msg:'<code>4 == 4</code> ✓',resultText:'pair OK'});
+    s.push({current:null,visited:['sym-0','sym-1','sym-2','sym-3','sym-4','sym-5','sym-6'],queued:[],lines:[11,12,13,14],msg:'Enqueue mirror <code>null</code> pairs for the two <b>4</b> leaves',resultText:'queue grows with null pairs'});
+    s.push({current:null,visited:['sym-0','sym-1','sym-2','sym-3','sym-4','sym-5','sym-6'],lines:[8],msg:'Poll (<code>null</code>,<code>null</code>) pairs → <code>continue</code> until queue drains',resultText:'queue: []'});
+    s.push({current:null,visited:['sym-0','sym-1','sym-2','sym-3','sym-4','sym-5','sym-6'],lines:[5],msg:'<code>while</code> empty → exit loop',resultText:'queue: []'});
+    s.push({current:null,visited:['sym-0','sym-1','sym-2','sym-3','sym-4','sym-5','sym-6'],lines:[16],msg:'<code>return true</code> — tree is symmetric ✓',resultText:'isSymmetric = true'});
     document.getElementById('symmetric-info').textContent='Click Play or Step to start';
     document.getElementById('symmetric-result').textContent='checking...';highlightLines('code-symmetric',[]);
 }
@@ -18908,27 +19142,27 @@ const subState = createAnimState();
 function initSubtree(){
     ['subt-0','subt-1','subt-2','subt-3','subt-4','subs-0','subs-1','subs-2'].forEach(id=>{document.getElementById(id).className='tree-node';});
     subState.step=-1;const s=subState.snapshots=[];
-    s.push({current:'subt-0',visited:[],lines:[0],msg:'Call <code>isSubtree(root=3, subRoot=4)</code>',resultText:'checking...'});
-    s.push({current:'subt-0',visited:[],lines:[1],msg:'<code>root=3 != null</code> → continue',resultText:'checking...'});
-    s.push({current:'subt-0',visited:[],lines:[2],msg:'<code>isSameTree(3, 4)</code> → 3≠4 → false',resultText:'checking...'});
-    s.push({current:'subt-1',visited:[],lines:[3],msg:'<code>isSubtree(root.left=4, subRoot=4)</code>',resultText:'checking...'});
-    s.push({current:'subt-1',visited:[],lines:[1],msg:'<code>root=4 != null</code>',resultText:'checking...'});
-    s.push({current:'subt-1',visited:[],lines:[2],msg:'<code>isSameTree(4, 4)</code> → checking...',resultText:'checking...'});
-    s.push({current:'subt-1',visited:[],lines:[7],msg:'<code>p.val=4 == q.val=4</code> → match root',resultText:'checking...'});
-    s.push({current:'subt-3',visited:[],lines:[8],msg:'<code>isSameTree(1, 1)</code> → left children',resultText:'checking...'});
-    s.push({current:'subt-3',visited:[],lines:[9],msg:'<code>p.val=1 == q.val=1</code> → match',resultText:'checking...'});
-    s.push({current:'subt-3',visited:['subt-3','subs-1'],lines:[10],msg:'<code>isSameTree(p.left, q.left)</code> — left children of node 1',resultText:'checking...'});
-    s.push({current:'subt-3',visited:['subt-3','subs-1'],lines:[7],msg:'<code>p == null &amp;&amp; q == null</code> → return true',resultText:'checking...'});
-    s.push({current:'subt-3',visited:['subt-3','subs-1'],lines:[11],msg:'<code>isSameTree(p.right, q.right)</code> — right children of node 1',resultText:'checking...'});
-    s.push({current:'subt-3',visited:['subt-3','subs-1'],lines:[7],msg:'<code>p == null &amp;&amp; q == null</code> → return true',resultText:'checking...'});
-    s.push({current:'subt-4',visited:['subt-3','subs-1'],lines:[11],msg:'<code>isSameTree(2, 2)</code> → right children',resultText:'checking...'});
-    s.push({current:'subt-4',visited:['subt-3','subs-1'],lines:[9],msg:'<code>p.val=2 == q.val=2</code> → match',resultText:'checking...'});
-    s.push({current:'subt-4',visited:['subt-3','subs-1','subt-4','subs-2'],lines:[10],msg:'<code>isSameTree(p.left, q.left)</code> — left children of node 2',resultText:'checking...'});
-    s.push({current:'subt-4',visited:['subt-3','subs-1','subt-4','subs-2'],lines:[7],msg:'<code>p == null &amp;&amp; q == null</code> → return true',resultText:'checking...'});
-    s.push({current:'subt-4',visited:['subt-3','subs-1','subt-4','subs-2'],lines:[11],msg:'<code>isSameTree(p.right, q.right)</code> — right children of node 2',resultText:'checking...'});
-    s.push({current:'subt-4',visited:['subt-3','subs-1','subt-4','subs-2'],lines:[7],msg:'<code>p == null &amp;&amp; q == null</code> → return true',resultText:'checking...'});
-    s.push({current:'subt-1',visited:['subt-1','subs-0','subt-3','subs-1','subt-4','subs-2'],lines:[2],msg:'<code>isSameTree</code> → true! Subtree found at node 4',resultText:'isSubtree = true'});
-    s.push({current:null,visited:['subt-0','subt-1','subt-2','subt-3','subt-4','subs-0','subs-1','subs-2'],lines:[2],msg:'Done! <code>return true</code> — subRoot IS a subtree',resultText:'isSubtree = true'});
+    s.push({current:'subt-0',visited:[],lines:[0],msg:'Call <code>isSubtree(root=3, subRoot=4)</code>',resultText:'queue: []'});
+    s.push({current:'subt-0',visited:[],lines:[1],msg:'<code>root != null</code> → continue',resultText:'queue: []'});
+    s.push({current:'subt-0',visited:[],lines:[2],msg:'<code>subRoot != null</code> → continue',resultText:'queue: []'});
+    s.push({current:null,visited:[],queued:['subt-0'],lines:[3,4],msg:'Create queue, <code>offer(root)</code> — BFS on main tree',resultText:'queue: [3]'});
+    s.push({current:null,visited:[],queued:['subt-0'],lines:[5],msg:'<code>while (!queue.isEmpty())</code>',resultText:'queue: [3]'});
+    s.push({current:'subt-0',visited:[],queued:[],lines:[6],msg:'Poll <code>node</code> = <b>3</b>',resultText:'candidate: 3'});
+    s.push({current:'subt-0',visited:['subt-0'],lines:[7],msg:'<code>node.val (3) == subRoot.val (4)</code>? → false — skip expensive <code>isSameTree</code>',resultText:'optimization ✓'});
+    s.push({current:null,visited:['subt-0'],queued:['subt-1','subt-2'],lines:[8,9],msg:'Enqueue non-null children <b>4</b> and <b>5</b>',resultText:'queue: [4, 5]'});
+    s.push({current:null,visited:['subt-0'],queued:['subt-1','subt-2'],lines:[5],msg:'Next BFS iteration',resultText:'queue: [4, 5]'});
+    s.push({current:'subt-1',visited:['subt-0'],queued:['subt-2'],lines:[6],msg:'Poll <code>node</code> = <b>4</b> — value matches <code>subRoot</code> root',resultText:'queue: [5]'});
+    s.push({current:'subt-1',visited:['subt-0','subt-1'],lines:[7],msg:'<code>node.val == subRoot.val</code> → run <code>isSameTree(node, subRoot)</code>',resultText:'deep compare…'});
+    s.push({current:'subt-1',visited:['subt-0'],lines:[13,14,15],msg:'<code>isSameTree(4, 4)</code>: null checks pass',resultText:'isSameTree…'});
+    s.push({current:'subt-1',visited:[],lines:[16],msg:'<code>p.val == q.val</code> (4 == 4) at roots ✓',resultText:'match'});
+    s.push({current:'subt-3',visited:[],lines:[17],msg:'Recurse <code>isSameTree</code> on left children <b>1</b> vs <b>1</b>',resultText:'…'});
+    s.push({current:'subt-3',visited:['subt-3','subs-1'],lines:[14,15,16],msg:'At nodes <b>1</b>: values match',resultText:'…'});
+    s.push({current:'subt-3',visited:['subt-3','subs-1'],lines:[17,14],msg:'Left subtree of <b>1</b>: both null → true',resultText:'…'});
+    s.push({current:'subt-3',visited:['subt-3','subs-1'],lines:[18,14],msg:'Right subtree of <b>1</b>: both null → true',resultText:'…'});
+    s.push({current:'subt-4',visited:['subt-3','subs-1'],lines:[18],msg:'Recurse on right children <b>2</b> vs <b>2</b>',resultText:'…'});
+    s.push({current:'subt-4',visited:['subt-3','subs-1','subt-4','subs-2'],lines:[16],msg:'<code>2 == 2</code> ✓',resultText:'…'});
+    s.push({current:'subt-4',visited:['subt-3','subs-1','subt-4','subs-2'],lines:[17,14,18,14],msg:'Leaves of <b>2</b>: null pairs → true',resultText:'isSameTree = true'});
+    s.push({current:'subt-1',visited:['subt-1','subs-0','subt-3','subs-1','subt-4','subs-2'],lines:[7],msg:'<code>isSameTree</code> true → <code>return true</code> from <code>isSubtree</code> (subtree found)',resultText:'isSubtree = true'});
     document.getElementById('subtree-info').textContent='Click Play or Step to start';
     document.getElementById('subtree-result').textContent='checking...';highlightLines('code-subtree',[]);
 }
@@ -18938,61 +19172,49 @@ function animSubtree(a){treeAnim(subState,renderSubtree,initSubtree,a);}
 // ===== INVERT TREE (LC 226) =====
 const invState = createAnimState();
 function initInvert(){
-    const vals={0:'4',1:'2',2:'7',3:'1',4:'3',5:'6',6:'9'};
-    ['inv-0','inv-1','inv-2','inv-3','inv-4','inv-5','inv-6'].forEach(id=>{const el=document.getElementById(id);el.className='tree-node';el.textContent=vals[id.split('-')[1]];});
+    const L={'inv-0':'4','inv-1':'2','inv-2':'7','inv-3':'1','inv-4':'3','inv-5':'6','inv-6':'9'};
+    const snapLab=()=>({...L});
+    Object.keys(L).forEach(id=>{const el=document.getElementById(id);el.className='tree-node';el.textContent=L[id];});
     invState.step=-1;const s=invState.snapshots=[];
-    s.push({current:'inv-0',visited:[],lines:[0],msg:'Call <code>invertTree(4)</code>',resultText:'original tree'});
-    s.push({current:'inv-0',visited:[],lines:[1],msg:'<code>4 != null</code> → continue',resultText:'original tree'});
-    s.push({current:'inv-1',visited:[],lines:[2],msg:'<code>left = invertTree(2)</code>',resultText:'inverting...'});
-    s.push({current:'inv-1',visited:[],lines:[1],msg:'<code>2 != null</code>',resultText:'inverting...'});
-    s.push({current:'inv-3',visited:[],lines:[2],msg:'<code>left = invertTree(1)</code>',resultText:'inverting...'});
-    s.push({current:'inv-3',visited:[],lines:[1],msg:'<code>1 != null</code>',resultText:'inverting...'});
-    s.push({current:'inv-3',visited:[],lines:[2],msg:'<code>left = invertTree(null)</code>',resultText:'inverting...'});
-    s.push({current:'inv-3',visited:[],lines:[1],msg:'<code>null == null</code> → return null. left = null',resultText:'inverting...'});
-    s.push({current:'inv-3',visited:[],lines:[3],msg:'<code>right = invertTree(null)</code>',resultText:'inverting...'});
-    s.push({current:'inv-3',visited:[],lines:[1],msg:'<code>null == null</code> → return null. right = null',resultText:'inverting...'});
-    s.push({current:'inv-3',visited:['inv-3'],lines:[4],msg:'<code>root.left = null (was null)</code>',resultText:'inverting...'});
-    s.push({current:'inv-3',visited:['inv-3'],lines:[5],msg:'<code>root.right = null (was null)</code>. Leaf 1 unchanged.',resultText:'inverting...'});
-    s.push({current:'inv-4',visited:['inv-3'],lines:[3],msg:'<code>right = invertTree(3)</code>',resultText:'inverting...'});
-    s.push({current:'inv-4',visited:['inv-3'],lines:[1],msg:'<code>3 != null</code> → continue',resultText:'inverting...'});
-    s.push({current:'inv-4',visited:['inv-3'],lines:[2],msg:'<code>left = invertTree(null)</code>',resultText:'inverting...'});
-    s.push({current:'inv-4',visited:['inv-3'],lines:[1],msg:'<code>null == null</code> → return null. left = null',resultText:'inverting...'});
-    s.push({current:'inv-4',visited:['inv-3'],lines:[3],msg:'<code>right = invertTree(null)</code>',resultText:'inverting...'});
-    s.push({current:'inv-4',visited:['inv-3'],lines:[1],msg:'<code>null == null</code> → return null. right = null',resultText:'inverting...'});
-    s.push({current:'inv-4',visited:['inv-3','inv-4'],lines:[4],msg:'<code>root.left = right(null)</code>',resultText:'inverting...'});
-    s.push({current:'inv-4',visited:['inv-3','inv-4'],lines:[5],msg:'<code>root.right = left(null)</code>. Leaf 3 unchanged.',resultText:'inverting...'});
-    s.push({current:'inv-4',visited:['inv-3','inv-4'],lines:[6],msg:'<code>return</code> node 3',resultText:'inverting...'});
-    s.push({current:'inv-1',visited:['inv-3','inv-4','inv-1'],lines:[4],msg:'At node 2: <code>root.left = right(3)</code>',resultText:'inverting...',swap:['inv-3','inv-4']});
-    s.push({current:'inv-1',visited:['inv-3','inv-4','inv-1'],lines:[5],msg:'At node 2: <code>root.right = left(1)</code>. Children swapped!',resultText:'inverting...'});
-    s.push({current:'inv-2',visited:['inv-3','inv-4','inv-1'],lines:[3],msg:'<code>right = invertTree(7)</code>',resultText:'inverting...'});
-    s.push({current:'inv-2',visited:['inv-3','inv-4','inv-1'],lines:[1],msg:'<code>7 != null</code>',resultText:'inverting...'});
-    s.push({current:'inv-5',visited:['inv-3','inv-4','inv-1'],lines:[2],msg:'<code>left = invertTree(6)</code>',resultText:'inverting...'});
-    s.push({current:'inv-5',visited:['inv-3','inv-4','inv-1'],lines:[1],msg:'<code>6 != null</code> → continue',resultText:'inverting...'});
-    s.push({current:'inv-5',visited:['inv-3','inv-4','inv-1'],lines:[2],msg:'<code>left = invertTree(null)</code>',resultText:'inverting...'});
-    s.push({current:'inv-5',visited:['inv-3','inv-4','inv-1'],lines:[1],msg:'<code>null == null</code> → return null. left = null',resultText:'inverting...'});
-    s.push({current:'inv-5',visited:['inv-3','inv-4','inv-1'],lines:[3],msg:'<code>right = invertTree(null)</code>',resultText:'inverting...'});
-    s.push({current:'inv-5',visited:['inv-3','inv-4','inv-1'],lines:[1],msg:'<code>null == null</code> → return null. right = null',resultText:'inverting...'});
-    s.push({current:'inv-5',visited:['inv-3','inv-4','inv-1','inv-5'],lines:[4],msg:'<code>root.left = right(null)</code>',resultText:'inverting...'});
-    s.push({current:'inv-5',visited:['inv-3','inv-4','inv-1','inv-5'],lines:[5],msg:'<code>root.right = left(null)</code>. Leaf 6 unchanged.',resultText:'inverting...'});
-    s.push({current:'inv-5',visited:['inv-3','inv-4','inv-1','inv-5'],lines:[6],msg:'<code>return</code> node 6',resultText:'inverting...'});
-    s.push({current:'inv-6',visited:['inv-3','inv-4','inv-1','inv-5'],lines:[3],msg:'<code>right = invertTree(9)</code>',resultText:'inverting...'});
-    s.push({current:'inv-6',visited:['inv-3','inv-4','inv-1','inv-5'],lines:[1],msg:'<code>9 != null</code> → continue',resultText:'inverting...'});
-    s.push({current:'inv-6',visited:['inv-3','inv-4','inv-1','inv-5'],lines:[2],msg:'<code>left = invertTree(null)</code>',resultText:'inverting...'});
-    s.push({current:'inv-6',visited:['inv-3','inv-4','inv-1','inv-5'],lines:[1],msg:'<code>null == null</code> → return null. left = null',resultText:'inverting...'});
-    s.push({current:'inv-6',visited:['inv-3','inv-4','inv-1','inv-5'],lines:[3],msg:'<code>right = invertTree(null)</code>',resultText:'inverting...'});
-    s.push({current:'inv-6',visited:['inv-3','inv-4','inv-1','inv-5'],lines:[1],msg:'<code>null == null</code> → return null. right = null',resultText:'inverting...'});
-    s.push({current:'inv-6',visited:['inv-3','inv-4','inv-1','inv-5','inv-6'],lines:[4],msg:'<code>root.left = right(null)</code>',resultText:'inverting...'});
-    s.push({current:'inv-6',visited:['inv-3','inv-4','inv-1','inv-5','inv-6'],lines:[5],msg:'<code>root.right = left(null)</code>. Leaf 9 unchanged.',resultText:'inverting...'});
-    s.push({current:'inv-6',visited:['inv-3','inv-4','inv-1','inv-5','inv-6'],lines:[6],msg:'<code>return</code> node 9',resultText:'inverting...'});
-    s.push({current:'inv-2',visited:['inv-3','inv-4','inv-1','inv-5','inv-6','inv-2'],lines:[4],msg:'At node 7: <code>root.left = right(9)</code>',resultText:'inverting...'});
-    s.push({current:'inv-2',visited:['inv-3','inv-4','inv-1','inv-5','inv-6','inv-2'],lines:[5],msg:'At node 7: <code>root.right = left(6)</code>. Children swapped!',resultText:'inverting...'});
-    s.push({current:'inv-0',visited:['inv-3','inv-4','inv-1','inv-5','inv-6','inv-2','inv-0'],lines:[4],msg:'At root 4: <code>root.left = right(7)</code>',resultText:'inverting...'});
-    s.push({current:'inv-0',visited:['inv-3','inv-4','inv-1','inv-5','inv-6','inv-2','inv-0'],lines:[5],msg:'At root 4: <code>root.right = left(2)</code>. Root swapped!',resultText:'inverting...'});
-    s.push({current:null,visited:['inv-0','inv-1','inv-2','inv-3','inv-4','inv-5','inv-6'],lines:[6],msg:'Done! Tree inverted: [4,7,2,9,6,3,1]',resultText:'inverted = [4,7,2,9,6,3,1]'});
+    s.push({current:'inv-0',visited:[],queued:['inv-0'],lines:[0],msg:'Call <code>invertTree(root=4)</code>',resultText:'queue: []',labels:snapLab()});
+    s.push({current:'inv-0',visited:[],queued:['inv-0'],lines:[1],msg:'<code>root != null</code> → continue',resultText:'queue: []',labels:snapLab()});
+    s.push({current:null,visited:[],queued:['inv-0'],lines:[2,3],msg:'Create queue, <code>offer(root)</code> — BFS starts',resultText:'queue: [4]',labels:snapLab()});
+    s.push({current:null,visited:[],queued:['inv-0'],lines:[4],msg:'<code>while (!queue.isEmpty())</code>',resultText:'queue: [4]',labels:snapLab()});
+    s.push({current:'inv-0',visited:[],queued:[],lines:[5],msg:'Poll <code>node</code> = <b>4</b> (root)',resultText:'process root',labels:snapLab()});
+    s.push({current:'inv-0',visited:['inv-0'],lines:[6,7,8],msg:'Swap children: <code>temp = left</code>, <code>left = right</code>, <code>right = temp</code>',resultText:'swap at 4',labels:snapLab()});
+    L['inv-1']='7';L['inv-2']='2';
+    s.push({current:'inv-0',visited:['inv-0'],queued:['inv-1','inv-2'],lines:[9,10],msg:'Enqueue new <code>node.left</code> then <code>node.right</code> (now 7 then 2)',resultText:'queue: [7, 2]',labels:snapLab()});
+    s.push({current:null,visited:['inv-0'],queued:['inv-1','inv-2'],lines:[4],msg:'Next iteration',resultText:'queue: [7, 2]',labels:snapLab()});
+    s.push({current:'inv-1',visited:['inv-0'],queued:['inv-2'],lines:[5],msg:'Poll <code>node</code> = <b>7</b> (left slot under root)',resultText:'queue: [2]',labels:snapLab()});
+    s.push({current:'inv-1',visited:['inv-0','inv-1'],lines:[6,7,8],msg:'Swap children of <b>7</b> (6 ↔ 9)',resultText:'swap at 7',labels:snapLab()});
+    L['inv-5']='9';L['inv-6']='6';
+    s.push({current:'inv-1',visited:['inv-0','inv-1'],queued:['inv-2','inv-6','inv-5'],lines:[9,10],msg:'Enqueue new <code>node.left</code> then <code>node.right</code> after swap at 7 → <b>9</b> then <b>6</b>',resultText:'queue: [2, 9, 6]',labels:snapLab()});
+    s.push({current:null,visited:['inv-0','inv-1'],queued:['inv-2','inv-6','inv-5'],lines:[4],msg:'Continue BFS',resultText:'queue: [2, 9, 6]',labels:snapLab()});
+    s.push({current:'inv-2',visited:['inv-0','inv-1'],queued:['inv-6','inv-5'],lines:[5],msg:'Poll <code>node</code> = <b>2</b>',resultText:'queue: [9, 6]',labels:snapLab()});
+    s.push({current:'inv-2',visited:['inv-0','inv-1','inv-2'],lines:[6,7,8],msg:'Swap children of <b>2</b> (1 ↔ 3)',resultText:'swap at 2',labels:snapLab()});
+    L['inv-3']='3';L['inv-4']='1';
+    s.push({current:'inv-2',visited:['inv-0','inv-1','inv-2'],queued:['inv-6','inv-5','inv-4','inv-3'],lines:[9,10],msg:'Enqueue new left then right → <b>3</b> then <b>1</b>',resultText:'queue: [9, 6, 3, 1]',labels:snapLab()});
+    s.push({current:'inv-6',visited:['inv-0','inv-1','inv-2'],queued:['inv-5','inv-4','inv-3'],lines:[5],msg:'Poll <b>9</b> (leaf) — swap only nulls',resultText:'queue: [6, 3, 1]',labels:snapLab()});
+    s.push({current:'inv-6',visited:['inv-0','inv-1','inv-2','inv-6'],lines:[6,7,8,9,10],msg:'No new children to enqueue',resultText:'...',labels:snapLab()});
+    s.push({current:'inv-5',visited:['inv-0','inv-1','inv-2','inv-6'],queued:['inv-4','inv-3'],lines:[5],msg:'Poll <b>6</b>',resultText:'queue: [3, 1]',labels:snapLab()});
+    s.push({current:'inv-5',visited:['inv-0','inv-1','inv-2','inv-6','inv-5'],lines:[6,7,8,9,10],msg:'Leaf',resultText:'...',labels:snapLab()});
+    s.push({current:'inv-4',visited:['inv-0','inv-1','inv-2','inv-6','inv-5'],queued:['inv-3'],lines:[5],msg:'Poll <b>3</b>',resultText:'queue: [1]',labels:snapLab()});
+    s.push({current:'inv-4',visited:['inv-0','inv-1','inv-2','inv-6','inv-5','inv-4'],lines:[6,7,8,9,10],msg:'Leaf',resultText:'...',labels:snapLab()});
+    s.push({current:'inv-3',visited:['inv-0','inv-1','inv-2','inv-6','inv-5','inv-4'],queued:[],lines:[5],msg:'Poll <b>1</b>',resultText:'queue: []',labels:snapLab()});
+    s.push({current:'inv-3',visited:['inv-0','inv-1','inv-2','inv-6','inv-5','inv-4','inv-3'],lines:[6,7,8,9,10],msg:'Leaf',resultText:'...',labels:snapLab()});
+    s.push({current:null,visited:['inv-0','inv-1','inv-2','inv-3','inv-4','inv-5','inv-6'],queued:[],lines:[4],msg:'Queue empty → exit <code>while</code>',resultText:'queue: []',labels:snapLab()});
+    L['inv-3']='9';L['inv-4']='6';L['inv-5']='3';L['inv-6']='1';
+    s.push({current:null,visited:['inv-0','inv-1','inv-2','inv-3','inv-4','inv-5','inv-6'],lines:[12],msg:'<code>return root</code> — inverted tree [4,7,2,9,6,3,1]',resultText:'inverted = [4,7,2,9,6,3,1]',labels:snapLab()});
     document.getElementById('invert-info').textContent='Click Play or Step to start';
     document.getElementById('invert-result').textContent='original tree';highlightLines('code-invert',[]);
 }
-function renderInvert(){if(invState.step<0){initInvert();return;}treeRender(invState,['inv-0','inv-1','inv-2','inv-3','inv-4','inv-5','inv-6'],'invert-info','invert-result','code-invert',getInvertLines);}
+function renderInvert(){
+    if(invState.step<0){initInvert();return;}
+    const st=invState.step;
+    const snap=invState.snapshots[Math.min(st,invState.snapshots.length-1)];
+    if(snap.labels){Object.keys(snap.labels).forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=snap.labels[id];});}
+    treeRender(invState,['inv-0','inv-1','inv-2','inv-3','inv-4','inv-5','inv-6'],'invert-info','invert-result','code-invert',getInvertLines);
+}
 function animInvert(a){treeAnim(invState,renderInvert,initInvert,a);}
 
 // ===== PATH SUM II (LC 113) =====
@@ -25627,6 +25849,10 @@ function setupCollapsibleSections() {
 
         if (bruteForce) {
             wrapInCollapsible(bruteForce, '\uD83D\uDCA1 Brute Force Approach', 'brute-force');
+        }
+        const intuition = card.querySelector('.intuition-section');
+        if (intuition) {
+            wrapInCollapsible(intuition, 'Intuition', 'intuition');
         }
         if (animBox) {
             wrapInCollapsible(animBox, '\u25B6\uFE0F Step-by-Step Animation', 'animation');
