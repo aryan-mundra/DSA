@@ -1,0 +1,4381 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advance Java - Revision</title>
+    <style>
+      :root {
+        --bg: #f6f8fc;
+        --panel: #ffffff;
+        --panel2: #f2f5fb;
+        --text: #0f172a;
+        --muted: #475569;
+        --link: #1d4ed8;
+        --border: rgba(15, 23, 42, 0.14);
+        --codeBg: rgba(15, 23, 42, 0.04);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji",
+          "Segoe UI Emoji";
+        background: radial-gradient(1200px 600px at 20% 0%, rgba(29, 78, 216, 0.12), transparent 60%),
+          radial-gradient(1000px 500px at 80% 0%, rgba(16, 185, 129, 0.10), transparent 55%), var(--bg);
+        color: var(--text);
+        line-height: 1.55;
+      }
+
+      .container {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 28px 18px 56px;
+      }
+
+      header {
+        padding: 16px 18px;
+        border: 1px solid var(--border);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+        border-radius: 14px;
+      }
+
+      h1 {
+        margin: 0 0 6px;
+        font-size: 22px;
+        letter-spacing: 0.2px;
+      }
+
+      .subtitle {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13.5px;
+      }
+
+      a {
+        color: var(--link);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+
+      .toc {
+        margin-top: 16px;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.85);
+      }
+
+      .toc-title {
+        padding: 12px 14px;
+        font-weight: 650;
+        border-bottom: 1px solid var(--border);
+        background: rgba(2, 6, 23, 0.02);
+      }
+
+      details {
+        border-bottom: 1px solid var(--border);
+      }
+      details:last-child {
+        border-bottom: 0;
+      }
+
+      summary {
+        cursor: pointer;
+        list-style: none;
+        padding: 12px 14px;
+        background: linear-gradient(180deg, rgba(2, 6, 23, 0.02), rgba(2, 6, 23, 0.01));
+      }
+      summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .summary-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .pill {
+        font-size: 12px;
+        color: var(--muted);
+        border: 1px solid var(--border);
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: rgba(2, 6, 23, 0.04);
+        white-space: nowrap;
+      }
+
+      .toc-body {
+        padding: 12px 14px 14px;
+        background: rgba(255, 255, 255, 0.7);
+      }
+
+      .hint {
+        margin: 0 0 10px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .list {
+        margin: 0;
+        padding-left: 18px;
+      }
+
+      .list li {
+        margin: 6px 0;
+      }
+
+      .answers {
+        margin-top: 22px;
+      }
+
+      section {
+        scroll-margin-top: 18px;
+        margin-top: 14px;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.85);
+        overflow: hidden;
+      }
+
+      .section-head {
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--border);
+        background: rgba(2, 6, 23, 0.02);
+      }
+
+      .section-head h2,
+      .section-head h3 {
+        margin: 0;
+        font-size: 16px;
+      }
+
+      .section-body {
+        padding: 14px 16px 16px;
+        color: var(--text);
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      pre {
+        margin: 12px 0 0;
+        padding: 12px 12px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: var(--codeBg);
+        overflow: auto;
+      }
+
+      table td pre {
+        margin-top: 0;
+      }
+
+      .cell-detail {
+        margin: 8px 0 0;
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .cell-detail p {
+        margin: 0 0 6px;
+      }
+
+      .cell-detail p:last-child {
+        margin-bottom: 0;
+      }
+
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+          monospace;
+        font-size: 13px;
+      }
+
+      .backtop {
+        display: inline-block;
+        margin-top: 12px;
+        font-size: 13px;
+      }
+
+      .anim-wrap {
+        margin-top: 14px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px 12px 14px;
+        background: rgba(255, 255, 255, 0.95);
+      }
+
+      .anim-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+      }
+
+      .anim-toolbar button {
+        padding: 6px 12px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: #fff;
+        cursor: pointer;
+        font-size: 14px;
+        color: var(--text);
+      }
+
+      .anim-toolbar button:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+
+      .anim-label {
+        font-size: 13px;
+        color: var(--muted);
+        min-width: 64px;
+        text-align: center;
+      }
+
+      .anim-steps > .anim-step {
+        display: none;
+      }
+
+      .anim-steps > .anim-step.active {
+        display: block;
+      }
+
+      .anim-step h4 {
+        margin: 0 0 8px;
+        font-size: 14px;
+      }
+
+      .viz-wrap {
+        background: rgba(29, 78, 216, 0.06);
+        border-color: rgba(29, 78, 216, 0.22);
+      }
+
+      .viz-badge {
+        font-weight: 650;
+        font-size: 13px;
+        margin-right: auto;
+        color: var(--text);
+      }
+
+      .viz-caption {
+        margin: 0 0 10px;
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .viz-wrap pre {
+        margin: 0;
+        font-size: 12px;
+        line-height: 1.35;
+      }
+
+      /* Colored “internals” diagrams (ArrayList, hash tables, trees, linked order) */
+      .viz-diagram {
+        margin: 0;
+        padding: 14px 12px;
+        border-radius: 12px;
+        background: linear-gradient(165deg, rgba(255, 255, 255, 0.97), rgba(241, 245, 249, 0.88));
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        overflow-x: auto;
+      }
+      .viz-diagram + .viz-diagram {
+        margin-top: 14px;
+      }
+      .viz-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 14px;
+        margin-top: 12px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .viz-legend-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .viz-swatch {
+        width: 13px;
+        height: 13px;
+        border-radius: 4px;
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        flex-shrink: 0;
+      }
+      .viz-row {
+        display: flex;
+        align-items: flex-end;
+        gap: 6px;
+        margin-top: 6px;
+        flex-wrap: wrap;
+      }
+      .viz-row-title {
+        width: 100%;
+        font-size: 11px;
+        font-weight: 750;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #64748b;
+        margin-top: 10px;
+        margin-bottom: 2px;
+      }
+      .viz-row-title:first-child {
+        margin-top: 0;
+      }
+      .ary-slot {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        min-width: 46px;
+      }
+      .ary-idx {
+        font-size: 11px;
+        font-weight: 700;
+        color: #64748b;
+      }
+      .ary-cell {
+        min-width: 46px;
+        min-height: 46px;
+        border-radius: 10px;
+        border: 2px solid #cbd5e1;
+        background: #f8fafc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 750;
+        font-size: 14px;
+        color: #64748b;
+      }
+      .ary-cell.empty {
+        font-size: 11px;
+        font-weight: 650;
+        color: #94a3b8;
+      }
+      .ary-cell.filled {
+        background: linear-gradient(180deg, #fef9c3, #fde047);
+        border-color: #ca8a04;
+        color: #713f12;
+      }
+      .ary-cell.hl {
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+        border-color: #2563eb;
+        background: linear-gradient(180deg, #dbeafe, #bfdbfe);
+        color: #1e3a8a;
+      }
+      .ary-cell.shift {
+        background: linear-gradient(180deg, #fce7f3, #fbcfe8);
+        border-color: #db2777;
+        color: #831843;
+      }
+      .ary-cell.newgrow {
+        background: linear-gradient(180deg, #d1fae5, #6ee7b7);
+        border: 2px dashed #059669;
+        color: #065f46;
+        font-size: 11px;
+      }
+      .viz-split {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+      }
+      .viz-arrow-lg {
+        font-size: 22px;
+        font-weight: 800;
+        color: #7c3aed;
+        line-height: 1;
+      }
+      .bkt-row {
+        display: flex;
+        gap: 5px;
+        margin-top: 8px;
+        flex-wrap: wrap;
+        align-items: flex-start;
+      }
+      .bkt-slot {
+        width: 56px;
+        min-height: 76px;
+        background: linear-gradient(180deg, #eef2ff, #e0e7ff);
+        border: 2px solid #818cf8;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 6px 4px 8px;
+        gap: 4px;
+      }
+      .bkt-slot.empty {
+        background: linear-gradient(180deg, #f8fafc, #f1f5f9);
+        border-color: #cbd5e1;
+      }
+      .bkt-slot.active {
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.25);
+        background: linear-gradient(180deg, #e0e7ff, #c7d2fe);
+      }
+      .bkt-idx {
+        font-size: 10px;
+        font-weight: 800;
+        color: #4338ca;
+      }
+      .bkt-slot.empty .bkt-idx {
+        color: #64748b;
+      }
+      .bkt-null {
+        font-size: 11px;
+        color: #94a3b8;
+        font-weight: 650;
+      }
+      .kv-node {
+        background: linear-gradient(180deg, #fce7f3, #fbcfe8);
+        border: 2px solid #db2777;
+        border-radius: 8px;
+        padding: 6px 8px;
+        font-size: 11px;
+        font-weight: 750;
+        color: #831843;
+        text-align: center;
+        line-height: 1.25;
+        max-width: 100%;
+      }
+      .kv-node.alt {
+        background: linear-gradient(180deg, #cffafe, #a5f3fc);
+        border-color: #0891b2;
+        color: #164e63;
+      }
+      .kv-node.val-dummy {
+        background: linear-gradient(180deg, #ffedd5, #fdba74);
+        border-color: #ea580c;
+        color: #7c2d12;
+        font-size: 10px;
+      }
+      .kv-chain {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 4px;
+      }
+      .kv-arrow {
+        color: #be185d;
+        font-weight: 900;
+        font-size: 16px;
+      }
+      .walk-tag {
+        margin-top: 8px;
+        padding: 6px 10px;
+        border-radius: 8px;
+        background: rgba(59, 130, 246, 0.12);
+        border: 1px solid rgba(59, 130, 246, 0.35);
+        font-size: 12px;
+        font-weight: 650;
+        color: #1d4ed8;
+      }
+      .walk-tag.bad {
+        background: rgba(239, 68, 68, 0.1);
+        border-color: rgba(239, 68, 68, 0.35);
+        color: #b91c1c;
+      }
+      .walk-tag.ok {
+        background: rgba(16, 185, 129, 0.12);
+        border-color: rgba(16, 185, 129, 0.35);
+        color: #047857;
+      }
+      .resize-compare {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        margin-top: 8px;
+      }
+      .resize-col {
+        flex: 1;
+        min-width: 140px;
+        padding: 10px;
+        border-radius: 10px;
+        background: rgba(124, 58, 237, 0.06);
+        border: 1px dashed rgba(124, 58, 237, 0.35);
+      }
+      .resize-col h5 {
+        margin: 0 0 8px;
+        font-size: 12px;
+        color: #6d28d9;
+      }
+      .order-strip {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 10px;
+        background: linear-gradient(90deg, rgba(236, 72, 153, 0.08), rgba(99, 102, 241, 0.1));
+        border: 1px solid rgba(236, 72, 153, 0.25);
+      }
+      .order-box {
+        background: linear-gradient(180deg, #fdf4ff, #fae8ff);
+        border: 2px solid #c026d3;
+        color: #86198f;
+        font-size: 12px;
+        font-weight: 750;
+        padding: 8px 12px;
+        border-radius: 10px;
+        white-space: nowrap;
+      }
+      .order-link {
+        font-size: 18px;
+        color: #a855f7;
+        font-weight: 900;
+      }
+      .order-hint {
+        flex-basis: 100%;
+        width: 100%;
+        font-size: 11px;
+        color: #86198f;
+        font-weight: 650;
+        margin-bottom: 4px;
+      }
+      .dual-label {
+        font-size: 12px;
+        font-weight: 700;
+        color: #0f766e;
+        margin-top: 12px;
+        margin-bottom: 4px;
+      }
+      .tree-wrap {
+        text-align: center;
+        padding: 8px 4px;
+      }
+      .tree-tier {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin: 10px 0;
+        flex-wrap: wrap;
+        align-items: flex-start;
+      }
+      .tree-node {
+        min-width: 52px;
+        height: 52px;
+        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 15px;
+        border: 3px solid;
+        box-sizing: border-box;
+      }
+      .tree-node.root {
+        background: linear-gradient(180deg, #fef08a, #fde047);
+        border-color: #ca8a04;
+        color: #713f12;
+      }
+      .tree-node.sm {
+        background: linear-gradient(180deg, #bbf7d0, #86efac);
+        border-color: #16a34a;
+        color: #14532d;
+      }
+      .tree-node.lg {
+        background: linear-gradient(180deg, #fed7aa, #fdba74);
+        border-color: #ea580c;
+        color: #7c2d12;
+      }
+      .tree-node.path {
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.55);
+        outline: 2px solid #1d4ed8;
+        outline-offset: 2px;
+      }
+      .tree-bridge {
+        display: flex;
+        justify-content: center;
+        gap: 80px;
+        font-size: 11px;
+        font-weight: 800;
+        color: #64748b;
+        margin: -4px 0 2px;
+        flex-wrap: wrap;
+      }
+      .tree-bridge span {
+        min-width: 72px;
+        text-align: center;
+      }
+      .tree-note {
+        margin-top: 10px;
+        font-size: 12px;
+        color: var(--muted);
+        text-align: center;
+        line-height: 1.45;
+      }
+      .set-illus {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        align-items: stretch;
+        margin-top: 6px;
+      }
+      .set-illus-col {
+        flex: 1;
+        min-width: 160px;
+        padding: 10px;
+        border-radius: 10px;
+      }
+      .set-illus-col.you {
+        background: rgba(14, 165, 233, 0.1);
+        border: 1px solid rgba(14, 165, 233, 0.35);
+      }
+      .set-illus-col.inside {
+        background: rgba(245, 158, 11, 0.1);
+        border: 1px solid rgba(245, 158, 11, 0.4);
+      }
+      .set-illus-col h5 {
+        margin: 0 0 8px;
+        font-size: 12px;
+      }
+      .pill {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 750;
+        margin: 3px 4px 3px 0;
+      }
+      .pill.sky {
+        background: #e0f2fe;
+        color: #0369a1;
+        border: 1px solid #7dd3fc;
+      }
+      .pill.amber {
+        background: #fffbeb;
+        color: #b45309;
+        border: 1px solid #fcd34d;
+      }
+
+      .hashset-diagram-figure,
+      .hashmap-diagram-figure {
+        margin: 18px 0 0;
+        padding: 14px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.96);
+        text-align: center;
+      }
+      .hashset-diagram-figure img,
+      .hashmap-diagram-figure img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        margin: 0 auto;
+        border-radius: 8px;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+      }
+      .hashset-diagram-figure figcaption,
+      .hashmap-diagram-figure figcaption {
+        margin-top: 12px;
+        font-size: 13px;
+        text-align: left;
+        line-height: 1.5;
+        color: var(--muted);
+      }
+      .hashmap-diagram-stack {
+        margin-top: 8px;
+      }
+      .hashmap-diagram-stack h4 {
+        margin: 22px 0 8px;
+        font-size: 15px;
+      }
+      .hashmap-diagram-stack h4:first-child {
+        margin-top: 14px;
+      }
+
+      /* TreeMap / red–black study diagrams */
+      .rbt-panel {
+        margin: 14px 0;
+        padding: 16px 14px;
+        border-radius: 12px;
+        background: linear-gradient(180deg, #f8fafc, #f1f5f9);
+        border: 1px solid rgba(15, 23, 42, 0.12);
+        text-align: center;
+      }
+      .rbt-panel p {
+        margin: 0 0 12px;
+        font-size: 13px;
+        color: var(--muted);
+        text-align: left;
+        line-height: 1.5;
+      }
+      .rbt-node {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        height: 44px;
+        padding: 0 10px;
+        border-radius: 10px;
+        font-weight: 800;
+        font-size: 15px;
+        border: 2px solid rgba(0, 0, 0, 0.25);
+        box-sizing: border-box;
+      }
+      .rbt-node small {
+        display: block;
+        font-size: 9px;
+        font-weight: 700;
+        opacity: 0.9;
+        margin-top: 1px;
+      }
+      .rbt-black {
+        background: #0f172a;
+        color: #f8fafc;
+        border-color: #334155;
+      }
+      .rbt-red {
+        background: #ef4444;
+        color: #fff;
+        border-color: #b91c1c;
+      }
+      .rbt-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+      }
+      .rbt-row {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 36px;
+        flex-wrap: wrap;
+        margin: 6px 0;
+      }
+      .rbt-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px 20px;
+        justify-content: center;
+        margin-top: 12px;
+        font-size: 13px;
+      }
+      .rbt-legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .rbt-pill {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: 6px;
+        font-weight: 750;
+        font-size: 13px;
+        vertical-align: middle;
+      }
+      .rbt-pill-b {
+        background: #0f172a;
+        color: #f8fafc;
+      }
+      .rbt-pill-r {
+        background: #ef4444;
+        color: #fff;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-top: 12px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.9);
+      }
+
+      th,
+      td {
+        text-align: left;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+
+      th {
+        font-weight: 700;
+        background: rgba(2, 6, 23, 0.03);
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <header id="top">
+        <h1>Advance Java — Quick Notes</h1>
+        <p class="subtitle">
+          Click a main question to expand its indirect questions. Click any question link to jump to the answer.
+        </p>
+      </header>
+
+      <nav class="toc" aria-label="Questions navigation">
+        <div class="toc-title">Questions</div>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q50</span>
+              <a href="#q50">Difference between Future and CompletableFuture?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <p class="hint">Indirect questions</p>
+            <ul class="list">
+              <li>
+                <a href="#q50-1">If two APIs return values and you want to process them together?</a>
+              </li>
+              <li>
+                <a href="#q50-2">How do you run a task asynchronously in Java?</a>
+              </li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q51</span>
+              <a href="#q51">How Java handles exceptions?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <p class="hint">Indirect questions</p>
+            <ul class="list">
+              <li><a href="#q51-1">Difference between Exception vs Error</a></li>
+              <li><a href="#q51-2">Can we write only try block without catch and finally blocks?</a></li>
+              <li><a href="#q51-3">Does remaining statements in try block execute after exception occurs?</a></li>
+              <li><a href="#q51-4">What Happens When an Exception Is Thrown by the Main Method?</a></li>
+              <li><a href="#q51-5">Does a try contain multiple catch blocks?</a></li>
+              <li><a href="#q51-6">What if we return from try, will finally block still execute?</a></li>
+              <li>
+                <a href="#q51-8">If both try and finally return a value, which one is returned?</a>
+              </li>
+              <li><a href="#q51-7">When will finally won't execute?</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q53</span>
+              <a href="#q53">What is the difference between throw and throws?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <p class="hint">Indirect questions</p>
+            <ul class="list">
+              <li><a href="#q53-1">Can we use throw without throws?</a></li>
+              <li><a href="#q53-2">What happens if I don’t declare a throws for a checked exception?</a></li>
+              <li><a href="#q53-3">Can we use throw with multiple exceptions?</a></li>
+              <li><a href="#q53-4">Can you override a method and change the exceptions it throws?</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q54</span>
+              <a href="#q54">What are custom exceptions and how create it?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <p class="hint">Indirect questions</p>
+            <ul class="list">
+              <li><a href="#q54-1">How to create it?</a></li>
+              <li><a href="#q54-2">When to extend Exception vs RuntimeException?</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q55</span>
+              <a href="#q55">Explain equals() and hashCode() contract?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <p class="hint">Indirect questions</p>
+            <ul class="list">
+              <li><a href="#q55">Why do we need both equals() and hashCode()?</a></li>
+              <li><a href="#q55-contract">What is the equals() and hashCode() contract?</a></li>
+              <li><a href="#q55-collision">What is a hash collision?</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q56</span>
+              <a href="#q56">What is the difference between List, Set and Map?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <ul class="list">
+              <li><a href="#q56">List vs Set vs Map</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q57</span>
+              <a href="#q57">ArrayList vs LinkedList?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <ul class="list">
+              <li><a href="#q57">ArrayList vs LinkedList</a></li>
+              <li><a href="#q57-1">Can I insert in the middle of ArrayList?</a></li>
+              <li><a href="#q57-2">How does Java manage dynamic resizing in ArrayList?</a></li>
+              <li><a href="#q57-3">Why is LinkedList not preferred for random access?</a></li>
+              <li>
+                <a href="#q57-4">
+                  If you are inserting an element in the middle of a LinkedList with 10 million items, how will it
+                  perform compared to an ArrayList?
+                </a>
+              </li>
+              <li>
+                <a href="#q57-5">
+                  If you need to implement a queue that frequently adds and removes elements from both ends, which list
+                  would be a better choice and why?
+                </a>
+              </li>
+              <li>
+                <a href="#q57-6">Defining the constructor capacity in ArrayList increases performance?</a>
+              </li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q58</span>
+              <a href="#q58">ArrayList vs Vector?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <ul class="list">
+              <li><a href="#q58">ArrayList vs Vector (table)</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q59</span>
+              <a href="#q59">HashMap vs TreeMap vs LinkedHashMap?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <ul class="list">
+              <li><a href="#q59">HashMap vs TreeMap vs LinkedHashMap</a></li>
+              <li>
+                <a href="#q59-1"
+                  >If you want to maintain the insertion order of key-value pairs, which Map implementation would you
+                  choose and why?</a
+                >
+              </li>
+              <li>
+                <a href="#q59-2"
+                  >How would you store user records where the keys must always stay sorted alphabetically?</a
+                >
+              </li>
+              <li>
+                <a href="#q59-3"
+                  >What would happen if you insert multiple elements with the same hashcode into a Map? How is ordering
+                  handled in such a case?</a
+                >
+              </li>
+              <li>
+                <a href="#q59-4"
+                  >In what scenarios could maintaining a sorted order of keys lead to performance trade-offs?</a
+                >
+              </li>
+              <li>
+                <a href="#q59-5"
+                  >Building a cache: fast access and predictable iteration order (which Map fits?)</a
+                >
+              </li>
+              <li><a href="#q59-6">How can we make HashMap Synchronized?</a></li>
+              <li>
+                <a href="#q59-7"
+                  >What are the consequences of non-final fields in a class that is used as a key in a HashMap?</a
+                >
+              </li>
+              <li>
+                <a href="#q59-8">What happens if we have added mutable object to HashMap and change it.</a>
+              </li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q61</span>
+              <a href="#q61">HashMap vs HashTable?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <ul class="list">
+              <li><a href="#q61">HashMap vs HashTable</a></li>
+              <li><a href="#q61-1">What is fail-fast and fail-safe?</a></li>
+              <li><a href="#q61-2">Is HashMap thread-safe by default?</a></li>
+              <li><a href="#q61-3">Why does Hashtable not allow null keys or values?</a></li>
+              <li><a href="#q61-4">Which is faster: HashMap or Hashtable?</a></li>
+              <li><a href="#q61-5">What is the difference between Iterator and Enumerator?</a></li>
+              <li><a href="#q61-6">When should we use ConcurrentHashMap over Hashtable?</a></li>
+              <li><a href="#q61-7">Why is Hashtable considered a legacy class?</a></li>
+              <li>
+                <a href="#q61-8"
+                  >Suppose I am using a Hashtable, one thread is updating the Hashtable and another thread at the same
+                  time is getting the value—then what happens?</a
+                >
+              </li>
+              <li>
+                <a href="#q61-9"
+                  >Suppose I am using a ConcurrentHashMap, one thread is updating it and another thread at the same time
+                  is getting a value—then what happens?</a
+                >
+              </li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q62</span>
+              <a href="#q62">ConcurrentHashMap vs Synchronized HashMap?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <ul class="list">
+              <li><a href="#q62">ConcurrentHashMap vs Synchronized HashMap (table)</a></li>
+              <li>
+                <a href="#q62-1">What is ConcurrentModificationException when it occurs?</a>
+              </li>
+              <li>
+                <a href="#q62-2">How does thread safety work in different map implementations?</a>
+              </li>
+              <li>
+                <a href="#q62-3">Which map implementation is best for concurrent updates in Java?</a>
+              </li>
+              <li>
+                <a href="#q62-4">Why is the SynchronizedMap slower during multi-threaded access?</a>
+              </li>
+              <li>
+                <a href="#q62-5"
+                  >Does ConcurrentHashMap throw ConcurrentModificationException when modified during iteration?</a
+                >
+              </li>
+              <li><a href="#q62-6">How to make HashMap thread-safe?</a></li>
+              <li>
+                <a href="#q62-7">What are the alternatives to Hashtable for high concurrency?</a>
+              </li>
+              <li><a href="#q62-8">Can we use HashMap in multi-threaded scenario?</a></li>
+              <li>
+                <a href="#q62-9">Can we insert and delete at time same from SynchronizedMap?</a>
+              </li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q63</span>
+              <a href="#q63">Why ConcurrentHashMap won't allow null keys and null values?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <ul class="list">
+              <li><a href="#q63">Null keys and null values in ConcurrentHashMap</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q64</span>
+              <a href="#q64">HashSet vs LinkedHashSet vs TreeSet?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <ul class="list">
+              <li><a href="#q64">HashSet vs LinkedHashSet vs TreeSet (table)</a></li>
+              <li><a href="#q64-1">How would you maintain insertion order in a Set?</a></li>
+              <li><a href="#q64-2">What if I need to always keep the elements sorted?</a></li>
+              <li>
+                <a href="#q64-3">How would you implement a deduplicated list of elements while keeping insertion order?</a>
+              </li>
+              <li><a href="#q64-4">Which Set would perform best for search operations?</a></li>
+              <li><a href="#q64-5">Can I store null in a Set?</a></li>
+              <li>
+                <a href="#q64-6"
+                  >What happens if I insert elements in random order, then iterate the Set?</a
+                >
+              </li>
+              <li><a href="#q64-7">How does TreeSet know how to sort the elements?</a></li>
+              <li><a href="#q64-8">Why TreeSet does not allow null?</a></li>
+              <li>
+                <a href="#q64-9"
+                  >What happens if you add elements to a HashSet with duplicate hashCode() values but different equals()
+                  implementations?</a
+                >
+              </li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q65</span>
+              <a href="#q65">Explain about Queue?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <ul class="list">
+              <li><a href="#q65">Queue (FIFO, bounded vs unbounded, implementations)</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q66</span>
+              <a href="#q66">When will you use each queue?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <ul class="list">
+              <li><a href="#q66">When to use each queue (with real-world examples)</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q67</span>
+              <a href="#q67">How ArrayList works internally?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <ul class="list">
+              <li><a href="#q67">ArrayList internals + coloured diagram</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q68</span>
+              <a href="#q68">How HashMap works internally?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <ul class="list">
+              <li><a href="#q68">HashMap internals + reference diagrams</a></li>
+              <li><a href="#q68-1">What is the load factor in HashMap?</a></li>
+              <li><a href="#q68-2">How does resize happen in HashMap?</a></li>
+              <li><a href="#q68-3">What is the difference between capacity and size of HashMap?</a></li>
+              <li><a href="#q68-4">Apart from String, what predefined classes can we use as keys in a Map?</a></li>
+              <li>
+                <a href="#q68-5"
+                  >If a poor hash function puts everything in one bucket, what happens to performance?</a
+                >
+              </li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q69</span>
+              <a href="#q69">How HashSet works internally?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <ul class="list">
+              <li><a href="#q69">HashSet internals + reference diagram</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q70</span>
+              <a href="#q70">How LinkedHashMap and LinkedHashSet work internally?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <ul class="list">
+              <li><a href="#q70">LinkedHashMap / LinkedHashSet internals (structures)</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q71</span>
+              <a href="#q71">How TreeMap works internally?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <ul class="list">
+              <li><a href="#q71">TreeMap internals (red–black tree)</a></li>
+              <li><a href="#q71-1">Will TreeMap allow null key or null value?</a></li>
+              <li><a href="#q71-2">Why no null key in TreeMap / TreeSet?</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q72</span>
+              <a href="#q72">How TreeSet works internally?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <ul class="list">
+              <li><a href="#q72">TreeSet internals + coloured diagram</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q73</span>
+              <a href="#q73">Iterator vs ListIterator?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <ul class="list">
+              <li><a href="#q73">Iterator vs ListIterator + indirect questions</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q74</span>
+              <a href="#q74">How do fail-fast iterators work?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <ul class="list">
+              <li><a href="#q74">Fail-fast iterators &amp; ConcurrentModificationException</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q75</span>
+              <a href="#q75">How do fail-safe iterators work?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <ul class="list">
+              <li><a href="#q75">Fail-safe iterators + memory (indirect)</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q76</span>
+              <a href="#q76">Comparable vs Comparator?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <ul class="list">
+              <li><a href="#q76">Comparable vs Comparator + precedence</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="summary-row">
+              <span class="pill">Q77</span>
+              <a href="#q77"><code>List.of()</code> vs <code>Collections.unmodifiableList()</code>?</a>
+            </div>
+          </summary>
+          <div class="toc-body">
+            <ul class="list">
+              <li><a href="#q77">Immutable list vs unmodifiable view</a></li>
+            </ul>
+          </div>
+        </details>
+      </nav>
+
+      <main class="answers">
+        <section id="q50">
+          <div class="section-head">
+            <h2>50. Difference between Future and CompletableFuture?</h2>
+          </div>
+          <div class="section-body">
+            <p>
+              <strong>Future</strong> and <strong>CompletableFuture</strong>, both help with asynchronous programming,
+              but they’re quite different in how they work.
+            </p>
+
+            <p class="muted"><strong>Real time example:</strong> Imagine you are ordering a pizza.</p>
+            <p><strong>Scenario A:</strong> You went to the restaurant and ordered and wait there on the table. You are not doing anything else. Just sitting and waiting for your order. That is <strong>Future</strong>.</p>
+            <p><strong>Scenario B:</strong> You place the order through an app from home. While it is being prepared, you watch Netflix, take a shower, and the app notifies us when it is done. That is <strong>CompletableFuture</strong>.</p>
+
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q50-1">
+          <div class="section-head">
+            <h3>50.1 If two APIs return values and you want to process them together?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              We can call both APIs using <strong>CompletableFuture</strong>. Use <code>CompletableFuture.allOf()</code>
+              to wait for both to finish. Once they’re done, we can get both results and combine them however we want.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q50-2">
+          <div class="section-head">
+            <h3>50.2 How do you run a task asynchronously in Java?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              Just wrap the task using <code>CompletableFuture.runAsync()</code> or <code>supplyAsync()</code>. This
+              tells Java to run it in the background thread, so the main thread doesn't get stuck waiting.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q51">
+          <div class="section-head">
+            <h2>51. How Java handles exceptions?</h2>
+          </div>
+          <div class="section-body">
+            <p>
+              An exception in Java is just an unexpected situation that breaks the normal flow of the program. Java
+              handles exceptions using a structured mechanism that involves keywords: <code>try</code>,
+              <code>catch</code>, <code>finally</code>.
+            </p>
+
+            <ul>
+              <li>
+                <strong>try block:</strong> This block encloses the code segment that is susceptible to throwing an
+                exception.
+              </li>
+              <li>
+                <strong>catch block:</strong> If an exception occurs within the try block, the corresponding catch
+                block is executed. A try block can have multiple catch blocks to handle different exception types.
+              </li>
+              <li>
+                <strong>finally block:</strong> This block is optional and contains code that is guaranteed to execute,
+                regardless of whether an exception occurred in the try block or was caught by a catch block. It is
+                typically used for cleanup operations like closing resources.
+              </li>
+            </ul>
+
+            <pre><code>try {
+  BufferedReader reader = new BufferedReader(new FileReader("data.txt"));
+  String line = reader.readLine();
+  System.out.println(line);
+} catch (IOException e) {
+  System.out.println("Something went wrong while reading the file.");
+  e.printStackTrace();
+} finally {
+  System.out.println("Cleanup code goes here.");
+}</code></pre>
+
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q51-1">
+          <div class="section-head">
+            <h3>51.1 Difference between Exception vs Error</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              Exceptions are issues in the code that can be handled; Errors are serious problems like memory leaks the
+              program can’t handle.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q51-2">
+          <div class="section-head">
+            <h3>51.2 Can we write only try block without catch and finally blocks?</h3>
+          </div>
+          <div class="section-body">
+            <p>No, a try block must be followed by either catch or finally. Java won't compile without it.</p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q51-3">
+          <div class="section-head">
+            <h3>51.3 Does remaining statements in try block execute after exception occurs?</h3>
+          </div>
+          <div class="section-body">
+            <p>No, once an exception is thrown, the remaining code in that try block is skipped.</p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q51-4">
+          <div class="section-head">
+            <h3>51.4 What Happens When an Exception Is Thrown by the Main Method?</h3>
+          </div>
+          <div class="section-body">
+            <p>If not caught, JVM prints the stack trace and exits the program.</p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q51-5">
+          <div class="section-head">
+            <h3>51.5 Does a try contain multiple catch blocks?</h3>
+          </div>
+          <div class="section-body">
+            <p>Yes, we can have multiple catch blocks to handle different exception types.</p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q51-6">
+          <div class="section-head">
+            <h3>51.6 What if we return from try, will finally block still execute?</h3>
+          </div>
+          <div class="section-body">
+            <p>Yes, finally will run even if try returns early.</p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q51-8">
+          <div class="section-head">
+            <h3>51.8 If both try and finally return a value, which one is returned?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              If both <code>try</code> and <code>finally</code> have a <code>return</code>, then the
+              <strong>finally return overrides</strong> the <code>try</code> return (and it can even override thrown
+              exceptions).
+            </p>
+            <pre><code>static String demo() {
+  try {
+    return "from try";
+  } finally {
+    return "from finally";
+  }
+}</code></pre>
+            <p class="muted">Returned value: <strong>"from finally"</strong></p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q51-7">
+          <div class="section-head">
+            <h3>51.7 When will finally won't execute?</h3>
+          </div>
+          <div class="section-body">
+            <p>With <code>System.exit(0)</code> Program exists, so finally will not be invoked.</p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q53">
+          <div class="section-head">
+            <h2>53. What is the difference between throw and throws?</h2>
+          </div>
+          <div class="section-body">
+            <p><strong>Throw:</strong></p>
+            <p>
+              The <code>throw</code> keyword is used to manually throw an exception in the code. When <code>throw</code>
+              is executed, the normal flow of execution is immediately terminated, and the control jumps to the nearest
+              catch block that can handle the thrown exception. If no such catch block is found, the exception
+              propagates up the call stack.
+            </p>
+            <p class="muted"><strong>Real-World Example:</strong> Imagine we are writing a banking app. If a user tries to withdraw more money than they have, we throw an exception.</p>
+            <pre><code>public class BankAccount {
+  private double balance;
+
+  public void withdraw(double amount) {
+    if (amount > balance) {
+      throw new IllegalArgumentException("Insufficient funds!");
+    }
+    balance -= amount;
+  }
+}</code></pre>
+
+            <p style="margin-top: 14px"><strong>Throws:</strong></p>
+            <p>
+              <code>throws</code> is used in a method's signature to declare the types of checked exceptions that the
+              method might throw. This informs calling methods that they need to either handle these exceptions (using
+              try-catch) or declare them as well (propagating them further).
+            </p>
+            <p class="muted">
+              <strong>Real World Example:</strong> We are writing a file reader method. Since files can be missing or
+              corrupted, Java forces us to declare <code>throws IOException</code> to warn callers.
+            </p>
+            <pre><code>public class FileProcessor {
+  // Warns that this method might throw an IOException
+  public String readFirstLine(String filePath) throws IOException {
+    BufferedReader reader = new BufferedReader(new FileReader(filePath));
+    return reader.readLine();
+  }
+}</code></pre>
+
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q53-1">
+          <div class="section-head">
+            <h3>53.1 Can we use throw without throws?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              We can use <code>throw</code> for unchecked exceptions (like <code>NullPointerException</code>) without
+              <code>throws</code>. But for checked exceptions (like <code>IOException</code>), if we throw them, we must
+              declare <code>throws</code> or handle them. Otherwise, Java will throw compile-time error.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q53-2">
+          <div class="section-head">
+            <h3>53.2 What happens if I don’t declare a throws for a checked exception?</h3>
+          </div>
+          <div class="section-body">
+            <p>If we don’t catch it with try-catch or declare it with throws, our code just won’t compile.</p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q53-3">
+          <div class="section-head">
+            <h3>53.3 Can we use throw with multiple exceptions?</h3>
+          </div>
+          <div class="section-body">
+            <p>No. <code>throw</code> is for throwing a single exception instance at a time.</p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q53-4">
+          <div class="section-head">
+            <h3>53.4 Can you override a method and change the exceptions it throws?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              Yes, but we can throw <strong>narrower checked exceptions</strong>. We can’t add new broader checked
+              exceptions in the child class.
+            </p>
+            <pre><code>class Parent {
+  void read() throws java.io.IOException {}
+}
+
+class ChildOk extends Parent {
+  // narrower checked exception is allowed (subclass of IOException)
+  @Override
+  void read() throws java.io.FileNotFoundException {}
+}
+
+class ChildNotOk extends Parent {
+  // NOT allowed: broader/new checked exception than parent declares
+  @Override
+  void read() throws java.lang.Exception {}
+}</code></pre>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q54">
+          <div class="section-head">
+            <h2>54. What are custom exceptions and how create it?</h2>
+          </div>
+          <div class="section-body">
+            <p>
+              Sometimes, Java's built-in exceptions like <code>NullPointerException</code>, <code>IOException</code>, or
+              <code>IllegalArgumentException</code> don’t exactly say what went wrong in the project.
+            </p>
+            <p class="muted">
+              <strong>Real-world Example:</strong> Let’s say we are building an e-commerce app, and a user tries to
+              order more than the available stock. There's no <code>OutOfStockException</code> in Java. In such
+              situations we create <strong>Custom Exceptions</strong>.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q54-1">
+          <div class="section-head">
+            <h3>54.1 How to create it?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              We create custom exceptions by extending either <code>Exception</code> (checked) or
+              <code>RuntimeException</code> (unchecked).
+            </p>
+            <p class="muted">
+              <strong>Real-world:</strong> For an e-commerce stock issue, we might create
+              <code>OutOfStockException</code>.
+            </p>
+            <pre><code>// Checked custom exception (caller must handle or declare)
+class OutOfStockException extends Exception {
+  OutOfStockException(String message) {
+    super(message);
+  }
+}
+
+// Unchecked custom exception (optional to handle/declare)
+class OutOfStockRuntimeException extends RuntimeException {
+  OutOfStockRuntimeException(String message) {
+    super(message);
+  }
+}</code></pre>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q54-2">
+          <div class="section-head">
+            <h3>54.2 When to extend Exception vs RuntimeException?</h3>
+          </div>
+          <div class="section-body">
+            <ul>
+              <li>
+                <strong>Extend Exception (checked):</strong> If the exceptional condition is recoverable or expected to
+                be handled by the caller.
+              </li>
+              <li>
+                <strong>Extend RuntimeException (unchecked):</strong> If the exceptional condition is unexpected or
+                typically indicates a programming error.
+              </li>
+            </ul>
+
+            <p class="muted"><strong>Real-world examples:</strong></p>
+            <ul>
+              <li>
+                <strong>Checked (Exception):</strong> A user tries to buy 5 items but only 2 are in stock. The caller
+                (service/controller) can show a proper message and let the user change quantity.
+              </li>
+              <li>
+                <strong>Unchecked (RuntimeException):</strong> A bug causes stock to be negative due to wrong business
+                logic, or a required value is unexpectedly null—this is more like a programming error that should be
+                fixed.
+              </li>
+            </ul>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q55">
+          <div class="section-head">
+            <h2>55. Explain equals() and hashCode() contract?</h2>
+          </div>
+          <div class="section-body">
+            <p>
+              <code>equals()</code> tells if two objects should be treated as the <strong>same logically</strong>.
+              By default (from <code>java.lang.Object</code>), it compares memory address (same object in RAM). If you
+              want logical comparison (like comparing two users by <code>id</code>), you override <code>equals()</code>.
+            </p>
+            <p>
+              <code>hashCode()</code> gives a number that helps hash-based collections (like <code>HashMap</code>,
+              <code>HashSet</code>) quickly find the object.
+            </p>
+
+            <p class="muted"><strong>Real-world example:</strong></p>
+            <p>
+              Think of a delivery address. <code>hashCode()</code> is like a <strong>pincode / area code</strong> that
+              quickly groups addresses into the same area (fast to narrow down). <code>equals()</code> is like the
+              <strong>full address</strong> (house no + building + street) that confirms it’s exactly the same place
+              (final confirmation).
+            </p>
+
+            <div id="q55-contract"></div>
+            <p><strong>Contract:</strong></p>
+            <ul>
+              <li>
+                If two objects are equal (<code>equals()</code> returns <code>true</code>), they must have the same
+                <code>hashCode()</code> value.
+              </li>
+              <li>
+                If two objects have the same <code>hashCode()</code>, they might still not be equal.
+              </li>
+            </ul>
+
+            <div id="q55-collision"></div>
+            <p>
+              When different objects end up with the same <code>hashCode()</code>, it’s called a
+              <strong>hash collision</strong>. Then Java uses <code>equals()</code> to check the real match.
+            </p>
+
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q56">
+          <div class="section-head">
+            <h2>56. What is the difference between List, Set and Map?</h2>
+          </div>
+          <div class="section-body">
+            <table aria-label="List vs Set vs Map comparison">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>List</th>
+                  <th>Set</th>
+                  <th>Map</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Duplicates</strong></td>
+                  <td>Allows duplicate elements</td>
+                  <td>Does not allow duplicate elements</td>
+                  <td>Does not allow duplicate keys (values can be duplicated)</td>
+                </tr>
+                <tr>
+                  <td><strong>Order</strong></td>
+                  <td>Maintains insertion order</td>
+                  <td>Does not maintain insertion order (except <code>LinkedHashSet</code>)</td>
+                  <td>Does not maintain insertion order (except <code>LinkedHashMap</code>)</td>
+                </tr>
+                <tr>
+                  <td><strong>Nulls</strong></td>
+                  <td>Can add any number of <code>null</code> values</td>
+                  <td>Allows at most one <code>null</code> value</td>
+                  <td>Allows one <code>null</code> key and multiple <code>null</code> values</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q57">
+          <div class="section-head">
+            <h2>57. ArrayList vs LinkedList?</h2>
+          </div>
+          <div class="section-body">
+            <table aria-label="ArrayList vs LinkedList comparison">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>ArrayList</th>
+                  <th>LinkedList</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Internal structure</strong></td>
+                  <td>
+                    Backed by a <strong>dynamic array</strong> (contiguous memory). Resizes when needed.
+                  </td>
+                  <td>
+                    Backed by a <strong>doubly linked list</strong> (nodes with next/prev references).
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Access by index</strong></td>
+                  <td><code>get(i)</code> is fast: <strong>O(1)</strong></td>
+                  <td>Needs traversal: <strong>O(n)</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>Insert / delete</strong></td>
+                  <td>
+                    Middle insert/delete is slower: <strong>O(n)</strong> (shifting). End add/remove is faster.
+                  </td>
+                  <td>
+                    Fast at beginning/end: <strong>O(1)</strong> (update links). Middle is still traversal-heavy to
+                    reach the node.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Memory usage</strong></td>
+                  <td>More memory-efficient (stores mostly the elements)</td>
+                  <td>More overhead (stores <code>next</code> and <code>prev</code> references per node)</td>
+                </tr>
+                <tr>
+                  <td><strong>Best use-cases</strong></td>
+                  <td>Frequent <strong>random access</strong>, reads, index-based operations</td>
+                  <td>Frequent insert/delete at <strong>start/end</strong>, queue/deque-like usage</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q57-1">
+          <div class="section-head">
+            <h3>57.1 Can I insert in the middle of ArrayList?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              Yes. You can insert in the middle using <code>add(index, element)</code>. But it takes
+              <strong>O(n)</strong> time because elements after that index must shift right.
+            </p>
+            <p><strong>Example in Java:</strong></p>
+            <pre><code>ArrayList&lt;Integer&gt; list = new ArrayList&lt;&gt;();
+list.add(10);
+list.add(20);
+list.add(30);
+
+list.add(1, 15); // inserts in the middle (between 10 and 20)
+
+System.out.println(list); // [10, 15, 20, 30]</code></pre>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q57-2">
+          <div class="section-head">
+            <h3>57.2 How does Java manage dynamic resizing in ArrayList?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              When the internal array is full, <code>ArrayList</code> creates a new array with about
+              <strong>50% more capacity</strong>, then copies all existing elements into the new array.
+            </p>
+            <p class="muted">This copy step is why resizing is expensive sometimes.</p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q57-3">
+          <div class="section-head">
+            <h3>57.3 Why is LinkedList not preferred for random access?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              <code>LinkedList</code> stores elements as nodes with references to the next and previous nodes. To access
+              element at index <code>i</code>, it must traverse from the head or tail until it reaches that node, which
+              is <strong>O(n)</strong>.
+            </p>
+            <p>
+              <code>ArrayList</code> can do <code>get(i)</code> in <strong>O(1)</strong> because it uses array indexing.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q57-4">
+          <div class="section-head">
+            <h3>
+              57.4 If you are inserting an element in the middle of a LinkedList with 10 million items, how will it
+              perform compared to an ArrayList?
+            </h3>
+          </div>
+          <div class="section-body">
+            <p>
+              <strong>LinkedList:</strong> To insert in the middle, you first traverse to that position
+              (<strong>O(n)</strong>), then update pointers (<strong>O(1)</strong>). Overall: <strong>O(n)</strong>.
+            </p>
+            <p>
+              <strong>ArrayList:</strong> Inserting in the middle requires shifting all elements after that index
+              (<strong>O(n)</strong>).
+            </p>
+            <p class="muted">
+              For 10 million items: both are <strong>O(n)</strong>, but in practice LinkedList can be slightly faster
+              for the insertion step because there is no shifting—only pointer updates (after you reach the node).
+            </p>
+            <p><strong>Rule:</strong></p>
+            <ul>
+              <li><strong>Use LinkedList</strong> if frequent insertions/deletions in the middle are needed.</li>
+              <li><strong>Use ArrayList</strong> if random access and iteration speed matter more.</li>
+            </ul>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q57-5">
+          <div class="section-head">
+            <h3>
+              57.5 If you need to implement a queue that frequently adds and removes elements from both ends, which list
+              would be a better choice and why?
+            </h3>
+          </div>
+          <div class="section-body">
+            <p>
+              Pick <strong>LinkedList</strong> over <strong>ArrayList</strong>. <code>LinkedList</code> implements
+              <code>Deque</code>, so it is designed for efficient insertions and deletions at both ends in
+              <strong>O(1)</strong> time.
+            </p>
+            <p>
+              <code>ArrayList</code> is backed by an array, so adding/removing at the front (or middle) requires
+              shifting elements, which is <strong>O(n)</strong>.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q57-6">
+          <div class="section-head">
+            <h3>57.6 Defining the constructor capacity in ArrayList increases performance?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              Yes, it can. If we don’t set capacity, <code>ArrayList</code> starts with a small default size and grows
+              by creating a bigger array (usually ~<strong>1.5x</strong>), copying elements, then continuing. This
+              resizing and copying costs time and memory.
+            </p>
+            <p>
+              So if you already know you will store, say, 10,000 items, setting an initial capacity can save multiple
+              resizes.
+            </p>
+            <pre><code>List&lt;Integer&gt; list = new ArrayList&lt;&gt;(10000);</code></pre>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q58">
+          <div class="section-head">
+            <h2>58. ArrayList vs Vector?</h2>
+          </div>
+          <div class="section-body">
+            <table aria-label="ArrayList vs Vector comparison (Q58)">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>ArrayList</th>
+                  <th>Vector</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Internal structure</strong></td>
+                  <td>Dynamic array</td>
+                  <td>Dynamic array</td>
+                </tr>
+                <tr>
+                  <td><strong>Resizing</strong></td>
+                  <td>Grows by ~<strong>50%</strong> when full</td>
+                  <td>Grows by <strong>100%</strong> (doubles) when full</td>
+                </tr>
+                <tr>
+                  <td><strong>Access (get by index)</strong></td>
+                  <td><strong>O(1)</strong> (fast)</td>
+                  <td><strong>O(1)</strong> (fast)</td>
+                </tr>
+                <tr>
+                  <td><strong>Insert / delete</strong></td>
+                  <td>
+                    End is usually fast; middle/front is <strong>O(n)</strong> (shifting elements)
+                  </td>
+                  <td>
+                    End is usually fast; middle/front is <strong>O(n)</strong> (shifting elements)
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Memory</strong></td>
+                  <td>More memory-friendly (grows conservatively)</td>
+                  <td>Can waste more memory (doubling may leave unused space)</td>
+                </tr>
+                <tr>
+                  <td><strong>Thread safety</strong></td>
+                  <td>
+                    <strong>Not synchronized</strong> (not thread-safe by default)
+                  </td>
+                  <td>
+                    <strong>Synchronized</strong> (thread-safe, but can be slower because of locking)
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <p class="muted" style="margin-top: 12px">
+              Note: If you need thread-safety, prefer <code>CopyOnWriteArrayList</code> or other concurrent collections
+              depending on the use-case, instead of using <code>Vector</code>.
+            </p>
+
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q59">
+          <div class="section-head">
+            <h2>59. HashMap vs TreeMap vs LinkedHashMap?</h2>
+          </div>
+          <div class="section-body">
+            <table aria-label="HashMap vs LinkedHashMap vs TreeMap comparison">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>HashMap</th>
+                  <th>LinkedHashMap</th>
+                  <th>TreeMap</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Internal structure</strong></td>
+                  <td>Hash table (bucket index from key’s hash)</td>
+                  <td>Like HashMap, plus a linked list to remember insertion order</td>
+                  <td>Red–black tree; keys kept in sorted order</td>
+                </tr>
+                <tr>
+                  <td><strong>Order of elements</strong></td>
+                  <td>No guaranteed order when iterating</td>
+                  <td>Insertion order (same order you put keys in)</td>
+                  <td>Keys sorted (natural order or custom <code>Comparator</code>)</td>
+                </tr>
+                <tr>
+                  <td><strong>Performance (typical)</strong></td>
+                  <td>Fastest for get/put/remove (average <strong>O(1)</strong>)</td>
+                  <td>Slightly slower than HashMap (extra order bookkeeping)</td>
+                  <td>Slower: get/put/remove are <strong>O(log n)</strong> to keep tree balanced</td>
+                </tr>
+                <tr>
+                  <td><strong>Null keys / values</strong></td>
+                  <td>One <code>null</code> key; many <code>null</code> values</td>
+                  <td>Same as HashMap (one <code>null</code> key)</td>
+                  <td>No <code>null</code> keys; <code>null</code> values allowed</td>
+                </tr>
+                <tr>
+                  <td><strong>When to use</strong></td>
+                  <td>Speed matters; order does not</td>
+                  <td>Need insertion order (history, predictable iteration)</td>
+                  <td>Need sorted keys (like a sorted dictionary)</td>
+                </tr>
+              </tbody>
+            </table>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q59-1">
+          <div class="section-head">
+            <h3>
+              59.1 If you want to maintain the insertion order of key-value pairs, which Map implementation would you
+              choose and why?
+            </h3>
+          </div>
+          <div class="section-body">
+            <p>
+              Use LinkedHashMap. It maintains the order in which we added the keys, so when we iterate, we get the
+              elements in the same order.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q59-2">
+          <div class="section-head">
+            <h3>59.2 How would you store user records where the keys must always stay sorted alphabetically?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              Go for TreeMap. It automatically keeps keys sorted based on natural order (like alphabetical for strings)
+              or a custom comparator.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q59-3">
+          <div class="section-head">
+            <h3>
+              59.3 What would happen if you insert multiple elements with the same hashcode into a Map? How is ordering
+              handled in such a case?
+            </h3>
+          </div>
+          <div class="section-body">
+            <p>In a HashMap, they go into the same bucket. Order is not guaranteed.</p>
+            <p>In a LinkedHashMap, they're linked in insertion order even in the same bucket.</p>
+            <p>In a TreeMap, hashcode doesn't matter, only key ordering does.</p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q59-4">
+          <div class="section-head">
+            <h3>59.4 In what scenarios could maintaining a sorted order of keys lead to performance trade-offs?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              When using a TreeMap, every put, get, or remove operation takes O(log n) time due to the underlying
+              Red-Black Tree. This is slower than a HashMap's average O(1), but useful when sorted order is required.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q59-5">
+          <div class="section-head">
+            <h3>59.5 Building a cache: fast access and predictable iteration order</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              You're building a cache: you store key–value pairs and look them up often (<strong>fast access</strong>).
+            </p>
+            <p>
+              You also care how entries appear when you loop over the map—for example oldest-first, insertion order, or
+              “who was used least recently.” That's <strong>predictable iteration order</strong> (not random like a plain
+              <code>HashMap</code>).
+            </p>
+            <p>
+              So the question is: which <code>Map</code> gives you both (1) quick get/put and (2) a stable, meaningful
+              order when you iterate?
+            </p>
+            <p>
+              <strong>LinkedHashMap</strong> is chosen because it's basically <code>HashMap</code> + a linked list that
+              remembers order:
+            </p>
+            <p><strong>“Fast access like a HashMap”</strong></p>
+            <p>
+              Lookups still use hashing, so average-time behavior is like a normal hash map (fast for typical cache use).
+            </p>
+            <p><strong>“Maintains order”</strong></p>
+            <p>
+              When you iterate <code>entrySet()</code> / <code>keySet()</code>, entries follow insertion order (unless you
+              switch it to access order, which is a <code>LinkedHashMap</code> option—useful for LRU-style behavior).
+            </p>
+            <p><strong>“LRU caching”</strong></p>
+            <p>LRU = “throw out the least recently used item when the cache is full.”</p>
+            <p>Many LRU cache examples use <code>LinkedHashMap</code> because you can:</p>
+            <ul>
+              <li>iterate in a fixed order (who to evict next), and</li>
+              <li>still do fast get/put.</li>
+            </ul>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q59-6">
+          <div class="section-head">
+            <h3>59.6 How can we make HashMap Synchronized?</h3>
+          </div>
+          <div class="section-body">
+            <pre><code>Map&lt;Integer, String&gt; map = new HashMap&lt;&gt;();
+Collections.synchronizedMap(map);</code></pre>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q59-7">
+          <div class="section-head">
+            <h3>59.7 What are the consequences of non-final fields in a class that is used as a key in a HashMap?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              Using non-final fields in a class that is used as a key in a HashMap can cause serious issues because
+              HashMap depends on two things:
+            </p>
+            <p>1. 2. Problem:</p>
+            <p>hashCode(): determines which bucket the key goes into.</p>
+            <p>equals(): determines whether two keys are the same inside that bucket.</p>
+            <p>
+              If the fields used in hashCode() or equals() are mutable (non-final), and if we change them after
+              inserting the object into the map, then:
+            </p>
+            <ul>
+              <li>The key's hashCode() may change, so the object is now in the wrong bucket.</li>
+              <li>
+                A lookup using the same key (but with changed values) will fail , we will get null even though the entry
+                exists.
+              </li>
+            </ul>
+            <pre><code>class Person {
+  String name; // mutable, not final
+
+  Person(String name) {
+    this.name = name;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Person)) return false;
+    Person p = (Person) o;
+    return Objects.equals(name, p.name);
+  }
+}
+
+public class HashMapProblem {
+  public static void main(String[] args) {
+    Map&lt;Person, String&gt; map = new HashMap&lt;&gt;();
+    Person p1 = new Person("Raju");
+    map.put(p1, "Engineer");
+    // Lookup works
+    System.out.println(map.get(p1)); // Engineer
+    // change the key
+    p1.name = "Raghu";
+    // Lookup fails
+    System.out.println(map.get(p1)); // null
+  }
+}</code></pre>
+            <ul>
+              <li>When we put p1 in the map, its hash is based on "Raju".</li>
+              <li>After changing p1.name to "Raghu", its hash changes but the entry is still stored under the old bucket.</li>
+              <li>So, lookup fails, the object exists in the map, but HashMap can't find it anymore.</li>
+            </ul>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q59-8">
+          <div class="section-head">
+            <h3>59.8 What happens if we have added mutable object to HashMap and change it.</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              It depends whether that object is the <strong>key</strong> or only the <strong>value</strong>.
+            </p>
+            <p>
+              If the object is the <strong>key</strong> and you change fields that are used in
+              <code>hashCode()</code> or <code>equals()</code>, the map can “lose” the entry: <code>get</code> may return
+              <code>null</code> even though the pair is still inside the map, because the map still looks in the
+              <strong>old bucket</strong> from the old hash. (Same idea as <a href="#q59-7">59.7</a>.)
+            </p>
+            <p>
+              If the object is only the <strong>value</strong>, changing it does not move the entry: you can still find
+              it with the same key; only the stored object’s contents change.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q61">
+          <div class="section-head">
+            <h2>61. HashMap vs HashTable?</h2>
+          </div>
+          <div class="section-body">
+            <table aria-label="HashMap vs HashTable comparison">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>HashMap</th>
+                  <th>HashTable</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>How to create</strong></td>
+                  <td>
+                    <pre><code>Map&lt;String, Integer&gt; map = new HashMap&lt;&gt;();</code></pre>
+                  </td>
+                  <td>
+                    <pre><code>Map&lt;String, Integer&gt; map = new Hashtable&lt;&gt;();</code></pre>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Synchronization</strong></td>
+                  <td>Doesn't provide thread safety.</td>
+                  <td>
+                    Provides thread safety by synchronizing all its methods, ensuring that only one thread can access the
+                    table at a time.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Performance</strong></td>
+                  <td>
+                    Due to the lack of synchronization overhead, HashMap generally offers better performance than
+                    HashTable.
+                  </td>
+                  <td>The synchronization mechanism adds overhead, potentially impacting performance.</td>
+                </tr>
+                <tr>
+                  <td><strong>Null keys and values</strong></td>
+                  <td>One null key and multiple null values are permitted.</td>
+                  <td>
+                    Does not allow. Attempting to insert null keys or values will result in a
+                    <code>NullPointerException</code>.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Iterators</strong></td>
+                  <td>
+                    HashMap is fail-fast: if it is modified after an iterator is created, a
+                    <code>ConcurrentModificationException</code> is thrown.
+                  </td>
+                  <td>
+                    HashTable is fail-safe, meaning modifications to the table during iteration will not cause an
+                    exception.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>When to use which</strong></td>
+                  <td>
+                    Choose HashMap when performance is critical and thread safety is handled externally or is not a
+                    concern.
+                  </td>
+                  <td>
+                    Choose HashTable when thread safety is a requirement and performance is less of a priority.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="muted" style="margin-top: 12px">
+              In modern Java, <code>ConcurrentHashMap</code> is often preferred over <code>Hashtable</code> for
+              concurrent access scenarios as it provides better performance while maintaining thread safety.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q61-1">
+          <div class="section-head">
+            <h3>61.1 What is fail-fast and fail-safe?</h3>
+          </div>
+          <div class="section-body">
+            <p><strong>Fail-fast (simple)</strong></p>
+            <p>
+              Imagine a teacher is reading names from the <strong>same attendance sheet</strong> you are still allowed to
+              edit. If a line is added or removed while the teacher is reading, the teacher <strong>stops immediately</strong>
+              and says “this list changed while I was reading it.” In Java, that kind of stop is usually a
+              <code>ConcurrentModificationException</code>. The goal is to avoid silently showing wrong or mixed-up data.
+            </p>
+            <p><strong>What it means in code words</strong></p>
+            <p>
+              A fail-fast iterator notices when the collection was <strong>structurally changed</strong> (add/remove,
+              etc.) after the iterator was created, while you are still iterating. It usually throws
+              <code>ConcurrentModificationException</code> right away instead of letting you keep going with inconsistent
+              results.
+            </p>
+            <p><strong>Typical example</strong></p>
+            <p>
+              Iterating a <code>HashMap</code> with an <code>Iterator</code> / enhanced-for and calling
+              <code>map.put(...)</code> inside the loop.
+            </p>
+
+            <p><strong>Fail-safe (common interview meaning) (simple)</strong></p>
+            <p>
+              Imagine the teacher reads from a <strong>photocopy</strong> of the list. Students may change the real list
+              on the desk, but the photocopy in the teacher’s hand does not change during that read, so the teacher
+              usually <strong>does not crash</strong>. You might not see the newest changes on that one pass—that is the
+              trade-off.
+            </p>
+            <p><strong>What it means in code words</strong></p>
+            <p>
+              A fail-safe iterator is designed so that concurrent changes to the underlying collection do not make the
+              iterator throw (at least not for the same reason as fail-fast). Often it does this by iterating over a
+              snapshot or a weakly consistent view (depending on the class).
+            </p>
+            <p><strong>Typical examples</strong></p>
+            <p>Iterators on <code>ConcurrentHashMap</code>, <code>CopyOnWriteArrayList</code> (iterates a copy), etc.</p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q61-2">
+          <div class="section-head">
+            <h3>61.2 Is HashMap thread-safe by default?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              No, HashMap is not thread-safe. If multiple threads access it concurrently and at least one modifies it, we
+              can get unpredictable results.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q61-3">
+          <div class="section-head">
+            <h3>61.3 Why does Hashtable not allow null keys or values?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              To avoid ambiguity during lookups and to keep the behaviour consistent across threads, Hashtable
+              disallows null keys and values.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q61-4">
+          <div class="section-head">
+            <h3>61.4 Which is faster: HashMap or Hashtable?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              HashMap is faster because it is unsynchronized. Hashtable uses locks on every operation, which slows
+              things down in single-threaded scenarios.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q61-5">
+          <div class="section-head">
+            <h3>61.5 What is the difference between Iterator and Enumerator?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              Iterator is newer, supports remove(), and is fail-fast. Enumerator is older, does not support removal, and
+              is not fail-fast.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q61-6">
+          <div class="section-head">
+            <h3>61.6 When should we use ConcurrentHashMap over Hashtable?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              Use ConcurrentHashMap when we need high-performance thread-safe operations. It allows concurrent reads
+              and partial concurrent writes.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q61-7">
+          <div class="section-head">
+            <h3>61.7 Why is Hashtable considered a legacy class?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              Because it was part of early Java and later replaced by better alternatives like HashMap and
+              ConcurrentHashMap in the Collections Framework.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q61-8">
+          <div class="section-head">
+            <h3>
+              61.8 Suppose I am using a Hashtable, one thread is updating the Hashtable and another thread at the same
+              time is getting the value—then what happens?
+            </h3>
+          </div>
+          <div class="section-body">
+            <p>
+              <code>Hashtable</code> synchronizes its public methods on the table itself. So <code>put</code> /
+              <code>remove</code> / <code>get</code> (and similar) do not truly run at the same time on the same
+              instance: <strong>one call holds the lock, the other waits</strong>, then runs on a consistent internal
+              state.
+            </p>
+            <p>
+              In your scenario, if one thread is updating while another calls <code>get</code>, the usual outcome is that
+              the <code>get</code> either happens <strong>before</strong> or <strong>after</strong> the update (depending
+              on which thread gets the lock first)—not both mutating/reading the internal structure concurrently without
+              ordering.
+            </p>
+            <p class="muted">
+              Note: safety is still per method. Multi-step logic like “check then put” needs extra synchronization or a
+              higher-level concurrent map.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q61-9">
+          <div class="section-head">
+            <h3>
+              61.9 Suppose I am using a ConcurrentHashMap, one thread is updating it and another thread at the same time
+              is getting a value—then what happens?
+            </h3>
+          </div>
+          <div class="section-body">
+            <p>
+              <code>ConcurrentHashMap</code> is built for this: one thread can <code>put</code> while another
+              <code>get</code>s, and the map stays safe (it won’t “break inside” like a normal <code>HashMap</code> race).
+            </p>
+            <p>
+              The reader usually sees either the <strong>old value</strong> or the <strong>new value</strong> for that
+              key, depending on tiny timing—even if both threads feel “at the same instant,” the CPU still applies an
+              order under the hood.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q62">
+          <div class="section-head">
+            <h2>62. ConcurrentHashMap vs Synchronized HashMap?</h2>
+          </div>
+          <div class="section-body">
+            <p class="muted">
+              Here “Synchronized HashMap” means the thread-safe map from
+              <code>Collections.synchronizedMap(new HashMap&lt;&gt;())</code>.
+            </p>
+            <table aria-label="ConcurrentHashMap vs Synchronized HashMap comparison">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Topic</th>
+                  <th>ConcurrentHashMap</th>
+                  <th>Synchronized HashMap</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td><strong>Locking mechanism</strong></td>
+                  <td>
+                    <p>
+                      The whole map is not locked. The map is divided into a number of <strong>segments</strong>, and
+                      each segment maintains its own lock.
+                    </p>
+                    <div class="cell-detail">
+                      <p>
+                        <strong>In simple words:</strong> Imagine a big office split into several <strong>rooms</strong>.
+                        If two people need to change files in <strong>different rooms</strong>, they can often work
+                        <strong>at the same time</strong>, because each room has its own lock. They only wait if two
+                        people need the <strong>same room</strong> at once.
+                      </p>
+                      <p>
+                        That is the idea of <strong>fine-grained locking</strong>: you don’t lock the entire building for
+                        every small change—only the part that truly needs protection.
+                      </p>
+                    </div>
+                  </td>
+                  <td>
+                    <p>
+                      Maintains an <strong>object-level lock</strong>—i.e. the <strong>whole map is locked</strong>.
+                    </p>
+                    <div class="cell-detail">
+                      <p>
+                        <strong>In simple words:</strong> Imagine <strong>one main door</strong> for the whole office.
+                        Before <strong>any</strong> work on the map (<code>get</code>, <code>put</code>, etc.), a thread
+                        must go through that same door. While one thread is inside, others typically <strong>wait outside</strong>
+                        —even if they only wanted a quick read.
+                      </p>
+                      <p>
+                        So it is easy to understand and safe for simple uses, but it can become a <strong>bottleneck</strong>
+                        when many threads hit the map often.
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td><strong>Synchronized operations</strong></td>
+                  <td>
+                    <p>
+                      Only <strong>update</strong> operations are synchronized. <strong>Read</strong> operations are not
+                      synchronized (in the same “whole-map lock” sense).
+                    </p>
+                    <div class="cell-detail">
+                      <p>
+                        <strong>If Thread A updates while Thread B calls <code>get</code> on the same key—what value does
+                        B see?</strong> Usually <strong>either</strong> the <strong>old value</strong> (before the update
+                        is fully visible) <strong>or</strong> the <strong>new value</strong> (after the update is visible).
+                        Think “before photo vs after photo,” not a random broken value.
+                      </p>
+                      <p>
+                        <strong>Why the table talks about locks:</strong> <code>ConcurrentHashMap</code> is built so
+                        <code>put</code>/<code>remove</code> still happen safely while many threads read. A synchronized
+                        <code>HashMap</code> wrapper is simpler: even a <code>get</code> often waits in the same single lock
+                        line as writers, so readers and writers block each other more.
+                      </p>
+                      <p>
+                        <strong>One caution (different issue):</strong> “Check map, then put if missing” is
+                        <strong>two steps</strong>. Another thread can change the map between those steps—use one atomic
+                        helper like <code>putIfAbsent</code> (or similar) if you need that guarantee.
+                      </p>
+                    </div>
+                  </td>
+                  <td>
+                    <p>
+                      <strong>All</strong> operations are synchronized—whether read or update, the thread must acquire the
+                      object lock.
+                    </p>
+                    <div class="cell-detail">
+                      <p>
+                        <strong>In simple words:</strong> Every common map method is wrapped with <code>synchronized</code>
+                        on the <strong>same monitor</strong>. So a <code>get</code> must wait behind a <code>put</code> (and
+                        vice versa) if they happen together—because they all share the <strong>one big lock strategy</strong>.
+                      </p>
+                      <p>
+                        That makes behavior predictable for beginners (“everything is guarded”), but under heavy traffic
+                        threads spend more time <strong>waiting in line</strong>, which hurts throughput.
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td><strong>Number of threads</strong></td>
+                  <td>
+                    Minimum <strong>16</strong> threads can perform <strong>update</strong> operations on
+                    <code>ConcurrentHashMap</code> at a time (segment-level locking idea).
+                  </td>
+                  <td>Only <strong>one</strong> thread can enter into a synchronized map at a time (single lock).</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td><strong>Null keys and null values</strong></td>
+                  <td>
+                    Doesn’t allow even a single <code>null</code> key and <code>null</code> values.
+                  </td>
+                  <td>Allows one <code>null</code> key and any number of <code>null</code> values.</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td><strong>Nature of iterators</strong></td>
+                  <td>
+                    Iterators are <strong>fail-safe</strong> in nature—i.e. they <strong>do not</strong> throw
+                    <code>ConcurrentModificationException</code> if the map is modified after the iterator is created.
+                  </td>
+                  <td>
+                    Iterators are <strong>fail-fast</strong> in nature—i.e. they throw
+                    <code>ConcurrentModificationException</code> if the map is modified after the iterator is created.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q62-1">
+          <div class="section-head">
+            <h3>62.1 What is ConcurrentModificationException when it occurs?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              A ConcurrentModificationException happens when we try to change a list (like adding or removing items)
+              while looping through it. This can happen in single-threaded code during iteration or in multi-threaded code.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q62-2">
+          <div class="section-head">
+            <h3>62.2 How does thread safety work in different map implementations?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              HashMap is not thread-safe. Hashtable and Collections.synchronizedMap() lock the whole map, while
+              ConcurrentHashMap uses fine-grained locking.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q62-3">
+          <div class="section-head">
+            <h3>62.3 Which map implementation is best for concurrent updates in Java?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              ConcurrentHashMap is the best choice. It allows safe concurrent access with better performance than
+              synchronized alternatives.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q62-4">
+          <div class="section-head">
+            <h3>62.4 Why is the SynchronizedMap slower during multi-threaded access?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              Because it locks the entire map for every operation. This creates contention and reduces performance when
+              multiple threads access it.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q62-5">
+          <div class="section-head">
+            <h3>62.5 Does ConcurrentHashMap throw ConcurrentModificationException when modified during iteration?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              No, it doesn’t. It provides a weakly consistent iterator that doesn't fail if the map is modified during
+              iteration.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q62-6">
+          <div class="section-head">
+            <h3>62.6 How to make HashMap thread-safe?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              we can wrap it using Collections.synchronizedMap(new HashMap&lt;&gt;()), but it will be slower under high
+              concurrency.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q62-7">
+          <div class="section-head">
+            <h3>62.7 What are the alternatives to Hashtable for high concurrency?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              Use ConcurrentHashMap. It is faster, non-blocking for reads, and designed specifically for multi-threaded
+              environments.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q62-8">
+          <div class="section-head">
+            <h3>62.8 Can we use HashMap in multi-threaded scenario?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              The problem arises when there is concurrent update on Hash Map. Hence, during such scenarios, we can use
+              the HashTable or ConcurrentHashMap.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q62-9">
+          <div class="section-head">
+            <h3>62.9 Can we insert and delete at time same from SynchronizedMap?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              Yes, we can insert and delete at the same time from a SynchronizedMap. Collections.synchronizedMap(...)
+              makes individual operations like put(), get(), and remove() thread-safe by wrapping them in synchronized
+              blocks.
+            </p>
+            <p class="muted">
+              <strong>What “at the same time” really means here:</strong> Two threads can <strong>try</strong> an insert
+              and a delete <strong>around the same moment</strong>, but the map still runs <strong>one synchronized method
+              at a time</strong> on that wrapper. So the insert and delete do <strong>not</strong> execute inside the
+              lock literally together—they <strong>take turns</strong> very quickly (one finishes its
+              <code>put</code>/<code>remove</code>, then the other runs). That is still “safe concurrent use”: no thread
+              corrupts the map while another is halfway through an operation.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q63">
+          <div class="section-head">
+            <h2>63. Why ConcurrentHashMap won't allow null keys and null values?</h2>
+          </div>
+          <div class="section-body">
+            <p>
+              In a normal <code>HashMap</code>, we can store one <code>null</code> key and many <code>null</code> values.
+              That is fine because everything happens in a single-threaded context.
+            </p>
+            <p>
+              But in a <code>ConcurrentHashMap</code>, multiple threads read and write at the same time. If
+              <code>null</code> were allowed, two big problems show up:
+            </p>
+
+            <h3 style="margin: 18px 0 8px; font-size: 16px">The problem with null keys</h3>
+            <p><strong>Null key in HashMap (single-threaded)</strong></p>
+            <p>
+              In a normal <code>HashMap</code>, if we put <code>null</code> as a key, Java keeps it in a special way (often
+              described as bucket 0 / a dedicated path). Since only one thread is using the map in a typical
+              single-threaded context, that is fine.
+            </p>
+            <p><strong>Problem in ConcurrentHashMap</strong></p>
+            <p><code>ConcurrentHashMap</code> is different:</p>
+            <ul>
+              <li>It splits data into many buckets.</li>
+              <li>Keys go into buckets based on their <code>hashCode()</code>.</li>
+              <li>This allows many threads to work on different buckets at the same time.</li>
+            </ul>
+            <p>But with <code>null</code> as a key:</p>
+            <ul>
+              <li>There’s no <code>hashCode()</code> to calculate.</li>
+              <li>
+                If all <code>null</code> keys were forced into one bucket (for example bucket 0), then all threads must
+                fight over that one bucket.
+              </li>
+              <li>This slows things down and makes concurrency messy.</li>
+            </ul>
+
+            <h3 style="margin: 18px 0 8px; font-size: 16px">The problem with null values</h3>
+            <p>
+              Imagine a scenario where <code>null</code> values are allowed. If we call <code>map.get(key)</code> and it
+              returns <code>null</code>, what does that mean? In a single-threaded <code>HashMap</code>,
+              <code>null</code> could mean either:
+            </p>
+            <ol>
+              <li>The key doesn’t exist in the map.</li>
+              <li>The key exists, but its value is explicitly set to <code>null</code>.</li>
+            </ol>
+            <p>In a concurrent setting, this ambiguity becomes a nightmare:</p>
+            <ul>
+              <li>
+                Thread A checks <code>map.get(key)</code> and gets <code>null</code>, assuming the key doesn’t exist.
+              </li>
+              <li>But Thread B might have just set the value to <code>null</code> using <code>map.put(key, null)</code>.</li>
+            </ul>
+            <p>
+              Now Thread A can’t tell whether the key is absent or its value is <code>null</code>, leading to race
+              conditions or incorrect logic. By banning <code>null</code> values, <code>ConcurrentHashMap</code> ensures
+              that <code>get()</code> returning <code>null</code> always means the key doesn’t exist.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q64">
+          <div class="section-head">
+            <h2>64. HashSet vs LinkedHashSet vs TreeSet?</h2>
+          </div>
+          <div class="section-body">
+            <table aria-label="HashSet vs LinkedHashSet vs TreeSet comparison">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Topic</th>
+                  <th>HashSet</th>
+                  <th>LinkedHashSet</th>
+                  <th>TreeSet</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td><strong>Ordering</strong></td>
+                  <td>
+                    Unordered. Elements are stored based on their hash codes, which means there's no predictable order of
+                    iteration.
+                  </td>
+                  <td>
+                    Maintains insertion order. Elements are stored in the order they were added to the set.
+                  </td>
+                  <td>
+                    Sorted. Elements are stored in a sorted order, either according to their natural ordering or based on
+                    a provided <code>Comparator</code>.
+                  </td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td><strong>Implementation</strong></td>
+                  <td>Uses a <code>HashMap</code> internally to store elements.</td>
+                  <td>
+                    Uses a <code>LinkedHashMap</code> internally, which maintains a doubly-linked list to track insertion
+                    order.
+                  </td>
+                  <td>
+                    Uses a <code>TreeMap</code> internally, which is a self-balancing binary search tree.
+                  </td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td><strong>Performance</strong></td>
+                  <td>
+                    Generally offers the best performance for add, remove, and contains operations (<strong>O(1)</strong>
+                    on average) due to the efficient hashing mechanism.
+                  </td>
+                  <td>
+                    Performance is slightly slower than <code>HashSet</code> because of the overhead of maintaining the
+                    linked list, but still generally fast (<strong>O(1)</strong> on average for most operations).
+                  </td>
+                  <td>
+                    Performance is generally slower than both <code>HashSet</code> and <code>LinkedHashSet</code> (
+                    <strong>O(log n)</strong> for add, remove, and contains operations) because of the sorting overhead.
+                  </td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td><strong>When to use which?</strong></td>
+                  <td>
+                    Use <code>HashSet</code> when we need to store unique elements and don't care about the order they are
+                    stored in, and when we need fast performance.
+                  </td>
+                  <td>
+                    Use <code>LinkedHashSet</code> when we need to store unique elements and need to iterate through them
+                    in the same order they were added.
+                  </td>
+                  <td>
+                    Use <code>TreeSet</code> when we need to store unique elements in a sorted order.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q64-1">
+          <div class="section-head">
+            <h3>64.1 How would you maintain insertion order in a Set?</h3>
+          </div>
+          <div class="section-body">
+            <p>Use LinkedHashSet.</p>
+            <p>Don’t say HashSet, it doesn’t maintain order.</p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q64-2">
+          <div class="section-head">
+            <h3>64.2 What if I need to always keep the elements sorted?</h3>
+          </div>
+          <div class="section-body">
+            <p>Use TreeSet. It uses Red-Black Tree internally for ordering.</p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q64-3">
+          <div class="section-head">
+            <h3>64.3 How would you implement a deduplicated list of elements while keeping insertion order?</h3>
+          </div>
+          <div class="section-body">
+            <p>LinkedHashSet, Because it is a Set (removes duplicates) + maintains order.</p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q64-4">
+          <div class="section-head">
+            <h3>64.4 Which Set would perform best for search operations?</h3>
+          </div>
+          <div class="section-body">
+            <p>In most cases, HashSet gives O(1) for contains().</p>
+            <p>TreeSet takes O(log n).</p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q64-5">
+          <div class="section-head">
+            <h3>64.5 Can I store null in a Set?</h3>
+          </div>
+          <div class="section-body">
+            <p>HashSet and LinkedHashSet allow one null.</p>
+            <p>TreeSet throws NullPointerException (if using natural ordering).</p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q64-6">
+          <div class="section-head">
+            <h3>64.6 What happens if I insert elements in random order, then iterate the Set?</h3>
+          </div>
+          <div class="section-body">
+            <ul>
+              <li>In HashSet: iteration order will be unpredictable.</li>
+              <li>In LinkedHashSet: elements come out in the order they went in.</li>
+              <li>In TreeSet: elements come out sorted.</li>
+            </ul>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q64-7">
+          <div class="section-head">
+            <h3>64.7 How does TreeSet know how to sort the elements?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              It uses <code>compareTo()</code> (natural ordering) Or a custom <code>Comparator</code> if passed during
+              construction.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q64-8">
+          <div class="section-head">
+            <h3>64.8 Why TreeSet does not allow null?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              A TreeSet compares each element either by comparable or comparator. If TreeSet allows null, then it will
+              throw NullPointerException.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q64-9">
+          <div class="section-head">
+            <h3>
+              64.9 What happens if you add elements to a HashSet with duplicate hashCode() values but different equals()
+              implementations?
+            </h3>
+          </div>
+          <div class="section-body">
+            <p>
+              If two objects have the same hashCode() but equals() returns false, the HashSet will store both objects.
+            </p>
+            <p>Here is why:</p>
+            <ul>
+              <li>HashSet first checks the bucket using hashCode().</li>
+              <li>Within the bucket, it uses equals() to see if the object already exists.</li>
+              <li>Since equals() is false, HashSet treats them as different, even though they collide in the hash bucket.</li>
+            </ul>
+            <p><strong>In depth (where they are stored):</strong></p>
+            <p>
+              A <code>HashSet</code> is backed by a <code>HashMap</code>. The element you add becomes the <strong>key</strong>
+              in that internal map. The map first maps the object’s <code>hashCode()</code> to a <strong>bucket index</strong>
+              (a “bin”). Many different objects can map to the <strong>same bucket</strong>—that is normal and is called a
+              <strong>hash collision</strong>.
+            </p>
+            <p>
+              Inside that bucket, Java does not store “only one object.” It stores a <strong>chain</strong> (or similar
+              structure) of entries that all landed in that bucket. When you add the second colliding object, the map
+              walks that chain and compares with <code>equals()</code>. Because <code>equals()</code> is
+              <code>false</code>, it decides “this is a <strong>different</strong> element,” so it
+              <strong>adds another entry</strong> in the same bucket.
+            </p>
+            <p>
+              So both objects live in the <strong>same bucket</strong>, but as <strong>separate entries</strong> linked
+              together—same <code>hashCode()</code> address, different <code>equals()</code> identity.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q65">
+          <div class="section-head">
+            <h2>65. Explain about Queue?</h2>
+          </div>
+          <div class="section-body">
+            <p>
+              A <code>Queue</code> in Java is a linear data structure that follows the <strong>First-In-First-Out
+              (FIFO)</strong> principle, meaning the first element added to the queue will be the first one to be
+              removed. Queues are widely used in scenarios like task scheduling, buffering and producer consumer problems.
+            </p>
+            <p>
+              Since the <code>Queue</code> is an interface, we cannot provide the direct implementation of it.
+            </p>
+            <p>
+              Queues in Java can be classified into <strong>bounded</strong> and <strong>unbounded</strong> implementations
+              based on their capacity.
+            </p>
+
+            <h3 style="margin: 18px 0 8px; font-size: 16px">Bounded vs unbounded (idea)</h3>
+            <ul>
+              <li>
+                <strong>Unbounded queue:</strong> Can grow dynamically (no fixed size).
+              </li>
+              <li>
+                <strong>Bounded queue:</strong> Has a fixed maximum capacity. A bounded queue has a fixed size. Once it is
+                full, we can’t just keep adding elements—either the operation fails, or it waits until space is available.
+              </li>
+            </ul>
+
+            <h3 style="margin: 18px 0 8px; font-size: 16px">Bounded queue examples (common interview classes)</h3>
+            <ul>
+              <li>
+                <strong>ArrayBlockingQueue:</strong> It uses an array with a fixed capacity. It also supports fair ordering
+                if we want threads to access in a strict first-come, first-served manner.
+              </li>
+              <li>
+                <strong>LinkedBlockingQueue:</strong> Works like a linked list and we can set the capacity. If we don’t,
+                it defaults to a very large size (<code>Integer.MAX_VALUE</code>).
+              </li>
+              <li>
+                <strong>PriorityBlockingQueue:</strong> Instead of strict FIFO, it orders elements based on priority (either
+                natural ordering or a custom comparator).
+              </li>
+            </ul>
+
+            <h3 style="margin: 18px 0 8px; font-size: 16px">Unbounded queues</h3>
+            <p>
+              Unbounded queues don’t force a hard capacity limit. They’ll grow as needed, limited only by the available
+              memory.
+            </p>
+            <ul>
+              <li>
+                <strong>PriorityQueue:</strong> Keeps elements ordered by natural order or a comparator, but it is not
+                thread-safe.
+              </li>
+              <li>
+                <strong>ConcurrentLinkedQueue:</strong> A thread-safe option that works well in highly concurrent scenarios.
+              </li>
+              <li>
+                <strong>LinkedList (as Queue):</strong> <code>LinkedList</code> also implements <code>Deque</code>. So, it
+                can also be used as <code>Queue</code>.
+              </li>
+            </ul>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q66">
+          <div class="section-head">
+            <h2>66. When will you use each queue?</h2>
+          </div>
+          <div class="section-body">
+            <p>
+              Below is a practical “when to use it” line for each type, plus one <strong>real-world use case</strong> you
+              can say in interviews.
+            </p>
+
+            <p style="margin-top: 14px"><strong>ArrayBlockingQueue</strong></p>
+            <p class="muted" style="margin-top: 4px">
+              <strong>When:</strong> You need a <strong>fixed maximum capacity</strong> FIFO queue, often shared by multiple
+              threads, and you want predictable memory (array-backed).
+            </p>
+            <p class="muted" style="margin-top: 4px">
+              <strong>Real-world:</strong> A thread pool’s <strong>bounded backlog</strong> of tasks (e.g. “accept at most
+              200 pending report jobs”) so a traffic spike can’t grow the waiting list without limit.
+            </p>
+
+            <p style="margin-top: 14px"><strong>LinkedBlockingQueue</strong></p>
+            <p class="muted" style="margin-top: 4px">
+              <strong>When:</strong> You want a classic <strong>producer–consumer</strong> queue; optionally bounded, and
+              linked-node structure is fine.
+            </p>
+            <p class="muted" style="margin-top: 4px">
+              <strong>Real-world:</strong> A web service where many request threads <strong>enqueue work items</strong> and
+              a pool of worker threads <strong>dequeue</strong> and process them.
+            </p>
+
+            <p style="margin-top: 14px"><strong>PriorityBlockingQueue</strong></p>
+            <p class="muted" style="margin-top: 4px">
+              <strong>When:</strong> Multiple threads produce/consume work, but the “next item” must be chosen by
+              <strong>priority</strong> (not strict FIFO).
+            </p>
+            <p class="muted" style="margin-top: 4px">
+              <strong>Real-world:</strong> An emergency room system where the next patient is picked by
+              <strong>severity/triage score</strong>, while many staff threads add updates and doctors pull the next case.
+            </p>
+
+            <p style="margin-top: 14px"><strong>PriorityQueue</strong></p>
+            <p class="muted" style="margin-top: 4px">
+              <strong>When:</strong> You need a <strong>heap/priority order</strong>, typically in <strong>single-threaded</strong>
+              logic (or you externally synchronize), and thread-safety is not required from the queue itself.
+            </p>
+            <p class="muted" style="margin-top: 4px">
+              <strong>Real-world:</strong> A desktop app that always processes the <strong>“highest priority notification”</strong>
+              next from an in-memory list (one consumer thread).
+            </p>
+
+            <p style="margin-top: 14px"><strong>ConcurrentLinkedQueue</strong></p>
+            <p class="muted" style="margin-top: 4px">
+              <strong>When:</strong> Many threads enqueue/dequeue frequently and you want a <strong>thread-safe</strong>,
+              <strong>lock-free style</strong> FIFO queue for high concurrency.
+            </p>
+            <p class="muted" style="margin-top: 4px">
+              <strong>Real-world:</strong> Many servers logging lightweight <strong>events/metrics</strong> into a shared line
+              where a background writer drains them—high throughput, lots of concurrent producers.
+            </p>
+
+            <p style="margin-top: 14px"><strong>LinkedList (as Queue)</strong></p>
+            <p class="muted" style="margin-top: 4px">
+              <strong>When:</strong> You want a simple <code>Queue</code>/<code>Deque</code> in mostly
+              <strong>single-threaded</strong> code, or you manage synchronization yourself; also handy when you need both
+              ends (deque operations).
+            </p>
+            <p class="muted" style="margin-top: 4px">
+              <strong>Real-world:</strong> A small in-memory <strong>waitlist</strong> for a UI feature (FIFO), or an
+              <strong>undo/redo</strong> stack where you push/pop from both ends in one thread.
+            </p>
+
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+        <section id="q67">
+          <div class="section-head">
+            <h2>67. How ArrayList works internally?</h2>
+          </div>
+          <div class="section-body">
+            <h3 style="margin: 0 0 10px; font-size: 15px">Answer (how it really works)</h3>
+            <p>
+              <code>ArrayList</code> is not a special magic list—it is mostly a thin wrapper around a normal Java
+              <strong>array</strong> (conceptually <code>Object[]</code>) that stores references to your elements in
+              <strong>contiguous indexes</strong> <code>0 .. capacity-1</code>.
+            </p>
+            <p>
+              Two numbers matter all the time: <strong>capacity</strong> (how many slots exist in the backing array) and
+              <strong>size</strong> (how many slots are actually used from index <code>0</code> to <code>size-1</code>). When
+              you call <code>add(x)</code> at the end, <code>ArrayList</code> writes into index <code>size</code> (if space
+              exists) and then increases <code>size</code> by 1. That end-add is why it is usually fast.
+            </p>
+            <p>
+              When <code>size</code> would become larger than the current capacity, <code>ArrayList</code> must
+              <strong>grow</strong>. Growing means: allocate a <strong>new bigger array</strong> (often about
+              <strong>1.5×</strong> the old capacity in modern JDKs), <strong>copy</strong> all elements from the old array
+              to the new array, then start using the new array. That copy is why an occasional <code>add</code> can take
+              noticeably longer.
+            </p>
+            <p>
+              <code>get(i)</code> is fast (<strong>O(1)</strong>) because an array supports direct indexing: the CPU/JVM can
+              jump straight to slot <code>i</code>. Inserting/removing in the <strong>middle</strong> is slower
+              (<strong>O(n)</strong>) because indexes must stay “dense”: inserting at <code>i</code> pushes elements from
+              <code>i</code> onward one step to the right; removing pulls them left.
+            </p>
+
+            <h3 style="margin: 22px 0 10px; font-size: 15px">Visual walkthrough (backing array)</h3>
+            <p class="muted" style="margin-top: 0">
+              Use <strong>Prev / Next</strong> for a <strong>coloured picture</strong> of memory: one contiguous block of
+              slots (the real internal shape), not Java syntax. More frames walk the same idea slowly—end growth, copy-grow,
+              middle edit, random read, then what deletes do.
+            </p>
+            <div class="anim-wrap viz-wrap">
+              <div class="anim-toolbar">
+                <span class="viz-badge">Inside memory</span>
+                <button type="button" class="anim-prev">Prev</button>
+                <span class="anim-label"></span>
+                <button type="button" class="anim-next">Next</button>
+              </div>
+              <div class="anim-steps">
+                <div class="anim-step">
+                  <h4>1 — Backing array: empty slots</h4>
+                  <p class="viz-caption">
+                    <code>ArrayList</code> owns one fixed-size row of boxes in the heap. Grey = unused; labels are index
+                    positions the JVM jumps to in O(1). Capacity is fixed until a grow; size starts at zero and only ever
+                    counts filled slots from the left edge—no gaps allowed in that prefix.
+                  </p>
+                  <div class="viz-diagram">
+                    <div class="viz-row-title">Backing <code>Object[]</code> (capacity 8)</div>
+                    <div class="viz-row">
+                      <div class="ary-slot"><span class="ary-idx">0</span><div class="ary-cell empty">∅</div></div>
+                      <div class="ary-slot"><span class="ary-idx">1</span><div class="ary-cell empty">∅</div></div>
+                      <div class="ary-slot"><span class="ary-idx">2</span><div class="ary-cell empty">∅</div></div>
+                      <div class="ary-slot"><span class="ary-idx">3</span><div class="ary-cell empty">∅</div></div>
+                      <div class="ary-slot"><span class="ary-idx">4</span><div class="ary-cell empty">∅</div></div>
+                      <div class="ary-slot"><span class="ary-idx">5</span><div class="ary-cell empty">∅</div></div>
+                      <div class="ary-slot"><span class="ary-idx">6</span><div class="ary-cell empty">∅</div></div>
+                      <div class="ary-slot"><span class="ary-idx">7</span><div class="ary-cell empty">∅</div></div>
+                    </div>
+                    <div class="viz-legend">
+                      <span class="viz-legend-item"><span class="viz-swatch" style="background: #f8fafc"></span> Empty slot</span>
+                      <span class="viz-legend-item"><strong>Size</strong> = 0 (nothing stored yet)</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="anim-step">
+                  <h4>2 — End <code>add</code>: fill from the left</h4>
+                  <p class="viz-caption">
+                    Each <code>add</code> at the end writes the next object reference into the first free slot and bumps
+                    <strong>size</strong>. Yellow = live element. The work is “write one pointer + increment an int”—no scan,
+                    which is why appending is the sweet spot for dynamic arrays.
+                  </p>
+                  <div class="viz-diagram">
+                    <div class="viz-row-title">Same array after three appends</div>
+                    <div class="viz-row">
+                      <div class="ary-slot"><span class="ary-idx">0</span><div class="ary-cell filled">A</div></div>
+                      <div class="ary-slot"><span class="ary-idx">1</span><div class="ary-cell filled">B</div></div>
+                      <div class="ary-slot"><span class="ary-idx">2</span><div class="ary-cell filled">C</div></div>
+                      <div class="ary-slot"><span class="ary-idx">3</span><div class="ary-cell empty">∅</div></div>
+                      <div class="ary-slot"><span class="ary-idx">4</span><div class="ary-cell empty">∅</div></div>
+                      <div class="ary-slot"><span class="ary-idx">5</span><div class="ary-cell empty">∅</div></div>
+                      <div class="ary-slot"><span class="ary-idx">6</span><div class="ary-cell empty">∅</div></div>
+                      <div class="ary-slot"><span class="ary-idx">7</span><div class="ary-cell empty">∅</div></div>
+                    </div>
+                    <div class="viz-legend">
+                      <span class="viz-legend-item"><span class="viz-swatch" style="background: #fde047; border-color: #ca8a04"></span> Stored element</span>
+                      <span class="viz-legend-item"><strong>Size</strong> = 3 contiguous from index 0</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="anim-step">
+                  <h4>3 — Grow: new wider row + copy</h4>
+                  <p class="viz-caption">
+                    When size would exceed capacity, the JVM allocates a <strong>new</strong> array (often ~1.5×), copies
+                    every reference across (purple arrow), then drops the old array. One slow step, then fast again. Amortised
+                    analysis spreads that rare copy cost over many earlier cheap appends.
+                  </p>
+                  <div class="viz-diagram">
+                    <div class="viz-row-title">Old array (full)</div>
+                    <div class="viz-row">
+                      <div class="ary-slot"><span class="ary-idx">0–7</span><div class="ary-cell filled" style="min-width: 120px">A … H (all full)</div></div>
+                    </div>
+                    <div class="viz-split" style="margin-top: 12px; justify-content: center">
+                      <span class="viz-arrow-lg">⇢ copy ⇢</span>
+                    </div>
+                    <div class="viz-row-title">New array (larger capacity)</div>
+                    <div class="viz-row">
+                      <div class="ary-slot"><span class="ary-idx">0</span><div class="ary-cell filled">A</div></div>
+                      <div class="ary-slot"><span class="ary-idx">1</span><div class="ary-cell filled">B</div></div>
+                      <div class="ary-slot"><span class="ary-idx">2</span><div class="ary-cell filled">C</div></div>
+                      <div class="ary-slot"><span class="ary-idx">3</span><div class="ary-cell filled">D</div></div>
+                      <div class="ary-slot"><span class="ary-idx">4</span><div class="ary-cell filled">E</div></div>
+                      <div class="ary-slot"><span class="ary-idx">5</span><div class="ary-cell filled">F</div></div>
+                      <div class="ary-slot"><span class="ary-idx">6</span><div class="ary-cell filled">G</div></div>
+                      <div class="ary-slot"><span class="ary-idx">7</span><div class="ary-cell filled">H</div></div>
+                      <div class="ary-slot"><span class="ary-idx">8</span><div class="ary-cell newgrow">+</div></div>
+                      <div class="ary-slot"><span class="ary-idx">9</span><div class="ary-cell newgrow">+</div></div>
+                      <div class="ary-slot"><span class="ary-idx">…</span><div class="ary-cell newgrow">free</div></div>
+                    </div>
+                    <div class="viz-legend">
+                      <span class="viz-legend-item"><span class="viz-swatch" style="background: #6ee7b7; border-style: dashed"></span> Fresh capacity (no object yet)</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="anim-step">
+                  <h4>4 — Middle insert = slide the tail</h4>
+                  <p class="viz-caption">
+                    Indexes must stay packed with no gaps. Inserting at slot <strong>2</strong> (blue) forces everything
+                    from 2 onward to move one step right (pink) — that is why middle insert is O(n).
+                  </p>
+                  <div class="viz-diagram">
+                    <div class="viz-row-title">Before</div>
+                    <div class="viz-row">
+                      <div class="ary-slot"><span class="ary-idx">0</span><div class="ary-cell filled">A</div></div>
+                      <div class="ary-slot"><span class="ary-idx">1</span><div class="ary-cell filled">B</div></div>
+                      <div class="ary-slot"><span class="ary-idx">2</span><div class="ary-cell hl">C</div></div>
+                      <div class="ary-slot"><span class="ary-idx">3</span><div class="ary-cell filled">D</div></div>
+                      <div class="ary-slot"><span class="ary-idx">4</span><div class="ary-cell filled">E</div></div>
+                    </div>
+                    <div class="viz-row-title" style="margin-top: 14px">After insert “X” at index 2</div>
+                    <div class="viz-row">
+                      <div class="ary-slot"><span class="ary-idx">0</span><div class="ary-cell filled">A</div></div>
+                      <div class="ary-slot"><span class="ary-idx">1</span><div class="ary-cell filled">B</div></div>
+                      <div class="ary-slot"><span class="ary-idx">2</span><div class="ary-cell hl">X</div></div>
+                      <div class="ary-slot"><span class="ary-idx">3</span><div class="ary-cell shift">C</div></div>
+                      <div class="ary-slot"><span class="ary-idx">4</span><div class="ary-cell shift">D</div></div>
+                      <div class="ary-slot"><span class="ary-idx">5</span><div class="ary-cell shift">E</div></div>
+                    </div>
+                    <div class="viz-legend">
+                      <span class="viz-legend-item"><span class="viz-swatch" style="background: #bfdbfe"></span> Insert position</span>
+                      <span class="viz-legend-item"><span class="viz-swatch" style="background: #fbcfe8; border-color: #db2777"></span> Shifted references</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="anim-step">
+                  <h4>5 — <code>get(i)</code> = jump straight to a slot</h4>
+                  <p class="viz-caption">
+                    Random access does not scan from the start: the internal index math lands on one yellow cell — that is
+                    why <code>get</code> feels instant.
+                  </p>
+                  <div class="viz-diagram">
+                    <div class="viz-row-title">Logical jump: <code>get(3)</code></div>
+                    <div class="viz-row">
+                      <div class="ary-slot"><span class="ary-idx">0</span><div class="ary-cell filled">A</div></div>
+                      <div class="ary-slot"><span class="ary-idx">1</span><div class="ary-cell filled">B</div></div>
+                      <div class="ary-slot"><span class="ary-idx">2</span><div class="ary-cell filled">C</div></div>
+                      <div class="ary-slot"><span class="ary-idx">3</span><div class="ary-cell hl">D</div></div>
+                      <div class="ary-slot"><span class="ary-idx">4</span><div class="ary-cell filled">E</div></div>
+                    </div>
+                    <div class="walk-tag ok">Return reference stored at index 3 — no walking from 0.</div>
+                  </div>
+                </div>
+                <div class="anim-step">
+                  <h4>6 — More tail <code>add</code>s stay cheap until the row is full</h4>
+                  <p class="viz-caption">
+                    Same capacity: you can keep filling yellow cells toward the right. Each step is still “next index, write
+                    reference.” Trouble only appears when the last free slot is used and the next <code>add</code> must trigger
+                    growth.
+                  </p>
+                  <div class="viz-diagram">
+                    <div class="viz-row-title">After two more appends (size 5, still capacity 8)</div>
+                    <div class="viz-row">
+                      <div class="ary-slot"><span class="ary-idx">0</span><div class="ary-cell filled">A</div></div>
+                      <div class="ary-slot"><span class="ary-idx">1</span><div class="ary-cell filled">B</div></div>
+                      <div class="ary-slot"><span class="ary-idx">2</span><div class="ary-cell filled">C</div></div>
+                      <div class="ary-slot"><span class="ary-idx">3</span><div class="ary-cell filled">D</div></div>
+                      <div class="ary-slot"><span class="ary-idx">4</span><div class="ary-cell filled">E</div></div>
+                      <div class="ary-slot"><span class="ary-idx">5</span><div class="ary-cell empty">∅</div></div>
+                      <div class="ary-slot"><span class="ary-idx">6</span><div class="ary-cell empty">∅</div></div>
+                      <div class="ary-slot"><span class="ary-idx">7</span><div class="ary-cell empty">∅</div></div>
+                    </div>
+                    <div class="viz-legend">
+                      <span class="viz-legend-item"><strong>Size</strong> = 5</span>
+                      <span class="viz-legend-item">Still <strong>3</strong> spare slots before grow</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="anim-step">
+                  <h4>7 — Middle <code>remove</code> slides the tail left (mirror of insert)</h4>
+                  <p class="viz-caption">
+                    Removing index 2 leaves no hole: everything after the gap moves one step left, then <strong>size</strong>
+                    drops. Capacity does not shrink unless you call <code>trimToSize</code>—the grey spare slots can stay
+                    there for the next wave of adds.
+                  </p>
+                  <div class="viz-diagram">
+                    <div class="viz-row-title">Before remove(2)</div>
+                    <div class="viz-row">
+                      <div class="ary-slot"><span class="ary-idx">0</span><div class="ary-cell filled">A</div></div>
+                      <div class="ary-slot"><span class="ary-idx">1</span><div class="ary-cell filled">B</div></div>
+                      <div class="ary-slot"><span class="ary-idx">2</span><div class="ary-cell hl">C</div></div>
+                      <div class="ary-slot"><span class="ary-idx">3</span><div class="ary-cell filled">D</div></div>
+                      <div class="ary-slot"><span class="ary-idx">4</span><div class="ary-cell filled">E</div></div>
+                    </div>
+                    <div class="viz-row-title" style="margin-top: 14px">After remove(2); last slot cleared logically</div>
+                    <div class="viz-row">
+                      <div class="ary-slot"><span class="ary-idx">0</span><div class="ary-cell filled">A</div></div>
+                      <div class="ary-slot"><span class="ary-idx">1</span><div class="ary-cell filled">B</div></div>
+                      <div class="ary-slot"><span class="ary-idx">2</span><div class="ary-cell shift">D</div></div>
+                      <div class="ary-slot"><span class="ary-idx">3</span><div class="ary-cell shift">E</div></div>
+                      <div class="ary-slot"><span class="ary-idx">4</span><div class="ary-cell empty">∅</div></div>
+                    </div>
+                    <div class="walk-tag">Size becomes 4; indices 0–3 are the live prefix.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q68">
+          <div class="section-head">
+            <h2>68. How HashMap works internally?</h2>
+          </div>
+          <div class="section-body">
+            <p>
+              <code>HashMap</code> contains an <strong>array of nodes</strong>, and each node is represented as a class (a
+              <code>Node&lt;K, V&gt;</code>-style record). It uses that <strong>array</strong> plus <strong>linked lists</strong>
+              (chains of <code>next</code> pointers) internally for storing keys and values. In the classic picture there are
+              four fields per node:
+            </p>
+            <ul style="margin: 10px 0 14px; padding-left: 1.25rem; line-height: 1.55">
+              <li><code>int hash</code> — derived from the key’s hash code (used for bucket choice and tuning)</li>
+              <li><code>K key</code></li>
+              <li><code>V value</code></li>
+              <li><code>Node&lt;K, V&gt; next</code> — points to the next entry in the same bucket when hashes collide</li>
+            </ul>
+            <p>
+              At the beginning, <code>Node&lt;K, V&gt;[] table</code> is allocated (for example default length
+              <strong>16</strong>, so indices <strong>0–15</strong>), and <strong>every bucket is <code>null</code></strong> until
+              the first <code>put</code>. So <code>HashMap</code> is “array of heads of small linked structures,” not one giant
+              list.
+            </p>
+            <p>
+              On <code>put(key, value)</code>, the map hashes the key, maps that to a bucket index, and either places a new
+              node at that head or walks the chain using <code>equals</code> to find an existing key (to overwrite the value)
+              or to append at the end of the chain. On <code>get(key)</code>, the same bucket index is computed, then the same
+              chain walk finds the matching key or returns nothing.
+            </p>
+            <p>
+              <code>hashCode()</code> narrows the search to one bucket; <code>equals()</code> confirms the exact key among
+              nodes in that bucket. Equal keys must have consistent hashes, or the map breaks. When too many entries live in
+              the table relative to capacity, the array <strong>resizes</strong> (larger <code>table</code>), entries are
+              <strong>rehashed</strong> into new indices, and chains tend to shorten again. The default <strong>load factor</strong>
+              (<code>0.75</code>) controls when that resize happens.
+            </p>
+            <p>
+              In modern Java, if a single bucket’s chain grows very long, that bucket may be converted from a linked list to a
+              <strong>balanced tree</strong> for faster lookup inside that bucket—but the mental model stays: array of buckets,
+              each bucket a small structure keyed by hash and disambiguated by <code>equals</code>.
+            </p>
+            <p>
+              The diagrams below use a 16-bucket row: index <strong>0</strong> is often shown specially because a
+              <code>null</code> key (allowed once in <code>HashMap</code>) is handled as a separate case and conceptually lives
+              in that reserved bucket; all other keys are placed using their hash into some index 0…capacity−1.
+            </p>
+
+            <div class="hashmap-diagram-stack">
+              <h4>1 — Empty <code>table</code>: sixteen buckets, all <code>null</code></h4>
+              <figure class="hashmap-diagram-figure">
+                <img
+                  src="assets/hashmap-buckets-initial.png"
+                  width="1024"
+                  height="238"
+                  alt="Sixteen HashMap buckets indexed 0 to 15, all null; bucket 0 highlighted as reserved for a null key entry."
+                  loading="lazy"
+                  decoding="async"
+                />
+                <figcaption>
+                  Initial internal array: every slot is empty. Bucket 0 is the usual place reserved for the special
+                  null-key entry when you use a null key (at most one such key in a <code>HashMap</code>).
+                </figcaption>
+              </figure>
+
+              <h4>2 — What one <code>Node&lt;K,V&gt;</code> stores</h4>
+              <figure class="hashmap-diagram-figure">
+                <img
+                  src="assets/hashmap-node-class.png"
+                  width="660"
+                  height="362"
+                  alt="Box labelled Node K V listing fields int hash, K key, V value, Node next."
+                  loading="lazy"
+                  decoding="async"
+                />
+                <figcaption>
+                  Each map entry is not “just” a value in the array cell: it is an object holding hash, key, value, and a
+                  <code>next</code> link for chaining inside one bucket.
+                </figcaption>
+              </figure>
+
+              <h4>3 — First entry: bucket head points at one node</h4>
+              <figure class="hashmap-diagram-figure">
+                <img
+                  src="assets/hashmap-bucket-single-node.png"
+                  width="1024"
+                  height="407"
+                  alt="HashMap bucket array with node for key One value 1 linked from bucket index 13; null key reserved at bucket 0."
+                  loading="lazy"
+                  decoding="async"
+                />
+                <figcaption>
+                  After a <code>put</code>, one array index holds a reference to the head node; the node carries hash, key,
+                  value, and <code>next</code> (often null when there is no collision yet).
+                </figcaption>
+              </figure>
+
+              <h4>4 — Collision: two keys, same bucket → linked list via <code>next</code></h4>
+              <figure class="hashmap-diagram-figure">
+                <img
+                  src="assets/hashmap-bucket-collision-chain.png"
+                  width="1024"
+                  height="495"
+                  alt="Same bucket 13 pointing to first node One then next pointing to second node Two in a chain."
+                  loading="lazy"
+                  decoding="async"
+                />
+                <figcaption>
+                  When another key hashes to the same index, the new node is linked after the previous one
+                  (<code>next</code>). Lookup in that bucket walks the chain until <code>equals</code> matches.
+                </figcaption>
+              </figure>
+            </div>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q68-1">
+          <div class="section-head">
+            <h3>68.1 What is the load factor in HashMap?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              <strong>Capacity</strong> = how many buckets exist at start. <strong>Load factor</strong> (default
+              <strong>0.75</strong>) means: when the map is about <strong>75% full</strong>, Java triggers a
+              <strong>resize</strong> (bigger buckets + copying).
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q68-2">
+          <div class="section-head">
+            <h3>68.2 How does resize happen in HashMap?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              When size crosses the load-factor threshold, the bucket array grows (often <strong>doubles</strong>), then old
+              entries are copied/rehashed into the new table.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q68-3">
+          <div class="section-head">
+            <h3>68.3 What is the difference between capacity and size of HashMap?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              <strong>Capacity</strong> = how many buckets the table can hold. <strong>Size</strong> = how many key/value
+              pairs are actually stored right now.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q68-4">
+          <div class="section-head">
+            <h3>68.4 Apart from String, what predefined classes can we use as keys?</h3>
+          </div>
+          <div class="section-body">
+            <p>Wrapper classes: <code>Integer</code>, <code>Long</code>, <code>Double</code>, <code>Float</code>, <code>Boolean</code>, <code>Character</code>.</p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q68-5">
+          <div class="section-head">
+            <h3>68.5 If everything collides into one bucket, what happens to performance?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              Average lookup is <strong>O(1)</strong> when buckets spread keys well. If <strong>all keys</strong> go to the
+              same bucket, lookup becomes like scanning a list → <strong>O(n)</strong>. Modern Java reduces worst pain by
+              switching long buckets to a <strong>tree</strong>, but a bad hash still hurts badly.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q69">
+          <div class="section-head">
+            <h2>69. How HashSet works internally?</h2>
+          </div>
+          <div class="section-body">
+            <p>
+              <code>HashSet</code> internally uses <code>HashMap</code> to store its elements. Whenever you create a
+              <code>HashSet</code> object, one <code>HashMap</code> object associated with it is also created. This
+              <code>HashMap</code> object is used to store the elements you enter in the <code>HashSet</code>. The elements you
+              add into <code>HashSet</code> are stored as keys of this <code>HashMap</code> object. The value associated with
+              those keys will be a constant.
+            </p>
+
+            <h3 style="margin: 22px 0 10px; font-size: 15px">Reference diagram</h3>
+            <figure class="hashset-diagram-figure">
+              <img
+                src="assets/hashset-hashmap-internals.jpg"
+                width="1024"
+                height="708"
+                alt="Diagram: HashSet user code on the left; internal HashSet methods delegating to HashMap.put(key, PRESENT) and remove in the middle; internal HashMap key/value table on the right showing set elements as keys and PRESENT as each value; note defining PRESENT as a static final Object."
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>
+                User <code>add</code> / <code>remove</code> on a <code>HashSet</code> map to the backing <code>HashMap</code>:
+                elements are keys; the same dummy value is stored for every entry (<code>PRESENT</code>).
+              </figcaption>
+            </figure>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q70">
+          <div class="section-head">
+            <h2>70. How LinkedHashMap and LinkedHashSet work internally?</h2>
+          </div>
+          <div class="section-body">
+            <h3 style="margin: 0 0 10px; font-size: 15px">LinkedHashMap (extends <code>HashMap</code>)</h3>
+            <p>
+              <code>LinkedHashMap</code> internally <strong>extends</strong> <code>HashMap</code>, so it still uses the same
+              hash-table core:
+            </p>
+            <ul style="margin: 8px 0 14px; padding-left: 1.25rem; line-height: 1.55">
+              <li><strong>Array of buckets</strong> — index into the table from the hash</li>
+              <li><strong>Hashing</strong> — find which bucket should hold a key</li>
+              <li>
+                <strong>Linked list / tree inside a bucket</strong> — when several keys collide, they share one bucket; the
+                implementation chains entries (and may use a tree when a chain grows very long, as in modern <code>HashMap</code>)
+              </li>
+            </ul>
+            <p>
+              <strong>Additionally</strong>, <code>LinkedHashMap</code> keeps a <strong>doubly linked list of all entries</strong>
+              so iteration can follow <strong>insertion order</strong> (default) or <strong>access order</strong> if you construct
+              it that way. That list is separate from “which bucket index,” but every entry node participates in both structures.
+            </p>
+
+            <h3 style="margin: 22px 0 10px; font-size: 15px">Internal structure (fields on each entry)</h3>
+            <p>Each node in <code>LinkedHashMap</code> carries the usual hash-map fields plus order links:</p>
+            <ul style="margin: 8px 0 14px; padding-left: 1.25rem; line-height: 1.55">
+              <li><code>int hash</code></li>
+              <li><code>K key</code></li>
+              <li><code>V value</code></li>
+              <li><code>Node&lt;K, V&gt; next</code> — next entry in the <em>same bucket</em> (collision chain)</li>
+              <li><code>Entry&lt;K, V&gt; before</code> — previous node in the <strong>global</strong> insertion/access list</li>
+              <li><code>Entry&lt;K, V&gt; after</code> — next node in that same global list</li>
+            </ul>
+            <p>
+              <strong>Extra fields in plain words:</strong> <code>before</code> points to the previously inserted (or ordered)
+              entry; <code>after</code> points to the next one in that order. Those pointers maintain insertion or access order
+              while <code>next</code> still handles collisions inside one bucket. In the JDK this is implemented with a concrete
+              entry type that extends <code>HashMap</code>’s node and adds <code>before</code>/<code>after</code>.
+            </p>
+
+            <h3 style="margin: 22px 0 10px; font-size: 15px">LinkedHashSet</h3>
+            <p>
+              <code>LinkedHashSet</code> internally uses a <code>LinkedHashMap</code>. You can think of it as:
+            </p>
+            <pre style="margin: 10px 0 14px"><code>LinkedHashSet  =  LinkedHashMap  +  only keys are used</code></pre>
+            <p>
+              <strong>Internal structure:</strong> <code>LinkedHashSet</code> stores each element as a <strong>key</strong> in
+              that internal <code>LinkedHashMap</code>. The map still needs a value per key, so a <strong>dummy</strong> object
+              (the same idea as <code>HashSet</code>’s <code>PRESENT</code>) is stored for every key.
+            </p>
+            <p><strong>Example:</strong></p>
+            <pre><code>LinkedHashSet&lt;Integer&gt; set = new LinkedHashSet&lt;&gt;();
+
+set.add(10);
+set.add(20);
+set.add(30);</code></pre>
+            <p><strong>Internally (conceptually):</strong></p>
+            <pre style="margin-top: 8px"><code>10  -&gt;  PRESENT
+20  -&gt;  PRESENT
+30  -&gt;  PRESENT</code></pre>
+            <p>A dummy value is stored for every key; the set API only shows you <code>10</code>, <code>20</code>, <code>30</code>.</p>
+
+            <h3 style="margin: 26px 0 10px; font-size: 15px">Indirect question — “array + linked list” vs “array + linked list + doubly linked list”?</h3>
+            <p style="margin-bottom: 10px">
+              <em>If <code>HashMap</code> is “array + linked list,” is <code>LinkedHashMap</code> “array + linked list + doubly
+              linked list”?</em>
+            </p>
+            <p>
+              <strong>Yes, in the usual interview picture</strong> — with one important split: the <strong>singly</strong>
+              linked part (<code>next</code>) is <em>per bucket</em> for collisions; the <strong>doubly</strong> linked part
+              (<code>before</code> / <code>after</code>) is <em>across the whole map</em> for iteration order. They solve
+              different problems and live on the same entry object.
+            </p>
+            <table aria-label="What each structure is used for in HashMap vs LinkedHashMap">
+              <thead>
+                <tr>
+                  <th>Structure</th>
+                  <th><code>HashMap</code> — used for what?</th>
+                  <th><code>LinkedHashMap</code> — used for what?</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Bucket array</strong></td>
+                  <td>
+                    Maps hash → bucket index; each slot is the head of (or root of) the structure for keys that landed in that
+                    index. Fast random “which drawer?”
+                  </td>
+                  <td><strong>Same</strong> — lookup and <code>put</code> still start here.</td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>Linked list inside a bucket</strong> <span class="muted">(and tree under heavy collisions)</span>
+                  </td>
+                  <td>
+                    Chains (or trees) keys that <strong>collide</strong> in the same bucket; <code>next</code> walks that
+                    collision structure only.
+                  </td>
+                  <td><strong>Same</strong> — collisions are still handled this way inside each bucket.</td>
+                </tr>
+                <tr>
+                  <td><strong>Doubly linked list</strong> (<code>before</code> / <code>after</code>)</td>
+                  <td>— <em>Not present.</em> Iterator order follows bucket index + chains, so order is not insertion order.</td>
+                  <td>
+                    Links <strong>all entries in insertion (or access) order</strong> for predictable iteration; does
+                    <strong>not</strong> replace the bucket array or collision <code>next</code> chain.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="muted" style="margin-top: 12px; font-size: 13px; line-height: 1.5">
+              Short version: <strong>array + collision list/tree</strong> is for <strong>hashing and duplicates inside a
+              bucket</strong>; the <strong>doubly linked list</strong> is only for <strong>remembering the order</strong> you
+              want when you iterate.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q71">
+          <div class="section-head">
+            <h2>71. How TreeMap works internally?</h2>
+          </div>
+          <div class="section-body">
+            <p>
+              <code>java.util.TreeMap</code> is a <strong>sorted map</strong>: keys always come out in order. Inside the JDK
+              it is implemented as a <strong>red–black tree</strong> — a kind of balanced binary search tree where each node
+              stores a <strong>key–value</strong> pair and has a <strong>colour</strong> (red or black) used only to keep the
+              tree balanced after inserts and deletes.
+            </p>
+            <p>
+              There is <strong>no hash table</strong>. To <code>put</code>, <code>get</code>, or <code>remove</code>, the map
+              starts at the <strong>root</strong> and repeatedly asks: is my key smaller or larger than this node’s key? That
+              sends you <strong>left</strong> or <strong>right</strong> until you find a match or an empty child slot. Because
+              the tree stays balanced, that path is short — about <strong>O(log n)</strong> steps.
+            </p>
+
+            <h3 style="margin: 22px 0 10px; font-size: 15px">How ordering is chosen</h3>
+            <p>
+              <strong>Natural order (default):</strong> if you write <code>new TreeMap&lt;&gt;()</code> with no comparator, keys
+              must implement <code>Comparable</code> (for example <code>Integer</code> sorts 1, 2, 3, …).
+            </p>
+            <pre><code>TreeMap&lt;Integer, String&gt; map = new TreeMap&lt;&gt;();</code></pre>
+            <p>
+              <strong>Custom order:</strong> pass a <code>Comparator</code> in the constructor if you want another rule (for
+              example reverse order).
+            </p>
+            <pre><code>TreeMap&lt;String, String&gt; map = new TreeMap&lt;&gt;(Comparator.reverseOrder());</code></pre>
+
+            <h3 style="margin: 22px 0 10px; font-size: 15px">Picture: keys in a tree (with colours)</h3>
+            <p>
+              Each box is one map entry (key + value). <span class="rbt-pill rbt-pill-b">Black</span>
+              and <span class="rbt-pill rbt-pill-r">Red</span>
+              are only there so the tree can rebalance itself — you still read smaller keys to the <strong>left</strong>, larger
+              to the <strong>right</strong>.
+            </p>
+            <div class="rbt-panel">
+              <div class="rbt-col">
+                <span class="rbt-node rbt-black">10</span>
+                <span style="font-size: 11px; color: #64748b">root</span>
+              </div>
+              <div class="rbt-row" style="align-items: flex-end">
+                <div class="rbt-col">
+                  <span class="rbt-node rbt-red">5</span>
+                  <span style="font-size: 11px; color: #64748b">smaller than 10</span>
+                </div>
+                <div class="rbt-col">
+                  <span class="rbt-node rbt-red">15</span>
+                  <span style="font-size: 11px; color: #64748b">larger than 10</span>
+                  <div class="rbt-row" style="gap: 16px; margin-top: 8px">
+                    <div class="rbt-col">
+                      <span class="rbt-node rbt-black">12</span>
+                      <span style="font-size: 10px; color: #64748b">under 15, left</span>
+                    </div>
+                    <div class="rbt-col">
+                      <span class="rbt-node rbt-black">20</span>
+                      <span style="font-size: 10px; color: #64748b">under 15, right</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="rbt-legend">
+                <span><span class="rbt-node rbt-red" style="min-width: 28px; height: 28px; font-size: 12px"></span> Red node</span>
+                <span><span class="rbt-node rbt-black" style="min-width: 28px; height: 28px; font-size: 12px"></span> Black node</span>
+              </div>
+            </div>
+
+            <h3 style="margin: 22px 0 10px; font-size: 15px">Red–black rules (good to know, in plain English)</h3>
+            <ul style="margin: 0 0 12px; padding-left: 1.25rem; line-height: 1.55">
+              <li>Every node is either <strong>red</strong> or <strong>black</strong>.</li>
+              <li>The <strong>root</strong> is always black.</li>
+              <li>“Leaves” (empty child slots / NIL) count as black.</li>
+              <li><strong>No two reds in a row:</strong> a red node’s parent is black.</li>
+              <li>Every path down from a node to those empty leaves passes through the <strong>same number of black</strong> nodes
+                (black-height rule). That is what keeps the tree from becoming a long skinny line.</li>
+            </ul>
+
+            <h3 style="margin: 22px 0 10px; font-size: 15px">Insertion — <code>put(key, value)</code></h3>
+            <p>
+              New keys are added as a <strong>leaf</strong> in the right place (smaller left, larger right). New nodes often
+              start <strong>red</strong>. If that breaks a rule (for example two reds touching), the tree <strong>recolours</strong>
+              and may <strong>rotate</strong> a few pointers — you do not do that by hand; <code>TreeMap</code> does it for you.
+            </p>
+            <p class="muted" style="font-size: 13px; margin-bottom: 8px">Example from your notes, simplified:</p>
+            <div class="rbt-panel">
+              <p style="margin-bottom: 10px"><strong>Start:</strong></p>
+              <div class="rbt-col"><span class="rbt-node rbt-black">10</span></div>
+              <div class="rbt-row">
+                <span class="rbt-node rbt-red">5</span>
+                <span class="rbt-node rbt-red">15</span>
+              </div>
+            </div>
+            <div class="rbt-panel">
+              <p style="margin-bottom: 10px"><strong>Insert 1</strong> — it belongs left of 5. Right after attach, 1 and 5 can
+                both be red (bad). The tree fixes itself:</p>
+              <div class="rbt-col"><span class="rbt-node rbt-black">10</span></div>
+              <div class="rbt-row">
+                <div class="rbt-col">
+                  <span class="rbt-node rbt-black">5</span>
+                  <span class="rbt-node rbt-red">1</span>
+                </div>
+                <span class="rbt-node rbt-black">15</span>
+              </div>
+              <p style="margin-top: 12px; margin-bottom: 0">
+                After fix-up, 5 and 15 are often turned <strong>black</strong> so the “no two reds” rule holds; 1 can stay red
+                as a leaf. The exact rotation depends on the rest of the tree — the idea is: <strong>rules stay true, tree stays
+                short</strong>.
+              </p>
+            </div>
+
+            <h3 style="margin: 22px 0 10px; font-size: 15px">Search — <code>get(key)</code></h3>
+            <p>To find a key, walk from the root and compare at each step — no hashing.</p>
+            <div class="rbt-panel">
+              <p><strong>Find 12</strong> in this tree:</p>
+              <div class="rbt-col"><span class="rbt-node rbt-black">10</span></div>
+              <div class="rbt-row" style="justify-content: center">
+                <div class="rbt-col" style="opacity: 0.45"><span class="rbt-node rbt-red">5</span></div>
+                <div class="rbt-col">
+                  <span class="rbt-node rbt-red">15</span>
+                  <span class="rbt-node rbt-black">12</span>
+                </div>
+              </div>
+            </div>
+            <ul style="margin: 10px 0 0; padding-left: 1.25rem; line-height: 1.55">
+              <li><code>12 &gt; 10</code> → go <strong>right</strong></li>
+              <li><code>12 &lt; 15</code> → go <strong>left</strong> → found <strong>12</strong></li>
+            </ul>
+            <p>Only a few steps because the tree stays balanced.</p>
+
+            <h3 style="margin: 22px 0 10px; font-size: 15px">Deletion — <code>remove(key)</code></h3>
+            <p>
+              The map finds the node, may replace it with its <strong>in-order successor</strong> (next key in sorted order)
+              or similar trick, then runs the same kind of <strong>recolour + rotate</strong> fix-up so red–black rules still
+              hold. You remember: <strong>remove → maybe swap with successor → rebalance</strong>.
+            </p>
+            <p class="muted" style="margin-top: 12px; font-size: 13px; line-height: 1.5">
+              <strong>Student shortcut:</strong> <code>TreeMap</code> = binary search tree + extra colour rules so height stays
+              ~log n; sorted iteration = walk the tree “in order” (left, node, right).
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q71-1">
+          <div class="section-head">
+            <h3>71.1 Will TreeMap allow null key or null value?</h3>
+          </div>
+          <div class="section-body">
+            <p><strong>No null keys.</strong> <strong>Null values</strong> are allowed (keys must compare).</p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q71-2">
+          <div class="section-head">
+            <h3>71.2 Why no null key in TreeMap / TreeSet?</h3>
+          </div>
+          <div class="section-body">
+            <p>
+              The tree must <strong>compare keys</strong> to place them. <code>null</code> can’t compare safely with normal
+              <code>compareTo</code>, so you get <code>NullPointerException</code>. Same idea for <code>TreeSet</code>.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q72">
+          <div class="section-head">
+            <h2>72. How TreeSet works internally?</h2>
+          </div>
+          <div class="section-body">
+            <h3 style="margin: 0 0 10px; font-size: 15px">Answer (sorted set = TreeMap of keys)</h3>
+            <p>
+              <code>TreeSet</code> is literally a thin wrapper: a private <code>TreeMap</code> where each set element is
+              stored as a <strong>map key</strong> and a fixed dummy object is the value. Uniqueness and sorted iteration both
+              come from the tree map’s rules.
+            </p>
+            <p>
+              Adding an element runs the same compare-walk as <code>TreeMap.put</code>. If comparisons say an equal key
+              already lives in the tree, the add is rejected. Iterating the set is an in-order walk of the tree, which is why
+              elements appear sorted without an extra sort pass.
+            </p>
+
+            <h3 style="margin: 22px 0 10px; font-size: 15px">Visual walkthrough (values live in the tree)</h3>
+            <p class="muted" style="margin-top: 0">
+              Same colours as <code>TreeMap</code>: comparisons, not hashes, decide where a new circle attaches. Two more
+              frames show iteration order and a <code>contains</code>-style probe path.
+            </p>
+            <div class="anim-wrap viz-wrap">
+              <div class="anim-toolbar">
+                <span class="viz-badge">Inside memory</span>
+                <button type="button" class="anim-prev">Prev</button>
+                <span class="anim-label"></span>
+                <button type="button" class="anim-next">Next</button>
+              </div>
+              <div class="anim-steps">
+                <div class="anim-step">
+                  <h4>1 — Engine under the hood</h4>
+                  <p class="viz-caption">
+                    You call <code>TreeSet</code>; the JVM manipulates a <code>TreeMap</code> node graph. Each set element =
+                    one tree key.
+                  </p>
+                  <div class="viz-diagram">
+                    <div class="set-illus">
+                      <div class="set-illus-col you">
+                        <h5 style="color: #0369a1">API you use</h5>
+                        <span class="pill sky">add(25)</span><span class="pill sky">add(10)</span>
+                      </div>
+                      <div class="set-illus-col inside">
+                        <h5 style="color: #b45309">Internal TreeMap keys</h5>
+                        <div class="tree-wrap" style="padding-top: 4px">
+                          <div class="tree-tier"><div class="tree-node root">25</div></div>
+                          <div class="tree-tier"><div class="tree-node sm">10</div></div>
+                        </div>
+                        <p class="muted" style="margin: 6px 0 0; font-size: 10px">+ hidden dummy values per node</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="anim-step">
+                  <h4>2 — add walks like TreeMap</h4>
+                  <p class="viz-caption">
+                    New value <strong>40</strong>: start at root 25 → larger side → attach as orange leaf. Structure stays
+                    sorted for free.
+                  </p>
+                  <div class="viz-diagram">
+                    <div class="tree-wrap">
+                      <div class="tree-tier"><div class="tree-node root path">25</div></div>
+                      <div class="tree-tier">
+                        <div class="tree-node sm">10</div>
+                        <div class="tree-node lg path">40</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="anim-step">
+                  <h4>3 — Duplicate stops at equal key</h4>
+                  <p class="viz-caption">
+                    Try <code>add(25)</code> again: comparisons lead back to the existing 25 node → no second key allowed →
+                    <code>false</code>.
+                  </p>
+                  <div class="viz-diagram">
+                    <div class="tree-wrap">
+                      <div class="tree-tier">
+                        <div class="tree-node root path" style="box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.4)">25</div>
+                      </div>
+                    </div>
+                    <div class="walk-tag bad">Equal key already in tree → set unchanged.</div>
+                  </div>
+                </div>
+                <div class="anim-step">
+                  <h4>4 — Cost comes from height</h4>
+                  <p class="viz-caption">
+                    Every add/contains/remove touches at most one root-to-leaf path. Balancing keeps that path length ~log n,
+                    unlike hash sets’ average O(1).
+                  </p>
+                  <div class="viz-diagram">
+                    <div class="viz-row" style="justify-content: center; align-items: center; gap: 16px">
+                      <div style="text-align: center">
+                        <div style="font-size: 11px; font-weight: 800; color: #64748b; margin-bottom: 6px">HashSet</div>
+                        <div class="bkt-row" style="margin-top: 0">
+                          <div class="bkt-slot active" style="min-height: 52px"><div class="kv-node" style="font-size: 10px">O(1) avg</div></div>
+                        </div>
+                      </div>
+                      <span class="viz-arrow-lg" style="color: #94a3b8">vs</span>
+                      <div style="text-align: center">
+                        <div style="font-size: 11px; font-weight: 800; color: #64748b; margin-bottom: 6px">TreeSet</div>
+                        <div class="tree-tier" style="margin: 0">
+                          <div class="tree-node root" style="min-width: 44px; height: 44px; font-size: 13px">log n</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="anim-step">
+                  <h4>5 — Iterator = in-order walk over keys</h4>
+                  <p class="viz-caption">
+                    When you foreach the set, you are not touching buckets—you walk the tree left-to-root-to-right. That is why
+                    the loop naturally emits elements sorted without calling <code>sort</code>.
+                  </p>
+                  <div class="viz-diagram">
+                    <div class="tree-wrap">
+                      <div class="tree-tier"><div class="tree-node root">25</div></div>
+                      <div class="tree-tier">
+                        <div class="tree-node sm">10</div>
+                        <div class="tree-node lg">40</div>
+                      </div>
+                    </div>
+                    <div class="order-strip" style="margin-top: 10px">
+                      <div class="order-box" style="border-color: #16a34a">10</div>
+                      <span class="order-link" style="color: #16a34a">→</span>
+                      <div class="order-box" style="border-color: #ca8a04">25</div>
+                      <span class="order-link" style="color: #ea580c">→</span>
+                      <div class="order-box" style="border-color: #ea580c">40</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="anim-step">
+                  <h4>6 — <code>contains(40)</code> along one root-to-node path</h4>
+                  <p class="viz-caption">
+                    Membership is “pretend to insert 40”: compare at 25 → go right; compare at 40 → equal → stop. Wrong
+                    branch at any level means “not in set” without scanning unrelated branches in full.
+                  </p>
+                  <div class="viz-diagram">
+                    <div class="tree-wrap">
+                      <div class="tree-tier"><div class="tree-node root path">25</div></div>
+                      <div class="tree-tier">
+                        <div class="tree-node sm" style="opacity: 0.35">10</div>
+                        <div class="tree-node lg path">40</div>
+                      </div>
+                    </div>
+                    <div class="walk-tag ok">Two compares in this picture — scales with tree height.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q73">
+          <div class="section-head">
+            <h2>73. Iterator vs ListIterator?</h2>
+          </div>
+          <div class="section-body">
+            <h3 style="margin: 0 0 10px; font-size: 15px">Supported collections</h3>
+            <ul style="margin: 0 0 14px; padding-left: 1.25rem; line-height: 1.55">
+              <li>
+                <strong><code>Iterator</code></strong> comes from <code>Iterable</code> / <code>Collection</code>. You can use
+                it on <strong>List</strong>, <strong>Set</strong>, <strong>Queue</strong>, and on a <strong>Map</strong>’s
+                views (<code>keySet()</code>, <code>values()</code>, <code>entrySet()</code>) because those views are
+                collections you iterate.
+              </li>
+              <li>
+                <strong><code>ListIterator</code></strong> exists only for <strong>List</strong> implementations (for example
+                <code>ArrayList</code>, <code>LinkedList</code>) via <code>list.listIterator()</code>.
+              </li>
+            </ul>
+
+            <h3 style="margin: 18px 0 10px; font-size: 15px">Direction of traversal</h3>
+            <ul style="margin: 0 0 14px; padding-left: 1.25rem; line-height: 1.55">
+              <li><strong><code>Iterator</code></strong> — <strong>forward only</strong> (<code>hasNext</code> / <code>next</code>).</li>
+              <li>
+                <strong><code>ListIterator</code></strong> — <strong>forward and backward</strong> (<code>hasNext</code> /
+                <code>next</code> and <code>hasPrevious</code> / <code>previous</code>), plus index helpers on a list.
+              </li>
+            </ul>
+
+            <h3 style="margin: 18px 0 10px; font-size: 15px">Real-world analogy</h3>
+            <p>
+              Think of a photo gallery: with a plain <strong>Iterator</strong> you only have a <strong>“Next”</strong> button.
+              With <strong>ListIterator</strong> you get <strong>“Next”</strong> and <strong>“Previous”</strong> because a list
+              has a well-defined left-to-right order with positions.
+            </p>
+
+            <h3 style="margin: 18px 0 10px; font-size: 15px">Code — one direction vs both</h3>
+            <p><strong>Iterator</strong> (forward only):</p>
+            <pre><code>List&lt;String&gt; names = new ArrayList&lt;&gt;();
+names.add("Dhoni");
+names.add("Virat");
+
+Iterator&lt;String&gt; iterator = names.iterator();
+while (iterator.hasNext()) {
+    System.out.println(iterator.next());
+}</code></pre>
+
+            <p><strong>ListIterator</strong> (forward, then backward):</p>
+            <pre><code>ListIterator&lt;String&gt; listIterator = names.listIterator();
+while (listIterator.hasNext()) {
+    System.out.println("Forward: " + listIterator.next());
+}
+while (listIterator.hasPrevious()) {
+    System.out.println("Backward: " + listIterator.previous());
+}</code></pre>
+
+            <h3 style="margin: 22px 0 10px; font-size: 15px">Indirect questions</h3>
+            <ol style="margin: 0; padding-left: 1.25rem; line-height: 1.55">
+              <li style="margin-bottom: 10px">
+                <strong>Best way to traverse a <code>Set</code> — why not <code>ListIterator</code>?</strong><br />
+                Use <code>Iterator</code> (or an enhanced for-loop, which uses it under the hood). A set has no guaranteed
+                positional order, and <code>ListIterator</code> is tied to <code>List</code> APIs that need indexed /
+                bidirectional list positions.
+              </li>
+              <li style="margin-bottom: 10px">
+                <strong>Safe removal while looping?</strong><br />
+                Call <code>Iterator.remove()</code> immediately after <code>next()</code> on the same iterator. Structural changes
+                done any other way during iteration can cause <code>ConcurrentModificationException</code> on fail-fast
+                iterators.
+              </li>
+              <li style="margin-bottom: 10px">
+                <strong>Insert while iterating?</strong><br />
+                Use <code>ListIterator.add(E)</code> on a list — it inserts relative to the iterator’s current position (just
+                before the element that would be returned by <code>next()</code>).
+              </li>
+              <li style="margin-bottom: 10px">
+                <strong>Iterate backward through a list?</strong><br />
+                Use <code>ListIterator</code> starting at the end (<code>list.listIterator(list.size())</code>) or walk forward
+                first, then use <code>hasPrevious</code> / <code>previous</code>.
+              </li>
+              <li style="margin-bottom: 10px">
+                <strong>What if the collection is modified during iteration the wrong way?</strong><br />
+                Fail-fast iterators usually throw <code>ConcurrentModificationException</code> because the iterator detects a
+                structural change it was not told about.
+              </li>
+              <li style="margin-bottom: 10px">
+                <strong>Which types cannot use <code>ListIterator</code>?</strong><br />
+                <code>Set</code>, <code>Queue</code>, and <code>Map</code> (directly) — there is no standard list iterator for
+                them because they are not <code>List</code>s (no list positions / bidirectional list contract).
+              </li>
+              <li>
+                <strong>When prefer <code>Iterator</code> over <code>ListIterator</code> in apps?</strong><br />
+                Use <code>Iterator</code> for sets, queues, and map views — it is universal and simple. Use
+                <code>ListIterator</code> when you truly need backward walk, index, or <code>add</code>/<code>set</code> while
+                traversing a list.
+              </li>
+            </ol>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q74">
+          <div class="section-head">
+            <h2>74. How do fail-fast iterators work? Why <code>ConcurrentModificationException</code>?</h2>
+          </div>
+          <div class="section-body">
+            <p>
+              <strong>Fail-fast</strong> iterators work on the <strong>live collection</strong> (they read the real
+              structure as you go). The collection keeps a <strong>modification count</strong> (conceptually: “how many
+              structural changes happened?”).
+            </p>
+            <p>
+              On every <code>next()</code> (or similar step), the iterator checks whether that count still matches what it
+              expected when it was created. If something else changed the collection structurally (add/remove without using this
+              iterator’s <code>remove()</code>), the iterator <strong>fails immediately</strong> by throwing
+              <code>ConcurrentModificationException</code> instead of returning stale or inconsistent data.
+            </p>
+            <p class="muted" style="margin-top: 12px; font-size: 13px; line-height: 1.5">
+              Goal: catch accidental concurrent or mid-loop structural edits early. Trade-off: you must use the iterator’s
+              own <code>remove()</code> (or avoid structural changes) while iterating.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q75">
+          <div class="section-head">
+            <h2>75. How do fail-safe iterators work? Why no <code>ConcurrentModificationException</code>?</h2>
+          </div>
+          <div class="section-body">
+            <p>
+              <strong>Fail-safe</strong> iterators do not walk the backing collection directly. They iterate over a
+              <strong>snapshot or copy</strong> of the data taken when the iterator was created (or over a weakly consistent
+              view, depending on the class — the interview idea is the same: <strong>not the single live structure</strong>).
+            </p>
+            <p>
+              Because of that, changes made to the original collection <strong>after</strong> the iterator was created are
+              not always visible to the iterator, and it will <strong>not</strong> throw <code>ConcurrentModificationException</code>
+              for those changes — you are not “cheating” the fail-fast check; you simply are not looking at the same mutable array
+              of entries anymore.
+            </p>
+
+            <h3 style="margin: 22px 0 10px; font-size: 15px">Indirect question — which uses more memory?</h3>
+            <p>
+              <strong>Fail-safe</strong> approaches usually consume <strong>more memory</strong> (copy or extra bookkeeping).
+              <strong>Fail-fast</strong> iterators use little extra memory because they traverse the real collection — but they
+              throw on unexpected structural modification instead of hiding it.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q76">
+          <div class="section-head">
+            <h2>76. Comparable vs Comparator — differences?</h2>
+          </div>
+          <div class="section-body">
+            <p>
+              <strong><code>Comparable</code></strong> is implemented <strong>by your class</strong>. It defines the
+              <strong>natural ordering</strong> of objects of that type (one default “how should instances compare?”).
+            </p>
+            <p>
+              <strong><code>Comparator</code></strong> is a <strong>separate strategy object</strong>. You can define
+              <strong>many</strong> different sort orders without changing the original class — pass different comparators to
+              <code>Collections.sort</code>, <code>List.sort</code>, <code>TreeSet</code> constructors, etc.
+            </p>
+
+            <h3 style="margin: 22px 0 10px; font-size: 15px">Indirect question — both natural order and a custom comparator?</h3>
+            <p>
+              If a class implements <code>Comparable</code>, that is its <strong>natural ordering</strong> (for example by id or
+              name) when no comparator is supplied.
+            </p>
+            <p>
+              If you pass a <code>Comparator</code> explicitly (for example <code>Collections.sort(list, comparator)</code> or
+              <code>stream.sorted(comparator)</code>), that <strong>comparator wins</strong> for that call or that sorted
+              structure. Natural ordering is used <strong>only when no <code>Comparator</code> is given</strong> (or the API
+              defaults to natural order).
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+
+        <section id="q77">
+          <div class="section-head">
+            <h2>77. <code>List.of()</code> vs <code>Collections.unmodifiableList()</code>?</h2>
+          </div>
+          <div class="section-body">
+            <h3 style="margin: 0 0 10px; font-size: 15px"><code>List.of()</code> (Java 9+)</h3>
+            <ul style="margin: 0 0 14px; padding-left: 1.25rem; line-height: 1.55">
+              <li>Creates a <strong>truly immutable</strong> list — no add, remove, or set.</li>
+              <li>Any mutating call throws <code>UnsupportedOperationException</code>.</li>
+              <li><strong>No <code>null</code> elements</strong> — passing or having null throws <code>NullPointerException</code>.</li>
+              <li>Often very compact for small fixed lists.</li>
+            </ul>
+            <pre><code>List&lt;String&gt; immutableList = List.of("A", "B", "C");
+immutableList.add("D"); // UnsupportedOperationException</code></pre>
+
+            <h3 style="margin: 22px 0 10px; font-size: 15px"><code>Collections.unmodifiableList()</code></h3>
+            <ul style="margin: 0 0 14px; padding-left: 1.25rem; line-height: 1.55">
+              <li>
+                Wraps an <strong>existing</strong> list: the <strong>view</strong> cannot be modified through the wrapper, but
+                the <strong>backing list can still change</strong> — and those changes show through the view.
+              </li>
+              <li>Mutating through the unmodifiable view throws <code>UnsupportedOperationException</code>.</li>
+              <li>Null elements follow whatever the backing list allows.</li>
+            </ul>
+            <pre><code>List&lt;String&gt; originalList = new ArrayList&lt;&gt;(List.of("A", "B", "C"));
+List&lt;String&gt; unmodifiableList = Collections.unmodifiableList(originalList);
+unmodifiableList.add("D"); // UnsupportedOperationException
+originalList.add("D");     // OK — backing list changed; view now sees four elements</code></pre>
+            <p class="muted" style="margin-top: 12px; font-size: 13px; line-height: 1.5">
+              Rule of thumb: <code>List.of</code> = immutable <strong>values</strong> you own; <code>unmodifiableList</code> =
+              read-only <strong>window</strong> onto someone else’s mutable list unless they also stop mutating it.
+            </p>
+            <a class="backtop" href="#top">Back to top</a>
+          </div>
+        </section>
+      </main>
+    </div>
+
+  <script>
+    (function () {
+      function boot(root) {
+        var steps = Array.prototype.slice.call(root.querySelectorAll(":scope > .anim-steps > .anim-step"));
+        if (!steps.length) return;
+        var prev = root.querySelector(".anim-prev");
+        var next = root.querySelector(".anim-next");
+        var label = root.querySelector(".anim-label");
+        var i = 0;
+        function show() {
+          steps.forEach(function (s, idx) {
+            if (idx === i) s.classList.add("active");
+            else s.classList.remove("active");
+          });
+          label.textContent = i + 1 + " / " + steps.length;
+          prev.disabled = i === 0;
+          next.disabled = i === steps.length - 1;
+        }
+        prev.addEventListener("click", function () {
+          if (i > 0) {
+            i--;
+            show();
+          }
+        });
+        next.addEventListener("click", function () {
+          if (i < steps.length - 1) {
+            i++;
+            show();
+          }
+        });
+        show();
+      }
+      document.addEventListener("DOMContentLoaded", function () {
+        Array.prototype.forEach.call(document.querySelectorAll(".anim-wrap"), boot);
+      });
+    })();
+  </script>
+
+  </body>
+</html>
