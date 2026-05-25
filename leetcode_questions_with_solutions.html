@@ -2700,12 +2700,12 @@
     <div class="container">
         <header>
             <h1>LeetCode Questions - Interactive Guide</h1>
-            <p>163 Curated Problems with Animated Solutions & Visual Walkthroughs</p>
+            <p>182 Curated Problems with Animated Solutions & Visual Walkthroughs</p>
         </header>
         
         <div class="stats">
-            <div class="stat-box"><h3>163</h3><p>Total Questions</p></div>
-            <div class="stat-box"><h3>11</h3><p>Topics Covered</p></div>
+            <div class="stat-box"><h3>182</h3><p>Total Questions</p></div>
+            <div class="stat-box"><h3>13</h3><p>Topics Covered</p></div>
             <div class="stat-box"><h3>45</h3><p>Animated Visuals</p></div>
         </div>
         
@@ -2721,6 +2721,8 @@
                 <li><a href="#recursion" onclick="scrollToSection(event, 'recursion')">Recursion</a></li>
                 <li><a href="#top-k" onclick="scrollToSection(event, 'top-k')">Top K Elements</a></li>
                 <li><a href="#binary-trees" onclick="scrollToSection(event, 'binary-trees')">Binary Trees</a></li>
+                <li><a href="#bfs-problems" onclick="scrollToSection(event, 'bfs-problems')">BFS Problems</a></li>
+                <li><a href="#dfs-problems" onclick="scrollToSection(event, 'dfs-problems')">DFS Problems</a></li>
                 <li><a href="#dynamic-programming" onclick="scrollToSection(event, 'dynamic-programming')">Dynamic Programming</a></li>
             </ul>
         </nav>
@@ -3713,8 +3715,10 @@ int maxSumSubarray(int[] nums, int k) {
             <p><strong>Problem:</strong> Given an integer array <code>nums</code> and an integer <code>k</code>, find a contiguous subarray whose length equals <code>k</code> that has the maximum average value and return this value.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,12,-5,-6,50,3], k = 4  |  Output: 12.75</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [5], k = 1  |  Output: 5.0</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,12,-5,-6,50,3], k = 4
+Output: 12.75</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [5], k = 1
+Output: 5.0</pre></div>
         </div>
         <div class="animation-box" id="anim-maxavg">
             <h3>Maximum Average Animation (nums=[1,12,-5,-6,50,3], k=4)</h3>
@@ -3766,8 +3770,10 @@ double findMaxAverage(int[] nums, int k) {
             <p><strong>Problem:</strong> Given an array <code>nums</code> and sliding window size <code>k</code>, return the max value in each window as it slides from left to right.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,3,-1,-3,5,3,6,7], k = 3  |  Output: [3,3,5,5,6,7]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1], k = 1  |  Output: [1]</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,3,-1,-3,5,3,6,7], k = 3
+Output: [3,3,5,5,6,7]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1], k = 1
+Output: [1]</pre></div>
         </div>
         <div class="animation-box" id="anim-swmax">
             <h3>Sliding Window Maximum Animation (nums=[1,3,-1,-3,5], k=3)</h3>
@@ -3825,8 +3831,10 @@ int[] maxSlidingWindow(int[] nums, int k) {
             <ul><li>0 &le; s.length &le; 5 * 10^4</li></ul>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "abcabcbb"  |  Output: 3  ("abc")</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "pwwkew"    |  Output: 3  ("wke")</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "abcabcbb"
+Output: 3  ("abc")</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "pwwkew"
+Output: 3  ("wke")</pre></div>
         </div>
 
         <!-- ANIMATION -->
@@ -3891,8 +3899,10 @@ int lengthOfLongestSubstring(String s) {
             <p><strong>Problem:</strong> Given a string <code>s</code> and an integer <code>k</code>, return the length of the longest substring that contains at most <code>k</code> distinct characters.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "eceba", k = 2  |  Output: 3 ("ece")</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "aa", k = 1  |  Output: 2</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "eceba", k = 2
+Output: 3 ("ece")</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "aa", k = 1
+Output: 2</pre></div>
         </div>
         <div class="animation-box" id="anim-atmostk">
             <h3>At Most K Distinct Animation (s="eceba", k=2)</h3>
@@ -3948,8 +3958,10 @@ int lengthOfLongestSubstringKDistinct(String s, int k) {
             <p><strong>Problem:</strong> Given a binary array <code>nums</code> and an integer <code>k</code>, return the maximum number of consecutive 1's if you can flip at most <code>k</code> 0's.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [0,0,1,1,0,1], k = 2  |  Output: 5</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,1,1,0,0,0,1,1,1,1,0], k = 2  |  Output: 6</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [0,0,1,1,0,1], k = 2
+Output: 5</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,1,1,0,0,0,1,1,1,1,0], k = 2
+Output: 6</pre></div>
         </div>
         <div class="animation-box" id="anim-maxones">
             <h3>Max Consecutive Ones Animation (nums=[0,0,1,1,0,1], k=2)</h3>
@@ -4001,8 +4013,10 @@ int longestOnes(int[] nums, int k) {
             <p><strong>Problem:</strong> Given a string <code>s</code> and integer <code>k</code>, you can choose any character and change it to any other uppercase letter. Find the length of the longest substring containing the same letter after performing at most <code>k</code> changes.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "AABABBA", k = 1  |  Output: 4</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "ABAB", k = 2  |  Output: 4</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "AABABBA", k = 1
+Output: 4</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "ABAB", k = 2
+Output: 4</pre></div>
         </div>
         <div class="animation-box" id="anim-longrepchar">
             <h3>Longest Repeating Char Replacement (s="AABABBA", k=1)</h3>
@@ -4079,8 +4093,10 @@ int characterReplacement(String s, int k) {
             <p><strong>Problem:</strong> You have a row of trees, each yielding one type of fruit. You have 2 baskets and each basket can hold only one type. Find the maximum number of fruits you can pick in a contiguous subarray.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: fruits = [1,2,3,2,2]  |  Output: 4 (subarray [3,2,2,2] has 2 types)</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: fruits = [1,2,1]  |  Output: 3</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: fruits = [1,2,3,2,2]
+Output: 4 (subarray [3,2,2,2] has 2 types)</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: fruits = [1,2,1]
+Output: 3</pre></div>
         </div>
         <div class="animation-box" id="anim-fruitbasket">
             <h3>Fruit Into Baskets Animation (fruits=[1,2,3,2,2])</h3>
@@ -4174,8 +4190,10 @@ int totalFruit(int[] fruits) {
             <p><strong>Problem:</strong> Given an array of positive integers <code>nums</code> and a positive integer <code>target</code>, return the minimal length of a subarray whose sum is &ge; target. Return 0 if no such subarray.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: target = 7, nums = [2,3,1,2,4,3]  |  Output: 2</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: target = 11, nums = [1,1,1,1,1,1]  |  Output: 0</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: target = 7, nums = [2,3,1,2,4,3]
+Output: 2</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: target = 11, nums = [1,1,1,1,1,1]
+Output: 0</pre></div>
         </div>
         <div class="animation-box" id="anim-minsizesum">
             <h3>Min Size Subarray Animation (target=7, nums=[2,3,1,2,4,3])</h3>
@@ -4263,8 +4281,10 @@ int minSubArrayLen(int target, int[] nums) {
             <p><strong>Problem:</strong> Given strings s and t, return the minimum window substring of s containing every character in t (including duplicates).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "ADOBECODEBANC", t = "ABC"  |  Output: "BANC"</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "a", t = "aa"               |  Output: ""</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "ADOBECODEBANC", t = "ABC"
+Output: "BANC"</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "a", t = "aa"
+Output: ""</pre></div>
         </div>
 
         <div class="animation-box" id="anim-minwin">
@@ -4419,8 +4439,10 @@ String minWindow(String s, String t) {
             <p><strong>Problem:</strong> Given an integer array <code>nums</code> and integer <code>k</code>, return the number of good subarrays — subarrays with exactly <code>k</code> different integers.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,2,1,2,3], k = 2  |  Output: 7</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,2,1,3,4], k = 3  |  Output: 3</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,2,1,2,3], k = 2
+Output: 7</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,2,1,3,4], k = 3
+Output: 3</pre></div>
         </div>
         <div class="animation-box" id="anim-subkdiff">
             <h3>Subarrays with K Distinct Integers (LC 992)</h3>
@@ -4505,8 +4527,10 @@ int atMost(int[] nums, int k) {
             <p><strong>Problem:</strong> Given array <code>nums</code> and integer <code>k</code>, return the number of nice sub-arrays — subarrays with exactly <code>k</code> odd numbers.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,1,2,1,1], k = 3  |  Output: 2</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [2,2,2,1,2,2,1,2,2,2], k = 2  |  Output: 16</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,1,2,1,1], k = 3
+Output: 2</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [2,2,2,1,2,2,1,2,2,2], k = 2
+Output: 16</pre></div>
         </div>
         <div class="animation-box" id="anim-countnice">
             <h3>Count Nice Subarrays (LC 1248)</h3>
@@ -4575,8 +4599,10 @@ int atMost(int[] nums, int k) {
             <p><strong>Problem:</strong> Given a binary array <code>nums</code> and an integer <code>goal</code>, return the number of non-empty subarrays with sum equal to <code>goal</code>.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,0,1,0,1], goal = 2  |  Output: 4</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [0,0,0,0,0], goal = 0  |  Output: 15</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,0,1,0,1], goal = 2
+Output: 4</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [0,0,0,0,0], goal = 0
+Output: 15</pre></div>
         </div>
         <div class="animation-box" id="anim-binsubsum">
             <h3>Binary Subarrays With Sum (LC 930)</h3>
@@ -4646,8 +4672,10 @@ int atMost(int[] nums, int goal) {
             <p><strong>Problem:</strong> Given two strings <code>s</code> and <code>p</code>, return an array of all start indices of <code>p</code>'s anagrams in <code>s</code>.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "cbaebabacd", p = "abc"  |  Output: [0,6]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "abab", p = "ab"  |  Output: [0,1,2]</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "cbaebabacd", p = "abc"
+Output: [0,6]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "abab", p = "ab"
+Output: [0,1,2]</pre></div>
         </div>
         <div class="animation-box" id="anim-findanagram">
             <h3>Find All Anagrams in String (LC 438)</h3>
@@ -4699,8 +4727,10 @@ List&lt;Integer&gt; findAnagrams(String s, String p) {
             <p><strong>Problem:</strong> Given two strings <code>s1</code> and <code>s2</code>, return <code>true</code> if <code>s2</code> contains a permutation of <code>s1</code>.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s1 = "ab", s2 = "eidbaooo"  |  Output: true</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s1 = "ab", s2 = "eidboaoo"  |  Output: false</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s1 = "ab", s2 = "eidbaooo"
+Output: true</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s1 = "ab", s2 = "eidboaoo"
+Output: false</pre></div>
         </div>
         <div class="animation-box" id="anim-perminstr">
             <h3>Permutation in String (LC 567)</h3>
@@ -4751,8 +4781,10 @@ boolean checkInclusion(String s1, String s2) {
             <p><strong>Problem:</strong> Given an array of positive integers <code>nums</code> and integer <code>k</code>, return the number of contiguous subarrays where the product of all elements is strictly less than <code>k</code>.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [10,5,2,6], k = 100  |  Output: 8</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,2,3], k = 0  |  Output: 0</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [10,5,2,6], k = 100
+Output: 8</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,2,3], k = 0
+Output: 0</pre></div>
         </div>
         <div class="animation-box" id="anim-subprodless">
             <h3>Subarray Product &lt; K (LC 713)</h3>
@@ -4808,8 +4840,10 @@ int numSubarrayProductLessThanK(int[] nums, int k) {
             <p><strong>Problem:</strong> Given a string <code>s</code> consisting only of characters <code>a</code>, <code>b</code> and <code>c</code>, return the number of substrings containing at least one occurrence of all these characters.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "abcabc"  |  Output: 10</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "aaacb"  |  Output: 3</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "abcabc"
+Output: 10</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "aaacb"
+Output: 3</pre></div>
         </div>
         <div class="animation-box" id="anim-numsuball3">
             <h3>Substrings With a, b, and c (LC 1358)</h3>
@@ -4918,8 +4952,10 @@ int sumRange(int left, int right) {
             <p><strong>Problem:</strong> Given an array <code>nums</code>, return the pivot index where the sum of all elements strictly to the left equals the sum of all elements strictly to the right. Return -1 if no such index.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,7,3,6,5,6]  |  Output: 3</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,2,3]  |  Output: -1</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,7,3,6,5,6]
+Output: 3</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,2,3]
+Output: -1</pre></div>
         </div>
         <div class="animation-box" id="anim-findpivot">
             <h3>Find Pivot Index Animation (nums=[1,7,3,6,5,6])</h3>
@@ -4973,9 +5009,11 @@ int pivotIndex(int[] nums) {
             </ul>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,1,1], k = 2  |  Output: 2
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,1,1], k = 2
+Output: 2
 Explanation: Subarrays [1,1] at index 0-1 and [1,1] at index 1-2</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,2,3], k = 3  |  Output: 2
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,2,3], k = 3
+Output: 2
 Explanation: Subarrays [1,2] and [3]</pre></div>
         </div>
 
@@ -5064,8 +5102,10 @@ int subarraySum(int[] nums, int k) {
             <p><strong>Problem:</strong> Given an integer array nums, return an array where answer[i] is the product of all elements except nums[i]. Must run in O(n) without division.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,2,3,4]  |  Output: [24,12,8,6]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [-1,1,0,-3,3]  |  Output: [0,0,9,0,0]</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,2,3,4]
+Output: [24,12,8,6]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [-1,1,0,-3,3]
+Output: [0,0,9,0,0]</pre></div>
         </div>
 
         <div class="animation-box" id="anim-prodarray">
@@ -5122,8 +5162,10 @@ int[] productExceptSelf(int[] nums) {
             <p><strong>Problem:</strong> Given a binary array <code>nums</code>, return the maximum length of a contiguous subarray with equal number of 0 and 1.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [0,1]  |  Output: 2</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [0,1,0]  |  Output: 2</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [0,1]
+Output: 2</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [0,1,0]
+Output: 2</pre></div>
         </div>
         <div class="animation-box" id="anim-contarray">
             <h3>Contiguous Array Animation (nums=[0,1,0,1,1,0])</h3>
@@ -5168,8 +5210,10 @@ int findMaxLength(int[] nums) {
             <p><strong>Problem:</strong> Given an integer array <code>nums</code> and integer <code>k</code>, return the maximum length of a subarray that sums to <code>k</code>.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,-1,5,-2,3], k = 3  |  Output: 4 ([1,-1,5,-2])</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [-2,-1,2,1], k = 1  |  Output: 2</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,-1,5,-2,3], k = 3
+Output: 4 ([1,-1,5,-2])</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [-2,-1,2,1], k = 1
+Output: 2</pre></div>
         </div>
         <div class="animation-box" id="anim-maxsizek">
             <h3>Max Size Subarray Sum = K (nums = [1, -1, 5, -2, 3], k = 3)</h3>
@@ -5228,8 +5272,10 @@ int maxSubArrayLen(int[] nums, int k) {
             <p><strong>Problem:</strong> Given an integer array <code>nums</code> and integer <code>k</code>, return the number of non-empty subarrays whose sum is divisible by <code>k</code>.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [4,5,0,-2,-3,1], k = 5  |  Output: 7</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [5], k = 9  |  Output: 0</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [4,5,0,-2,-3,1], k = 5
+Output: 7</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [5], k = 9
+Output: 0</pre></div>
         </div>
         <div class="animation-box" id="anim-divbyk">
             <h3>Divisible by K Animation (nums=[4,5,0,-2,-3,1], k=5)</h3>
@@ -5281,8 +5327,10 @@ int subarraysDivByK(int[] nums, int k) {
             <p><strong>Problem:</strong> Given an integer array <code>nums</code> and integer <code>k</code>, return <code>true</code> if <code>nums</code> has a good subarray — a subarray of length &ge; 2 whose sum is a multiple of <code>k</code>.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [23,2,4,6,7], k = 6  |  Output: true ([2,4] sums to 6)</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [23,2,6,4,7], k = 13  |  Output: false</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [23,2,4,6,7], k = 6
+Output: true ([2,4] sums to 6)</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [23,2,6,4,7], k = 13
+Output: false</pre></div>
         </div>
         <div class="animation-box" id="anim-contsubsum">
             <h3>Continuous Subarray Sum Animation (nums=[23,2,4,6,7], k=6)</h3>
@@ -5337,8 +5385,10 @@ boolean checkSubarraySum(int[] nums, int k) {
             <p><strong>Problem:</strong> Given an array <code>nums</code> and integer <code>p</code>, remove the smallest subarray so the sum of the remaining elements is divisible by <code>p</code>. Return the length of the smallest subarray to remove, or -1 if impossible.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [3,1,4,2], p = 6  |  Output: 1 (remove [4])</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [6,3,5,2], p = 9  |  Output: 2</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [3,1,4,2], p = 6
+Output: 1 (remove [4])</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [6,3,5,2], p = 9
+Output: 2</pre></div>
         </div>
         <div class="animation-box" id="anim-makesumdiv">
             <h3>Make Sum Divisible Animation (nums=[3,1,4,2], p=6)</h3>
@@ -5395,7 +5445,11 @@ int minSubarray(int[] nums, int p) {
             <p><strong>Problem:</strong> Given a 2D matrix, handle queries to find the sum of elements inside a rectangle defined by its upper-left (row1,col1) and lower-right (row2,col2) corners.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: matrix = [[1,2,3],[4,5,6],[7,8,9]], sumRegion(1,1,2,2) → 28</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: matrix =
+[1, 2, 3]
+[4, 5, 6]
+[7, 8, 9]
+sumRegion(1,1,2,2) → 28</pre></div>
             <div class="test-case"><h4>Test Case 2:</h4><pre>Input: sumRegion(0,0,1,1) → 12</pre></div>
         </div>
         <div class="animation-box" id="anim-rangesum2d">
@@ -5444,8 +5498,18 @@ int sumRegion(int r1, int c1, int r2, int c2) {
             <p><strong>Problem:</strong> Given a m&times;n matrix <code>mat</code> and integer <code>k</code>, return a matrix <code>answer</code> where each <code>answer[i][j]</code> is the sum of all elements <code>mat[r][c]</code> for <code>i-k &le; r &le; i+k</code>, <code>j-k &le; c &le; j+k</code>.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: mat = [[1,2,3],[4,5,6],[7,8,9]], k = 1  |  Output: [[12,21,16],[27,45,33],[24,39,28]]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: mat = [[1,2,3],[4,5,6],[7,8,9]], k = 2  |  Output: [[45,45,45],[45,45,45],[45,45,45]]</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: mat =
+[1, 2, 3]
+[4, 5, 6]
+[7, 8, 9]
+k = 1
+Output: [[12,21,16],[27,45,33],[24,39,28]]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: mat =
+[1, 2, 3]
+[4, 5, 6]
+[7, 8, 9]
+k = 2
+Output: [[45,45,45],[45,45,45],[45,45,45]]</pre></div>
         </div>
         <div class="animation-box" id="anim-matblock">
             <h3>Matrix Block Sum Animation (mat 3&times;3, k=1)</h3>
@@ -5496,8 +5560,10 @@ int[][] matrixBlockSum(int[][] mat, int k) {
             <p><strong>Problem:</strong> Given length <code>n</code> (initially all zeros) and a list of update operations <code>[startIdx, endIdx, val]</code>, return the final array after all operations.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: length=5, updates=[[1,3,2],[2,4,3],[0,2,-2]]  |  Output: [-2,0,3,5,3]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: length=3, updates=[[0,2,1]]  |  Output: [1,1,1]</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: length=5, updates=[[1,3,2],[2,4,3],[0,2,-2]]
+Output: [-2,0,3,5,3]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: length=3, updates=[[0,2,1]]
+Output: [1,1,1]</pre></div>
         </div>
         <div class="animation-box" id="anim-rangeadd">
             <h3>Range Addition Animation (length=5)</h3>
@@ -5544,8 +5610,10 @@ int[] getModifiedArray(int length, int[][] updates) {
             <p><strong>Problem:</strong> Given <code>n</code> flights and bookings <code>[first, last, seats]</code>, return an array of total seats reserved for each flight.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: bookings=[[1,2,10],[2,3,20],[2,5,25]], n=5  |  Output: [10,55,45,25,25]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: bookings=[[1,2,10],[2,2,15]], n=2  |  Output: [10,25]</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: bookings=[[1,2,10],[2,3,20],[2,5,25]], n=5
+Output: [10,55,45,25,25]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: bookings=[[1,2,10],[2,2,15]], n=2
+Output: [10,25]</pre></div>
         </div>
         <div class="animation-box" id="anim-corpflight">
             <h3>Corporate Flight Bookings Animation (n=5)</h3>
@@ -5592,8 +5660,10 @@ int[] corpFlightBookings(int[][] bookings, int n) {
             <p><strong>Problem:</strong> Given trips <code>[numPassengers, from, to]</code> and vehicle <code>capacity</code>, return whether it's possible to pick up and drop off all passengers.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: trips = [[2,1,5],[3,3,7]], capacity = 4  |  Output: false</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: trips = [[2,1,5],[3,3,7]], capacity = 5  |  Output: true</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: trips = [[2,1,5],[3,3,7]], capacity = 4
+Output: false</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: trips = [[2,1,5],[3,3,7]], capacity = 5
+Output: true</pre></div>
         </div>
         <div class="animation-box" id="anim-carpool">
             <h3>Car Pooling Animation (trips=[[2,1,5],[3,3,7]], cap=5)</h3>
@@ -5652,8 +5722,10 @@ boolean carPooling(int[][] trips, int capacity) {
             <p><strong>Problem:</strong> Given a sorted array and a target, return the index if found, else return -1.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [-1,0,3,5,9,12], target = 9  |  Output: 4</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [-1,0,3,5,9,12], target = 2  |  Output: -1</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [-1,0,3,5,9,12], target = 9
+Output: 4</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [-1,0,3,5,9,12], target = 2
+Output: -1</pre></div>
         </div>
 
         <div class="animation-box" id="anim-binsearch">
@@ -5706,8 +5778,10 @@ int search(int[] nums, int target) {
             <p><strong>Problem:</strong> Given a sorted array and a target value, return the index if found. If not, return the index where it would be inserted.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,3,5,6], target = 5  |  Output: 2</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,3,5,6], target = 2  |  Output: 1</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,3,5,6], target = 5
+Output: 2</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,3,5,6], target = 2
+Output: 1</pre></div>
         </div>
         <div class="animation-box" id="anim-searchinsert">
             <h3>Search Insert Animation (nums=[1,3,5,6], target=2)</h3>
@@ -5749,8 +5823,10 @@ int searchInsert(int[] nums, int target) {
             <p><strong>Problem:</strong> Given a sorted array, find the starting and ending position of a given target value. Return [-1,-1] if not found.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [5,7,7,8,8,10], target = 8  |  Output: [3,4]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [5,7,7,8,8,10], target = 6  |  Output: [-1,-1]</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [5,7,7,8,8,10], target = 8
+Output: [3,4]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [5,7,7,8,8,10], target = 6
+Output: [-1,-1]</pre></div>
         </div>
         <div class="animation-box" id="anim-firstlast">
             <h3>Find First &amp; Last Animation (target=8)</h3>
@@ -5801,8 +5877,10 @@ int findBound(int[] nums, int target, boolean isFirst) {
             <p><strong>Problem:</strong> In a sorted array where every element appears exactly twice except one, find the single element. Must run in O(log n).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,1,2,3,3,4,4,8,8]  |  Output: 2</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [3,3,7,7,10,11,11]  |  Output: 10</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,1,2,3,3,4,4,8,8]
+Output: 2</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [3,3,7,7,10,11,11]
+Output: 10</pre></div>
         </div>
         <div class="animation-box" id="anim-singleelem">
             <h3>Single Element Animation (nums=[1,1,2,3,3,4,4,8,8])</h3>
@@ -5846,8 +5924,10 @@ int singleNonDuplicate(int[] nums) {
             <p><strong>Problem:</strong> Search for a target in a rotated sorted array. Return its index, or -1 if not found. Must run in O(log n).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [4,5,6,7,0,1,2], target = 0  |  Output: 4</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [4,5,6,7,0,1,2], target = 3  |  Output: -1</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [4,5,6,7,0,1,2], target = 0
+Output: 4</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [4,5,6,7,0,1,2], target = 3
+Output: -1</pre></div>
         </div>
         <div class="animation-box" id="anim-rotatedsearch">
             <h3>Rotated Search Animation (target=0)</h3>
@@ -5898,8 +5978,10 @@ int search(int[] nums, int target) {
             <p><strong>Problem:</strong> Find the minimum element in a rotated sorted array (no duplicates). Must run in O(log n).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [3,4,5,1,2]  |  Output: 1</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [4,5,6,7,0,1,2]  |  Output: 0</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [3,4,5,1,2]
+Output: 1</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [4,5,6,7,0,1,2]
+Output: 0</pre></div>
         </div>
         <div class="animation-box" id="anim-findmin">
             <h3>Find Minimum Animation (nums=[3,4,5,1,2])</h3>
@@ -5942,8 +6024,10 @@ int findMin(int[] nums) {
             <p><strong>Problem:</strong> Find a peak element (strictly greater than its neighbors). Return its index. Must run in O(log n).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,2,3,1]  |  Output: 2</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,2,1,3,5,6,4]  |  Output: 5 (or 1)</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,2,3,1]
+Output: 2</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,2,1,3,5,6,4]
+Output: 5 (or 1)</pre></div>
         </div>
         <div class="animation-box" id="anim-findpeak">
             <h3>Find Peak Animation (nums=[1,2,3,1])</h3>
@@ -5986,8 +6070,10 @@ int findPeakElement(int[] nums) {
             <p><strong>Problem:</strong> Given a mountain array (strictly increases then decreases), find the peak index. Must run in O(log n).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: arr = [0,1,0]  |  Output: 1</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: arr = [0,10,5,2]  |  Output: 1</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: arr = [0,1,0]
+Output: 1</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: arr = [0,10,5,2]
+Output: 1</pre></div>
         </div>
         <div class="animation-box" id="anim-peakmtn">
             <h3>Peak Mountain Animation (arr=[0,2,5,3,1])</h3>
@@ -6030,8 +6116,10 @@ int peakIndexInMountainArray(int[] arr) {
             <p><strong>Problem:</strong> Koko eats bananas at speed <code>k</code> per hour. Given <code>piles</code> and <code>h</code> hours, find the minimum integer <code>k</code> to eat all bananas in time.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: piles = [3,6,7,11], h = 8  |  Output: 4</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: piles = [30,11,23,4,20], h = 5  |  Output: 30</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: piles = [3,6,7,11], h = 8
+Output: 4</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: piles = [30,11,23,4,20], h = 5
+Output: 30</pre></div>
         </div>
         <div class="animation-box" id="anim-koko">
             <h3>Koko Bananas Animation (piles=[3,6,7,11], h=8)</h3>
@@ -6076,8 +6164,10 @@ int minEatingSpeed(int[] piles, int h) {
             <p><strong>Problem:</strong> Find the minimum ship capacity to ship all packages within <code>days</code> days, where packages must be shipped in order.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: weights = [1,2,3,4,5,6,7,8,9,10], days = 5  |  Output: 15</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: weights = [3,2,2,4,1,4], days = 3  |  Output: 6</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: weights = [1,2,3,4,5,6,7,8,9,10], days = 5
+Output: 15</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: weights = [3,2,2,4,1,4], days = 3
+Output: 6</pre></div>
         </div>
         <div class="animation-box" id="anim-shipcap">
             <h3>Ship Capacity Animation (weights=[1,2,3,4,5,6,7,8,9,10], days=5)</h3>
@@ -6123,8 +6213,10 @@ int shipWithinDays(int[] weights, int days) {
             <p><strong>Problem:</strong> Split array into <code>k</code> non-empty continuous subarrays. Minimize the largest sum among them.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [7,2,5,10,8], k = 2  |  Output: 18</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,2,3,4,5], k = 2  |  Output: 9</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [7,2,5,10,8], k = 2
+Output: 18</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,2,3,4,5], k = 2
+Output: 9</pre></div>
         </div>
         <div class="animation-box" id="anim-splitarray">
             <h3>Split Array Animation (nums=[7,2,5,10,8], k=2)</h3>
@@ -6170,8 +6262,10 @@ int splitArray(int[] nums, int k) {
             <p><strong>Problem:</strong> Find the minimum positive integer speed to travel through all train distances within <code>hour</code> time. Return -1 if impossible.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: dist = [1,3,2], hour = 6  |  Output: 1</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: dist = [1,3,2], hour = 2.7  |  Output: 3</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: dist = [1,3,2], hour = 6
+Output: 1</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: dist = [1,3,2], hour = 2.7
+Output: 3</pre></div>
         </div>
         <div class="animation-box" id="anim-minspeed">
             <h3>Min Speed Animation (dist=[1,3,2], hour=2.7)</h3>
@@ -6217,8 +6311,10 @@ int minSpeedOnTime(int[] dist, double hour) {
             <p><strong>Problem:</strong> Allocate <code>n</code> books to <code>k</code> students such that the maximum pages any student reads is minimized. Each student gets contiguous books.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: pages = [12,34,67,90], k = 2  |  Output: 113</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: pages = [10,20,30,40], k = 2  |  Output: 60</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: pages = [12,34,67,90], k = 2
+Output: 113</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: pages = [10,20,30,40], k = 2
+Output: 60</pre></div>
         </div>
         <div class="animation-box" id="anim-allocpages">
             <h3>Allocate Pages Animation (pages=[12,34,67,90], k=2)</h3>
@@ -6264,8 +6360,10 @@ int allocatePages(int[] pages, int k) {
             <p><strong>Problem:</strong> Place <code>k</code> cows in <code>n</code> stalls. Maximize the minimum distance between any two cows.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: stalls = [1,2,4,8,9], k = 3  |  Output: 3</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: stalls = [1,2,3,4,7], k = 3  |  Output: 3</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: stalls = [1,2,4,8,9], k = 3
+Output: 3</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: stalls = [1,2,3,4,7], k = 3
+Output: 3</pre></div>
         </div>
         <div class="animation-box" id="anim-aggcows">
             <h3>Aggressive Cows Animation (stalls=[1,2,4,8,9], k=3)</h3>
@@ -6314,8 +6412,14 @@ int aggressiveCows(int[] stalls, int k) {
             <p><strong>Problem:</strong> Search for a target in an m&times;n matrix where each row is sorted and the first element of each row is greater than the last of the previous row.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3  |  Output: true</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: target = 13  |  Output: false</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: matrix =
+[ 1,  3,  5,  7]
+[10, 11, 16, 20]
+[23, 30, 34, 60]
+target = 3
+Output: true</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: target = 13
+Output: false</pre></div>
         </div>
         <div class="animation-box" id="anim-search2d">
             <h3>Search 2D Matrix Animation (target=3)</h3>
@@ -6359,8 +6463,14 @@ boolean searchMatrix(int[][] matrix, int target) {
             <p><strong>Problem:</strong> Search in an m&times;n matrix where rows and columns are sorted. The first element of each row is NOT necessarily greater than the last of the previous row.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: matrix = [[1,4,7],[2,5,8],[3,6,9]], target = 5  |  Output: true</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: target = 10  |  Output: false</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: matrix =
+[1, 4, 7]
+[2, 5, 8]
+[3, 6, 9]
+target = 5
+Output: true</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: target = 10
+Output: false</pre></div>
         </div>
         <div class="animation-box" id="anim-search2dii">
             <h3>Search 2D Matrix II Animation (target=5)</h3>
@@ -6396,7 +6506,7 @@ boolean searchMatrix(int[][] matrix, int target) {
 <!-- ==================== MONOTONIC STACK ==================== -->
 <section id="monotonic-stack" class="section">
     <div class="section-header">
-        <h2>4. Monotonic Stack (13 Questions)</h2>
+        <h2>4. Monotonic Stack (11 Questions)</h2>
         <p>Find next greater/smaller elements efficiently</p>
     </div>
 
@@ -6412,7 +6522,8 @@ boolean searchMatrix(int[][] matrix, int target) {
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input:  [73, 74, 75, 71, 69, 72, 76, 73]
 Output: [1,  1,  4,  2,  1,  1,  0,  0]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input:  [30, 40, 50, 60]  |  Output: [1, 1, 1, 0]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input:  [30, 40, 50, 60]
+Output: [1, 1, 1, 0]</pre></div>
         </div>
 
         <div class="animation-box" id="anim-dailytemp">
@@ -6481,8 +6592,10 @@ int[] dailyTemperatures(int[] temps) {
             <ul><li>All values are unique</li><li>nums1 is a subset of nums2</li></ul>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums1 = [4,1,2], nums2 = [1,3,4,2]  |  Output: [-1,3,-1]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums1 = [2,4], nums2 = [1,2,3,4]  |  Output: [3,-1]</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums1 = [4,1,2], nums2 = [1,3,4,2]
+Output: [-1,3,-1]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums1 = [2,4], nums2 = [1,2,3,4]
+Output: [3,-1]</pre></div>
         </div>
         <div class="animation-box" id="anim-nge1">
             <h3>Next Greater Element I Animation (nums2=[1,3,4,2])</h3>
@@ -6539,8 +6652,10 @@ int[] nextGreaterElement(int[] nums1, int[] nums2) {
             <ul><li>1 &le; nums.length &le; 10<sup>4</sup></li></ul>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,2,1]  |  Output: [2,-1,2]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,2,3,4,3]  |  Output: [2,3,4,-1,4]</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,2,1]
+Output: [2,-1,2]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,2,3,4,3]
+Output: [2,3,4,-1,4]</pre></div>
         </div>
         <div class="animation-box" id="anim-nge2">
             <h3>Circular Next Greater Animation (nums=[1,2,1])</h3>
@@ -6594,8 +6709,10 @@ int[] nextGreaterElements(int[] nums) {
             <ul><li>1 &le; heights.length &le; 10<sup>5</sup></li></ul>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: heights = [2,1,5,6,2,3]  |  Output: 10</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: heights = [2,4]  |  Output: 4</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: heights = [2,1,5,6,2,3]
+Output: 10</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: heights = [2,4]
+Output: 4</pre></div>
         </div>
         <div class="animation-box" id="anim-largerect">
             <h3>Largest Rectangle Animation (heights=[2,1,5,6,2,3])</h3>
@@ -6652,8 +6769,13 @@ int largestRectangleArea(int[] heights) {
             <ul><li>1 &le; rows, cols &le; 200</li></ul>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: matrix = [["1","0","1"],["1","1","1"]]  |  Output: 3</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: matrix = [["0"]]  |  Output: 0</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: matrix =
+["1", "0", "1"]
+["1", "1", "1"]
+Output: 3</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: matrix =
+["0"]
+Output: 0</pre></div>
         </div>
         <div class="animation-box" id="anim-maxrect">
             <h3>Maximal Rectangle Animation (row-by-row histogram)</h3>
@@ -6695,119 +6817,6 @@ int maximalRectangle(char[][] matrix) {
         </div>
     </div>
 
-    <!-- Trapping Rain Water (LC 42) -->
-    <div class="question-card">
-        <div class="question-header">
-            <span class="question-title">Trapping Rain Water (LC 42)</span>
-            <span class="difficulty hard">Hard</span>
-        </div>
-        <div class="question-description">
-            <p><strong>Problem:</strong> Given n non-negative integers representing an elevation map, compute how much water it can trap after raining.</p>
-        </div>
-        <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: height = [0,1,0,2,1,0,1,3,2,1,2,1]  |  Output: 6</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: height = [4,2,0,3,2,5]               |  Output: 9</pre></div>
-        </div>
-
-        <div class="animation-box" id="anim-traprain">
-            <h3>Visual Animation - Water Filling</h3>
-            <div class="legend">
-                <div class="legend-item"><div class="legend-color" style="background:#795548; border-color:#5d4037;"></div> Ground</div>
-                <div class="legend-item"><div class="legend-color" style="background:#64b5f6; border-color:#42a5f5;"></div> Water</div>
-                <div class="legend-item"><div class="legend-color" style="background:#fed7d7; border-color:#e53e3e;"></div> Left Pointer</div>
-                <div class="legend-item"><div class="legend-color" style="background:#bee3f8; border-color:#3182ce;"></div> Right Pointer</div>
-            </div>
-            <div class="controls">
-                <button class="btn-play" onclick="animTrapRain('play')">Play</button>
-                <button class="btn-step" onclick="animTrapRain('step')">Step</button>
-                <button class="btn-prev" onclick="animTrapRain('prev')">Prev</button>
-                <button class="btn-reset" onclick="animTrapRain('reset')">Reset</button>
-            </div>
-            <div class="step-info" id="traprain-info">Click Play or Step to start</div>
-            <div class="bar-container" id="traprain-bars"></div>
-            <div class="result-box" id="traprain-result">leftMax = 0 | rightMax = 0 | water = 0</div>
-        </div>
-
-        <div class="solution">
-            <h3>Solution (Java-style Pseudocode):</h3>
-            <pre id="code-trap">
-int trap(int[] height) {
-    int left = 0, right = height.length - 1;
-    int leftMax = 0, rightMax = 0;
-    int water = 0;
-    
-    while (left < right) {
-        if (height[left] < height[right]) {
-            if (height[left] >= leftMax) leftMax = height[left];
-            else water += leftMax - height[left];
-            left++;
-        } else {
-            if (height[right] >= rightMax) rightMax = height[right];
-            else water += rightMax - height[right];
-            right--;
-        }
-    }
-    
-    return water;
-}
-            </pre>
-            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(1)</p></div>
-        </div>
-    </div>
-
-    <!-- Container With Most Water (LC 11) -->
-    <div class="question-card">
-        <div class="question-header">
-            <span class="question-title">Container With Most Water (LC 11)</span>
-            <span class="difficulty medium">Medium</span>
-        </div>
-        <div class="question-description">
-            <p><strong>Problem:</strong> Given <code>n</code> non-negative integers <code>height[i]</code> representing vertical lines, find two lines that together with the x-axis forms a container that holds the most water.</p>
-            <ul><li>2 &le; n &le; 10<sup>5</sup></li></ul>
-        </div>
-        <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: height = [1,8,6,2,5,4,8,3,7]  |  Output: 49</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: height = [1,1]  |  Output: 1</pre></div>
-        </div>
-        <div class="animation-box" id="anim-container">
-            <h3>Two Pointer Animation (height=[1,8,6,2,5])</h3>
-            <div class="legend">
-                <div class="legend-item"><div class="legend-color" style="background:#fed7d7; border-color:#e53e3e;"></div> Left Pointer</div>
-                <div class="legend-item"><div class="legend-color" style="background:#bee3f8; border-color:#3182ce;"></div> Right Pointer</div>
-                <div class="legend-item"><div class="legend-color" style="background:#c6f6d5; border-color:#48bb78;"></div> Best Area</div>
-            </div>
-            <div class="controls">
-                <button class="btn-play" onclick="animContainer('play')">Play</button>
-                <button class="btn-step" onclick="animContainer('step')">Step</button>
-                <button class="btn-prev" onclick="animContainer('prev')">Prev</button>
-                <button class="btn-reset" onclick="animContainer('reset')">Reset</button>
-            </div>
-            <div class="step-info" id="container-info">Click Play or Step to start</div>
-            <div><div class="array-container" id="container-array" style="justify-content:center;"></div></div>
-            <div class="result-box" id="container-result">maxWater = 0</div>
-        </div>
-        <div class="solution">
-            <h3>Solution (Java-style Pseudocode):</h3>
-            <pre id="code-container">
-int maxArea(int[] height) {
-    int left = 0, right = height.length - 1;
-    int maxWater = 0;
-    while (left &lt; right) {
-        int area = Math.min(height[left], height[right]) * (right - left);
-        maxWater = Math.max(maxWater, area);
-        if (height[left] &lt; height[right]) {
-            left++;
-        } else {
-            right--;
-        }
-    }
-    return maxWater;
-}
-            </pre>
-            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(1)</p></div>
-        </div>
-    </div>
-
     <!-- Remove K Digits (LC 402) -->
     <div class="question-card">
         <div class="question-header">
@@ -6819,8 +6828,10 @@ int maxArea(int[] height) {
             <ul><li>1 &le; num.length &le; 10<sup>5</sup></li><li>0 &le; k &le; num.length</li></ul>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: num = "1432219", k = 3  |  Output: "1219"</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: num = "10200", k = 1  |  Output: "200"</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: num = "1432219", k = 3
+Output: "1219"</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: num = "10200", k = 1
+Output: "200"</pre></div>
         </div>
         <div class="animation-box" id="anim-removek">
             <h3>Remove K Digits Animation (num="1432219", k=3)</h3>
@@ -6877,8 +6888,10 @@ String removeKdigits(String num, int k) {
             <ul><li>1 &le; s.length &le; 10<sup>4</sup></li><li>s consists of lowercase English letters</li></ul>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "bcabc"  |  Output: "abc"</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "cbacdcbc"  |  Output: "acdb"</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "bcabc"
+Output: "abc"</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "cbacdcbc"
+Output: "acdb"</pre></div>
         </div>
         <div class="animation-box" id="anim-removedup">
             <h3>Remove Duplicate Letters Animation (s="bcabc")</h3>
@@ -6938,8 +6951,10 @@ String removeDuplicateLetters(String s) {
             <ul><li>1 &le; s.length &le; 1000</li></ul>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "bcabc"  |  Output: "abc"</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "cbacdcbc"  |  Output: "acdb"</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "bcabc"
+Output: "abc"</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "cbacdcbc"
+Output: "acdb"</pre></div>
         </div>
         <div class="animation-box" id="anim-smallsub">
             <h3>Smallest Subsequence Animation (s="cbacdcbc")</h3>
@@ -6999,8 +7014,10 @@ String smallestSubsequence(String s) {
             <ul><li>2 &le; asteroids.length &le; 10<sup>4</sup></li></ul>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: asteroids = [5,10,-5]  |  Output: [5,10]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: asteroids = [8,-8]  |  Output: []</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: asteroids = [5,10,-5]
+Output: [5,10]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: asteroids = [8,-8]
+Output: []</pre></div>
         </div>
         <div class="animation-box" id="anim-asteroid">
             <h3>Asteroid Collision Animation ([5,10,-5])</h3>
@@ -7062,8 +7079,10 @@ int[] asteroidCollision(int[] asteroids) {
             <p><strong>Problem:</strong> Given a string <code>s</code> containing just the characters <code>'(', ')', '{', '}', '[', ']'</code>, determine if the input string is valid. Open brackets must be closed by the same type and in the correct order.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "()[]{}"  |  Output: true</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "([)]"  |  Output: false</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "()[]{}"
+Output: true</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "([)]"
+Output: false</pre></div>
         </div>
         <div class="animation-box" id="anim-validparen">
             <h3>Valid Parentheses Animation (s="()[]{}")</h3>
@@ -7115,8 +7134,10 @@ boolean isValid(String s) {
             <ul><li>1 &le; s.length &le; 1000</li></ul>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "())"  |  Output: 1</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "((("  |  Output: 3</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "())"
+Output: 1</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "((("
+Output: 3</pre></div>
         </div>
         <div class="animation-box" id="anim-minadd">
             <h3>Min Add Parentheses Animation (s="())")</h3>
@@ -7160,8 +7181,126 @@ int minAddToMakeValid(String s) {
 <!-- ==================== GREEDY SECTION ==================== -->
 <section id="greedy" class="section">
     <div class="section-header">
-        <h2>5. Greedy Approach (13 Questions)</h2>
+        <h2>5. Greedy Approach (15 Questions)</h2>
         <p>Make locally optimal choices for global optimum</p>
+    </div>
+
+    <!-- Two-pointer greedy (water / max area) -->
+    <!-- Trapping Rain Water (LC 42) -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">Trapping Rain Water (LC 42)</span>
+            <span class="difficulty hard">Hard</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given n non-negative integers representing an elevation map, compute how much water it can trap after raining.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: height = [0,1,0,2,1,0,1,3,2,1,2,1]
+Output: 6</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: height = [4,2,0,3,2,5]
+Output: 9</pre></div>
+        </div>
+
+        <div class="animation-box" id="anim-traprain">
+            <h3>Visual Animation - Water Filling</h3>
+            <div class="legend">
+                <div class="legend-item"><div class="legend-color" style="background:#795548; border-color:#5d4037;"></div> Ground</div>
+                <div class="legend-item"><div class="legend-color" style="background:#64b5f6; border-color:#42a5f5;"></div> Water</div>
+                <div class="legend-item"><div class="legend-color" style="background:#fed7d7; border-color:#e53e3e;"></div> Left Pointer</div>
+                <div class="legend-item"><div class="legend-color" style="background:#bee3f8; border-color:#3182ce;"></div> Right Pointer</div>
+            </div>
+            <div class="controls">
+                <button class="btn-play" onclick="animTrapRain('play')">Play</button>
+                <button class="btn-step" onclick="animTrapRain('step')">Step</button>
+                <button class="btn-prev" onclick="animTrapRain('prev')">Prev</button>
+                <button class="btn-reset" onclick="animTrapRain('reset')">Reset</button>
+            </div>
+            <div class="step-info" id="traprain-info">Click Play or Step to start</div>
+            <div class="bar-container" id="traprain-bars"></div>
+            <div class="result-box" id="traprain-result">leftMax = 0 | rightMax = 0 | water = 0</div>
+        </div>
+
+        <div class="solution">
+            <h3>Solution (Java-style Pseudocode):</h3>
+            <pre id="code-trap">
+int trap(int[] height) {
+    int left = 0, right = height.length - 1;
+    int leftMax = 0, rightMax = 0;
+    int water = 0;
+    
+    while (left < right) {
+        if (height[left] < height[right]) {
+            if (height[left] >= leftMax) leftMax = height[left];
+            else water += leftMax - height[left];
+            left++;
+        } else {
+            if (height[right] >= rightMax) rightMax = height[right];
+            else water += rightMax - height[right];
+            right--;
+        }
+    }
+    
+    return water;
+}
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(1)</p></div>
+        </div>
+    </div>
+
+    <!-- Container With Most Water (LC 11) -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">Container With Most Water (LC 11)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given <code>n</code> non-negative integers <code>height[i]</code> representing vertical lines, find two lines that together with the x-axis forms a container that holds the most water.</p>
+            <ul><li>2 &le; n &le; 10<sup>5</sup></li></ul>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: height = [1,8,6,2,5,4,8,3,7]
+Output: 49</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: height = [1,1]
+Output: 1</pre></div>
+        </div>
+        <div class="animation-box" id="anim-container">
+            <h3>Two Pointer Animation (height=[1,8,6,2,5])</h3>
+            <div class="legend">
+                <div class="legend-item"><div class="legend-color" style="background:#fed7d7; border-color:#e53e3e;"></div> Left Pointer</div>
+                <div class="legend-item"><div class="legend-color" style="background:#bee3f8; border-color:#3182ce;"></div> Right Pointer</div>
+                <div class="legend-item"><div class="legend-color" style="background:#c6f6d5; border-color:#48bb78;"></div> Best Area</div>
+            </div>
+            <div class="controls">
+                <button class="btn-play" onclick="animContainer('play')">Play</button>
+                <button class="btn-step" onclick="animContainer('step')">Step</button>
+                <button class="btn-prev" onclick="animContainer('prev')">Prev</button>
+                <button class="btn-reset" onclick="animContainer('reset')">Reset</button>
+            </div>
+            <div class="step-info" id="container-info">Click Play or Step to start</div>
+            <div><div class="array-container" id="container-array" style="justify-content:center;"></div></div>
+            <div class="result-box" id="container-result">maxWater = 0</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (Java-style Pseudocode):</h3>
+            <pre id="code-container">
+int maxArea(int[] height) {
+    int left = 0, right = height.length - 1;
+    int maxWater = 0;
+    while (left &lt; right) {
+        int area = Math.min(height[left], height[right]) * (right - left);
+        maxWater = Math.max(maxWater, area);
+        if (height[left] &lt; height[right]) {
+            left++;
+        } else {
+            right--;
+        }
+    }
+    return maxWater;
+}
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(1)</p></div>
+        </div>
     </div>
 
     <!-- 1. Non-overlapping Intervals -->
@@ -7177,7 +7316,8 @@ int minAddToMakeValid(String s) {
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: intervals = [[1,2],[2,3],[3,4],[1,3]]
 Output: 1  (Remove [1,3] to make the rest non-overlapping)</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: intervals = [[1,2],[1,2],[1,2]]  |  Output: 2</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: intervals = [[1,2],[1,2],[1,2]]
+Output: 2</pre></div>
         </div>
         <div class="animation-box" id="anim-nonoverlap">
             <h3>Step-by-Step Animation (sorted by end: [[1,2],[2,3],[1,3],[3,4]])</h3>
@@ -7229,8 +7369,10 @@ int eraseOverlapIntervals(int[][] intervals) {
             <ul><li>0 &le; intervals.length &le; 10^4</li></ul>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: intervals = [[0,30],[5,10],[15,20]]  |  Output: false</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: intervals = [[7,10],[2,4]]  |  Output: true</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: intervals = [[0,30],[5,10],[15,20]]
+Output: false</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: intervals = [[7,10],[2,4]]
+Output: true</pre></div>
         </div>
         <div class="animation-box" id="anim-meetrooms">
             <h3>Step-by-Step Animation (sorted: [[0,30],[5,10],[15,20]])</h3>
@@ -7278,7 +7420,8 @@ boolean canAttendMeetings(int[][] intervals) {
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: intervals = [[1,3],[2,6],[8,10],[15,18]]
 Output: [[1,6],[8,10],[15,18]]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: intervals = [[1,4],[4,5]]  |  Output: [[1,5]]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: intervals = [[1,4],[4,5]]
+Output: [[1,5]]</pre></div>
         </div>
         <div class="animation-box" id="anim-mergeint">
             <h3>Step-by-Step Animation</h3>
@@ -7403,8 +7546,10 @@ int[][] merge(int[][] intervals) {
             <ul><li>1 &le; intervals.length &le; 10^4</li></ul>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: intervals = [[0,30],[5,10],[15,20]]  |  Output: 2</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: intervals = [[7,10],[2,4]]  |  Output: 1</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: intervals = [[0,30],[5,10],[15,20]]
+Output: 2</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: intervals = [[7,10],[2,4]]
+Output: 1</pre></div>
         </div>
         <div class="animation-box" id="anim-meetrooms2">
             <h3>Two-Pointer Animation (starts vs ends)</h3>
@@ -7570,7 +7715,8 @@ return pq.size(); // number of rooms needed
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: arr = [900,940,950,1100,1500,1800], dep = [910,1200,1120,1130,1900,2000]
 Output: 3</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: arr = [900,1100,1235], dep = [1000,1200,1240]  |  Output: 1</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: arr = [900,1100,1235], dep = [1000,1200,1240]
+Output: 1</pre></div>
         </div>
         <div class="animation-box" id="anim-minplat">
             <h3>Two-Pointer Animation (arrivals vs departures)</h3>
@@ -7629,9 +7775,11 @@ int findMinPlatforms(int[] arr, int[] dep) {
             <ul><li>1 &le; nums.length &le; 10^4</li><li>0 &le; nums[i] &le; 10^5</li></ul>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [2,3,1,1,4]  |  Output: true
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [2,3,1,1,4]
+Output: true
 Explanation: Jump 1 step from 0 to 1, then 3 steps to last index</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [3,2,1,0,4]  |  Output: false
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [3,2,1,0,4]
+Output: false
 Explanation: Always arrive at index 3 with max jump 0</pre></div>
         </div>
         <div class="animation-box" id="anim-jumpgame">
@@ -7682,9 +7830,11 @@ boolean canJump(int[] nums) {
             <ul><li>1 &le; nums.length &le; 10^4</li><li>0 &le; nums[i] &le; 1000</li></ul>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [2,3,1,1,4]  |  Output: 2
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [2,3,1,1,4]
+Output: 2
 Explanation: Jump 1 step (0→1), then 3 steps (1→4)</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [2,3,0,1,4]  |  Output: 2</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [2,3,0,1,4]
+Output: 2</pre></div>
         </div>
         <div class="animation-box" id="anim-jumpgame2">
             <h3>BFS-Level Animation (nums=[2,3,1,1,4])</h3>
@@ -7733,9 +7883,11 @@ int jump(int[] nums) {
             <ul><li>1 &le; prices.length &le; 10^5</li><li>0 &le; prices[i] &le; 10^4</li></ul>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: prices = [7,1,5,3,6,4]  |  Output: 5
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: prices = [7,1,5,3,6,4]
+Output: 5
 Explanation: Buy on day 2 (price=1), sell on day 5 (price=6)</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: prices = [7,6,4,3,1]  |  Output: 0  (no profitable transaction)</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: prices = [7,6,4,3,1]
+Output: 0  (no profitable transaction)</pre></div>
         </div>
         <div class="animation-box" id="anim-stock1">
             <h3>Step-by-Step Animation (prices=[7,1,5,3,6,4])</h3>
@@ -7785,9 +7937,11 @@ int maxProfit(int[] prices) {
             <ul><li>1 &le; prices.length &le; 3 * 10^4</li></ul>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: prices = [7,1,5,3,6,4]  |  Output: 7
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: prices = [7,1,5,3,6,4]
+Output: 7
 Explanation: Buy@1 sell@5 (+4), buy@3 sell@6 (+3) = 7</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: prices = [1,2,3,4,5]  |  Output: 4  (buy@1, sell@5)</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: prices = [1,2,3,4,5]
+Output: 4  (buy@1, sell@5)</pre></div>
         </div>
         <div class="animation-box" id="anim-stock2">
             <h3>Step-by-Step Animation (prices=[7,1,5,3,6,4])</h3>
@@ -7834,8 +7988,10 @@ int maxProfit(int[] prices) {
             <ul><li>1 &le; n &le; 10^5</li><li>0 &le; gas[i], cost[i] &le; 10^4</li></ul>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: gas = [1,2,3,4,5], cost = [3,4,5,1,2]  |  Output: 3</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: gas = [2,3,4], cost = [3,4,3]  |  Output: -1</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: gas = [1,2,3,4,5], cost = [3,4,5,1,2]
+Output: 3</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: gas = [2,3,4], cost = [3,4,3]
+Output: -1</pre></div>
         </div>
         <div class="animation-box" id="anim-gasstation">
             <h3>Step-by-Step Animation</h3>
@@ -7889,8 +8045,10 @@ int canCompleteCircuit(int[] gas, int[] cost) {
             <ul><li>1 &le; flowerbed.length &le; 2 * 10^4</li><li>flowerbed[i] is 0 or 1</li></ul>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: flowerbed = [1,0,0,0,1], n = 1  |  Output: true</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: flowerbed = [1,0,0,0,1], n = 2  |  Output: false</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: flowerbed = [1,0,0,0,1], n = 1
+Output: true</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: flowerbed = [1,0,0,0,1], n = 2
+Output: false</pre></div>
         </div>
         <div class="animation-box" id="anim-flowers">
             <h3>Step-by-Step Animation (flowerbed=[1,0,0,0,1], n=1)</h3>
@@ -7941,7 +8099,8 @@ boolean canPlaceFlowers(int[] flowerbed, int n) {
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "ababcbacadefegdehijhklij"
 Output: [9,7,8]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "eccbbbbdec"  |  Output: [10]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "eccbbbbdec"
+Output: [10]</pre></div>
         </div>
         <div class="animation-box" id="anim-partlabel">
             <h3>Step-by-Step Animation (s = "abacbc")</h3>
@@ -7995,8 +8154,10 @@ List&lt;Integer&gt; partitionLabels(String s) {
             <ul><li>1 &le; g.length, s.length &le; 3 * 10^4</li></ul>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: g = [1,2,3], s = [1,1]  |  Output: 1</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: g = [1,2], s = [1,2,3]  |  Output: 2</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: g = [1,2,3], s = [1,1]
+Output: 1</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: g = [1,2], s = [1,2,3]
+Output: 2</pre></div>
         </div>
         <div class="animation-box" id="anim-cookies">
             <h3>Two-Pointer Animation (g=[1,2,3], s=[1,1])</h3>
@@ -8064,7 +8225,8 @@ int findContentChildren(int[] g, int[] s) {
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,2,3]
 Output: [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [0]  |  Output: [[],[0]]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [0]
+Output: [[],[0]]</pre></div>
         </div>
 
         <div class="animation-box" id="anim-subsets">
@@ -8173,7 +8335,8 @@ void backtrack(List<List<Integer>> result, List<Integer> current,
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,2,2]
 Output: [[],[1],[1,2],[1,2,2],[2],[2,2]]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [0]  |  Output: [[],[0]]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [0]
+Output: [[],[0]]</pre></div>
         </div>
         <div class="animation-box" id="anim-subsets2">
             <h3>Backtracking Tree Animation (nums = [1,2,2], sorted)</h3>
@@ -8275,7 +8438,8 @@ void backtrack(List&lt;List&lt;Integer&gt;&gt; result, List&lt;Integer&gt; curre
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "a1b2"
 Output: ["a1b2","a1B2","A1b2","A1B2"]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "3z4"  |  Output: ["3z4","3Z4"]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "3z4"
+Output: ["3z4","3Z4"]</pre></div>
         </div>
         <div class="animation-box" id="anim-lcp">
             <h3>Decision Tree Animation (s = &quot;a1b2&quot;)</h3>
@@ -8389,7 +8553,8 @@ void backtrack(List&lt;String&gt; result, char[] chars, int idx) {
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,2,3]
 Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [0,1]  |  Output: [[0,1],[1,0]]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [0,1]
+Output: [[0,1],[1,0]]</pre></div>
         </div>
 
         <div class="animation-box" id="anim-permutations">
@@ -8650,7 +8815,8 @@ void backtrack(List&lt;List&lt;Integer&gt;&gt; result, List&lt;Integer&gt; curre
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: n = 4, k = 2
 Output: [[1,2],[1,3],[1,4],[2,3],[2,4],[3,4]]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: n = 1, k = 1  |  Output: [[1]]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: n = 1, k = 1
+Output: [[1]]</pre></div>
         </div>
         <div class="animation-box" id="anim-comb">
             <h3>Backtracking Tree — combine(n = 4, k = 2)</h3>
@@ -9097,7 +9263,8 @@ void backtrack(List&lt;List&lt;Integer&gt;&gt; result, List&lt;Integer&gt; curre
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: n = 4
 Output: [[".Q..","...Q","Q...","..Q."],["..Q.","Q...","...Q",".Q.."]]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: n = 1  |  Output: [["Q"]]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: n = 1
+Output: [["Q"]]</pre></div>
         </div>
         <div class="animation-box" id="anim-nqueens">
             <h3>N-Queens (n=4) — first solution</h3>
@@ -9192,9 +9359,17 @@ boolean isValid(char[][] board, int row, int col) {
             <p><strong>Problem:</strong> Given an m x n grid of characters board and a string word, return true if word exists in the grid. Words can be constructed from adjacent cells (up/down/left/right). Same cell can't be used twice.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: board =
+["A", "B", "C", "E"]
+["S", "F", "C", "S"]
+["A", "D", "E", "E"]
+word = "ABCCED"
 Output: true</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCB"
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: board =
+["A", "B", "C", "E"]
+["S", "F", "C", "S"]
+["A", "D", "E", "E"]
+word = "ABCB"
 Output: false</pre></div>
         </div>
         <div class="animation-box" id="anim-ws">
@@ -9278,7 +9453,8 @@ boolean backtrack(char[][] board, String word, int r, int c, int idx) {
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "aab"
 Output: [["a","a","b"],["aa","b"]]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "a"  |  Output: [["a"]]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "a"
+Output: [["a"]]</pre></div>
         </div>
         <div class="animation-box" id="anim-pal">
             <h3>Partition tree (s = &quot;aab&quot;)</h3>
@@ -9390,7 +9566,8 @@ boolean isPalindrome(String s) {
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: n = 3
 Output: ["((()))","(()())","(())()","()(())","()()()"]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: n = 1  |  Output: ["()"]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: n = 1
+Output: ["()"]</pre></div>
         </div>
 
         <div class="animation-box" id="anim-genparens">
@@ -9505,7 +9682,8 @@ void backtrack(List<String> result, String current,
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: [38, 27, 43, 3, 9, 82, 10]
 Output: [3, 9, 10, 27, 38, 43, 82]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: [5, 1, 4, 2]  |  Output: [1, 2, 4, 5]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: [5, 1, 4, 2]
+Output: [1, 2, 4, 5]</pre></div>
         </div>
         <div class="animation-box" id="anim-msort">
             <h3>Merge sort trace — <code>[4, 2, 1, 3]</code></h3>
@@ -9576,8 +9754,10 @@ void merge(int[] arr, int left, int mid, int right) {
             <ul><li>1 &le; k &le; nums.length &le; 10^5</li></ul>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [3,2,1,5,6,4], k = 2  |  Output: 5</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [3,2,3,1,2,4,5,5,6], k = 4  |  Output: 4</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [3,2,1,5,6,4], k = 2
+Output: 5</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [3,2,3,1,2,4,5,5,6], k = 4
+Output: 4</pre></div>
         </div>
 
         <div class="animation-box" id="anim-kthlargest">
@@ -9708,8 +9888,10 @@ class KthLargest {
             <p><strong>Problem:</strong> Given an integer array nums and integer k, return the k most frequent elements.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,1,1,2,2,3], k = 2  |  Output: [1,2]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1], k = 1  |  Output: [1]</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,1,1,2,2,3], k = 2
+Output: [1,2]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1], k = 1
+Output: [1]</pre></div>
         </div>
         <div class="animation-box" id="anim-topkfreq">
             <h3>Top K Frequent Animation (nums=[1,1,1,2,2,3], k=2)</h3>
@@ -9852,8 +10034,10 @@ List&lt;String&gt; topKFrequent(String[] words, int k) {
             <ul><li>1 &le; s.length &le; 5 &times; 10<sup>5</sup></li><li><code>s</code> consists of uppercase/lowercase English letters and digits</li></ul>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "tree"  |  Output: "eert" (or "eetr")</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "cccaaa"  |  Output: "aaaccc" (or "cccaaa")</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "tree"
+Output: "eert" (or "eetr")</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "cccaaa"
+Output: "aaaccc" (or "cccaaa")</pre></div>
         </div>
         <div class="animation-box" id="anim-sortbyfreq">
             <h3>Frequency Sort Animation (s = "tree")</h3>
@@ -9921,7 +10105,8 @@ String frequencySort(String s) {
             <ul><li>1 &le; k &le; points.length &le; 10<sup>4</sup></li></ul>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: points = [[1,3],[-2,2]], k = 1  |  Output: [[-2,2]]</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: points = [[1,3],[-2,2]], k = 1
+Output: [[-2,2]]</pre></div>
             <div class="test-case"><h4>Test Case 2:</h4><pre>Input: points = [[3,3],[5,-1],[-2,4]], k = 2
 Output: [[3,3],[-2,4]]</pre></div>
         </div>
@@ -10045,7 +10230,8 @@ int[][] kClosest(int[][] points, int k) {
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: lists = [[1,4,5],[1,3,4],[2,6]]
 Output: [1,1,2,3,4,4,5,6]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: lists = []  |  Output: []</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: lists = []
+Output: []</pre></div>
         </div>
 
         <div class="animation-box" id="anim-mergeklists">
@@ -10301,9 +10487,16 @@ Process:<br>
             <p><strong>Problem:</strong> Given the root of a binary tree, return the level order traversal (left to right, level by level).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [3,9,20,null,null,15,7]
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+    3
+  /   \
+9      20
+       / \
+     15   7
 Output: [[3],[9,20],[15,7]]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [1]  |  Output: [[1]]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root =
+1
+Output: [[1]]</pre></div>
         </div>
 
         <div class="animation-box" id="anim-levelorder">
@@ -10369,8 +10562,16 @@ List<List<Integer>> levelOrder(TreeNode root) {
             <p><strong>Problem:</strong> Given the root of a binary tree, return the inorder traversal of its nodes' values (Left → Root → Right).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [1,2,3,4,5]  |  Output: [4,2,5,1,3]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = []  |  Output: []</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+      1
+    /   \
+  2       3
+ / \
+4   5
+Output: [4,2,5,1,3]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root =
+(empty tree)
+Output: []</pre></div>
         </div>
         <div class="animation-box" id="anim-inorder">
             <h3>Inorder DFS Animation (root = [1,2,3,4,5])</h3>
@@ -10418,8 +10619,16 @@ void inorder(TreeNode root) {
             <p><strong>Problem:</strong> Given the root of a binary tree, return the preorder traversal of its nodes' values (Root → Left → Right).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [1,2,3,4,5]  |  Output: [1,2,4,5,3]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [1]  |  Output: [1]</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+      1
+    /   \
+  2       3
+ / \
+4   5
+Output: [1,2,4,5,3]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root =
+1
+Output: [1]</pre></div>
         </div>
         <div class="animation-box" id="anim-preorder">
             <h3>Preorder DFS Animation (root = [1,2,3,4,5])</h3>
@@ -10462,8 +10671,18 @@ void preorder(TreeNode root) {
             <p><strong>Problem:</strong> Given the root of a binary tree, return the postorder traversal of its nodes' values (Left → Right → Root).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [1,2,3,4,5]  |  Output: [4,5,2,3,1]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [1,null,2]  |  Output: [2,1]</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+      1
+    /   \
+  2       3
+ / \
+4   5
+Output: [4,5,2,3,1]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root =
+1
+ \
+  2
+Output: [2,1]</pre></div>
         </div>
         <div class="animation-box" id="anim-postorder">
             <h3>Postorder DFS Animation (root = [1,2,3,4,5])</h3>
@@ -10506,9 +10725,16 @@ void postorder(TreeNode root) {
             <p><strong>Problem:</strong> Given the root of a binary tree, return the zigzag level order traversal (alternating left-to-right and right-to-left).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [3,9,20,null,null,15,7]
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+    3
+  /   \
+9      20
+       / \
+     15   7
 Output: [[3],[20,9],[15,7]]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [1]  |  Output: [[1]]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root =
+1
+Output: [[1]]</pre></div>
         </div>
         <div class="animation-box" id="anim-zigzag">
             <h3>Zigzag BFS Animation</h3>
@@ -10565,9 +10791,18 @@ List&lt;List&lt;Integer&gt;&gt; zigzagLevelOrder(TreeNode root) {
             <p><strong>Problem:</strong> Given the root of a binary tree, return the values of the nodes you can see from the right side (one node per level).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [1,2,3,null,5,null,4]
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+    1
+  /   \
+2       3
+ \       \
+  5       4
 Output: [1,3,4]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [1,2]  |  Output: [1,2]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root =
+  1
+ /
+2
+Output: [1,2]</pre></div>
         </div>
         <div class="intuition-section">
             <h4>Right side se dekhna</h4>
@@ -10633,8 +10868,18 @@ List&lt;Integer&gt; rightSideView(TreeNode root) {
             <p><strong>Problem:</strong> Given the root of a binary tree, return its maximum depth (number of nodes on the longest root-to-leaf path).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [3,9,20,null,null,15,7]  |  Output: 3</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [1,null,2]  |  Output: 2</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+    3
+  /   \
+9      20
+       / \
+     15   7
+Output: 3</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root =
+1
+ \
+  2
+Output: 2</pre></div>
         </div>
         <div class="intuition-section">
             <h4>Problem kya hai</h4>
@@ -10695,8 +10940,18 @@ int maxDepth(TreeNode root) {
             <p><strong>Problem:</strong> Given the root of a binary tree, return the length of the diameter (longest path between any two nodes, measured by number of edges).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [1,2,3,4,5]  |  Output: 3 (path 4→2→1→3 or 5→2→1→3)</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [1,2]  |  Output: 1</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+      1
+    /   \
+  2       3
+ / \
+4   5
+Output: 3 (path 4→2→1→3 or 5→2→1→3)</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root =
+  1
+ /
+2
+Output: 1</pre></div>
         </div>
         <div class="intuition-section">
             <p>Is problem mein humein tree ka <strong>diameter</strong> nikalna hai, matlab kisi bhi do nodes ke beech ka longest path (in <strong>edges</strong>).</p>
@@ -10752,8 +11007,22 @@ int height(TreeNode node) {
             <p><strong>Problem:</strong> Given a binary tree, determine if it is height-balanced (depth of left and right subtrees differ by at most 1 for every node).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [3,9,20,null,null,15,7]  |  Output: true</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [1,2,2,3,3,null,null,4,4]  |  Output: false</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+    3
+  /   \
+9      20
+       / \
+     15   7
+Output: true</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root =
+              1
+          /       \
+      2               2
+    /   \
+  3       3
+ / \
+4   4
+Output: false</pre></div>
         </div>
         <div class="intuition-section">
             <p>Is problem mein humein check karna hai ki binary tree <strong>height-balanced</strong> hai ya nahi. Balanced ka matlab hai ki har node ke liye left aur right subtree ke height ka difference <strong>1 se zyada nahi</strong> hona chahiye.</p>
@@ -10821,8 +11090,10 @@ int checkHeight(TreeNode node) {
             <p><strong>Problem:</strong> Given the roots of two binary trees, check if they are structurally identical and have the same node values.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: p = [1,2,3], q = [1,2,3]  |  Output: true</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: p = [1,2], q = [1,null,2]  |  Output: false</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: p = [1,2,3], q = [1,2,3]
+Output: true</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: p = [1,2], q = [1,null,2]
+Output: false</pre></div>
         </div>
         <div class="intuition-section">
             <p>So for this problem, I&rsquo;m thinking of solving it using <strong>level order traversal (BFS)</strong>.</p>
@@ -10902,8 +11173,20 @@ List&lt;Integer&gt; buildLevelOrder(TreeNode root) {
             <p><strong>Problem:</strong> Given the root of a binary tree, check whether it is a mirror of itself (symmetric around its center).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [1,2,2,3,4,4,3]  |  Output: true</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [1,2,2,null,3,null,3]  |  Output: false</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+      1
+    /   \
+  2       2
+ / \     / \
+3   4   4   3
+Output: true</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root =
+    1
+  /   \
+2       2
+ \       \
+  3       3
+Output: false</pre></div>
         </div>
         <div class="intuition-section">
             <p><strong>Iterative angle (BFS / queue):</strong> Haan, isko hum <strong>queue</strong> se bhi solve kar sakte hain &mdash; recursion ki jagah nodes ko <strong>pairs</strong> mein compare karenge.</p>
@@ -10987,8 +11270,24 @@ boolean isSymmetric(TreeNode root) {
             <p><strong>Problem:</strong> Given the roots of two binary trees root and subRoot, return true if there is a subtree of root with the same structure and values as subRoot.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [3,4,5,1,2], subRoot = [4,1,2]  |  Output: true</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [3,4,5,1,2,null,null,null,null,0], subRoot = [4,1,2]  |  Output: false</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+      3
+    /   \
+  4       5
+ / \
+1   2
+subRoot = [4,1,2]
+Output: true</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root =
+            3
+        /       \
+    4               5
+  /   \
+1       2
+       /
+      0
+subRoot = [4,1,2]
+Output: false</pre></div>
         </div>
         <div class="intuition-section">
             <p><strong>Iterative approach (BFS):</strong> Main ek <strong>queue</strong> use karke poore <code>root</code> tree ko traverse karunga, aur <strong>har node ko potential starting point</strong> treat karunga.</p>
@@ -11073,9 +11372,18 @@ boolean isSameTree(TreeNode p, TreeNode q) {
             <p><strong>Problem:</strong> Given the root of a binary tree, invert the tree (swap left and right children at every node) and return its root.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [4,2,7,1,3,6,9]
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+      4
+    /   \
+  2       7
+ / \     / \
+1   3   6   9
 Output: [4,7,2,9,6,3,1]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [2,1,3]  |  Output: [2,3,1]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root =
+  2
+ / \
+1   3
+Output: [2,3,1]</pre></div>
         </div>
         <div class="intuition-section">
             <p><strong>Iterative BFS:</strong> Main <strong>queue</strong> use kar raha hoon &mdash; yeh <strong>level-order</strong> traversal jaisa hai: tree ko level by level process karte hain, har node ko exactly <strong>ek baar</strong> visit karte hain.</p>
@@ -11143,9 +11451,22 @@ TreeNode invertTree(TreeNode root) {
             <p><strong>Problem:</strong> Given the root of a binary tree and a target sum, return all root-to-leaf paths where the sum of node values equals the target.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [5,4,8,11,null,13,4,7,2,null,null,5,1], targetSum = 22
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+              5
+          /       \
+      4               8
+    /               /   \
+ 11              13       4
+ / \                     / \
+7   2                   5   1
+targetSum = 22
 Output: [[5,4,11,2],[5,8,4,5]]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [1,2,3], targetSum = 5  |  Output: []</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root =
+  1
+ / \
+2   3
+targetSum = 5
+Output: []</pre></div>
         </div>
         <div class="animation-box" id="anim-pathsum2">
             <h3>Path Sum II DFS Animation (target=22)</h3>
@@ -11196,9 +11517,22 @@ void dfs(TreeNode node, int remain, List&lt;Integer&gt; path, List&lt;List&lt;In
             <p><strong>Problem:</strong> Given the root of a binary tree and a target sum, return the number of paths where values sum to target. The path does not need to start at root or end at leaf.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [10,5,-3,3,2,null,11,3,-2,null,1], targetSum = 8
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+             10
+          /       \
+      5              -3
+    /   \               \
+  3       2              11
+ / \       \
+3  -2       1
+targetSum = 8
 Output: 3</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [1,2], targetSum = 3  |  Output: 1</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root =
+  1
+ /
+2
+targetSum = 3
+Output: 1</pre></div>
         </div>
         <div class="animation-box" id="anim-pathsum3">
             <h3>Path Sum III Prefix Sum Animation</h3>
@@ -11249,8 +11583,18 @@ int dfs(TreeNode node, long curSum, int target, Map&lt;Long, Integer&gt; map) {
             <p><strong>Problem:</strong> Given the root of a binary tree, return the maximum path sum. A path is any sequence of nodes connected by edges (doesn't need to pass through root).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [-10,9,20,null,null,15,7]  |  Output: 42 (15→20→7)</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [1,2,3]  |  Output: 6 (2→1→3)</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+    -10
+   /   \
+9        20
+         / \
+       15   7
+Output: 42 (15→20→7)</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root =
+  1
+ / \
+2   3
+Output: 6 (2→1→3)</pre></div>
         </div>
         <div class="animation-box" id="anim-maxpathsum">
             <h3>Max Path Sum DFS Animation</h3>
@@ -11298,8 +11642,22 @@ int gain(TreeNode node) {
             <p><strong>Problem:</strong> Given a binary tree, find the lowest common ancestor (LCA) of two given nodes p and q.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [3,5,1,6,2,0,8], p=5, q=1  |  Output: 3</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [3,5,1,6,2,0,8], p=5, q=4  |  Output: 5</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+      3
+    /   \
+  5       1
+ / \     / \
+6   2   0   8
+p=5, q=1
+Output: 3</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root =
+      3
+    /   \
+  5       1
+ / \     / \
+6   2   0   8
+p=5, q=4
+Output: 5</pre></div>
         </div>
         <div class="animation-box" id="anim-lca">
             <h3>LCA DFS Animation (p=5, q=1)</h3>
@@ -11343,8 +11701,22 @@ TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
             <p><strong>Problem:</strong> Given a BST, find the lowest common ancestor of two given nodes p and q. Use BST property for O(h) efficiency.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [6,2,8,0,4,7,9], p=2, q=8  |  Output: 6</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [6,2,8,0,4,7,9], p=2, q=4  |  Output: 2</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+      6
+    /   \
+  2       8
+ / \     / \
+0   4   7   9
+p=2, q=8
+Output: 6</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root =
+      6
+    /   \
+  2       8
+ / \     / \
+0   4   7   9
+p=2, q=4
+Output: 2</pre></div>
         </div>
         <div class="animation-box" id="anim-lcabst">
             <h3>LCA BST Animation (p=2, q=8)</h3>
@@ -11391,8 +11763,18 @@ TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
             <p><strong>Problem:</strong> Given the root of a binary tree, determine if it is a valid BST (left subtree values &lt; node &lt; right subtree values).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [2,1,3]  |  Output: true</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [5,1,4,null,null,3,6]  |  Output: false (4 has child 3 &lt; 5)</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+  2
+ / \
+1   3
+Output: true</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root =
+    5
+  /   \
+1       4
+       / \
+      3   6
+Output: false (4 has child 3 &lt; 5)</pre></div>
         </div>
         <div class="animation-box" id="anim-validbst">
             <h3>Validate BST Animation (root = [5,1,4,null,null,3,6])</h3>
@@ -11437,8 +11819,24 @@ boolean validate(TreeNode node, long min, long max) {
             <p><strong>Problem:</strong> Given the root of a BST and an integer k, return the kth smallest value in the tree.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [3,1,4,null,2], k = 1  |  Output: 1</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [5,3,6,2,4,null,null,1], k = 3  |  Output: 3</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+    3
+  /   \
+1       4
+ \
+  2
+k = 1
+Output: 1</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root =
+              5
+          /       \
+      3               6
+    /   \
+  2       4
+ /
+1
+k = 3
+Output: 3</pre></div>
         </div>
         <div class="animation-box" id="anim-kthsmallest">
             <h3>Kth Smallest Inorder Animation (k=1)</h3>
@@ -11486,8 +11884,22 @@ void inorder(TreeNode node, int k) {
             <p><strong>Problem:</strong> Given the root of a BST and a value, find the node whose value equals val and return the subtree rooted at that node.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [4,2,7,1,3], val = 2  |  Output: [2,1,3]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [4,2,7,1,3], val = 5  |  Output: null</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+      4
+    /   \
+  2       7
+ / \
+1   3
+val = 2
+Output: [2,1,3]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root =
+      4
+    /   \
+  2       7
+ / \
+1   3
+val = 5
+Output: null</pre></div>
         </div>
         <div class="animation-box" id="anim-searchbst">
             <h3>Search BST Animation (val=2)</h3>
@@ -11529,8 +11941,22 @@ TreeNode searchBST(TreeNode root, int val) {
             <p><strong>Problem:</strong> Given the root of a BST and a value to insert, insert the value into the BST and return the root.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [4,2,7,1,3], val = 5  |  Output: [4,2,7,1,3,5]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = [40,20,60,10,30], val = 25  |  Output: [40,20,60,10,30,null,null,null,null,25]</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+      4
+    /   \
+  2       7
+ / \
+1   3
+val = 5
+Output: [4,2,7,1,3,5]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root =
+      40
+     /   \
+  20      60
+  / \
+10  30
+val = 25
+Output: [40,20,60,10,30,null,null,null,null,25]</pre></div>
         </div>
         <div class="animation-box" id="anim-insertbst">
             <h3>Insert BST Animation (val=5)</h3>
@@ -11574,8 +12000,10 @@ TreeNode insertIntoBST(TreeNode root, int val) {
             <p><strong>Problem:</strong> Given an integer array sorted in ascending order, convert it to a height-balanced BST.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [-10,-3,0,5,9]  |  Output: [0,-3,9,-10,null,5]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,3]  |  Output: [3,1] or [1,null,3]</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [-10,-3,0,5,9]
+Output: [0,-3,9,-10,null,5]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,3]
+Output: [3,1] or [1,null,3]</pre></div>
         </div>
         <div class="animation-box" id="anim-sortedtobst">
             <h3>Sorted Array to BST Animation</h3>
@@ -11625,7 +12053,8 @@ TreeNode build(int[] nums, int left, int right) {
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]
 Output: [3,9,20,null,null,15,7]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: preorder = [-1], inorder = [-1]  |  Output: [-1]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: preorder = [-1], inorder = [-1]
+Output: [-1]</pre></div>
         </div>
         <div class="animation-box" id="anim-constructpi">
             <h3>Construct from Pre+In Animation</h3>
@@ -11679,7 +12108,8 @@ TreeNode build(int[] preorder, int inLeft, int inRight) {
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: inorder = [9,3,15,20,7], postorder = [9,15,7,20,3]
 Output: [3,9,20,null,null,15,7]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: inorder = [-1], postorder = [-1]  |  Output: [-1]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: inorder = [-1], postorder = [-1]
+Output: [-1]</pre></div>
         </div>
         <div class="animation-box" id="anim-constructip">
             <h3>Construct from In+Post Animation</h3>
@@ -11732,9 +12162,16 @@ TreeNode build(int[] postorder, int inLeft, int inRight) {
             <p><strong>Problem:</strong> Design an algorithm to serialize a binary tree to a string and deserialize the string back to a tree.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [1,2,3,null,null,4,5]
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+    1
+  /   \
+2       3
+       / \
+      4   5
 Serialized: "1,2,null,null,3,4,null,null,5,null,null"</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = []  |  Serialized: "null"</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root =
+(empty tree)
+Serialized: "null"</pre></div>
         </div>
         <div class="animation-box" id="anim-serialize">
             <h3>Serialize/Deserialize Animation</h3>
@@ -11786,9 +12223,16 @@ TreeNode buildTree(Queue&lt;String&gt; q) {
             <p><strong>Problem:</strong> Given the root of a binary tree, flatten it into a linked list in-place using preorder traversal (all left pointers become null, right pointers chain nodes).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root = [1,2,5,3,4,null,6]
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+      1
+    /   \
+  2       5
+ / \       \
+3   4       6
 Output: [1,null,2,null,3,null,4,null,5,null,6]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root = []  |  Output: []</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root =
+(empty tree)
+Output: []</pre></div>
         </div>
         <div class="animation-box" id="anim-flatten">
             <h3>Flatten Tree Animation</h3>
@@ -11826,10 +12270,780 @@ void flatten(TreeNode root) {
 </section>
 
 
+<!-- ==================== BFS PROBLEMS ==================== -->
+<section id="bfs-problems" class="section">
+    <div class="section-header">
+        <h2>9. BFS Problems (Easy &rarr; Hard) (10 Questions)</h2>
+        <p>Breadth-first search: level order, multi-source distances, state graphs, and shortest paths on grids and implicit graphs</p>
+    </div>
+
+    <!-- Binary Tree Level Order Traversal (LC 102) -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">Binary Tree Level Order Traversal (LC 102)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given the <code>root</code> of a binary tree, return the level order traversal of its nodes' values (i.e., from left to right, level by level).</p>
+            <p><strong>Pattern:</strong> Basic BFS &mdash; process the tree layer by layer using a queue; each queue snapshot is one level.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+    3
+  /   \
+9      20
+       / \
+     15   7
+Output: [[3],[9,20],[15,7]]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: root =
+1
+Output: [[1]]</pre></div>
+        </div>
+        <div class="animation-box" id="anim-bfs-lc102">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (Java-style Pseudocode):</h3>
+            <pre id="code-bfs-lc102">
+List&lt;List&lt;Integer&gt;&gt; levelOrder(TreeNode root) {
+    List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+    if (root == null) return res;
+    Queue&lt;TreeNode&gt; q = new LinkedList&lt;&gt;();
+    q.offer(root);
+    while (!q.isEmpty()) {
+        int sz = q.size();
+        List&lt;Integer&gt; level = new ArrayList&lt;&gt;();
+        for (int i = 0; i &lt; sz; i++) {
+            TreeNode n = q.poll();
+            level.add(n.val);
+            if (n.left != null) q.offer(n.left);
+            if (n.right != null) q.offer(n.right);
+        }
+        res.add(level);
+    }
+    return res;
+}
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <!-- Rotting Oranges (LC 994) -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">Rotting Oranges (LC 994)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> In an <code>m x n</code> grid, each cell is empty (0), fresh orange (1), or rotten (2). Every minute, rotten oranges rot all 4-directionally adjacent fresh oranges. Return minutes until no fresh orange remains, or <code>-1</code> if impossible.</p>
+            <p><strong>Pattern:</strong> Multi-source BFS &mdash; enqueue all rotten cells as distance 0, then expand in waves.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: grid =
+[2, 1, 1]
+[1, 1, 0]
+[0, 1, 1]
+Output: 4</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: grid =
+[0, 2]
+Output: 0</pre></div>
+        </div>
+        <div class="animation-box" id="anim-bfs-lc994">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (Java-style Pseudocode):</h3>
+            <pre id="code-bfs-lc994">
+int orangesRotting(int[][] grid) {
+    Queue&lt;int[]&gt; q = new LinkedList&lt;&gt;();
+    int fresh = 0;
+    for (int r = 0; r &lt; grid.length; r++)
+        for (int c = 0; c &lt; grid[0].length; c++) {
+            if (grid[r][c] == 2) q.offer(new int[]{r, c});
+            else if (grid[r][c] == 1) fresh++;
+        }
+    int mins = 0;
+    int[][] dirs = {{1,0},{-1,0},{0,1},{0,-1}};
+    while (!q.isEmpty() &amp;&amp; fresh &gt; 0) {
+        int sz = q.size();
+        for (int i = 0; i &lt; sz; i++) {
+            int[] cell = q.poll();
+            for (int[] d : dirs) { /* relax neighbors; decrement fresh */ }
+        }
+        mins++;
+    }
+    return fresh == 0 ? mins : -1;
+}
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(mn) | <strong>Space:</strong> O(mn)</p></div>
+        </div>
+    </div>
+
+    <!-- 01 Matrix (LC 542) -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">01 Matrix (LC 542)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given an <code>m x n</code> binary matrix, return a matrix of the same size where each cell is the distance to the nearest <code>0</code> (Manhattan).</p>
+            <p><strong>Pattern:</strong> Distance BFS &mdash; start BFS from every <code>0</code> (multi-source) to compute shortest distances.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: mat =
+[0, 0, 0]
+[0, 1, 0]
+[1, 1, 1]
+Output: [[0,0,0],[0,1,0],[1,2,1]]</pre></div>
+        </div>
+        <div class="animation-box" id="anim-bfs-lc542">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (Java-style Pseudocode):</h3>
+            <pre id="code-bfs-lc542">
+int[][] updateMatrix(int[][] mat) {
+    int m = mat.length, n = mat[0].length;
+    int[][] dist = new int[m][n];
+    Queue&lt;int[]&gt; q = new LinkedList&lt;&gt;();
+    // enqueue all zeros, dist=0; others INF; then multi-source BFS
+    return dist;
+}
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(mn) | <strong>Space:</strong> O(mn)</p></div>
+        </div>
+    </div>
+
+    <!-- Open the Lock (LC 752) -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">Open the Lock (LC 752)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> A lock has 4 circular wheels 0&ndash;9. Start at <code>"0000"</code>. Given a list of <code>deadends</code> and a <code>target</code> string, return minimum turns to reach <code>target</code>, or <code>-1</code>. Each turn increments or decrements one wheel by one (with wrap).</p>
+            <p><strong>Pattern:</strong> State-space BFS &mdash; each 4-digit string is a node; edges are single-wheel moves.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: deadends = ["0201","0101","0102","1212","2002"], target = "0202"
+Output: 6</pre></div>
+        </div>
+        <div class="animation-box" id="anim-bfs-lc752">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (Java-style Pseudocode):</h3>
+            <pre id="code-bfs-lc752">
+int openLock(String[] deadends, String target) {
+    Set&lt;String&gt; dead = new HashSet&lt;&gt;(Arrays.asList(deadends));
+    Queue&lt;String&gt; q = new LinkedList&lt;&gt;();
+    // BFS from "0000", skip dead; neighbors = turn one wheel up/down
+    return -1; // or min turns
+}
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(10^4 &times; 8) | <strong>Space:</strong> O(10^4)</p></div>
+        </div>
+    </div>
+
+    <!-- Word Ladder (LC 127) -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">Word Ladder (LC 127)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given two words <code>beginWord</code> and <code>endWord</code>, and a dictionary <code>wordList</code>, return the length of the shortest transformation sequence from <code>beginWord</code> to <code>endWord</code> where each step changes exactly one letter and every intermediate word must be in <code>wordList</code>. Return <code>0</code> if no sequence exists.</p>
+            <p><strong>Pattern:</strong> Graph shortest path BFS &mdash; implicit edges between words differing by one letter (often optimized with patterns / adjacency).</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: beginWord = "hit", endWord = "cog",
+       wordList = ["hot","dot","dog","lot","log","cog"]
+Output: 5  (hit → hot → dot → dog → cog)</pre></div>
+        </div>
+        <div class="animation-box" id="anim-bfs-lc127">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (Java-style Pseudocode):</h3>
+            <pre id="code-bfs-lc127">
+int ladderLength(String beginWord, String endWord, List&lt;String&gt; wordList) {
+    Set&lt;String&gt; dict = new HashSet&lt;&gt;(wordList);
+    if (!dict.contains(endWord)) return 0;
+    Queue&lt;String&gt; q = new LinkedList&lt;&gt;();
+    // BFS: dequeue word, try change each position to a-z if in dict
+    return 0;
+}
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(N &times; L&sup2;) typical | <strong>Space:</strong> O(N)</p></div>
+        </div>
+    </div>
+
+    <!-- Shortest Path in Binary Matrix (LC 1091) -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">Shortest Path in Binary Matrix (LC 1091)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> In an <code>n x n</code> binary matrix, find the length of the shortest clear path from top-left <code>(0,0)</code> to bottom-right <code>(n-1,n-1)</code>. A clear path uses only <code>0</code> cells and may move in 8 directions (including diagonals).</p>
+            <p><strong>Pattern:</strong> Grid shortest path BFS &mdash; unweighted graph; first time you dequeue the goal is optimal length.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: grid =
+[0, 1]
+[1, 0]
+Output: 2</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: grid =
+[0, 0, 0]
+[1, 1, 0]
+[1, 1, 0]
+Output: 4</pre></div>
+        </div>
+        <div class="animation-box" id="anim-bfs-lc1091">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (Java-style Pseudocode):</h3>
+            <pre id="code-bfs-lc1091">
+int shortestPathBinaryMatrix(int[][] grid) {
+    if (grid[0][0] == 1) return -1;
+    int n = grid.length;
+    Queue&lt;int[]&gt; q = new LinkedList&lt;&gt;();
+    q.offer(new int[]{0, 0, 1}); // r, c, dist
+    // mark visited; 8-neighbor BFS until (n-1,n-1)
+    return -1;
+}
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n&sup2;) | <strong>Space:</strong> O(n&sup2;)</p></div>
+        </div>
+    </div>
+
+    <!-- Minimum Genetic Mutation (LC 433) -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">Minimum Genetic Mutation (LC 433)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> A gene string has length 8 and uses <code>A,C,G,T</code>. Given <code>start</code>, <code>end</code>, and a bank of valid mutations, return minimum mutations to reach <code>end</code> from <code>start</code>, or <code>-1</code> if impossible. Each step changes exactly one character, and the new string must be in the bank.</p>
+            <p><strong>Pattern:</strong> Transformation BFS &mdash; same as word ladder on a 8-character alphabet.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: start = "AACCGGTT", end = "AACCGGTA",
+       bank = ["AACCGGTA","AACCGCTA","AAACGGTA"]
+Output: 1</pre></div>
+        </div>
+        <div class="animation-box" id="anim-bfs-lc433">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (Java-style Pseudocode):</h3>
+            <pre id="code-bfs-lc433">
+int minMutation(String start, String end, String[] bank) {
+    Set&lt;String&gt; B = new HashSet&lt;&gt;(Arrays.asList(bank));
+    Queue&lt;String&gt; q = new LinkedList&lt;&gt;();
+    // BFS: neighbors = change one position to A,C,G,T if in B
+    return -1;
+}
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(N &times; L) | <strong>Space:</strong> O(N)</p></div>
+        </div>
+    </div>
+
+    <!-- Snakes and Ladders (LC 909) -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">Snakes and Ladders (LC 909)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> On an <code>n x n</code> board labeled 1 to <code>n&sup2;</code> in boustrophedon order, start at square 1. Roll a 1&ndash;6 die; move forward up to 6 steps, but if you land on a snake or ladder start, slide/jump to its end. Return minimum moves to reach square <code>n&sup2;</code>, or <code>-1</code>.</p>
+            <p><strong>Pattern:</strong> BFS on game board &mdash; states are board cells; each roll expands to up to 6 next cells (with teleport edges).</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: board =
+[-1, -1]
+[-1, -1]  (n=2, no snakes/ladders)
+Output: 1  (one roll from square 1 can reach square n² = 4)</pre></div>
+        </div>
+        <div class="animation-box" id="anim-bfs-lc909">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (Java-style Pseudocode):</h3>
+            <pre id="code-bfs-lc909">
+int snakesAndLadders(int[][] board) {
+    // map label &lt;-&gt; (r,c); BFS from cell 1 on implicit graph of dice + snakes/ladders
+    return -1;
+}
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n&sup2;) | <strong>Space:</strong> O(n&sup2;)</p></div>
+        </div>
+    </div>
+
+    <!-- Bus Routes (LC 815) -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">Bus Routes (LC 815)</span>
+            <span class="difficulty hard">Hard</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given an array of bus routes (<code>routes[i]</code> is distinct stops that bus <code>i</code> visits repeatedly), find minimum buses to travel from <code>source</code> to <code>target</code>. You can switch buses only at shared stops. Return <code>-1</code> if impossible.</p>
+            <p><strong>Pattern:</strong> Graph + level BFS &mdash; nodes can be routes or stops; often BFS on routes with stop-to-route adjacency.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: routes = [[1,2,7],[3,6,7]], source = 1, target = 6
+Output: 2</pre></div>
+        </div>
+        <div class="animation-box" id="anim-bfs-lc815">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (Java-style Pseudocode):</h3>
+            <pre id="code-bfs-lc815">
+int numBusesToDestination(int[][] routes, int source, int target) {
+    // build stop -&gt; list of route indices; BFS routes, count bus transfers
+    return -1;
+}
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(S + R) typical | <strong>Space:</strong> O(S + R)</p></div>
+        </div>
+    </div>
+
+    <!-- Escape a Large Maze (LC 1036) -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">Escape a Large Maze (LC 1036)</span>
+            <span class="difficulty hard">Hard</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> A huge <code>10^6 x 10^6</code> grid with up to <code>200</code> blocked cells. Given <code>source</code> and <code>target</code>, determine if there is a path of empty cells between them (4-directional).</p>
+            <p><strong>Pattern:</strong> Advanced BFS pruning &mdash; cannot visit whole grid; bound search (e.g. limited steps from source/target) using the fact that few obstacles cannot surround a point in an infinite plane unless they form a closed barrier of sufficient size.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: blocked = [[0,1]], source = [0,0], target = [0,2]
+Output: true</pre></div>
+        </div>
+        <div class="animation-box" id="anim-bfs-lc1036">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (Java-style Pseudocode):</h3>
+            <pre id="code-bfs-lc1036">
+boolean isEscapePossible(int[][] blocked, int[] source, int[] target) {
+    Set&lt;String&gt; B = new HashSet&lt;&gt;(); // blocked
+    // BFS from source (cap visits, e.g. 2 * blocked.length^2) to see escape or hit target;
+    // symmetric check from target; use obstacle count theory
+    return false;
+}
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(b&sup2;) with bounded BFS | <strong>Space:</strong> O(b&sup2;)</p></div>
+        </div>
+    </div>
+
+</section>
+
+
+<!-- ==================== DFS PROBLEMS ==================== -->
+<section id="dfs-problems" class="section">
+    <div class="section-header">
+        <h2>10. DFS Problems (Easy &rarr; Hard) (10 Questions)</h2>
+        <p>Depth-first search on grids, graphs, and trees &mdash; connected components, backtracking, cycle detection, and path reconstruction</p>
+    </div>
+
+    <!-- Flood Fill (LC 733) -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">Flood Fill (LC 733)</span>
+            <span class="difficulty easy">Easy</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given an <code>m x n</code> integer image, starting pixel <code>(sr, sc)</code>, and a <code>newColor</code>, replace the starting color and all 4-connected pixels with the same starting color with <code>newColor</code>.</p>
+            <p><strong>Pattern:</strong> Basic DFS &mdash; explore the same-color region recursively or with a stack.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: image =
+[1, 1, 1]
+[1, 1, 0]
+[1, 0, 1]
+sr=1, sc=1, newColor=2
+Output: [[2,2,2],[2,2,0],[2,0,1]]</pre></div>
+        </div>
+        <div class="animation-box" id="anim-dfs-lc733">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (Java-style Pseudocode):</h3>
+            <pre id="code-dfs-lc733">
+int[][] floodFill(int[][] img, int sr, int sc, int c) {
+    int old = img[sr][sc];
+    if (old == c) return img;
+    dfs(img, sr, sc, old, c);
+    return img;
+}
+void dfs(int[][] g, int r, int c, int old, int nc) {
+    if (r &lt; 0 || c &lt; 0 || r &gt;= g.length || c &gt;= g[0].length || g[r][c] != old) return;
+    g[r][c] = nc;
+    dfs(g, r+1, c, old, nc); dfs(g, r-1, c, old, nc);
+    dfs(g, r, c+1, old, nc); dfs(g, r, c-1, old, nc);
+}
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(mn) | <strong>Space:</strong> O(mn)</p></div>
+        </div>
+    </div>
+
+    <!-- Number of Islands (LC 200) -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">Number of Islands (LC 200)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given an <code>m x n</code> grid of <code>'1'</code> (land) and <code>'0'</code> (water), count how many islands (4-directionally connected land components).</p>
+            <p><strong>Pattern:</strong> Connected components &mdash; each unseen <code>'1'</code> starts a DFS that sinks the whole island (mark visited).</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: grid =
+["1", "1", "1"]
+["0", "1", "0"]
+["1", "1", "1"]
+Output: 1</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: grid =
+["1", "1", "0", "0", "0"]
+["1", "1", "0", "0", "0"]
+["0", "0", "0", "1", "1"]
+Output: 3</pre></div>
+        </div>
+        <div class="animation-box" id="anim-dfs-lc200">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (Java-style Pseudocode):</h3>
+            <pre id="code-dfs-lc200">
+int numIslands(char[][] g) {
+    int n = 0;
+    for (int r = 0; r &lt; g.length; r++)
+        for (int c = 0; c &lt; g[0].length; c++)
+            if (g[r][c] == '1') { dfs(g, r, c); n++; }
+    return n;
+}
+void dfs(char[][] g, int r, int c) {
+    if (r &lt; 0 || c &lt; 0 || r &gt;= g.length || c &gt;= g[0].length || g[r][c] != '1') return;
+    g[r][c] = '0';
+    dfs(g,r+1,c); dfs(g,r-1,c); dfs(g,r,c+1); dfs(g,r,c-1);
+}
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(mn) | <strong>Space:</strong> O(mn)</p></div>
+        </div>
+    </div>
+
+    <!-- Max Area of Island (LC 695) -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">Max Area of Island (LC 695)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given a binary matrix, return the maximum area of an island (4-directionally connected group of <code>1</code>s). Return <code>0</code> if none.</p>
+            <p><strong>Pattern:</strong> DFS counting &mdash; same as islands, but accumulate cell count per DFS instead of only counting components.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: grid =
+[0, 0, 1, 0, 0]
+[0, 0, 0, 0, 0]
+[0, 1, 1, 0, 0]
+[0, 1, 0, 0, 0]
+[0, 1, 0, 0, 1]
+Output: 4</pre></div>
+        </div>
+        <div class="animation-box" id="anim-dfs-lc695">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (Java-style Pseudocode):</h3>
+            <pre id="code-dfs-lc695">
+int maxAreaOfIsland(int[][] g) {
+    int best = 0;
+    for (int r = 0; r &lt; g.length; r++)
+        for (int c = 0; c &lt; g[0].length; c++)
+            if (g[r][c] == 1) best = Math.max(best, dfsArea(g, r, c));
+    return best;
+}
+int dfsArea(int[][] g, int r, int c) {
+    if (r &lt; 0 || c &lt; 0 || r &gt;= g.length || c &gt;= g[0].length || g[r][c] == 0) return 0;
+    g[r][c] = 0;
+    return 1 + dfsArea(g,r+1,c) + dfsArea(g,r-1,c) + dfsArea(g,r,c+1) + dfsArea(g,r,c-1);
+}
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(mn) | <strong>Space:</strong> O(mn)</p></div>
+        </div>
+    </div>
+
+    <!-- Surrounded Regions (LC 130) -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">Surrounded Regions (LC 130)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given an <code>m x n</code> matrix of <code>'X'</code> and <code>'O'</code>, flip every <code>'O'</code> that is not connected to the boundary (4-directionally) into <code>'X'</code>. In-place.</p>
+            <p><strong>Pattern:</strong> Boundary DFS &mdash; first mark all <code>'O'</code> reachable from border (safe); remaining <code>'O'</code> become <code>'X'</code>.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: board =
+["X", "X", "X", "X"]
+["X", "O", "O", "X"]
+["X", "X", "O", "X"]
+["X", "O", "X", "X"]
+Output: [["X","X","X","X"],["X","X","X","X"],["X","X","X","X"],["X","O","X","X"]]</pre></div>
+        </div>
+        <div class="animation-box" id="anim-dfs-lc130">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (Java-style Pseudocode):</h3>
+            <pre id="code-dfs-lc130">
+void solve(char[][] b) {
+    // DFS from each border 'O', mark as safe (e.g. 'S'); then flip remaining 'O' to 'X', 'S' back to 'O'
+}
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(mn) | <strong>Space:</strong> O(mn)</p></div>
+        </div>
+    </div>
+
+    <!-- Clone Graph (LC 133) -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">Clone Graph (LC 133)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given a reference node of a connected undirected graph (each node has <code>val</code> and <code>List&lt;Node&gt; neighbors</code>), return a deep copy of the graph.</p>
+            <p><strong>Pattern:</strong> Graph DFS &mdash; hash map from original node to clone; DFS creates nodes and wires neighbors lazily.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: adjList = [[2,4],[1,3],[2,4],[1,3]]  (4-node cycle)
+Output: deep copy with same structure, new node objects</pre></div>
+        </div>
+        <div class="animation-box" id="anim-dfs-lc133">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (Java-style Pseudocode):</h3>
+            <pre id="code-dfs-lc133">
+Node cloneGraph(Node node) {
+    Map&lt;Node, Node&gt; map = new HashMap&lt;&gt;();
+    return dfsClone(node, map);
+}
+Node dfsClone(Node u, Map&lt;Node, Node&gt; map) {
+    if (map.containsKey(u)) return map.get(u);
+    Node v = new Node(u.val);
+    map.put(u, v);
+    for (Node w : u.neighbors) v.neighbors.add(dfsClone(w, map));
+    return v;
+}
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(V + E) | <strong>Space:</strong> O(V)</p></div>
+        </div>
+    </div>
+
+    <!-- Word Search (LC 79) -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">Word Search (LC 79)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given an <code>m x n</code> grid of letters and a string <code>word</code>, return whether <code>word</code> exists by moving orthogonally without reusing a cell in the same path.</p>
+            <p><strong>Pattern:</strong> DFS + backtracking &mdash; try each start cell; mark visited on entry, unmark on backtrack.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: board =
+["A", "B", "C", "E"]
+["S", "F", "C", "S"]
+["A", "D", "E", "E"]
+word = "ABCCED"
+Output: true</pre></div>
+        </div>
+        <div class="animation-box" id="anim-dfs-lc79">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (Java-style Pseudocode):</h3>
+            <pre id="code-dfs-lc79">
+boolean exist(char[][] b, String word) {
+    for (int r = 0; r &lt; b.length; r++)
+        for (int c = 0; c &lt; b[0].length; c++)
+            if (dfs(b, r, c, 0, word)) return true;
+    return false;
+}
+boolean dfs(char[][] b, int r, int c, int i, String w) { /* match w[i], visit, recurse, undo */ return false; }
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(mn &times; 3<sup>L</sup>) typical | <strong>Space:</strong> O(L)</p></div>
+        </div>
+    </div>
+
+    <!-- Path Sum (LC 112) -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">Path Sum (LC 112)</span>
+            <span class="difficulty easy">Easy</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given the <code>root</code> of a binary tree and an integer <code>targetSum</code>, return whether there is a root-to-leaf path whose node values sum to <code>targetSum</code>.</p>
+            <p><strong>Pattern:</strong> Tree DFS &mdash; carry running sum (or remainder); at leaf, compare to target.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: root =
+              5
+          /       \
+      4               8
+    /               /   \
+ 11              13       4
+ / \                       \
+7   2                       1
+targetSum = 22
+Output: true  (5→4→11→2)</pre></div>
+        </div>
+        <div class="animation-box" id="anim-dfs-lc112">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (Java-style Pseudocode):</h3>
+            <pre id="code-dfs-lc112">
+boolean hasPathSum(TreeNode root, int t) {
+    if (root == null) return false;
+    if (root.left == null &amp;&amp; root.right == null) return root.val == t;
+    return hasPathSum(root.left, t - root.val) || hasPathSum(root.right, t - root.val);
+}
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(h)</p></div>
+        </div>
+    </div>
+
+    <!-- Course Schedule (LC 207) -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">Course Schedule (LC 207)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> There are <code>numCourses</code> labeled <code>0 .. numCourses-1</code>. <code>prerequisites[i] = [a, b]</code> means you must take course <code>b</code> before <code>a</code>. Return whether you can finish all courses (no cycles in the prerequisite graph).</p>
+            <p><strong>Pattern:</strong> Cycle detection DFS &mdash; 3-color (unvisited / visiting / done) on directed graph; edge to visiting node implies cycle.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: numCourses = 2, prerequisites = [[1,0]]
+Output: true</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: numCourses = 2, prerequisites = [[1,0],[0,1]]
+Output: false</pre></div>
+        </div>
+        <div class="animation-box" id="anim-dfs-lc207">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (Java-style Pseudocode):</h3>
+            <pre id="code-dfs-lc207">
+boolean canFinish(int n, int[][] pre) {
+    List&lt;Integer&gt;[] g = buildAdj(n, pre);
+    int[] color = new int[n]; // 0 white, 1 gray, 2 black
+    for (int i = 0; i &lt; n; i++)
+        if (color[i] == 0 &amp;&amp; hasCycle(g, i, color)) return false;
+    return true;
+}
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(V + E) | <strong>Space:</strong> O(V + E)</p></div>
+        </div>
+    </div>
+
+    <!-- All Paths From Source to Target (LC 797) -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">All Paths From Source to Target (LC 797)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given a directed acyclic graph as adjacency lists <code>graph</code> with <code>n</code> nodes (<code>0</code> to <code>n-1</code>), return all paths from source <code>0</code> to target <code>n-1</code> (order any).</p>
+            <p><strong>Pattern:</strong> Path generation DFS &mdash; append node to path, recurse on neighbors, pop on backtrack; collect path at target.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: graph = [[1,2],[3],[3],[]]
+Output: [[0,1,3],[0,2,3]]</pre></div>
+        </div>
+        <div class="animation-box" id="anim-dfs-lc797">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (Java-style Pseudocode):</h3>
+            <pre id="code-dfs-lc797">
+List&lt;List&lt;Integer&gt;&gt; allPathsSourceTarget(int[][] g) {
+    List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+    List&lt;Integer&gt; path = new ArrayList&lt;&gt;();
+    dfsPaths(g, 0, path, res);
+    return res;
+}
+void dfsPaths(int[][] g, int u, List&lt;Integer&gt; path, List&lt;List&lt;Integer&gt;&gt; res) { /* push u; if u==n-1 copy; else recurse; pop */ }
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(paths &times; n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <!-- Reconstruct Itinerary (LC 332) -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-title">Reconstruct Itinerary (LC 332)</span>
+            <span class="difficulty hard">Hard</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Given a list of airline tickets <code>[from, to]</code> (use each exactly once), reconstruct the itinerary starting at <code>"JFK"</code>. If multiple valid itineraries exist, return the lexicographically smallest one. Eulerian trail exists by problem guarantee.</p>
+            <p><strong>Pattern:</strong> Advanced DFS / Hierholzer style &mdash; post-order DFS on multiset of edges; reverse result to get forward itinerary (lex order: sort destinations descending and pop from end).</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: tickets = [["MUC","FRA"],["JFK","MUC"],["SFO","SJC"],["JFK","SFO"],["SJC","JFK"]]
+Output: ["JFK","SFO","SJC","JFK","MUC","FRA"]</pre></div>
+        </div>
+        <div class="animation-box" id="anim-dfs-lc332">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (Java-style Pseudocode):</h3>
+            <pre id="code-dfs-lc332">
+List&lt;String&gt; findItinerary(List&lt;List&lt;String&gt;&gt; tickets) {
+    Map&lt;String, PriorityQueue&lt;String&gt;&gt; adj = new HashMap&lt;&gt;();
+    // build adjacency; dfs from JFK always taking smallest dest; Hierholzer: append airport after exhausting outgoing
+    return Collections.emptyList();
+}
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(E log E) | <strong>Space:</strong> O(E)</p></div>
+        </div>
+    </div>
+
+</section>
+
+
 <!-- ==================== DYNAMIC PROGRAMMING ==================== -->
 <section id="dynamic-programming" class="section">
     <div class="section-header">
-        <h2>9. Dynamic Programming (25 Questions)</h2>
+        <h2>11. Dynamic Programming (25 Questions)</h2>
         <p>Solve optimization problems using memoization and tabulation</p>
     </div>
 
@@ -11843,8 +13057,10 @@ void flatten(TreeNode root) {
             <p><strong>Problem:</strong> You can climb 1 or 2 steps at a time. How many distinct ways can you climb n steps?</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: n = 2  |  Output: 2  (1+1 or 2)</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: n = 5  |  Output: 8</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: n = 2
+Output: 2  (1+1 or 2)</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: n = 5
+Output: 8</pre></div>
         </div>
 
         <div class="animation-box" id="anim-climb">
@@ -11945,8 +13161,10 @@ public int climbStairs(int n) {
             <p><strong>Problem:</strong> Given coin denominations and an amount, return the fewest coins needed. Return -1 if impossible.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: coins = [1,2,5], amount = 11  |  Output: 3  (5+5+1)</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: coins = [2], amount = 3        |  Output: -1</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: coins = [1,2,5], amount = 11
+Output: 3  (5+5+1)</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: coins = [2], amount = 3
+Output: -1</pre></div>
         </div>
 
         <div class="animation-box" id="anim-coinchange">
@@ -12003,8 +13221,10 @@ int coinChange(int[] coins, int amount) {
             <p><strong>Problem:</strong> Given two strings, return the length of their longest common subsequence.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: text1 = "abcde", text2 = "ace"  |  Output: 3 ("ace")</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: text1 = "abc", text2 = "def"    |  Output: 0</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: text1 = "abcde", text2 = "ace"
+Output: 3 ("ace")</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: text1 = "abc", text2 = "def"
+Output: 0</pre></div>
         </div>
 
         <div class="animation-box" id="anim-lcs">
@@ -12060,8 +13280,10 @@ int longestCommonSubsequence(String text1, String text2) {
             <p><strong>Problem:</strong> You are a robber planning to rob houses along a street. Each house has a non-negative amount of money. Adjacent houses have security connected — you cannot rob two adjacent houses. Return the maximum money you can rob tonight.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [2,7,9,3,1]  |  Output: 12  (rob 2 + 9 + 1)</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,2,3,1]     |  Output: 4   (rob 1 + 3)</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [2,7,9,3,1]
+Output: 12  (rob 2 + 9 + 1)</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,2,3,1]
+Output: 4   (rob 1 + 3)</pre></div>
         </div>
         <div class="animation-box" id="anim-hr">
             <h3>1D DP Table (nums = [2,7,9,3,1])</h3>
@@ -12112,8 +13334,10 @@ int rob(int[] nums) {
             <p><strong>Problem:</strong> Same as House Robber, but houses are arranged in a <strong>circle</strong>: the first and last houses are neighbors. You still cannot rob two adjacent houses. Return the maximum money you can rob.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [2,3,2]  |  Output: 3  (rob house 1 only; cannot rob 0 and 2 together)</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,2,3,1]  |  Output: 4</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [2,3,2]
+Output: 3  (rob house 1 only; cannot rob 0 and 2 together)</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,2,3,1]
+Output: 4</pre></div>
         </div>
         <div class="animation-box" id="anim-hr2">
             <h3>Two linear ranges (nums = [2,3,2]) — exclude last vs exclude first</h3>
@@ -12172,8 +13396,10 @@ int robRange(int[] nums, int lo, int hi) {
             <p><strong>Problem:</strong> Each index of an integer array <code>cost</code> is a stair; <code>cost[i]</code> is the cost to step on it. You may start at index 0 or 1. Each move goes 1 or 2 stairs up. Return the minimum cost to reach the top (past the last index).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: cost = [10,15,20]  |  Output: 15  (start at 1, pay 15, jump to top)</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: cost = [1,100,1,1,1,100,1,1,100,1]  |  Output: 6</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: cost = [10,15,20]
+Output: 15  (start at 1, pay 15, jump to top)</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: cost = [1,100,1,1,1,100,1,1,100,1]
+Output: 6</pre></div>
         </div>
         <div class="animation-box" id="anim-mcc">
             <h3>dp[i] = min cost to reach step i (cost = [10,15,20])</h3>
@@ -12219,8 +13445,10 @@ int minCostClimbingStairs(int[] cost) {
             <p><strong>Problem:</strong> A robot starts at the top-left corner of an <code>m x n</code> grid and tries to reach the bottom-right. It can only move <strong>right</strong> or <strong>down</strong>. How many unique paths are there?</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: m = 3, n = 3  |  Output: 6</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: m = 3, n = 7  |  Output: 28</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: m = 3, n = 3
+Output: 6</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: m = 3, n = 7
+Output: 28</pre></div>
         </div>
         <div class="animation-box" id="anim-up">
             <h3>Grid DP (m = 3, n = 3)</h3>
@@ -12271,8 +13499,15 @@ int uniquePaths(int m, int n) {
             <p><strong>Problem:</strong> Same as Unique Paths, but the grid may contain obstacles marked as <code>1</code> (blocked). Empty cells are <code>0</code>. An obstacle has zero paths through it.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: grid = [[0,0,0],[0,1,0],[0,0,0]]  |  Output: 2</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: grid = [[0,1],[0,0]]  |  Output: 1</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: grid =
+[0, 0, 0]
+[0, 1, 0]
+[0, 0, 0]
+Output: 2</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: grid =
+[0, 1]
+[0, 0]
+Output: 1</pre></div>
         </div>
         <div class="animation-box" id="anim-up2">
             <h3>Grid with obstacle at [1][1]</h3>
@@ -12331,8 +13566,15 @@ int uniquePathsWithObstacles(int[][] grid) {
             <p><strong>Problem:</strong> Given an <code>m x n</code> grid of non-negative numbers, find a path from top-left to bottom-right that minimizes the sum of values along the path. You may only move right or down.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: grid = [[1,3,1],[1,5,1],[4,2,1]]  |  Output: 7  (1→1→3→1→1)</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: grid = [[1,2,3],[4,5,6]]  |  Output: 12</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: grid =
+[1, 3, 1]
+[1, 5, 1]
+[4, 2, 1]
+Output: 7  (1→1→3→1→1)</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: grid =
+[1, 2, 3]
+[4, 5, 6]
+Output: 12</pre></div>
         </div>
         <div class="animation-box" id="anim-mpsum">
             <h3>Minimum sum path DP</h3>
@@ -12384,8 +13626,15 @@ int minPathSum(int[][] grid) {
             <p><strong>Problem:</strong> Given an <code>m x n</code> binary matrix filled with <code>0</code> and <code>1</code>, find the largest square containing only <code>1</code>s and return <strong>its area</strong> (side length squared).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: matrix = [["1","0","1"],["1","1","1"],["0","1","1"]]  |  Output: 4</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: matrix = [["0","1"],["1","0"]]  |  Output: 1</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: matrix =
+["1", "0", "1"]
+["1", "1", "1"]
+["0", "1", "1"]
+Output: 4</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: matrix =
+["0", "1"]
+["1", "0"]
+Output: 1</pre></div>
         </div>
         <div class="animation-box" id="anim-msq">
             <h3>dp[i][j] = side length of largest square of 1s ending at (i,j)</h3>
@@ -12442,8 +13691,10 @@ int maximalSquare(char[][] matrix) {
             <p><strong>Problem:</strong> Given a non-empty array of positive integers, determine if it can be partitioned into two subsets with equal sum.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,5,11,5]  |  Output: true  (subset sums 11 and 11)</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,2,3,5]    |  Output: false</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,5,11,5]
+Output: true  (subset sums 11 and 11)</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1,2,3,5]
+Output: false</pre></div>
         </div>
         <div class="animation-box" id="anim-pess">
             <h3>Subset-sum DP (nums = [1,5,11,5], target = 11)</h3>
@@ -12499,8 +13750,10 @@ boolean canPartition(int[] nums) {
             <p><strong>Problem:</strong> Assign <code>+</code> or <code>-</code> before each integer in <code>nums</code> so the expression equals <code>target</code>. Return the number of different expressions that work.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,1,1,1,1], target = 3  |  Output: 5</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1], target = 1             |  Output: 1</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [1,1,1,1,1], target = 3
+Output: 5</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [1], target = 1
+Output: 1</pre></div>
         </div>
         <div class="animation-box" id="anim-ts">
             <h3>Count subsets with sum (sum+target)/2 — t = 4</h3>
@@ -12556,8 +13809,10 @@ int findTargetSumWays(int[] nums, int target) {
             <p><strong>Problem:</strong> On each turn, pick two stones and smash them: if equal, both destroyed; else the larger breaks into <code>|a-b|</code>. Return the smallest possible weight of the last remaining stone (same as minimizing pile difference — knapsack to <code>sum/2</code>).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: stones = [2,7,4,1,8,1]  |  Output: 1</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: stones = [31,26,33,21,40]  |  Output: 5</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: stones = [2,7,4,1,8,1]
+Output: 1</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: stones = [31,26,33,21,40]
+Output: 5</pre></div>
         </div>
         <div class="animation-box" id="anim-lsw">
             <h3>Max subset ≤ sum/2 (stones = [2,7,4,1,8,1], sum=23, target=11)</h3>
@@ -12612,8 +13867,10 @@ int lastStoneWeightII(int[] stones) {
             <p><strong>Problem:</strong> You have an integer array <code>coins</code> of distinct coin values and an integer <code>amount</code>. Return the number of combinations that make up that amount (order of coins does not matter; unlimited supply of each coin).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: amount = 5, coins = [1,2,5]  |  Output: 4</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: amount = 3, coins = [2]       |  Output: 0</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: amount = 5, coins = [1,2,5]
+Output: 4</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: amount = 3, coins = [2]
+Output: 0</pre></div>
         </div>
         <div class="animation-box" id="anim-cc2">
             <h3>Unbounded knapsack count (amount = 5, coins = [1,2,5])</h3>
@@ -12660,8 +13917,10 @@ int change(int amount, int[] coins) {
             <p><strong>Problem:</strong> Given an integer <code>n</code>, return the least number of perfect square numbers (e.g. 1, 4, 9, …) that sum to <code>n</code>.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: n = 12  |  Output: 3  (4 + 4 + 4)</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: n = 13  |  Output: 2  (4 + 9)</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: n = 12
+Output: 3  (4 + 4 + 4)</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: n = 13
+Output: 2  (4 + 9)</pre></div>
         </div>
         <div class="animation-box" id="anim-psq">
             <h3>dp[i] = min squares summing to i (n = 12)</h3>
@@ -12710,8 +13969,10 @@ int numSquares(int n) {
             <p><strong>Problem:</strong> Given two strings, return the minimum number of operations to convert <code>word1</code> into <code>word2</code>. You may insert, delete, or replace a character; each costs 1.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: word1 = "horse", word2 = "ros"  |  Output: 3</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: word1 = "intention", word2 = "execution"  |  Output: 5</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: word1 = "horse", word2 = "ros"
+Output: 3</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: word1 = "intention", word2 = "execution"
+Output: 5</pre></div>
         </div>
         <div class="animation-box" id="anim-ed">
             <h3>2D DP (word1 = "horse", word2 = "ros")</h3>
@@ -12771,8 +14032,10 @@ int minDistance(String a, String b) {
             <p><strong>Problem:</strong> Given two strings, return the minimum sum of steps (each step deletes exactly one character in either string) so the two strings become equal.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: word1 = "sea", word2 = "eat"  |  Output: 2</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: word1 = "leetcode", word2 = "etco"  |  Output: 4</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: word1 = "sea", word2 = "eat"
+Output: 2</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: word1 = "leetcode", word2 = "etco"
+Output: 4</pre></div>
         </div>
         <div class="animation-box" id="anim-dots">
             <h3>Min deletions DP (word1 = "sea", word2 = "eat")</h3>
@@ -12821,8 +14084,10 @@ int minDistance(String w1, String w2) {
             <p><strong>Problem:</strong> Given an integer array <code>nums</code>, return the length of the longest strictly increasing subsequence.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [10,9,2,5,3,7,101,18]  |  Output: 4  (e.g. 2,5,7,101)</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [0,1,0,3,2,3]           |  Output: 4</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: nums = [10,9,2,5,3,7,101,18]
+Output: 4  (e.g. 2,5,7,101)</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: nums = [0,1,0,3,2,3]
+Output: 4</pre></div>
         </div>
         <div class="animation-box" id="anim-lis">
             <h3>O(n²) DP — dp[i] = LIS ending at i</h3>
@@ -12874,8 +14139,10 @@ int lengthOfLIS(int[] nums) {
             <p><strong>Problem:</strong> You have a number of envelopes with widths and heights. One envelope fits inside another only if both dimensions are strictly larger. Return the maximum number of envelopes you can Russian doll (nest).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: envelopes = [[5,4],[6,4],[6,7],[2,3]]  |  Output: 3</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: envelopes = [[1,1],[1,1],[1,1]]  |  Output: 1</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: envelopes = [[5,4],[6,4],[6,7],[2,3]]
+Output: 3</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: envelopes = [[1,1],[1,1],[1,1]]
+Output: 1</pre></div>
         </div>
         <div class="animation-box" id="anim-rde">
             <h3>Sort by width ↑, height ↓, then LIS on heights (patience / binary search)</h3>
@@ -12943,8 +14210,10 @@ int maxEnvelopes(int[][] env) {
             <p><strong>Problem:</strong> Given an array of unique strings, a chain is a sequence where each word can be formed by adding exactly one letter to the previous word. Return the length of the longest possible chain.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: words = ["a","b","ba","bca","bda","bdca"]  |  Output: 4</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: words = ["xbc","pcxbcf","xb","cxbc","pcxbc"]  |  Output: 5</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: words = ["a","b","ba","bca","bda","bdca"]
+Output: 4</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: words = ["xbc","pcxbcf","xb","cxbc","pcxbc"]
+Output: 5</pre></div>
         </div>
         <div class="animation-box" id="anim-lsc">
             <h3>Sort by length, then dp[word] = 1 + max(dp[pred]) over predecessors</h3>
@@ -12998,8 +14267,10 @@ int longestStrChain(String[] words) {
             <p><strong>Problem:</strong> Given a string <code>s</code>, return the longest palindromic substring in <code>s</code>.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "babad"  |  Output: "bab" (or "aba")</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "cbbd"  |  Output: "bb"</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "babad"
+Output: "bab" (or "aba")</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "cbbd"
+Output: "bb"</pre></div>
         </div>
         <div class="animation-box" id="anim-lps">
             <h3>2D DP: dp[i][j] = true if s[i..j] is palindrome (s = "babad")</h3>
@@ -13052,8 +14323,10 @@ String longestPalindrome(String s) {
             <p><strong>Problem:</strong> Given a string <code>s</code>, return the length of its longest palindromic subsequence.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "bbbab"  |  Output: 4  (e.g. "bbbb")</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "cbbd"  |  Output: 2</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "bbbab"
+Output: 4  (e.g. "bbbb")</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "cbbd"
+Output: 2</pre></div>
         </div>
         <div class="animation-box" id="anim-lpseq">
             <h3>2D DP: dp[i][j] = LPS length in s[i..j] (s = "bbbab")</h3>
@@ -13101,8 +14374,10 @@ int longestPalindromeSubseq(String s) {
             <p><strong>Problem:</strong> Given a string <code>s</code>, return the number of palindromic substrings in it (each distinct substring counts once).</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "abc"  |  Output: 3</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "aaa"  |  Output: 6</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "abc"
+Output: 3</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "aaa"
+Output: 6</pre></div>
         </div>
         <div class="animation-box" id="anim-psub">
             <h3>Expand from center (s = "aab")</h3>
@@ -13148,8 +14423,10 @@ int countSubstrings(String s) {
             <p><strong>Problem:</strong> Given a string <code>s</code> and a dictionary of strings, return <code>true</code> if <code>s</code> can be segmented into a space-separated sequence of one or more dictionary words.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "leetcode", wordDict = ["leet","code"]  |  Output: true</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "applepenapple", wordDict = ["apple","pen"]  |  Output: true</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "leetcode", wordDict = ["leet","code"]
+Output: true</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "applepenapple", wordDict = ["apple","pen"]
+Output: true</pre></div>
         </div>
         <div class="animation-box" id="anim-wb">
             <h3>dp[i] = can segment s[0..i-1] (s = "leetcode", dict = leet, code)</h3>
@@ -13202,8 +14479,10 @@ boolean wordBreak(String s, List<String> wordDict) {
             <p><strong>Problem:</strong> Given a string <code>s</code> and a dictionary, return all valid space-separated sentences you can form by segmenting <code>s</code> entirely into dictionary words.</p>
         </div>
         <div class="test-cases">
-            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "catsanddog", wordDict = ["cat","cats","and","sand","dog"]  |  Output: ["cats and dog","cat sand dog"]</pre></div>
-            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "pineapplepenapple", dict = ["apple","pen","applepen","pine","pineapple"]  |  Output: multiple sentences</pre></div>
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "catsanddog", wordDict = ["cat","cats","and","sand","dog"]
+Output: ["cats and dog","cat sand dog"]</pre></div>
+            <div class="test-case"><h4>Test Case 2:</h4><pre>Input: s = "pineapplepenapple", dict = ["apple","pen","applepen","pine","pineapple"]
+Output: multiple sentences</pre></div>
         </div>
         <div class="animation-box" id="anim-wb2">
             <h3>Backtracking + memo: explore splits on "catsanddog"</h3>
