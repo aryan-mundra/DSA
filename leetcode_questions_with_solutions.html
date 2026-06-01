@@ -23,6 +23,21 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             overflow: hidden;
         }
+        @media (min-width: 1100px) {
+            .container {
+                max-width: 1580px;
+                overflow: visible;
+            }
+        }
+        .page-layout {
+            display: block;
+        }
+        .page-main {
+            min-width: 0;
+        }
+        .practice-sidebar {
+            display: none;
+        }
         
         header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -59,6 +74,41 @@
             transition: all 0.3s;
         }
         nav a:hover { background: #667eea; transform: translateY(-2px); }
+        .nav-topics-list {
+            padding: 0;
+            margin: 0;
+        }
+        .nav-divider {
+            height: 0;
+            border: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            margin: 14px 0 12px;
+        }
+        .nav-resources-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding-top: 2px;
+        }
+        .nav-resources-bar ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            padding: 0;
+            margin: 0;
+        }
+        .nav-resources-bar a {
+            background: rgba(102, 126, 234, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .nav-resources-bar a:hover {
+            background: #667eea;
+            border-color: transparent;
+        }
 
         .nav-practice-bar {
             display: flex;
@@ -305,6 +355,421 @@
         }
         .practice-modal-body .collapsible-content.expanded {
             max-height: 8000px;
+        }
+
+        /* ===== DAILY PRACTICE TRACKER (desktop sidebar) ===== */
+        .practice-tracker-section { margin: 0; }
+        .practice-tracker-section .section-header { display: none; }
+        .practice-tracker-panel {
+            background: #ffffff;
+            border-radius: 14px;
+            border: 1px solid #e8ecf3;
+            box-shadow: 0 6px 28px rgba(45, 55, 72, 0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .practice-sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 14px 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+        }
+        .practice-sidebar-header h2 {
+            margin: 0;
+            font-size: 1.05em;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        .practice-tracker-badge {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 0.72em;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .practice-tracker-stack {
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        .practice-sidebar .practice-calendar-panel {
+            margin-top: 0;
+            border-top: 1px solid #e8ecf3;
+            border-radius: 0 0 14px 14px;
+        }
+        .practice-counter-panel {
+            padding: 16px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e8ecf3;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .practice-counter-label {
+            font-size: 0.72em;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #667eea;
+            margin: 0 0 6px;
+        }
+        .practice-counter-date {
+            color: #64748b;
+            font-size: 0.8em;
+            margin: 0 0 14px;
+            line-height: 1.35;
+        }
+        .practice-stepper {
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06);
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+        .practice-stepper-btn {
+            flex: 0 0 44px;
+            border: none;
+            background: #f1f5f9;
+            color: #475569;
+            font-size: 1.6rem;
+            font-weight: 300;
+            line-height: 1;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+        .practice-stepper-btn:hover:not(:disabled) {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+        .practice-stepper-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+        .practice-stepper-btn.practice-stepper-plus {
+            background: linear-gradient(180deg, #7c8ff0 0%, #667eea 100%);
+            color: #fff;
+            font-size: 1.75rem;
+            font-weight: 400;
+        }
+        .practice-stepper-btn.practice-stepper-plus:hover:not(:disabled) {
+            background: linear-gradient(180deg, #667eea 0%, #5a67d8 100%);
+            color: #fff;
+        }
+        .practice-stepper-display {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 8px;
+            min-width: 0;
+            border-left: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+        }
+        .practice-counter-value {
+            font-size: 2.25rem;
+            font-weight: 800;
+            line-height: 1;
+            font-variant-numeric: tabular-nums;
+            color: #cbd5e1;
+            transition: color 0.2s, transform 0.15s;
+        }
+        .practice-counter-value.active { color: #059669; }
+        .practice-counter-value.bump {
+            transform: scale(1.08);
+        }
+        .practice-counter-unit {
+            font-size: 0.72em;
+            color: #94a3b8;
+            margin-top: 4px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+        .btn-practice-ghost {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            color: #94a3b8;
+            font-size: 0.82em;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: color 0.15s, background 0.15s;
+        }
+        .btn-practice-ghost:hover {
+            color: #ef4444;
+            background: #fef2f2;
+        }
+        .practice-calendar-panel {
+            padding: 14px 16px 12px;
+            background: #fff;
+            flex-shrink: 0;
+        }
+        .practice-calendar-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            gap: 8px;
+        }
+        .practice-calendar-toolbar h3 {
+            margin: 0;
+            font-size: 0.88em;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        .practice-calendar-nav {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: #f1f5f9;
+            border-radius: 10px;
+            padding: 4px;
+        }
+        .practice-calendar-nav button {
+            background: transparent;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #475569;
+            line-height: 1;
+            transition: background 0.15s, color 0.15s;
+        }
+        .practice-calendar-nav button:hover {
+            background: #fff;
+            color: #667eea;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+        }
+        .practice-calendar-month-label {
+            font-weight: 600;
+            font-size: 0.9em;
+            min-width: 118px;
+            text-align: center;
+            color: #334155;
+            padding: 0 6px;
+        }
+        .practice-calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 6px;
+        }
+        .practice-calendar-weekdays span {
+            text-align: center;
+            font-size: 0.68em;
+            font-weight: 600;
+            color: #94a3b8;
+            letter-spacing: 0.04em;
+            padding-bottom: 4px;
+        }
+        .practice-calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+        .practice-calendar-day {
+            aspect-ratio: 1;
+            min-height: 0;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1px;
+            font-weight: 600;
+            color: #64748b;
+            background: #f8fafc;
+            border: 1px solid transparent;
+            padding: 2px;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .practice-calendar-day.empty {
+            background: transparent;
+            border: none;
+            pointer-events: none;
+        }
+        .practice-calendar-day.future {
+            background: transparent;
+            color: #cbd5e1;
+        }
+        .practice-calendar-day.editable {
+            cursor: pointer;
+        }
+        .practice-calendar-day.editable:hover {
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.35);
+        }
+        .practice-calendar-day.selected {
+            box-shadow: 0 0 0 2px #667eea;
+            z-index: 1;
+        }
+        .practice-calendar-hint {
+            margin-top: 8px;
+            font-size: 0.65em;
+            color: #94a3b8;
+            line-height: 1.35;
+        }
+        .btn-practice-today-link {
+            display: none;
+            width: 100%;
+            margin-top: 8px;
+            padding: 8px;
+            border: 1px dashed #c7d2fe;
+            border-radius: 8px;
+            background: #eef2ff;
+            color: #667eea;
+            font-size: 0.8em;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-practice-today-link.visible { display: block; }
+        .btn-practice-today-link:hover { background: #e0e7ff; }
+        .practice-calendar-day.today {
+            border-color: #667eea;
+            background: #eef2ff;
+            color: #4338ca;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+        }
+        .practice-calendar-day.done {
+            background: linear-gradient(160deg, #d1fae5 0%, #a7f3d0 100%);
+            border-color: #6ee7b7;
+            color: #065f46;
+        }
+        .practice-calendar-day.done .day-count {
+            font-size: 0.95em;
+            font-weight: 800;
+            line-height: 1;
+        }
+        .practice-calendar-day.missed {
+            background: #fef2f2;
+            border-color: #fecaca;
+            color: #991b1b;
+        }
+        .practice-calendar-day.missed::after {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #f87171;
+            margin-top: 1px;
+        }
+        .practice-calendar-day .day-num {
+            font-size: 0.7em;
+            font-weight: 600;
+            opacity: 0.75;
+            line-height: 1;
+        }
+        .practice-calendar-day.done .day-num,
+        .practice-calendar-day.missed .day-num { opacity: 1; }
+        .practice-calendar-legend {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid #f1f5f9;
+            font-size: 0.68em;
+            color: #94a3b8;
+        }
+        .practice-calendar-legend span {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .legend-swatch {
+            width: 18px;
+            height: 18px;
+            border-radius: 6px;
+            flex-shrink: 0;
+        }
+        .legend-swatch.green {
+            background: linear-gradient(160deg, #d1fae5, #a7f3d0);
+            border: 1px solid #6ee7b7;
+        }
+        .legend-swatch.red {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            position: relative;
+        }
+        .legend-swatch.red::after {
+            content: '';
+            position: absolute;
+            bottom: 3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #f87171;
+        }
+        @media (min-width: 1100px) {
+            .page-layout {
+                display: flex;
+                align-items: flex-start;
+            }
+            .page-main {
+                flex: 1;
+                min-width: 0;
+            }
+            .practice-sidebar {
+                display: block;
+                flex: 0 0 300px;
+                align-self: flex-start;
+                padding: 16px 14px 24px 0;
+                background: #fafbfc;
+                border-left: 1px solid #e8ecf3;
+                position: sticky;
+                top: 16px;
+                z-index: 90;
+                max-height: calc(100vh - 32px);
+            }
+            .practice-sidebar #practice-tracker {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                max-height: calc(100vh - 32px);
+            }
+            .practice-tracker-panel {
+                flex-shrink: 1;
+                min-height: 0;
+                overflow-y: auto;
+                border-radius: 14px 14px 0 0;
+                border-bottom: none;
+                overscroll-behavior: contain;
+            }
+            .practice-sidebar .practice-calendar-panel {
+                flex-shrink: 0;
+                position: sticky;
+                top: 16px;
+                width: 100%;
+                border-radius: 0 0 14px 14px;
+                box-shadow: 0 6px 28px rgba(45, 55, 72, 0.08);
+                border: 1px solid #e8ecf3;
+                border-top: 1px solid #e8ecf3;
+                background: #fff;
+            }
+            .content { padding: 40px 32px 40px 40px; }
+        }
+        @media (max-width: 1099px) {
+            .practice-sidebar,
+            .practice-tracker-section { display: none !important; }
         }
         
         .content { padding: 40px; }
@@ -2576,6 +3041,43 @@
             font-size: 0.95em;
         }
 
+        .info-card-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .info-card {
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 18px 20px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .info-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.12);
+        }
+        .info-card h4 {
+            margin: 0 0 10px 0;
+            font-size: 1.05em;
+            color: #2d3748;
+        }
+        .info-card p {
+            margin: 0;
+            color: #4a5568;
+            font-size: 0.92em;
+            line-height: 1.55;
+        }
+        #rules .info-card {
+            border-left: 4px solid #667eea;
+        }
+        #did-you-know .info-card {
+            border-left: 4px solid #48bb78;
+        }
+
         /* ===== RESPONSIVE — TABLET (≤ 768px) ===== */
         @media (max-width: 768px) {
             body { padding: 8px; }
@@ -3093,7 +3595,9 @@
             <div class="stat-box"><h3>13</h3><p>Topics Covered</p></div>
             <div class="stat-box"><h3>142</h3><p>Animated Visuals</p></div>
         </div>
-        
+
+        <div class="page-layout">
+        <div class="page-main">
         <nav>
             <div class="nav-practice-bar">
                 <button type="button" id="btn-random-question" class="btn-random-question" disabled title="Select one or more topics below first">Random Question</button>
@@ -3101,7 +3605,7 @@
                 <button type="button" id="btn-clear-topics" class="btn-topic-util">Clear all</button>
                 <span id="practice-selection-hint" class="practice-hint">Tick topics below for practice mode</span>
             </div>
-            <ul>
+            <ul class="nav-topics-list">
                 <li class="nav-topic-item">
                     <label class="topic-select-label" title="Include Sorting in random practice">
                         <input type="checkbox" class="topic-practice-checkbox" data-section-id="sorting-algorithms" data-topic-label="Sorting">
@@ -3193,10 +3697,19 @@
                     </label>
                     <a href="#dynamic-programming" onclick="scrollToSection(event, 'dynamic-programming')">DP (19)</a>
                 </li>
-                <li><a href="#video-resources" onclick="scrollToSection(event, 'video-resources')">Videos</a></li>
             </ul>
+
+            <hr class="nav-divider" aria-hidden="true">
+
+            <div class="nav-resources-bar">
+                <ul>
+                    <li><a href="#videos" onclick="scrollToSection(event, 'videos')">Videos</a></li>
+                    <li><a href="#rules" onclick="scrollToSection(event, 'rules')">Rules</a></li>
+                    <li><a href="#did-you-know" onclick="scrollToSection(event, 'did-you-know')">Did you know</a></li>
+                </ul>
+            </div>
         </nav>
-        
+
         <div class="content">
 
 <!-- ==================== SORTING ALGORITHMS ==================== -->
@@ -3207,7 +3720,7 @@
     </div>
 
     <!-- ===== SELECTION SORT ===== -->
-    <div class="question-card">
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/sort-an-array/description/">
         <div class="question-header">
             <span class="question-title">1. Selection Sort</span>
             <span class="difficulty easy">Easy</span>
@@ -3221,6 +3734,7 @@
                 <li>Space Complexity: O(1) &mdash; in-place sorting</li>
                 <li>Not stable</li>
             </ul>
+            <p><strong>Reference:</strong> <a href="https://leetcode.com/problems/sort-an-array/description/" target="_blank" rel="noopener noreferrer">LeetCode — Sort an Array (LC 912)</a></p>
         </div>
         <div class="test-cases">
             <div class="test-case">
@@ -3278,7 +3792,7 @@ public static void selectionSort(int[] arr) {
     </div>
 
     <!-- ===== BUBBLE SORT ===== -->
-    <div class="question-card">
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/sort-an-array/description/">
         <div class="question-header">
             <span class="question-title">2. Bubble Sort</span>
             <span class="difficulty easy">Easy</span>
@@ -3292,6 +3806,7 @@ public static void selectionSort(int[] arr) {
                 <li>Space Complexity: O(1) &mdash; in-place sorting</li>
                 <li>Stable sort</li>
             </ul>
+            <p><strong>Reference:</strong> <a href="https://leetcode.com/problems/sort-an-array/description/" target="_blank" rel="noopener noreferrer">LeetCode — Sort an Array (LC 912)</a></p>
         </div>
         <div class="test-cases">
             <div class="test-case">
@@ -3348,7 +3863,7 @@ public static void bubbleSort(int[] arr) {
     </div>
 
     <!-- ===== INSERTION SORT ===== -->
-    <div class="question-card">
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/sort-an-array/description/">
         <div class="question-header">
             <span class="question-title">3. Insertion Sort</span>
             <span class="difficulty easy">Easy</span>
@@ -3362,6 +3877,7 @@ public static void bubbleSort(int[] arr) {
                 <li>Space Complexity: O(1) &mdash; in-place sorting</li>
                 <li>Stable sort &mdash; excellent for nearly-sorted data</li>
             </ul>
+            <p><strong>Reference:</strong> <a href="https://leetcode.com/problems/sort-an-array/description/" target="_blank" rel="noopener noreferrer">LeetCode — Sort an Array (LC 912)</a></p>
         </div>
         <div class="test-cases">
             <div class="test-case">
@@ -3415,7 +3931,7 @@ public static void insertionSort(int[] arr) {
     </div>
 
     <!-- ===== MERGE SORT ===== -->
-    <div class="question-card">
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/sort-an-array/description/">
         <div class="question-header">
             <span class="question-title">4. Merge Sort</span>
             <span class="difficulty medium">Medium</span>
@@ -3429,6 +3945,7 @@ public static void insertionSort(int[] arr) {
                 <li>Space Complexity: O(n) &mdash; requires auxiliary array</li>
                 <li>Stable sort &mdash; used in Java&rsquo;s Arrays.sort for objects</li>
             </ul>
+            <p><strong>Reference:</strong> <a href="https://leetcode.com/problems/sort-an-array/description/" target="_blank" rel="noopener noreferrer">LeetCode — Sort an Array (LC 912)</a></p>
         </div>
         <div class="test-cases">
             <div class="test-case">
@@ -3489,7 +4006,7 @@ public static void merge(int[] a, int l, int m, int r) {
     </div>
 
     <!-- ===== QUICK SORT ===== -->
-    <div class="question-card">
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/sort-an-array/description/">
         <div class="question-header">
             <span class="question-title">5. Quick Sort</span>
             <span class="difficulty medium">Medium</span>
@@ -3503,6 +4020,7 @@ public static void merge(int[] a, int l, int m, int r) {
                 <li>Space Complexity: O(log n) &mdash; recursion stack</li>
                 <li>Not stable &mdash; but very fast in practice (cache friendly)</li>
             </ul>
+            <p><strong>Reference:</strong> <a href="https://leetcode.com/problems/sort-an-array/description/" target="_blank" rel="noopener noreferrer">LeetCode — Sort an Array (LC 912)</a></p>
         </div>
         <div class="test-cases">
             <div class="test-case">
@@ -12531,10 +13049,10 @@ int uniquePathsWithObstacles(int[][] grid) {
     </div>
 </section>
 
-<!-- ==================== VIDEO RESOURCES ==================== -->
-<section id="video-resources" class="section video-resources">
+<!-- ==================== VIDEOS ==================== -->
+<section id="videos" class="section video-resources">
     <div class="section-header">
-        <h2>Video Resources</h2>
+        <h2>Videos</h2>
         <p>Recommended walkthroughs for each major topic in this guide</p>
     </div>
 
@@ -12614,8 +13132,125 @@ int uniquePathsWithObstacles(int[][] grid) {
     </div>
 </section>
 
+<!-- ==================== RULES ==================== -->
+<section id="rules" class="section">
+    <div class="section-header">
+        <h2>Rules</h2>
+        <p>Simple habits that make this guide and your practice actually stick</p>
+    </div>
+    <ul class="info-card-list">
+            <li class="info-card">
+                <h4>Understand, then code</h4>
+                <p>Read the problem and intuition before opening a solution. If you cannot explain the approach in plain English, you are not ready to memorize code.</p>
+            </li>
+            <li class="info-card">
+                <h4>One topic at a time</h4>
+                <p>Finish a pattern section (e.g. sliding window) before jumping to the next. Depth beats skimming ten techniques in one day.</p>
+            </li>
+            <li class="info-card">
+                <h4>Log what you solve</h4>
+                <p>Use the practice tracker on the right (desktop) to record daily counts. Backfill missed days if you forgot&mdash;consistency matters more than perfection.</p>
+            </li>
+            <li class="info-card">
+                <h4>Re-solve without looking</h4>
+                <p>After watching a video or reading a solution, close everything and solve again from scratch within 48 hours.</p>
+            </li>
+            <li class="info-card">
+                <h4>Time yourself lightly</h4>
+                <p>Easy: ~20 min, Medium: ~35 min, Hard: ~45 min. If you are stuck past that, read hints&mdash;do not grind endlessly on day one.</p>
+            </li>
+            <li class="info-card">
+                <h4>Random practice</h4>
+                <p>Select topics in the nav and use <strong>Random Question</strong> to mimic interview unpredictability instead of only solving in list order.</p>
+            </li>
+        </ul>
+</section>
+
+<!-- ==================== DID YOU KNOW ==================== -->
+<section id="did-you-know" class="section">
+    <div class="section-header">
+        <h2>Did you know</h2>
+        <p>Small facts that connect patterns across this guide</p>
+    </div>
+    <ul class="info-card-list">
+            <li class="info-card">
+                <h4>Sliding window = fixed budget</h4>
+                <p>Many window problems are really &ldquo;keep a valid range and shrink or grow it&rdquo;&mdash;the same idea as limiting sum, distinct characters, or max frequency.</p>
+            </li>
+            <li class="info-card">
+                <h4>Prefix sum turns ranges into O(1)</h4>
+                <p>Once you have prefix sums, any subarray sum query is two pointer lookups. Pair with a hash map for &ldquo;sum equals K&rdquo; style problems.</p>
+            </li>
+            <li class="info-card">
+                <h4>Binary search is not only for sorted arrays</h4>
+                <p>Answer-space binary search works on monotonic predicates too&mdash;minimize maximum, capacity, days to ship, etc.</p>
+            </li>
+            <li class="info-card">
+                <h4>Monotonic stack = next greater/smaller</h4>
+                <p>Each element is pushed and popped once&mdash;O(n) for histogram, temperatures, and daily temperatures style problems.</p>
+            </li>
+            <li class="info-card">
+                <h4>Tree BFS vs DFS</h4>
+                <p>BFS uses a queue for level order and shortest path in unweighted trees; DFS uses recursion or a stack for paths, structure, and backtracking.</p>
+            </li>
+            <li class="info-card">
+                <h4>DP = overlapping subproblems</h4>
+                <p>If brute force recalculates the same states, tabulation or memoization usually applies&mdash;start from the recurrence, then optimize space.</p>
+            </li>
+        </ul>
+</section>
+
         </div>
-        
+        </div>
+
+        <aside class="practice-sidebar" aria-label="Daily practice tracker">
+            <section id="practice-tracker" class="practice-tracker-section">
+                <div class="practice-tracker-panel">
+                    <div class="practice-sidebar-header">
+                        <h2>Practice</h2>
+                        <span class="practice-tracker-badge" id="practice-month-total">0 this month</span>
+                    </div>
+                    <div class="practice-tracker-stack">
+                        <div class="practice-counter-panel">
+                            <p class="practice-counter-label" id="practice-counter-label-text">Today</p>
+                            <p class="practice-counter-date" id="practice-counter-date-label">—</p>
+                            <div class="practice-stepper" role="group" aria-label="Problem count for selected day">
+                                <button type="button" class="practice-stepper-btn" id="btn-practice-minus" aria-label="Remove one problem" disabled>&minus;</button>
+                                <div class="practice-stepper-display">
+                                    <span class="practice-counter-value" id="practice-today-count">0</span>
+                                    <span class="practice-counter-unit" id="practice-counter-unit">solved</span>
+                                </div>
+                                <button type="button" class="practice-stepper-btn practice-stepper-plus" id="btn-practice-plus-one" aria-label="Add one problem">+</button>
+                            </div>
+                            <button type="button" class="btn-practice-today-link" id="btn-practice-jump-today">&larr; Back to today</button>
+                            <button type="button" class="btn-practice-ghost" id="btn-practice-reset-today">Clear day</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="practice-calendar-panel">
+                    <div class="practice-calendar-toolbar">
+                        <h3>Calendar</h3>
+                        <div class="practice-calendar-nav">
+                            <button type="button" id="practice-cal-prev" aria-label="Previous month">&lsaquo;</button>
+                            <span class="practice-calendar-month-label" id="practice-cal-month-label">May 2026</span>
+                            <button type="button" id="practice-cal-next" aria-label="Next month">&rsaquo;</button>
+                        </div>
+                    </div>
+                    <div class="practice-calendar-weekdays">
+                        <span>S</span><span>M</span><span>T</span><span>W</span>
+                        <span>T</span><span>F</span><span>S</span>
+                    </div>
+                    <div class="practice-calendar-days" id="practice-calendar-days"></div>
+                    <div class="practice-calendar-legend">
+                        <span><i class="legend-swatch green" aria-hidden="true"></i> Solved</span>
+                        <span><i class="legend-swatch red" aria-hidden="true"></i> Missed</span>
+                    </div>
+                    <p class="practice-calendar-hint">Click any past day or today to select it, then use + / &minus; to log or fix counts.</p>
+                </div>
+            </section>
+        </aside>
+        </div>
+
         <footer>
             <p>&copy; 2026 LeetCode Interactive Guide | Created for Interview Preparation</p>
         </footer>
@@ -12641,6 +13276,285 @@ int uniquePathsWithObstacles(int[][] grid) {
     <button type="button" class="scroll-top" id="scroll-top-btn" aria-label="Scroll to top" title="Back to top">&#8593;</button>
 
 <script>
+// ===== DAILY PRACTICE TRACKER =====
+const DAILY_PRACTICE_STORAGE_KEY = 'leetcodeGuideDailyPractice';
+
+var dailyPracticeLog = {};
+var practiceCalendarView = { year: 0, month: 0 };
+var selectedPracticeDateKey = null;
+
+function dateKeyFromParts(y, m, d) {
+    var mm = String(m + 1).padStart(2, '0');
+    var dd = String(d).padStart(2, '0');
+    return y + '-' + mm + '-' + dd;
+}
+
+function dateKeyFromDate(dt) {
+    return dateKeyFromParts(dt.getFullYear(), dt.getMonth(), dt.getDate());
+}
+
+function parseDateKey(key) {
+    var p = key.split('-').map(Number);
+    return new Date(p[0], p[1] - 1, p[2]);
+}
+
+function loadDailyPracticeLog() {
+    try {
+        var raw = localStorage.getItem(DAILY_PRACTICE_STORAGE_KEY);
+        dailyPracticeLog = raw ? JSON.parse(raw) : {};
+        if (typeof dailyPracticeLog !== 'object' || dailyPracticeLog === null) {
+            dailyPracticeLog = {};
+        }
+    } catch (e) {
+        dailyPracticeLog = {};
+    }
+}
+
+function saveDailyPracticeLog() {
+    try {
+        localStorage.setItem(DAILY_PRACTICE_STORAGE_KEY, JSON.stringify(dailyPracticeLog));
+    } catch (e) { /* ignore */ }
+}
+
+function getDayCount(key) {
+    var n = dailyPracticeLog[key];
+    return typeof n === 'number' && n > 0 ? n : 0;
+}
+
+function getTodayDateKey() {
+    return dateKeyFromDate(new Date());
+}
+
+function getSelectedPracticeDateKey() {
+    return selectedPracticeDateKey || getTodayDateKey();
+}
+
+function isFutureDateKey(key) {
+    var p = key.split('-').map(Number);
+    var cellStart = new Date(p[0], p[1] - 1, p[2]);
+    var todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    return cellStart > todayStart;
+}
+
+function selectPracticeDate(key) {
+    if (!key || isFutureDateKey(key)) return;
+    selectedPracticeDateKey = key;
+    renderDailyPracticeTracker();
+}
+
+function selectTodayForPractice() {
+    selectedPracticeDateKey = getTodayDateKey();
+    var now = new Date();
+    practiceCalendarView.year = now.getFullYear();
+    practiceCalendarView.month = now.getMonth();
+    renderDailyPracticeTracker();
+}
+
+function addToSelectedDay(amount) {
+    var add = Math.max(1, Math.floor(Number(amount) || 1));
+    var key = getSelectedPracticeDateKey();
+    if (isFutureDateKey(key)) return;
+    dailyPracticeLog[key] = getDayCount(key) + add;
+    saveDailyPracticeLog();
+    renderDailyPracticeTracker();
+    bumpCounterDisplay();
+}
+
+function subtractFromSelectedDay(amount) {
+    var sub = Math.max(1, Math.floor(Number(amount) || 1));
+    var key = getSelectedPracticeDateKey();
+    if (isFutureDateKey(key)) return;
+    var next = getDayCount(key) - sub;
+    if (next <= 0) delete dailyPracticeLog[key];
+    else dailyPracticeLog[key] = next;
+    saveDailyPracticeLog();
+    renderDailyPracticeTracker();
+}
+
+function bumpCounterDisplay() {
+    var val = document.getElementById('practice-today-count');
+    if (!val) return;
+    val.classList.remove('bump');
+    void val.offsetWidth;
+    val.classList.add('bump');
+    setTimeout(function() { val.classList.remove('bump'); }, 180);
+}
+
+function resetSelectedDayCount() {
+    var key = getSelectedPracticeDateKey();
+    if (isFutureDateKey(key)) return;
+    delete dailyPracticeLog[key];
+    saveDailyPracticeLog();
+    renderDailyPracticeTracker();
+}
+
+function renderTodayCounter() {
+    var now = new Date();
+    var todayKey = getTodayDateKey();
+    var key = getSelectedPracticeDateKey();
+    var count = getDayCount(key);
+    var isToday = key === todayKey;
+    var selectedDate = parseDateKey(key);
+    var labelHeading = document.getElementById('practice-counter-label-text');
+    var label = document.getElementById('practice-counter-date-label');
+    var val = document.getElementById('practice-today-count');
+    var btnMinus = document.getElementById('btn-practice-minus');
+    var btnToday = document.getElementById('btn-practice-jump-today');
+    var btnReset = document.getElementById('btn-practice-reset-today');
+    var monthTotal = document.getElementById('practice-month-total');
+
+    if (labelHeading) {
+        labelHeading.textContent = isToday ? 'Today' : 'Selected day';
+    }
+    if (label) {
+        label.textContent = selectedDate.toLocaleDateString(undefined, {
+            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+        });
+    }
+    if (btnToday) {
+        if (isToday) btnToday.classList.remove('visible');
+        else btnToday.classList.add('visible');
+    }
+    if (btnReset) {
+        btnReset.textContent = isToday ? 'Clear today' : 'Clear this day';
+    }
+    if (val) {
+        val.textContent = String(count);
+        if (count > 0) val.classList.add('active');
+        else val.classList.remove('active');
+    }
+    if (btnMinus) btnMinus.disabled = count <= 0;
+    if (monthTotal) {
+        var total = 0;
+        Object.keys(dailyPracticeLog).forEach(function(k) {
+            var parts = k.split('-').map(Number);
+            if (parts[0] === now.getFullYear() && parts[1] === now.getMonth() + 1) {
+                total += getDayCount(k);
+            }
+        });
+        monthTotal.textContent = total + ' this month';
+    }
+}
+
+function renderPracticeCalendar() {
+    var container = document.getElementById('practice-calendar-days');
+    var monthLabel = document.getElementById('practice-cal-month-label');
+    if (!container) return;
+
+    var y = practiceCalendarView.year;
+    var m = practiceCalendarView.month;
+    var now = new Date();
+    var todayKey = dateKeyFromDate(now);
+
+    if (monthLabel) {
+        monthLabel.textContent = new Date(y, m, 1).toLocaleDateString(undefined, {
+            month: 'long', year: 'numeric'
+        });
+    }
+
+    container.innerHTML = '';
+    var firstDow = new Date(y, m, 1).getDay();
+    var daysInMonth = new Date(y, m + 1, 0).getDate();
+
+    for (var i = 0; i < firstDow; i++) {
+        var pad = document.createElement('div');
+        pad.className = 'practice-calendar-day empty';
+        container.appendChild(pad);
+    }
+
+    for (var day = 1; day <= daysInMonth; day++) {
+        var cellDate = new Date(y, m, day);
+        var key = dateKeyFromParts(y, m, day);
+        var count = getDayCount(key);
+        var isToday = key === todayKey;
+        var isFuture = isFutureDateKey(key);
+        var isPastOrToday = !isFuture;
+        var isSelected = key === getSelectedPracticeDateKey();
+
+        var cell = document.createElement('div');
+        cell.className = 'practice-calendar-day';
+        cell.setAttribute('data-date-key', key);
+        if (isFuture) cell.classList.add('future');
+        else cell.classList.add('editable');
+        if (isToday) cell.classList.add('today');
+        if (isSelected) cell.classList.add('selected');
+
+        if (count > 0) {
+            cell.classList.add('done');
+            cell.innerHTML = '<span class="day-num">' + day + '</span><span class="day-count">' + count + '</span>';
+        } else if (isPastOrToday) {
+            cell.classList.add('missed');
+            cell.innerHTML = '<span class="day-num">' + day + '</span>';
+        } else {
+            cell.innerHTML = '<span class="day-num">' + day + '</span>';
+        }
+
+        cell.title = isFuture
+            ? key + ' (future)'
+            : key + (count > 0 ? ': ' + count + ' solved — click to edit' : ': click to log');
+        container.appendChild(cell);
+    }
+}
+
+function renderDailyPracticeTracker() {
+    renderTodayCounter();
+    renderPracticeCalendar();
+}
+
+function initDailyPracticeTracker() {
+    loadDailyPracticeLog();
+    var now = new Date();
+    practiceCalendarView.year = now.getFullYear();
+    practiceCalendarView.month = now.getMonth();
+    selectedPracticeDateKey = getTodayDateKey();
+
+    var btnPlus = document.getElementById('btn-practice-plus-one');
+    var btnMinus = document.getElementById('btn-practice-minus');
+    var btnReset = document.getElementById('btn-practice-reset-today');
+    var btnToday = document.getElementById('btn-practice-jump-today');
+    var btnPrev = document.getElementById('practice-cal-prev');
+    var btnNext = document.getElementById('practice-cal-next');
+    var calDays = document.getElementById('practice-calendar-days');
+
+    if (btnPlus) btnPlus.addEventListener('click', function() { addToSelectedDay(1); });
+    if (btnMinus) btnMinus.addEventListener('click', function() { subtractFromSelectedDay(1); });
+    if (btnToday) btnToday.addEventListener('click', selectTodayForPractice);
+    if (btnReset) btnReset.addEventListener('click', function() {
+        var key = getSelectedPracticeDateKey();
+        var msg = key === getTodayDateKey()
+            ? 'Clear today\u2019s count?'
+            : 'Clear count for ' + parseDateKey(key).toLocaleDateString() + '?';
+        if (confirm(msg)) resetSelectedDayCount();
+    });
+    if (calDays) {
+        calDays.addEventListener('click', function(e) {
+            var cell = e.target.closest('.practice-calendar-day.editable');
+            if (!cell) return;
+            var key = cell.getAttribute('data-date-key');
+            if (key) selectPracticeDate(key);
+        });
+    }
+    if (btnPrev) btnPrev.addEventListener('click', function() {
+        practiceCalendarView.month -= 1;
+        if (practiceCalendarView.month < 0) {
+            practiceCalendarView.month = 11;
+            practiceCalendarView.year -= 1;
+        }
+        renderPracticeCalendar();
+    });
+    if (btnNext) btnNext.addEventListener('click', function() {
+        practiceCalendarView.month += 1;
+        if (practiceCalendarView.month > 11) {
+            practiceCalendarView.month = 0;
+            practiceCalendarView.year += 1;
+        }
+        renderPracticeCalendar();
+    });
+
+    renderDailyPracticeTracker();
+}
+
 // ===== PRACTICE MODE — RANDOM QUESTION =====
 // LC problem number -> official LeetCode URL (source: leetcode-problem-links.json)
 const LEETCODE_PROBLEM_LINKS = {
@@ -12749,6 +13663,7 @@ const LEETCODE_PROBLEM_LINKS = {
     "784": "https://leetcode.com/problems/letter-case-permutation/",
     "852": "https://leetcode.com/problems/peak-index-in-a-mountain-array/",
     "875": "https://leetcode.com/problems/koko-eating-bananas/",
+    "912": "https://leetcode.com/problems/sort-an-array/description/",
     "904": "https://leetcode.com/problems/fruit-into-baskets/",
     "921": "https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/",
     "930": "https://leetcode.com/problems/binary-subarrays-with-sum/",
@@ -12915,10 +13830,19 @@ function getLeetCodeUrlForTitle(titleText) {
     return lcNum && LEETCODE_PROBLEM_LINKS[lcNum] ? LEETCODE_PROBLEM_LINKS[lcNum] : null;
 }
 
-function updatePracticeLeetCodeLink(titleText) {
+function getLeetCodeUrlForCard(card) {
+    if (!card) return null;
+    if (card.dataset.leetcodeUrl) return card.dataset.leetcodeUrl;
+    const titleNode = card.querySelector('.question-title');
+    return getLeetCodeUrlForTitle(titleNode ? titleNode.textContent.trim() : '');
+}
+
+function updatePracticeLeetCodeLink(cardOrTitle) {
     const linkEl = document.getElementById('practice-modal-leetcode-link');
     if (!linkEl) return;
-    const url = getLeetCodeUrlForTitle(titleText);
+    const url = (cardOrTitle && cardOrTitle.nodeType === 1)
+        ? getLeetCodeUrlForCard(cardOrTitle)
+        : getLeetCodeUrlForTitle(cardOrTitle);
     if (url) {
         linkEl.href = url;
         linkEl.classList.add('visible');
@@ -12990,7 +13914,7 @@ function showRandomQuestionModal(card) {
     const titleText = titleNode ? titleNode.textContent.trim() : 'Random Question';
 
     if (titleEl) titleEl.textContent = titleText;
-    updatePracticeLeetCodeLink(titleText);
+    updatePracticeLeetCodeLink(card);
 
     body.innerHTML = '';
     const clone = buildQuestionCardClone(card);
@@ -25767,6 +26691,7 @@ function wrapInCollapsible(element, label, type) {
 // ===== INIT ALL ON PAGE LOAD =====
 document.addEventListener('DOMContentLoaded', function() {
     // Practice mode & scroll-to-top first — animation inits below can throw
+    initDailyPracticeTracker();
     initPracticeMode();
     initScrollTopButton();
 
