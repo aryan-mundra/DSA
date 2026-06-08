@@ -79,6 +79,11 @@ h4{color:var(--accent2);font-size:.9rem;margin:16px 0 6px;font-weight:600}
 h5{color:var(--orange);font-size:.82rem;margin:12px 0 4px;font-weight:600}
 .note{background:rgba(78,205,196,.08);border-left:3px solid var(--green);padding:10px 14px;border-radius:0 6px 6px 0;margin:10px 0;font-size:.82rem;color:var(--text2)}
 .warn{background:rgba(255,85,85,.08);border-left:3px solid var(--red);padding:10px 14px;border-radius:0 6px 6px 0;margin:10px 0;font-size:.82rem}
+.heap-key{background:rgba(0,0,0,.38);color:var(--text);padding:8px 12px;border-radius:6px;margin:6px 0;font-weight:600;border:1px solid var(--border)}
+[data-theme="light"] .heap-key{background:rgba(0,0,0,.09);color:var(--text)}
+.heap-diagram{background:var(--code-bg);border:1px solid var(--code-border);border-radius:8px;padding:12px 16px;margin:10px 0;font-family:'JetBrains Mono','Fira Code',monospace;font-size:.76rem;line-height:1.55;overflow-x:auto}
+.heap-diagram .heap-root{color:var(--accent);font-weight:800;background:rgba(108,140,255,.18);padding:1px 6px;border-radius:4px}
+.heap-diagram .heap-caption{color:var(--text2);font-size:.72rem;margin-top:6px;display:block}
 .comparison{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
 .comparison>div{border-radius:8px;padding:2px}
 .comp-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;padding:4px 10px;border-radius:4px}
@@ -253,6 +258,7 @@ kbd{background:var(--surface2);border:1px solid var(--border);border-radius:4px;
     <a class="nav-link" href="#linkedlist">LinkedList</a>
     <a class="nav-link" href="#stack">Stack</a>
     <a class="nav-link" href="#queue">Queue</a>
+    <a class="nav-link" href="#heap">Heap</a>
     <a class="nav-link" href="#set">Set</a>
     <a class="nav-link" href="#hashmap">HashMap</a>
   </div>
@@ -266,6 +272,7 @@ kbd{background:var(--surface2);border:1px solid var(--border);border-radius:4px;
   <div class="nav-group"><div class="nav-group-title">Functional Java</div>
     <a class="nav-link" href="#lambda">Lambda Expressions</a>
     <a class="nav-link" href="#streams">Streams</a>
+    <a class="nav-link" href="#streams-advance">Streams — Advance Java</a>
     <a class="nav-link" href="#comparator">Comparator</a>
   </div>
   <div class="nav-group"><div class="nav-group-title">Modern Java</div>
@@ -279,7 +286,7 @@ kbd{background:var(--surface2);border:1px solid var(--border);border-radius:4px;
 <!-- STATS -->
 <div class="stats">
   <div class="stat"><div class="stat-num">80+</div><div class="stat-label">Quick References</div></div>
-  <div class="stat"><div class="stat-num">10</div><div class="stat-label">Categories</div></div>
+  <div class="stat"><div class="stat-num">11</div><div class="stat-label">Categories</div></div>
   <div class="stat"><div class="stat-num">Java 21</div><div class="stat-label">Latest Features</div></div>
 </div>
 
@@ -965,6 +972,81 @@ for (Integer item : queue) System.out.println(item);
 
 <span class="cmt">// Poll all (destructive)</span>
 while (!queue.isEmpty()) System.out.println(queue.poll());</code></pre>
+</div></div>
+
+</section>
+
+<!-- ======================= HEAP ======================= -->
+<section class="category" id="heap">
+<div class="category-header">
+  <div class="category-icon">&#9650;</div>
+  <span class="category-title">Heap</span>
+  <span class="category-count">2 topics</span>
+</div>
+
+<div class="card" data-tags="heap maxHeap PriorityQueue poll peek root descending">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How does a <code>Max Heap</code> work with <code>PriorityQueue</code>?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>PriorityQueue&lt;Integer&gt; maxHeap =
+    new PriorityQueue&lt;&gt;((a, b) -&gt; b - a);</code></pre>
+<pre class="heap-diagram"><code>        <span class="heap-root">5</span>  <span class="cmt">← root (largest)</span>
+       ╱ ╲
+      3   2
+     ╱
+    1
+
+<span class="heap-caption">Insert {5, 3, 2, 1} — tree shape, NOT sorted left-to-right</span>
+<span class="heap-caption">poll(): 5 → 3 → 2 → 1 (descending)</span></code></pre>
+<div class="note">
+<div class="heap-key">Internal storage is not sorted.</div>
+Largest element is always at the root.<br>
+<div class="heap-key"><code>poll()</code> removes the largest element first.</div>
+Poll order: Descending (5, 3, 2, 1).
+</div>
+<h4>Memory Trick</h4>
+<div class="note">
+<strong>Max Heap</strong> &rarr; <code>poll()</code> gives <strong>Descending</strong> order<br><br>
+Heap itself is <strong>NOT</strong> sorted.<br>
+Only the root is guaranteed to be max.
+</div>
+</div></div>
+
+<div class="card" data-tags="heap minHeap PriorityQueue poll peek root ascending">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How does a <code>Min Heap</code> work with <code>PriorityQueue</code>?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>PriorityQueue&lt;Integer&gt; minHeap =
+    new PriorityQueue&lt;&gt;();
+
+<span class="cmt">// or</span>
+
+PriorityQueue&lt;Integer&gt; minHeap =
+    new PriorityQueue&lt;&gt;((a, b) -&gt; a - b);</code></pre>
+<pre class="heap-diagram"><code>        <span class="heap-root">1</span>  <span class="cmt">← root (smallest)</span>
+       ╱ ╲
+      2   3
+         ╱
+        5
+
+<span class="heap-caption">Insert {1, 2, 3, 5} — tree shape, NOT sorted left-to-right</span>
+<span class="heap-caption">poll(): 1 → 2 → 3 → 5 (ascending)</span></code></pre>
+<div class="note">
+<div class="heap-key">Internal storage is not sorted.</div>
+Smallest element is always at the root.<br>
+<div class="heap-key"><code>poll()</code> removes the smallest element first.</div>
+Poll order: Ascending (1, 2, 3, 5).
+</div>
+<h4>Memory Trick</h4>
+<div class="note">
+<strong>Min Heap</strong> &rarr; <code>poll()</code> gives <strong>Ascending</strong> order<br><br>
+Heap itself is <strong>NOT</strong> sorted.<br>
+Only the root is guaranteed to be min.
+</div>
 </div></div>
 
 </section>
@@ -2130,6 +2212,700 @@ List&lt;Integer&gt; result = nums.stream()
 <div class="card-body">
 <div class="anim-problem-tabs" id="streamTabs"></div>
 <div id="streamAnimContainer"></div>
+</div></div>
+
+</section>
+
+<!-- ======================= STREAMS — ADVANCE JAVA ======================= -->
+<section class="category" id="streams-advance">
+<div class="category-header">
+  <div class="category-icon">&#8594;</div>
+  <span class="category-title">Streams — Advance Java</span>
+  <span class="category-count">22 topics</span>
+</div>
+
+<div class="card open" data-tags="stream Arrays.stream collection list set array reference when use">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#128218; When to use <code>Arrays.stream()</code> vs <code>.stream()</code></span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>Array        -&gt; Arrays.stream()
+Collection   -&gt; .stream()
+
+Collections include:
+
+List
+Set
+Queue
+HashSet
+ArrayList
+LinkedList
+etc.</code></pre>
+</div></div>
+
+<div class="card" data-tags="stream distinct duplicate remove filter hashmap collect advance">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">1) Remove Duplicates without <code>distinct()</code></span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">Track seen elements with a <code>HashMap</code> inside <code>filter()</code> — first occurrence passes, duplicates are dropped.</div>
+<pre><code>import java.util.*;
+import java.util.stream.Collectors;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        List&lt;Integer&gt; list =
+            Arrays.asList(1, 2, 3, 2, 4, 3, 5, 1);
+
+        HashMap&lt;Integer, Boolean&gt; seen = new HashMap&lt;&gt;();
+
+        List&lt;Integer&gt; result = list.stream()
+            .filter(n -&gt; {
+
+                if (!seen.containsKey(n)) {
+                    seen.put(n, true);
+                    return true;
+                }
+
+                return false;
+            })
+            .collect(Collectors.toList());
+
+        System.out.println(result);
+    }
+}</code></pre>
+<div class="note">Output: <code>[1, 2, 3, 4, 5]</code> — order preserved (first occurrence kept).</div>
+</div></div>
+
+<div class="card" data-tags="stream duplicate get find filter hashmap collect advance">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">2) Get Duplicates</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">Opposite of remove-duplicates: keep only elements seen before — <code>containsKey</code> true means duplicate.</div>
+<pre><code>import java.util.*;
+import java.util.stream.Collectors;
+
+class Main {
+
+    public static void main(String[] args) {
+
+        List&lt;Integer&gt; al =
+            Arrays.asList(1, 2, 2, 3, 3, 4, 4, 4, 5);
+
+        HashMap&lt;Integer, Boolean&gt; hm = new HashMap&lt;&gt;();
+
+        List&lt;Integer&gt; ans = al.stream()
+            .filter(n -&gt; {
+
+                if (hm.containsKey(n)) {
+                    return true;
+                } else {
+                    hm.put(n, true);
+                    return false;
+                }
+
+            })
+            .collect(Collectors.toList());
+
+        System.out.println(ans);
+    }
+}</code></pre>
+<div class="note">Output: <code>[2, 2, 3, 3, 4, 4, 4]</code> — every repeat after the first occurrence.</div>
+</div></div>
+
+<div class="card" data-tags="stream sort descending distinct comparator reverseOrder collect advance">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">3) Sort in descending order</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note"><code>distinct()</code> removes duplicates, then <code>sorted(Comparator.reverseOrder())</code> sorts high → low.</div>
+<pre><code>import java.util.*;
+import java.util.stream.Collectors;
+
+public class StreamsSample {
+
+    public static void main(String[] args) {
+
+        List&lt;Integer&gt; list =
+            Arrays.asList(11, 11, 1, 3, 5, 6, 5);
+
+        List&lt;Integer&gt; result = list.stream()
+            .distinct()
+            .sorted(Comparator.reverseOrder())
+            .collect(Collectors.toList());
+
+        System.out.println(result);
+    }
+}</code></pre>
+<div class="note">Output: <code>[11, 6, 5, 3, 1]</code></div>
+</div></div>
+
+<div class="card" data-tags="stream sort string length comparator comparingInt collect advance">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">4) Sort strings by length (increasing)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">Given a list of strings, sort by increasing length using a lambda comparator: <code>(s1, s2) -&gt; s1.length() - s2.length()</code>.</div>
+<pre><code>import java.util.*;
+import java.util.stream.Collectors;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        List&lt;String&gt; list =
+            Arrays.asList("apple", "hi", "banana", "cat", "a");
+
+        List&lt;String&gt; result = list.stream()
+            .sorted((s1, s2) -&gt; s1.length() - s2.length())
+            .collect(Collectors.toList());
+
+        System.out.println(result);
+    }
+}</code></pre>
+<div class="note">Output: <code>[a, hi, cat, apple, banana]</code></div>
+</div></div>
+
+<div class="card" data-tags="stream max findFirst sorted reverseOrder comparator advance">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">5) Find Max Number in a list</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">Sort descending, then <code>findFirst()</code> — the largest value is first.</div>
+<pre><code>import java.util.*;
+
+class Main {
+
+    public static void main(String[] args) {
+
+        List&lt;Integer&gt; al =
+            Arrays.asList(1, 2, 2, 3, 3, 4, 4, 4, 5);
+
+        int ans = al.stream()
+            .sorted(Comparator.reverseOrder())
+            .findFirst()
+            .get();
+
+        System.out.println(ans);
+    }
+}</code></pre>
+<div class="note">Output: <code>5</code></div>
+</div></div>
+
+<div class="card" data-tags="stream allMatch even boolean check advance">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">6) Check all numbers even or not</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note"><code>allMatch()</code> returns <code>true</code> only if every element satisfies the condition.</div>
+<pre><code>import java.util.*;
+
+class Main {
+
+    public static void main(String[] args) {
+
+        List&lt;Integer&gt; al =
+            Arrays.asList(1, 2, 2, 3, 3, 4, 4, 4, 5);
+
+        boolean ans = al.stream()
+            .allMatch(n -&gt; n % 2 == 0);
+
+            <span class="cmt">// allMatch() is used when you want to check:
+            // Do ALL elements satisfy this condition?</span>
+
+        System.out.println(ans);
+    }
+}</code></pre>
+<div class="note">Output: <code>false</code> — not every number is even (1, 3, 5 are odd).</div>
+</div></div>
+
+<div class="card" data-tags="stream filter null startsWith string valueOf collect advance">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">7) Numbers starting with 1</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">Filter out <code>null</code>, then check string form with <code>String.valueOf(i).startsWith("1")</code>.</div>
+<pre><code>import java.util.*;
+import java.util.stream.Collectors;
+
+public class StreamsSample {
+
+    public static void main(String[] args) {
+
+        List&lt;Integer&gt; numbers =
+            Arrays.asList(10, 12, 20, null, 19, 30);
+
+        List&lt;Integer&gt; startWith1 = numbers.stream()
+            .filter(i -&gt; i != null)
+            .filter(i -&gt; String.valueOf(i).startsWith("1"))
+            .collect(Collectors.toList());
+
+        System.out.println(startWith1);
+    }
+}</code></pre>
+<div class="note">Output: <code>[10, 12, 19]</code></div>
+</div></div>
+
+<div class="card" data-tags="stream string longest max length sorted findFirst advance">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">8) Find the longest word in a list</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">Sort by length descending (<code>s2.length() - s1.length()</code>), then <code>findFirst()</code> gives the longest word.</div>
+<pre><code>import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        List&lt;String&gt; list =
+            Arrays.asList("apple", "hi", "banana", "cat", "a");
+
+        String max = list.stream()
+            .sorted((s1, s2) -&gt; s2.length() - s1.length())
+            .findFirst()
+            .get();
+
+        System.out.println(max);
+    }
+}</code></pre>
+<div class="note">Output: <code>banana</code></div>
+</div></div>
+
+<div class="card" data-tags="stream merge concat IntStream boxed sorted array collect advance">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">9) Merge two unsorted arrays into single sorted array</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note"><code>IntStream.concat</code> merges two int streams, then <code>boxed()</code>, <code>sorted()</code>, and <code>collect</code>.</div>
+<pre><code>import java.util.*;
+import java.util.stream.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        int[] arr1 = {5, 2, 8, 1};
+        int[] arr2 = {7, 3, 9, 4};
+
+        List&lt;Integer&gt; result = IntStream
+
+            <span class="cmt">// merge 2 streams
+            // works with arrays, lists, sets, maps etc.</span>
+            .concat(Arrays.stream(arr1), Arrays.stream(arr2))
+
+            <span class="cmt">// int -&gt; Integer</span>
+            .boxed()
+
+            <span class="cmt">// sort ascending</span>
+            .sorted()
+
+            <span class="cmt">// stream -&gt; list</span>
+            .collect(Collectors.toList());
+
+        System.out.println(result);
+    }
+}</code></pre>
+<div class="note">Output: <code>[1, 2, 3, 4, 5, 7, 8, 9]</code></div>
+</div></div>
+
+<div class="card" data-tags="stream top limit sorted reverseOrder collect advance">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">10) Get top 3 elements from the list</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">Sort descending, <code>limit(3)</code> keeps only the first 3 (largest values).</div>
+<pre><code>import java.util.*;
+import java.util.stream.Collectors;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        List&lt;Integer&gt; list =
+            Arrays.asList(5, 2, 8, 1, 9, 3, 7);
+
+        List&lt;Integer&gt; result = list.stream()
+            .sorted(Comparator.reverseOrder())
+            .limit(3)
+            .collect(Collectors.toList());
+
+        System.out.println(result);
+    }
+}</code></pre>
+<div class="note">Output: <code>[9, 8, 7]</code></div>
+</div></div>
+
+<div class="card" data-tags="stream third highest skip findFirst sorted reverseOrder advance">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">11) Get 3rd highest element from the list</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">Sort descending, <code>skip(2)</code> skips the top 2, then <code>findFirst()</code> gets the 3rd highest.</div>
+<pre><code>import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        List&lt;Integer&gt; list =
+            Arrays.asList(5, 2, 8, 1, 9, 3, 7);
+
+        int ans = list.stream()
+            .sorted(Comparator.reverseOrder())
+            .skip(2)
+            .findFirst()
+            .get();
+
+        System.out.println(ans);
+    }
+}</code></pre>
+<div class="note">Output: <code>7</code> (9 and 8 are 1st and 2nd highest).</div>
+</div></div>
+
+
+<div class="card" data-tags="stream anagram string split sorted joining equals advance">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">12) Check if two strings are anagrams or not</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">Uppercase each char, sort, join — if both normalized strings match, they are anagrams.</div>
+<pre><code>import java.util.stream.*;
+import java.util.stream.Collectors;
+
+public class StreamsSample {
+
+    public static void main(String[] args) {
+
+        String s1 = "RaceCar";
+        String s2 = "CarRace";
+
+        s1 = Stream.of(s1.split(""))
+            .map(s -&gt; s.toUpperCase())
+            .sorted()
+            .collect(Collectors.joining());
+
+        s2 = Stream.of(s2.split(""))
+            .map(s -&gt; s.toUpperCase())
+            .sorted()
+            .collect(Collectors.joining());
+
+        if (s1.equals(s2)) {
+            System.out.println("Two strings are anagrams");
+        } else {
+            System.out.println("Two strings are not anagrams");
+        }
+    }
+}</code></pre>
+<div class="note">Output: <code>Two strings are anagrams</code></div>
+</div></div>
+
+<div class="card" data-tags="stream sum digits number mapToInt Arrays.stream split advance">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">13) Sum of all digits in a number</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">Convert number to string, split into digits, <code>mapToInt</code>, then <code>sum()</code>.</div>
+<pre><code>import java.util.*;
+import java.util.stream.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        int num = 12345;
+
+        int sum = Arrays.stream(
+                String.valueOf(num).split("")
+            )
+            .mapToInt(s -&gt; Integer.parseInt(s))
+            .sum();
+
+        System.out.println(sum);
+    }
+}</code></pre>
+<div class="note">Output: <code>15</code> (1 + 2 + 3 + 4 + 5)</div>
+</div></div>
+
+<div class="card" data-tags="stream common intersection filter anyMatch two list collect advance">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">14) Common element between two list</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">For each element in <code>list1</code>, use <code>anyMatch</code> on <code>list2</code> to see if it exists.</div>
+<pre><code>import java.util.*;
+import java.util.stream.Collectors;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        List&lt;Integer&gt; list1 =
+            Arrays.asList(1, 2, 3, 4, 5);
+
+        List&lt;Integer&gt; list2 =
+            Arrays.asList(3, 4, 5, 6, 7);
+
+        List&lt;Integer&gt; result = list1.stream()
+            .filter(n -&gt; list2.stream()
+                .anyMatch(x -&gt; x.equals(n)))
+            .collect(Collectors.toList());
+
+        System.out.println(result);
+    }
+}</code></pre>
+<div class="note">Output: <code>[3, 4, 5]</code></div>
+</div></div>
+
+<div class="card" data-tags="stream string reverse word split map StringBuilder joining advance">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">15) Reverse each word of a string</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">Split by space, reverse each word with <code>StringBuilder</code>, join back with a space.</div>
+<pre><code>import java.util.Arrays;
+import java.util.stream.Collectors;
+
+public class StreamsSample {
+
+    public static void main(String[] args) {
+
+        String str = "Java Concept Of The Day";
+
+        String reversed = Arrays.stream(str.split(" "))
+            .map(s -&gt; new StringBuilder(s).reverse())
+            .collect(Collectors.joining(" "));
+
+        System.out.println(reversed);
+    }
+}</code></pre>
+<div class="note">Output: <code>avaJ tpecnoC fO ehT yaD</code></div>
+</div></div>
+
+
+<div class="card" data-tags="stream count occurrences flatMap filter string target advance">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">16) Count the number of occurrences of a given String</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note"><code>flatMap</code> flattens all words from each line, then <code>filter</code> + <code>count</code> matches the target.</div>
+<pre><code>import java.util.*;
+
+public class StreamsSample {
+
+    public static void main(String[] args) {
+
+        List&lt;String&gt; strings = Arrays.asList(
+            "java scala ruby",
+            "java react spring java"
+        );
+
+        String target = "java";
+
+        long count = strings.stream()
+
+            <span class="cmt">// split() returns String[]
+            // Arrays.stream() converts array -&gt; Stream&lt;String&gt;
+
+            // flatMap combines them into:
+            // ["java", "scala", "ruby", "java", "react", "spring", "java"]</span>
+            .flatMap(s -&gt; Arrays.stream(s.split(" ")))
+
+            .filter(word -&gt; word.equals(target))
+
+            .count();
+
+        System.out.println(count);
+    }
+}</code></pre>
+<div class="note">Output: <code>3</code></div>
+</div></div>
+
+<div class="card" data-tags="stream sentences unique words flatMap distinct collect advance">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">17) Convert the list of sentences into unique words</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note"><code>flatMap</code> splits each sentence into words, <code>distinct()</code> removes duplicates.</div>
+<pre><code>import java.util.*;
+import java.util.stream.*;
+
+public class StreamsSample {
+
+    public static void main(String[] args) {
+
+        List&lt;String&gt; sentences = List.of(
+            "java is cool",
+            "cool code in java"
+        );
+
+        List&lt;String&gt; uniqueWords = sentences.stream()
+            .flatMap(sentence -&gt; Arrays.stream(sentence.split(" ")))
+            .distinct()
+            .collect(Collectors.toList());
+
+        System.out.println(uniqueWords);
+    }
+}</code></pre>
+<div class="note">Output: <code>[java, is, cool, code, in]</code></div>
+</div></div>
+
+
+<div class="card" data-tags="stream flatMap nested list flatten List List Integer advance">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">18) Flatten List&lt;List&lt;Integer&gt;&gt; to List&lt;Integer&gt;</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">You have <code>List&lt;List&lt;Integer&gt;&gt;</code>. Use <code>flatMap(list -&gt; list.stream())</code> to merge into one list.</div>
+<pre><code>import java.util.*;
+import java.util.stream.*;
+
+public class FlattenExample {
+
+    public static void main(String[] args) {
+
+        List&lt;List&lt;Integer&gt;&gt; nested = List.of(
+            List.of(1, 2),
+            List.of(3, 4),
+            List.of(5)
+        );
+
+        List&lt;Integer&gt; flat = nested.stream()
+            .flatMap(list -&gt; list.stream())  <span class="cmt">// each inner list -&gt; one stream of numbers</span>
+            .collect(Collectors.toList());
+
+        System.out.println(flat);
+    }
+}</code></pre>
+<div class="note">Output: <code>[1, 2, 3, 4, 5]</code></div>
+</div></div>
+
+
+<div class="card" data-tags="stream longest word sorted findFirst orElse string advance">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">19) Find the longest word(s) in a list</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">Sort by length descending, <code>findFirst()</code>, then <code>orElse("")</code> if the list is empty.</div>
+<pre><code>import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        List&lt;String&gt; words =
+            Arrays.asList("apple", "hi", "banana", "cat", "a");
+
+        String longest = words.stream()
+            .sorted((a, b) -&gt; b.length() - a.length())
+            .findFirst()
+            .orElse("");
+
+        System.out.println(longest);
+    }
+}</code></pre>
+<div class="note">Output: <code>banana</code></div>
+</div></div>
+
+
+<div class="card" data-tags="stream sum reduce mapToInt accumulator identity advance">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">20) Sum of numbers in a list</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">Two ways to sum: <code>reduce</code> or <code>mapToInt().sum()</code>.</div>
+<pre><code>import java.util.*;
+import java.util.stream.*;
+
+public class StreamsSample {
+
+    public static void main(String[] args) {
+
+        List&lt;Integer&gt; numbers = Arrays.asList(5, 10, 15, 20);
+
+        <span class="cmt">// way 1: reduce</span>
+        int sum1 = numbers.stream()
+            .reduce(0, (acc, num) -&gt; acc + num);
+
+        <span class="cmt">// way 2: mapToInt + sum</span>
+        int sum2 = numbers.stream()
+            .mapToInt(num -&gt; num)
+            .sum();
+
+        System.out.println(sum1);  <span class="cmt">// 50</span>
+        System.out.println(sum2);  <span class="cmt">// 50</span>
+    }
+}</code></pre>
+
+<h4>How <code>reduce</code> works</h4>
+<pre><code>.reduce(0, (acc, num) -&gt; acc + num)
+<span class="cmt">//       ↑   ↑    ↑         ↑
+//       |   |    |         └── combine: new total = old total + current number
+//       |   |    └── element: current item (5, then 10, then 15, then 20)
+//       |   └── acc (accumulator): running total so far
+//       └── identity: value of acc before stream starts (0 for sum)</span></code></pre>
+<div class="note">Both print <code>50</code>.</div>
+</div></div>
+
+
+<div class="card" data-tags="stream max maximum reduce Integer.MIN_VALUE accumulator advance">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">21) Find Maximum using reduce</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">Start with <code>Integer.MIN_VALUE</code> as identity so the first real number always wins.</div>
+<pre><code>import java.util.*;
+import java.util.stream.*;
+
+public class StreamsSample {
+
+    public static void main(String[] args) {
+
+        List&lt;Integer&gt; numbers = Arrays.asList(7, 2, 10, 4);
+
+        int max = numbers.stream()
+            .reduce(
+                Integer.MIN_VALUE,
+                (acc, num) -&gt; acc &gt; num ? acc : num
+            );
+
+        System.out.println(max);  <span class="cmt">// 10</span>
+    }
+}</code></pre>
+
+<h4>Step-by-step</h4>
+<pre><code><span class="cmt">acc starts as Integer.MIN_VALUE   ← identity
+
+acc=MIN, num=7   → 7 &gt; MIN  → acc = 7
+acc=7,    num=2   → 7 &gt; 2    → acc = 7
+acc=7,    num=10  → 10 &gt; 7   → acc = 10
+acc=10,   num=4   → 10 &gt; 4   → acc = 10   ← answer</span></code></pre>
+<div class="note">Output: <code>10</code></div>
 </div></div>
 
 </section>
