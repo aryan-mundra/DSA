@@ -1,0 +1,2255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Design — Complete Beginner's Guide</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    mermaid.initialize({ startOnLoad: true, theme: 'default', securityLevel: 'loose', flowchart: { useMaxWidth: true }, sequence: { useMaxWidth: true } });
+  });
+</script>
+<style>
+  :root{
+    --bg:#f4f7fb; --panel:#ffffff; --ink:#1f2a37;
+    --muted:#5b6b7b; --brand:#2563eb; --brand-dark:#1e40af;
+    --line:#e3e9f2; --soft:#eef3fb;
+    --green-bg:#e9f8ef; --green-bd:#bce5cd; --green-ink:#176437;
+    --yellow-bg:#fff7e6; --yellow-bd:#f3dca0; --yellow-ink:#8a5a00;
+    --blue-bg:#e8f1ff; --blue-bd:#bcd6ff; --blue-ink:#1e4fa3;
+    --code-bg:#0f172a; --code-ink:#e2e8f0;
+    --sidebar-w:300px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.7; font-size:16px;
+  }
+  /* Layout */
+  .layout{display:flex; align-items:flex-start;}
+  .sidebar{
+    width:var(--sidebar-w); min-width:var(--sidebar-w); height:100vh; position:sticky; top:0;
+    overflow-y:auto; background:#0f1d36; color:#cdd9ee; padding:22px 16px;
+  }
+  .sidebar h2{color:#fff; font-size:18px; margin:4px 8px 14px;}
+  .sidebar .sub{font-size:12px; color:#8fa6cf; margin:0 8px 18px;}
+  .sidebar a{
+    display:block; color:#cdd9ee; text-decoration:none; padding:7px 10px;
+    border-radius:8px; font-size:13.5px; margin-bottom:2px;
+  }
+  .sidebar a:hover{background:#1c2f52; color:#fff;}
+  .sidebar a .num{display:inline-block; width:26px; color:#6f8ec9; font-weight:700;}
+  .content{flex:1; min-width:0; padding:34px 46px 80px;}
+  .content-inner{max-width:980px; margin:0 auto;}
+
+  header.hero{
+    background:linear-gradient(135deg,#1e40af,#2563eb); color:#fff;
+    border-radius:18px; padding:34px 34px; margin-bottom:30px;
+    box-shadow:0 10px 30px rgba(30,64,175,.25);
+  }
+  header.hero h1{margin:0 0 8px; font-size:30px;}
+  header.hero p{margin:0; color:#dbe7ff; font-size:15.5px;}
+
+  section{background:var(--panel); border:1px solid var(--line); border-radius:16px;
+    padding:28px 30px; margin-bottom:30px; box-shadow:0 2px 10px rgba(31,42,55,.04);}
+  section > h2{font-size:24px; margin:0 0 6px; color:var(--brand-dark);
+    border-bottom:3px solid var(--soft); padding-bottom:10px;}
+  .modtag{display:inline-block; background:var(--blue-bg); color:var(--blue-ink);
+    font-size:12px; font-weight:700; padding:3px 10px; border-radius:20px; margin-bottom:12px;}
+  h3{font-size:19px; margin:26px 0 6px; color:#16223a;}
+  h4{font-size:16px; margin:18px 0 4px; color:#22304d;}
+  p{margin:8px 0;}
+  ul,ol{margin:8px 0 8px 4px; padding-left:22px;}
+  li{margin:4px 0;}
+
+  /* Highlight boxes */
+  .box{border-radius:12px; padding:14px 16px; margin:14px 0; border:1px solid; font-size:14.8px;}
+  .box .t{font-weight:700; display:block; margin-bottom:3px;}
+  .ex{background:var(--green-bg); border-color:var(--green-bd); color:#13502c;}
+  .ex .t{color:var(--green-ink);}
+  .tip{background:var(--yellow-bg); border-color:var(--yellow-bd); color:#6d4800;}
+  .tip .t{color:var(--yellow-ink);}
+  .key{background:var(--blue-bg); border-color:var(--blue-bd); color:#1a3f80;}
+  .key .t{color:var(--blue-ink);}
+
+  /* Diagram container */
+  .diagram{background:#fbfdff; border:1px solid var(--line); border-radius:12px;
+    padding:18px; margin:18px 0; overflow-x:auto; text-align:center;}
+  .diagram .cap{font-size:12.5px; color:var(--muted); margin-top:8px; font-style:italic;}
+  .mermaid{display:flex; justify-content:center;}
+
+  /* Tables */
+  table{width:100%; border-collapse:collapse; margin:16px 0; font-size:14.3px; overflow:hidden;
+    border-radius:10px; border:1px solid var(--line);}
+  th,td{border:1px solid var(--line); padding:9px 12px; text-align:left; vertical-align:top;}
+  th{background:var(--soft); color:#1e335c; font-weight:700;}
+  tr:nth-child(even) td{background:#fafcff;}
+  .tablewrap{overflow-x:auto;}
+
+  /* Code */
+  code{background:#eef2f9; color:#b4225a; padding:1.5px 6px; border-radius:5px; font-size:13.5px;
+    font-family:"SF Mono",Menlo,Consolas,monospace;}
+  pre{background:var(--code-bg); color:var(--code-ink); padding:16px 18px; border-radius:12px;
+    overflow-x:auto; font-size:13.3px; line-height:1.55;}
+  pre code{background:none; color:inherit; padding:0;}
+
+  .backtop{display:inline-block; margin-top:10px; font-size:13px; color:var(--brand);
+    text-decoration:none; font-weight:600;}
+  .backtop:hover{text-decoration:underline;}
+
+  .pill{display:inline-block; background:var(--soft); color:#2b3f63; border-radius:6px;
+    padding:1px 8px; font-size:12.5px; font-weight:600; margin:0 2px;}
+
+  /* Mobile menu toggle */
+  .menubtn{display:none; position:fixed; top:14px; left:14px; z-index:50;
+    background:var(--brand); color:#fff; border:none; border-radius:10px; padding:10px 14px;
+    font-size:15px; font-weight:700; box-shadow:0 4px 12px rgba(0,0,0,.2); cursor:pointer;}
+
+  @media (max-width: 900px){
+    .menubtn{display:block;}
+    .sidebar{position:fixed; left:0; top:0; z-index:40; transform:translateX(-105%);
+      transition:transform .25s ease; box-shadow:4px 0 20px rgba(0,0,0,.3); width:84%; max-width:330px;}
+    .sidebar.open{transform:translateX(0);}
+    .content{padding:64px 16px 60px;}
+    header.hero{padding:24px 20px;}
+    header.hero h1{font-size:23px;}
+    section{padding:20px 16px;}
+    section > h2{font-size:20px;}
+    h3{font-size:17px;}
+    body{font-size:15.3px;}
+  }
+  .overlay{display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:35;}
+  .overlay.open{display:block;}
+</style>
+</head>
+<body>
+<button class="menubtn" onclick="document.querySelector('.sidebar').classList.toggle('open');document.querySelector('.overlay').classList.toggle('open');">☰ Menu</button>
+<div class="overlay" onclick="document.querySelector('.sidebar').classList.remove('open');this.classList.remove('open');"></div>
+<div class="layout">
+<nav class="sidebar" id="top">
+  <h2>📐 System Design</h2>
+  <div class="sub">Complete Beginner's Guide · 27 Modules</div>
+  <a href="#m1"><span class="num">01</span>Core Components</a>
+  <a href="#m2"><span class="num">02</span>Data vs Compute Intensive</a>
+  <a href="#m3"><span class="num">03</span>Functional vs Non-Functional</a>
+  <a href="#m4"><span class="num">04</span>Scalability Patterns</a>
+  <a href="#m5"><span class="num">05</span>DNS</a>
+  <a href="#m6"><span class="num">06</span>Networking &amp; Edge</a>
+  <a href="#m7"><span class="num">07</span>APIs &amp; Communication</a>
+  <a href="#m8"><span class="num">08</span>REST API Deep Dive</a>
+  <a href="#m9"><span class="num">09</span>SQL Databases</a>
+  <a href="#m10"><span class="num">10</span>NoSQL Databases</a>
+  <a href="#m11"><span class="num">11</span>Storage Systems</a>
+  <a href="#m12"><span class="num">12</span>Caching</a>
+  <a href="#m13"><span class="num">13</span>Load Balancer</a>
+  <a href="#m14"><span class="num">14</span>Replication</a>
+  <a href="#m15"><span class="num">15</span>Partitioning (Sharding)</a>
+  <a href="#m16"><span class="num">16</span>CAP &amp; Consistency</a>
+  <a href="#m17"><span class="num">17</span>Message Queue</a>
+  <a href="#m18"><span class="num">18</span>Data Processing</a>
+  <a href="#m19"><span class="num">19</span>Fault Tolerance &amp; HA</a>
+  <a href="#m20"><span class="num">20</span>Distributed Patterns</a>
+  <a href="#m21"><span class="num">21</span>Architecture Styles</a>
+  <a href="#m22"><span class="num">22</span>Security &amp; Identity</a>
+  <a href="#m23"><span class="num">23</span>Monitoring &amp; Observability</a>
+  <a href="#m24"><span class="num">24</span>Special Data Structures</a>
+  <a href="#m25"><span class="num">25</span>Cost &amp; Trade-offs</a>
+  <a href="#m26"><span class="num">26</span>Case Studies (12)</a>
+  <a href="#m27"><span class="num">27</span>Real-World Architectures</a>
+</nav>
+<main class="content">
+<div class="content-inner">
+<header class="hero">
+  <h1>📐 System Design — The Complete Beginner's Guide</h1>
+  <p>All 27 modules explained in plain English, with real-life analogies, real-world tech examples, and diagrams. No prior experience needed — just curiosity. Use the menu (☰ on mobile) to jump to any topic.</p>
+</header>
+
+<!-- ===================== MODULE 1 ===================== -->
+<section id="m1">
+  <span class="modtag">Module 01</span>
+  <h2>Core Components of System Design</h2>
+  <p>Before designing anything, you need to know the "Lego blocks" that every large system is built from. Almost every app you use — Instagram, Uber, Netflix — is just these same blocks arranged differently. Let's meet each block.</p>
+
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+  U["📱 Client<br/>(Web/Mobile/Desktop)"] --> CDN["🌍 CDN"]
+  U --> GW["🚪 API Gateway"]
+  GW --> LB["⚖️ Load Balancer"]
+  LB --> S1["🖥️ Server 1"]
+  LB --> S2["🖥️ Server 2"]
+  S1 --> C["⚡ Cache"]
+  S1 --> DB[("🗄️ Database")]
+  S1 --> MQ["📩 Message Queue"]
+  MQ --> W["⚙️ Worker"]
+  S1 --> MON["📊 Monitoring &amp; Logs"]
+    </div>
+    <div class="cap">A bird's-eye view of how the core components connect in a typical system.</div>
+  </div>
+
+  <h3>Client Applications (Web, Mobile, Desktop)</h3>
+  <p><strong>Simple Definition:</strong> The client is the part of the system the user actually touches — the website in your browser, the app on your phone, or a desktop program. It collects what you type or tap, shows results, and talks to the backend over the internet. A <em>web client</em> runs in a browser, a <em>mobile client</em> is an installed app (Android/iOS), and a <em>desktop client</em> is software like Slack for Mac. The client's main job is presentation and capturing user actions, not heavy thinking.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A TV remote is the "client." It doesn't play the show — it just sends your button presses to the TV (the backend) which does the real work.</div>
+  <p><strong>Real-World Tech Example:</strong> Instagram has three clients (web at instagram.com, iOS app, Android app) all talking to the same backend.</p>
+  <p><strong>Why It Matters:</strong> The client shapes the user's first impression and decides how much work happens on the device vs the server. A well-designed client reduces unnecessary network calls, works on slow connections, and keeps sensitive logic on the server. Designers must support many client types from one backend.</p>
+  <div class="box tip"><span class="t">⚠️ Interview Tip</span>Never trust the client — always re-validate data on the server, because anyone can fake requests coming from a "client."</div>
+
+  <h3>Backend Servers</h3>
+  <p><strong>Simple Definition:</strong> A backend server is a computer (usually in a data center) that receives requests from clients, runs the "business logic," talks to databases, and sends back answers. Business logic is the set of rules of your app — e.g., "a user can't withdraw more money than they have." Servers don't have a screen for users; they just process and respond. You usually run many identical servers so the load can be spread out.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A restaurant kitchen: you (client) place an order, the kitchen (server) does the cooking using ingredients (database), and sends the dish back.</div>
+  <p><strong>Why It Matters:</strong> Servers are where most logic and cost live. Keeping them <em>stateless</em> (not storing user-specific memory) lets you add or remove servers freely, which is the foundation of scaling.</p>
+
+  <h3>Databases</h3>
+  <p><strong>Simple Definition:</strong> A database is organized, permanent storage for your data — users, posts, orders, payments. It lets you save (write), look up (read), update, and delete information reliably, even after a server restarts. Databases also enforce rules and keep data consistent. They come in two big families: SQL (tables) and NoSQL (flexible formats), covered in Modules 9 and 10.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A giant, perfectly organized filing cabinet where every document has a label and you can instantly find any file.</div>
+  <p><strong>Real-World Tech Example:</strong> WhatsApp stores chats and contacts; Amazon stores products and orders in databases.</p>
+  <p><strong>Why It Matters:</strong> The database is often the hardest part to scale because data must stay correct. Most big system-design problems are really "how do we store and read this data fast and safely?"</p>
+
+  <h3>Load Balancers</h3>
+  <p><strong>Simple Definition:</strong> A load balancer sits in front of many servers and spreads incoming requests evenly among them. If one server is busy or dead, it sends traffic to the healthy ones. This prevents any single server from being overwhelmed and keeps the app online if a server crashes. (Full detail in Module 13.)</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A supermarket receptionist directing customers to whichever checkout counter is free, so no single line gets too long.</div>
+  <p><strong>Why It Matters:</strong> Without it, you can't use multiple servers effectively, and one failure takes down the whole app. It's the entry point that makes horizontal scaling possible.</p>
+
+  <h3>Message Queues</h3>
+  <p><strong>Simple Definition:</strong> A message queue is a buffer that holds tasks so they can be processed later, in the background, instead of making the user wait. The server drops a "to-do" message into the queue and replies instantly; separate worker programs pick up the messages and do the slow work. This is called <em>asynchronous</em> processing. (Full detail in Module 17.)</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A restaurant order-ticket rail: waiters clip orders up, and the kitchen works through them at its own pace without the waiter standing and waiting.</div>
+  <p><strong>Real-World Tech Example:</strong> When you upload a video to YouTube, a queue holds the "convert this video" task while you keep browsing.</p>
+  <p><strong>Why It Matters:</strong> Queues absorb traffic spikes, decouple components, and let slow jobs happen without freezing the user experience.</p>
+
+  <h3>Caching Layers</h3>
+  <p><strong>Simple Definition:</strong> A cache is super-fast temporary storage that keeps copies of frequently used data so you don't have to fetch it from the slow database every time. It usually lives in memory (RAM), which is far faster than disk. Caches make apps feel instant and reduce database load. (Full detail in Module 12.)</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Keeping your most-used books on your desk instead of walking to the library every single time you need them.</div>
+  <p><strong>Real-World Tech Example:</strong> Twitter caches popular tweets and timelines in Redis so they load in milliseconds.</p>
+  <p><strong>Why It Matters:</strong> Caching is the cheapest, fastest way to boost performance. But stale data (old copies) is a real risk, so designers must plan how to refresh it.</p>
+
+  <h3>CDN (Content Delivery Network)</h3>
+  <p><strong>Simple Definition:</strong> A CDN is a network of servers spread across the world that store copies of static files (images, videos, CSS) close to users. When you load a page, files come from a nearby CDN server instead of the faraway origin, so they arrive faster. (Full detail in Module 6.)</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Instead of one central pizza kitchen serving the whole country, you open local branches in every city so delivery is quick.</div>
+  <p><strong>Real-World Tech Example:</strong> Netflix uses a huge CDN so your movie streams from a server in your own city.</p>
+  <p><strong>Why It Matters:</strong> It cuts latency, saves bandwidth on your main servers, and handles huge traffic for media-heavy apps.</p>
+
+  <h3>API Gateway</h3>
+  <p><strong>Simple Definition:</strong> An API gateway is a single front door for all client requests. It routes each request to the right backend service, and handles shared concerns like authentication (who are you?), rate limiting (don't spam us), and logging — all in one place. (Full detail in Module 6.)</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A building's security reception: every visitor enters through one desk that checks IDs and directs them to the correct office.</div>
+  <p><strong>Why It Matters:</strong> It keeps individual services simple by centralizing cross-cutting tasks, and gives clients one clean address to call.</p>
+
+  <h3>Monitoring and Logs</h3>
+  <p><strong>Simple Definition:</strong> Monitoring collects numbers about your system's health (CPU, errors, response time), and logs are timestamped records of what happened. Together they let you see problems, get alerts, and investigate why something broke. Without them, you're flying blind. (Full detail in Module 23.)</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A car dashboard (speed, fuel, engine light) plus the black-box recorder that explains what went wrong after a problem.</div>
+  <p><strong>Real-World Tech Example:</strong> Companies use Prometheus + Grafana for metrics and the ELK stack or Datadog for logs.</p>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>Every big system = Clients → (CDN / Gateway / Load Balancer) → Servers → (Cache + Database + Queues), all watched by Monitoring. Master these 9 blocks and every architecture becomes readable.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 2 ===================== -->
+<section id="m2">
+  <span class="modtag">Module 02</span>
+  <h2>Data-Intensive vs Compute-Intensive Applications</h2>
+  <p>Every system has a "bottleneck" — the thing that runs out first. For some apps it's moving and storing lots of data; for others it's heavy number-crunching. Knowing which kind you're building tells you where to spend money and effort.</p>
+
+  <h3>What makes an application data-intensive</h3>
+  <p><strong>Simple Definition:</strong> A data-intensive app's main challenge is the <em>amount, speed, and complexity of data</em> — not the calculations. The hard parts are storing huge volumes, reading/writing fast, keeping data consistent, and moving it around. The CPU is rarely the limit; databases, networks, and disks are. Most web apps you use daily are data-intensive.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A massive library: the challenge isn't "thinking hard," it's storing millions of books and finding the right one instantly.</div>
+  <p><strong>Real-World Tech Example:</strong> Instagram — billions of photos to store, serve, and search; very little heavy math.</p>
+
+  <h3>What makes an application compute-intensive</h3>
+  <p><strong>Simple Definition:</strong> A compute-intensive app's main challenge is <em>heavy calculation</em> — the CPU or GPU is the bottleneck. Data may be small, but processing it takes enormous computing power. Think simulations, video rendering, AI training, and scientific computing. Here you optimize processors, not databases.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A chess grandmaster: little "data," but enormous thinking per move.</div>
+  <p><strong>Real-World Tech Example:</strong> Training ChatGPT, Pixar rendering a movie frame, or weather-forecast simulations.</p>
+
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+  subgraph DI["📦 Data-Intensive"]
+    A1["Bottleneck: storage,<br/>I/O, network"] --> A2["Optimize: DB, cache,<br/>sharding, CDN"]
+  end
+  subgraph CI["🧮 Compute-Intensive"]
+    B1["Bottleneck: CPU/GPU"] --> B2["Optimize: parallelism,<br/>GPUs, faster algorithms"]
+  end
+    </div>
+    <div class="cap">The two app types differ in <em>what runs out first</em>.</div>
+  </div>
+
+  <h3>Instagram Architecture Discussion</h3>
+  <p>Instagram is a classic data-intensive system. Its hard problems are: storing billions of photos (object storage + CDN), generating each user's feed quickly (caching + fan-out), and handling read-heavy traffic (far more people view photos than post them). Very little of Instagram is heavy computation — it's about moving data fast and reliably to millions of people. This is why they lean on caching, read replicas, and CDNs rather than supercomputers.</p>
+
+  <h3>Machine Learning and Rendering Workloads</h3>
+  <p><strong>Simple Definition:</strong> ML training and 3D/video rendering are compute-intensive. Training a model means doing trillions of math operations over data; rendering means computing the color of every pixel in every frame. Both crave raw processing power and are usually run as long <em>batch</em> jobs on specialized hardware.</p>
+  <p><strong>Real-World Tech Example:</strong> Netflix renders/encodes each title into many formats; Tesla trains self-driving models on GPU clusters.</p>
+
+  <h3>CPU-bound and GPU-bound Systems</h3>
+  <p><strong>Simple Definition:</strong> A system is <em>CPU-bound</em> when the processor is the limit (e.g., complex logic, encryption), and <em>GPU-bound</em> when graphics/AI math dominates. GPUs do thousands of simple operations in parallel, perfect for ML and graphics. Knowing which you are tells you what hardware to buy.</p>
+  <div class="box tip"><span class="t">⚠️ Interview Tip</span>If adding more RAM/disk/DB power doesn't help but the CPU stays at 100%, you're CPU-bound — scale compute, not storage.</div>
+
+  <h3>Real-World Scalability Concerns</h3>
+  <p>Data-intensive systems scale by adding storage, caches, replicas, and shards. Compute-intensive systems scale by adding more/faster CPUs and GPUs, and by parallelizing work. The mistake is treating every problem the same way — throwing database power at a CPU problem (or vice versa) wastes money and doesn't fix the bottleneck.</p>
+
+  <h3>OLTP vs OLAP Workloads</h3>
+  <p><strong>Simple Definition:</strong> <span class="pill">OLTP</span> (Online Transaction Processing) handles many small, fast operations — placing an order, liking a post. <span class="pill">OLAP</span> (Online Analytical Processing) handles few but huge analytical queries over lots of data — "total sales per region last year." OLTP is the live app; OLAP is the reporting/analytics brain.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>OLTP = a cashier ringing up individual purchases. OLAP = the manager studying a year of sales to find trends.</div>
+  <div class="tablewrap">
+  <table>
+    <tr><th>Aspect</th><th>OLTP</th><th>OLAP</th></tr>
+    <tr><td>Purpose</td><td>Run the business (live)</td><td>Analyze the business</td></tr>
+    <tr><td>Queries</td><td>Many, small, fast</td><td>Few, large, complex</td></tr>
+    <tr><td>Data</td><td>Current, detailed</td><td>Historical, aggregated</td></tr>
+    <tr><td>Example DB</td><td>PostgreSQL, MySQL</td><td>Snowflake, BigQuery, Redshift</td></tr>
+  </table>
+  </div>
+
+  <h3>Batch vs Real-Time Processing Workloads</h3>
+  <p><strong>Simple Definition:</strong> <em>Batch</em> processing collects data and processes it in big chunks on a schedule (e.g., nightly). <em>Real-time</em> (stream) processing handles each event the moment it arrives, within milliseconds to seconds. Batch is cheaper and simpler; real-time is needed when freshness matters (fraud alerts, live dashboards).</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Batch = doing all your laundry once a week. Real-time = washing each shirt the instant it gets dirty.</div>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>First ask: "Is my bottleneck data or compute?" and "Do I need answers now (real-time/OLTP) or later in bulk (batch/OLAP)?" These two questions steer your entire design.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 3 ===================== -->
+<section id="m3">
+  <span class="modtag">Module 03</span>
+  <h2>Functional vs Non-Functional Requirements</h2>
+  <p>When designing a system, requirements come in two flavors: <em>what it does</em> (functional) and <em>how well it does it</em> (non-functional). Beginners obsess over features; great designers obsess over the "how well." Let's cover both.</p>
+
+  <h3>Functional Requirements</h3>
+  <p><strong>Simple Definition:</strong> Functional requirements describe the actual features and behaviors — what the system must <em>do</em>. "Users can sign up," "users can post a photo," "users can search." They answer the question, "What can a user accomplish here?" They're usually easy to list and directly visible to users.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>For a car: "it must drive, brake, and turn." Those are functional requirements.</div>
+
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  R["📋 Requirements"] --> F["✅ Functional<br/>(What it does)"]
+  R --> N["⚙️ Non-Functional<br/>(How well it does it)"]
+  F --> F1["Sign up · Post · Search · Pay"]
+  N --> N1["Scalability · Availability · Reliability"]
+  N --> N2["Performance · Security · Maintainability"]
+  N --> N3["Observability · Cost · Extensibility"]
+    </div>
+  </div>
+
+  <p>The following are <strong>non-functional requirements (NFRs)</strong> — the qualities that make a system production-ready. Often abbreviated as the "-ilities."</p>
+
+  <h3>Scalability</h3>
+  <p><strong>Simple Definition:</strong> The ability to handle growth — more users, more data, more traffic — by adding resources, without redesigning everything. A scalable system serves 100 users and 100 million users using the same basic design, just bigger.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A highway that can add more lanes as traffic grows, instead of being rebuilt from scratch.</div>
+
+  <h3>Availability</h3>
+  <p><strong>Simple Definition:</strong> The percentage of time the system is up and usable. Measured in "nines" — 99.9% ("three nines") means about 8.7 hours of downtime per year; 99.99% means under an hour. High availability comes from redundancy and removing single points of failure.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A 24/7 hospital that always has staff on duty — never closed, no matter what.</div>
+
+  <h3>Reliability</h3>
+  <p><strong>Simple Definition:</strong> The system does the <em>correct</em> thing consistently and doesn't lose or corrupt data, even when parts fail. Availability means "it's up"; reliability means "and it works correctly." A reliable bank never loses your deposit.</p>
+  <div class="box tip"><span class="t">⚠️ Interview Tip</span>Availability ≠ Reliability. A site can be "up" (available) but returning wrong data (unreliable). Mention both.</div>
+
+  <h3>Performance</h3>
+  <p><strong>Simple Definition:</strong> How fast the system responds (latency) and how much it can handle per second (throughput). Users notice delays above ~100ms. Good performance means low latency under realistic load, not just when the system is empty.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A fast-food drive-through measured by how quickly you get your food (latency) and how many cars it serves per hour (throughput).</div>
+
+  <h3>Security</h3>
+  <p><strong>Simple Definition:</strong> Protecting data and access — making sure only the right people can do the right things, and data is safe from theft or tampering. Covers authentication, authorization, encryption, and defense against attacks. (Module 22 goes deep.)</p>
+
+  <h3>Maintainability</h3>
+  <p><strong>Simple Definition:</strong> How easily engineers can understand, fix, and change the system over time. Clean code, modular design, and good docs make a system maintainable. Poor maintainability means every change is risky and slow.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A car designed so a mechanic can reach every part easily, vs one where changing a bulb means removing the engine.</div>
+
+  <h3>Observability</h3>
+  <p><strong>Simple Definition:</strong> How well you can understand what's happening inside the system from the outside — through logs, metrics, and traces. An observable system tells you <em>why</em> it's slow or broken, not just <em>that</em> it is. (Module 23.)</p>
+
+  <h3>Cost Efficiency</h3>
+  <p><strong>Simple Definition:</strong> Getting the needed performance and reliability without overspending. Every replica, cache, and region costs money. Good design balances quality against budget instead of buying maximum everything. (Module 25.)</p>
+
+  <h3>Extensibility</h3>
+  <p><strong>Simple Definition:</strong> How easily you can add <em>new</em> features without breaking existing ones. An extensible system has clean interfaces so new modules plug in cleanly. It's about future growth in capability, not just traffic.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A phone with expandable storage and an app store — you add new abilities without replacing the phone.</div>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>In interviews, always nail functional requirements first, then explicitly discuss the key NFRs (usually scalability, availability, latency, consistency). The NFRs drive every architectural choice you'll make.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 4 ===================== -->
+<section id="m4">
+  <span class="modtag">Module 04</span>
+  <h2>Scalability Patterns</h2>
+  <p>Scalability is the art of handling more load gracefully. Here are the core patterns and tools you'll reach for again and again.</p>
+
+  <h3>Vertical Scaling (Scale Up)</h3>
+  <p><strong>Simple Definition:</strong> Make one machine more powerful — add more CPU, RAM, or disk. It's simple (no code changes) and great for getting started. But there's a ceiling: a single machine can only get so big, and it's a single point of failure.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Upgrading from a bicycle to a motorbike to a truck — one vehicle, made stronger.</div>
+
+  <h3>Horizontal Scaling (Scale Out)</h3>
+  <p><strong>Simple Definition:</strong> Add more machines and split the work among them. There's no real ceiling — you can keep adding servers — and it removes the single point of failure. The catch: your app must be designed to run on many machines, which needs load balancers and stateless services.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Instead of one giant truck, use a fleet of many delivery vans working together.</div>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+  subgraph V["⬆️ Vertical (Scale Up)"]
+    v1["Small Server"] --> v2["Bigger Server"] --> v3["Huge Server"]
+  end
+  subgraph H["➡️ Horizontal (Scale Out)"]
+    LB["⚖️ Load Balancer"] --> h1["Server"]
+    LB --> h2["Server"]
+    LB --> h3["Server"]
+  end
+    </div>
+    <div class="cap">Vertical = one bigger box. Horizontal = many boxes.</div>
+  </div>
+  <p><strong>Real-World Tech Example:</strong> Google and Netflix scale horizontally across tens of thousands of commodity servers.</p>
+
+  <h3>Stateless vs Stateful Services</h3>
+  <p><strong>Simple Definition:</strong> A <em>stateless</em> service keeps no memory of past requests on the server — every request carries all it needs, so any server can handle it. A <em>stateful</em> service remembers things (like a session) on a specific server, so requests must return to that same server. Stateless is the key to easy horizontal scaling.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Stateless = any cashier can serve you because you carry your shopping list. Stateful = only the one cashier who remembers your order can help.</div>
+  <div class="box tip"><span class="t">⚠️ Interview Tip</span>Push state out of servers into a shared store (Redis/DB). Then servers stay stateless and you can add/remove them freely.</div>
+
+  <h3>Auto-scaling</h3>
+  <p><strong>Simple Definition:</strong> Automatically adding servers when traffic rises and removing them when it falls, based on metrics like CPU. You save money during quiet times and survive spikes without manual work. Cloud providers (AWS, GCP) offer this out of the box.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A store opening extra checkout counters at rush hour and closing them at night.</div>
+
+  <h3>Consistent Hashing</h3>
+  <p><strong>Simple Definition:</strong> A clever technique to decide which server (or cache node) stores which piece of data, so that when you add or remove a server, only a small fraction of data moves — not everything. Plain hashing (key % N) reshuffles almost all data when N changes; consistent hashing avoids that by placing servers and keys on a virtual ring.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Seating guests around a round table: adding one new chair only shifts the few guests nearest to it, not the entire table.</div>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  subgraph Ring["🔵 Hash Ring"]
+    K["Key 'user42'"] -->|"walk clockwise"| N2["Node B"]
+  end
+  Note["Adding Node D only reassigns<br/>keys between C and D"] -.-> Ring
+    </div>
+    <div class="cap">Keys map to the next node clockwise on the ring; adding a node moves minimal data.</div>
+  </div>
+  <p><strong>Real-World Tech Example:</strong> Used by DynamoDB, Cassandra, and Redis Cluster to distribute data across nodes.</p>
+
+  <h3>Hot vs Cold Data Separation</h3>
+  <p><strong>Simple Definition:</strong> <em>Hot</em> data is accessed often and recently (today's posts); <em>cold</em> data is rarely touched (5-year-old logs). Keep hot data on fast, expensive storage (RAM/SSD) and move cold data to cheap, slow storage. This saves money while keeping common operations fast.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Clothes you wear weekly stay in your closet (hot); winter coats go to the attic in summer (cold).</div>
+
+  <h3>Read-heavy vs Write-heavy Optimization</h3>
+  <p><strong>Simple Definition:</strong> Some systems are read-heavy (many more reads than writes, like a news site) and some are write-heavy (like a logging or IoT system). Read-heavy systems benefit from caching and read replicas; write-heavy systems benefit from sharding, batching writes, and write-optimized databases.</p>
+  <div class="tablewrap">
+  <table>
+    <tr><th>Type</th><th>Example</th><th>Optimize with</th></tr>
+    <tr><td>Read-heavy</td><td>News site, blog, Instagram feed</td><td>Caching, CDN, read replicas</td></tr>
+    <tr><td>Write-heavy</td><td>IoT sensors, logging, analytics ingest</td><td>Sharding, batching, LSM/columnar DBs</td></tr>
+  </table>
+  </div>
+
+  <h3>Back-of-Envelope Capacity Estimation</h3>
+  <p><strong>Simple Definition:</strong> Quick, rough math to size a system before building — estimating requests per second, storage, and bandwidth using simple assumptions. You're not aiming for precision, just the right order of magnitude (thousands? millions?). It tells you whether one server or a thousand is needed.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Planning a party: "50 guests × 2 slices each = 100 slices = ~13 pizzas." Rough but good enough to shop.</div>
+  <p><strong>A worked example (Twitter-like):</strong></p>
+  <pre><code>Users: 300 million total, 50% daily active = 150M DAU
+Tweets: each user posts 2/day → 300M tweets/day
+Writes/sec = 300,000,000 / 86,400 sec ≈ 3,500 writes/sec
+Reads are ~100× writes → ~350,000 reads/sec  (read-heavy!)
+Storage: 300M tweets × 300 bytes ≈ 90 GB/day ≈ 33 TB/year (text only)</code></pre>
+  <div class="box tip"><span class="t">⚠️ Interview Tip</span>Memorize: 1 day ≈ 86,400 sec (~10⁵). "Per day ÷ 100,000 ≈ per second." This single trick speeds up every estimation.</div>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>Prefer horizontal scaling + stateless services + caching for read-heavy apps. Use consistent hashing to distribute data, separate hot/cold data to control cost, and always do quick capacity math first.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 5 ===================== -->
+<section id="m5">
+  <span class="modtag">Module 05</span>
+  <h2>DNS (Domain Name System)</h2>
+  <p>DNS is the internet's phonebook. It turns a human-friendly name like <code>google.com</code> into the numeric IP address computers actually use to find each other. Let's trace exactly how it works.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Your phone's contacts app: you tap "Mom," and it converts that name into her actual phone number. DNS converts a website name into its IP address.</div>
+
+  <h3>How Websites Actually Work</h3>
+  <p><strong>Simple Definition:</strong> When you type a website name, your computer must first find that site's IP address (like <code>142.250.x.x</code>), then open a connection to that address, send an HTTP request, and receive the page back. Names are for humans; IP addresses are for machines. DNS is the translation step that makes this possible before anything else can happen.</p>
+
+  <h3>Root Server</h3>
+  <p><strong>Simple Definition:</strong> The root servers sit at the very top of DNS. They don't know individual websites, but they know where to find the servers responsible for each top-level domain (<code>.com</code>, <code>.org</code>, etc.). There are 13 root server "identities" worldwide (mirrored across many machines). Every lookup can start here.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A library's main directory that doesn't list every book but tells you which section (floor) to go to.</div>
+
+  <h3>TLD (Top-Level Domain)</h3>
+  <p><strong>Simple Definition:</strong> The TLD is the last part of a domain — <code>.com</code>, <code>.org</code>, <code>.in</code>, <code>.io</code>. TLD servers know which name server is responsible for each domain under them. So the <code>.com</code> TLD server knows where to find info about <code>google.com</code>.</p>
+
+  <h3>Name Server (Authoritative)</h3>
+  <p><strong>Simple Definition:</strong> The authoritative name server is the final source of truth for a specific domain. It actually holds the records (like the IP address) for <code>google.com</code>. When the resolver reaches it, it gives the real answer.</p>
+
+  <h3>DNS Resolution Process (Step-by-Step)</h3>
+  <div class="diagram">
+    <div class="mermaid">
+sequenceDiagram
+  participant U as 💻 Your Computer
+  participant R as 🔁 Resolver (ISP)
+  participant Root as 🌐 Root Server
+  participant TLD as 🏷️ .com TLD Server
+  participant NS as 📇 Authoritative NS
+  U->>R: What is the IP of google.com?
+  R->>Root: Where is .com?
+  Root-->>R: Ask the .com TLD server
+  R->>TLD: Where is google.com?
+  TLD-->>R: Ask google's name server
+  R->>NS: What is google.com's IP?
+  NS-->>R: 142.250.182.78
+  R-->>U: 142.250.182.78 (cached for TTL)
+  U->>U: Now connect to that IP
+    </div>
+    <div class="cap">A full recursive DNS lookup. After this, the answer is cached so it's instant next time.</div>
+  </div>
+  <ol>
+    <li>You type <code>google.com</code>. Your computer asks a <strong>resolver</strong> (usually your ISP's or 8.8.8.8).</li>
+    <li>Resolver asks a <strong>root server</strong> → it points to the <code>.com</code> TLD server.</li>
+    <li>Resolver asks the <strong>TLD server</strong> → it points to google's authoritative name server.</li>
+    <li>Resolver asks the <strong>name server</strong> → it returns the IP address.</li>
+    <li>Resolver caches the answer and gives it to your computer, which then connects.</li>
+  </ol>
+
+  <h3>DNS Caching</h3>
+  <p><strong>Simple Definition:</strong> To avoid doing that whole journey every time, DNS answers are cached (remembered) at several layers — your browser, your OS, and the resolver. Most lookups are answered instantly from cache. This massively reduces traffic and speeds up browsing.</p>
+
+  <h3>TTL in DNS</h3>
+  <p><strong>Simple Definition:</strong> TTL (Time To Live) is how long a cached DNS answer stays valid, in seconds. A TTL of 3600 means "trust this for 1 hour, then re-check." Low TTL = changes propagate fast but more lookups; high TTL = fewer lookups but slow to update.</p>
+  <div class="box tip"><span class="t">⚠️ Interview Tip</span>Before migrating servers, lower the TTL days in advance so the new IP spreads quickly when you switch.</div>
+
+  <h3>DNS Load Balancing</h3>
+  <p><strong>Simple Definition:</strong> DNS can return different IP addresses for the same name to spread users across multiple servers or data centers. Simple "round-robin DNS" rotates through a list of IPs. It's a basic, cheap form of load balancing at the very first step.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A pizza chain's single phone number that automatically routes your call to the nearest branch.</div>
+
+  <h3>Anycast DNS</h3>
+  <p><strong>Simple Definition:</strong> Anycast lets many servers around the world share the <em>same</em> IP address; the network automatically routes you to the nearest/healthiest one. This makes DNS (and CDNs) fast and resilient — if one location fails, traffic flows to another with no change needed.</p>
+  <p><strong>Real-World Tech Example:</strong> Cloudflare's <code>1.1.1.1</code> and Google's <code>8.8.8.8</code> use Anycast so you hit a nearby server.</p>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>DNS = phonebook of the internet. A lookup walks Root → TLD → Name Server, then everything is cached for the TTL. Anycast + DNS load balancing make it fast and highly available worldwide.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 6 ===================== -->
+<section id="m6">
+  <span class="modtag">Module 06</span>
+  <h2>Networking &amp; Edge Infrastructure</h2>
+  <p>This module covers how data physically travels across the internet, how it's kept secure, and the "edge" pieces (CDN, API Gateway) that sit between users and your servers.</p>
+
+  <h3>TCP/IP Basics</h3>
+  <p><strong>Simple Definition:</strong> TCP/IP is the set of rules computers use to talk over the internet. <em>IP</em> handles addressing and routing packets to the right machine (like the postal address on an envelope). <em>TCP</em> ensures those packets arrive completely, in order, and without errors — it resends anything lost. Together they create a reliable connection from small packets traveling separate paths.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Mailing a long letter as numbered pages (packets): IP delivers each envelope; TCP makes sure all pages arrive and you read them in order, requesting re-sends for any missing page.</div>
+  <p>There's also <em>UDP</em>, a faster but unreliable alternative (no resends), used for live video/gaming where speed beats perfection.</p>
+
+  <h3>HTTP vs HTTPS</h3>
+  <p><strong>Simple Definition:</strong> HTTP is the language browsers and servers use to exchange web pages (requests and responses). HTTPS is the same thing but <em>encrypted</em>, so nobody snooping on the network can read or tamper with the data. The "S" stands for Secure, provided by TLS.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>HTTP is a postcard anyone can read; HTTPS is a sealed, tamper-proof envelope.</div>
+
+  <h3>TLS/SSL Encryption</h3>
+  <p><strong>Simple Definition:</strong> TLS (the modern name; SSL is its old name) is the technology that encrypts HTTPS connections. Through a quick "handshake," the browser and server agree on secret keys and verify the server's identity using a certificate. After that, all data is scrambled so only the two parties can read it.</p>
+  <div class="diagram">
+    <div class="mermaid">
+sequenceDiagram
+  participant B as 🌐 Browser
+  participant S as 🖥️ Server
+  B->>S: Hello (supported ciphers)
+  S-->>B: Certificate + public key
+  B->>B: Verify certificate is trusted
+  B->>S: Encrypted shared secret
+  Note over B,S: Both derive the same session key
+  B->>S: 🔒 Encrypted data flows
+    </div>
+    <div class="cap">The TLS handshake: verify identity, agree on a secret, then encrypt everything.</div>
+  </div>
+
+  <h3>Forward Proxy vs Reverse Proxy</h3>
+  <p><strong>Simple Definition:</strong> A <em>forward proxy</em> sits in front of <strong>clients</strong> and makes requests on their behalf (hiding/filtering users). A <em>reverse proxy</em> sits in front of <strong>servers</strong> and receives requests on their behalf (hiding/protecting servers, doing load balancing, TLS, caching). Same idea (a middleman), opposite side.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Forward proxy = a personal shopper who buys things for you so the store never sees you. Reverse proxy = a company receptionist who takes all incoming calls before routing them inside.</div>
+  <div class="tablewrap">
+  <table>
+    <tr><th></th><th>Forward Proxy</th><th>Reverse Proxy</th></tr>
+    <tr><td>Sits in front of</td><td>Clients</td><td>Servers</td></tr>
+    <tr><td>Hides</td><td>The client</td><td>The servers</td></tr>
+    <tr><td>Used for</td><td>Filtering, anonymity, caching</td><td>Load balancing, TLS, security, caching</td></tr>
+    <tr><td>Example</td><td>Corporate web filter, VPN</td><td>Nginx, Cloudflare, API Gateway</td></tr>
+  </table>
+  </div>
+
+  <h3>CDN (Content Delivery Network)</h3>
+  <p><strong>Simple Definition:</strong> A CDN is a worldwide network of cache servers that store copies of your static content close to users, so it loads fast. (Introduced in Module 1; here's the detail.)</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+  U1["👤 User in India"] --> E1["📍 Edge (Mumbai)"]
+  U2["👤 User in USA"] --> E2["📍 Edge (New York)"]
+  E1 -->|"cache miss only"| O[("🏢 Origin Server")]
+  E2 -->|"cache miss only"| O
+    </div>
+    <div class="cap">Users hit the nearest edge; the origin is contacted only on a cache miss.</div>
+  </div>
+  <h4>Edge Servers</h4>
+  <p>The CDN's many servers placed in cities worldwide ("the edge"). They serve cached content to nearby users in milliseconds, reducing distance and load on your origin.</p>
+  <h4>Cache Invalidation</h4>
+  <p>The process of removing or refreshing outdated copies on edge servers when content changes. Done via TTL expiry or an explicit "purge." Getting this right avoids serving users old files.</p>
+  <h4>Origin Server</h4>
+  <p>Your real, central server that holds the original content. The CDN fetches from it only when its cache is empty or stale (a "cache miss"), then keeps a copy.</p>
+  <h4>Static vs Dynamic Content Delivery</h4>
+  <p><em>Static</em> content (images, CSS, JS, videos) is the same for everyone and caches beautifully on CDNs. <em>Dynamic</em> content (your personalized feed) differs per user and is harder to cache, though modern CDNs can cache parts of it or run logic at the edge.</p>
+  <p><strong>Real-World Tech Example:</strong> Cloudflare, Akamai, and AWS CloudFront power most of the web's media delivery.</p>
+
+  <h3>API Gateway</h3>
+  <p><strong>Simple Definition:</strong> The single entry point that receives all API requests and handles shared concerns before passing them to backend services. (Introduced in Module 1; details below.)</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  C["📱 Client"] --> G["🚪 API Gateway<br/>(auth · rate limit · routing · transform)"]
+  G --> S1["👤 User Service"]
+  G --> S2["📦 Order Service"]
+  G --> S3["💳 Payment Service"]
+    </div>
+  </div>
+  <h4>Routing and Aggregation</h4>
+  <p>Routing sends each request to the correct service. Aggregation lets the gateway call several services and combine their responses into one, so the client makes a single call instead of many.</p>
+  <h4>Authentication at the Gateway</h4>
+  <p>Checking the caller's identity (token/API key) once at the gateway, so individual services don't each re-implement login checks.</p>
+  <h4>Rate Limiting at the Gateway</h4>
+  <p>Capping how many requests a client can make in a time window, applied centrally to protect all services from abuse and overload.</p>
+  <h4>Request/Response Transformation</h4>
+  <p>Reshaping data as it passes through — e.g., converting formats, adding headers, or hiding internal fields — so clients and services can evolve independently.</p>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>TCP/IP moves data reliably; TLS keeps it private (HTTPS). At the edge, a reverse proxy / CDN brings content close to users, and an API Gateway centralizes auth, rate limiting, routing, and transformation.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 7 ===================== -->
+<section id="m7">
+  <span class="modtag">Module 07</span>
+  <h2>APIs and Communication</h2>
+  <p>Systems need to talk — clients to servers, services to services. The "language and style" they use to talk is an API and a communication protocol. Here are all the main options and when to use each.</p>
+
+  <h3>What is an API</h3>
+  <p><strong>Simple Definition:</strong> An API (Application Programming Interface) is a contract that lets two pieces of software talk. It defines what requests you can make and what responses you'll get back, without exposing the messy internals. You call a defined "endpoint," send some data, and receive a result. APIs are how apps use each other's features.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A restaurant menu: you don't enter the kitchen, you just order from a defined list and food arrives. The menu is the API.</div>
+
+  <h3>REST APIs</h3>
+  <p><strong>Simple Definition:</strong> REST is the most common API style for the web. It treats everything as a "resource" (users, orders) with a URL, and uses standard HTTP methods (GET, POST, etc.) to act on them. Data is usually exchanged as JSON. It's simple, stateless, and works everywhere. (Deep dive in Module 8.)</p>
+  <p><strong>Real-World Tech Example:</strong> Most public APIs — Twitter, Stripe, GitHub — are REST.</p>
+
+  <h3>SOAP APIs</h3>
+  <p><strong>Simple Definition:</strong> SOAP is an older, stricter, XML-based protocol with formal contracts (WSDL) and built-in standards for security and reliability. It's heavier and more rigid than REST, but its strictness suits banking and enterprise systems that need guarantees.</p>
+  <p><strong>Real-World Tech Example:</strong> Many banks and legacy enterprise/payment systems still use SOAP.</p>
+
+  <h3>GraphQL</h3>
+  <p><strong>Simple Definition:</strong> GraphQL is a query language for APIs where the <em>client</em> asks for exactly the fields it needs in one request — no more, no less. This avoids "over-fetching" (getting too much) and "under-fetching" (needing many calls). There's usually a single endpoint.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A buffet where you put exactly the items you want on your plate, vs a fixed thali where you get whatever they decided.</div>
+  <p><strong>Real-World Tech Example:</strong> Facebook created it; GitHub and Shopify offer GraphQL APIs.</p>
+
+  <h3>gRPC</h3>
+  <p><strong>Simple Definition:</strong> gRPC is a high-performance way for services to call each other, using a compact binary format (Protocol Buffers) over HTTP/2. It's much faster and smaller than JSON, supports streaming, but isn't human-readable and is awkward directly from browsers. Ideal for internal service-to-service calls.</p>
+  <p><strong>Real-World Tech Example:</strong> Google, Netflix, and Uber use gRPC between microservices.</p>
+
+  <h3>WebSockets</h3>
+  <p><strong>Simple Definition:</strong> WebSockets open a single, persistent two-way connection between client and server, so both can send messages anytime instantly — no repeated requests. Perfect for real-time apps where the server must push updates immediately.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A phone call (open line, both can talk anytime) vs sending letters back and forth (HTTP request/response).</div>
+  <p><strong>Real-World Tech Example:</strong> WhatsApp Web, live chat, multiplayer games, and trading apps.</p>
+
+  <h3>Server-Sent Events (SSE)</h3>
+  <p><strong>Simple Definition:</strong> SSE lets a server push a continuous stream of updates to the client over one HTTP connection, but in one direction only (server → client). It's simpler than WebSockets when the client just needs to <em>receive</em> live updates and doesn't need to send much back.</p>
+  <p><strong>Real-World Tech Example:</strong> Live news tickers, stock price feeds, notification streams.</p>
+
+  <h3>Long Polling</h3>
+  <p><strong>Simple Definition:</strong> A trick for near-real-time updates using normal HTTP: the client asks the server and the server <em>holds the request open</em> until it has new data, then responds; the client immediately asks again. It mimics push without special protocols, but is less efficient than WebSockets/SSE.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Calling a shop and them keeping you on hold until your item is ready, then telling you — instead of you calling every minute.</div>
+
+  <h3>Webhooks</h3>
+  <p><strong>Simple Definition:</strong> A webhook is a "reverse API" — instead of you repeatedly asking a service for updates, the service calls <em>your</em> URL when an event happens. You register a URL; they POST data to it on events. Great for event notifications between systems.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Instead of checking the mailbox every hour, you ask the postman to ring your doorbell when a package arrives.</div>
+  <p><strong>Real-World Tech Example:</strong> Stripe sends a webhook to your server when a payment succeeds; GitHub fires webhooks on a push.</p>
+
+  <h3>Sync vs Async Communication</h3>
+  <p><strong>Simple Definition:</strong> In <em>synchronous</em> communication the caller waits for the response before continuing. In <em>asynchronous</em> communication the caller sends the request and moves on, getting the result later (often via a queue or callback). Sync is simple and immediate; async is resilient and great for slow or bursty work.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+  subgraph S["🔁 Synchronous"]
+    s1["Client"] -->|"request"| s2["Server"]
+    s2 -->|"waits for response"| s1
+  end
+  subgraph A["⏩ Asynchronous"]
+    a1["Client"] -->|"drop message"| q["📩 Queue"]
+    q --> a2["Worker"]
+    a2 -.->|"result later"| a1
+  end
+    </div>
+  </div>
+
+  <h3>When and Why to Use Each One</h3>
+  <div class="tablewrap">
+  <table>
+    <tr><th>Style</th><th>Best For</th><th>Avoid When</th></tr>
+    <tr><td>REST</td><td>Public APIs, CRUD, simplicity</td><td>You need real-time push or tiny payloads</td></tr>
+    <tr><td>SOAP</td><td>Strict enterprise/banking contracts</td><td>You want lightweight & modern</td></tr>
+    <tr><td>GraphQL</td><td>Flexible clients, many data shapes</td><td>Simple fixed responses; heavy caching needs</td></tr>
+    <tr><td>gRPC</td><td>Fast internal microservice calls</td><td>Direct browser calls, human debugging</td></tr>
+    <tr><td>WebSockets</td><td>Two-way real-time (chat, games)</td><td>One-off requests</td></tr>
+    <tr><td>SSE</td><td>One-way live streams (feeds)</td><td>Client needs to push a lot back</td></tr>
+    <tr><td>Long Polling</td><td>Real-time-ish with basic HTTP</td><td>WebSockets/SSE are available</td></tr>
+    <tr><td>Webhooks</td><td>Event notifications between systems</td><td>You need an immediate reply in the same call</td></tr>
+  </table>
+  </div>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>Default to REST for public APIs and gRPC between services. Use WebSockets/SSE for live updates, webhooks for cross-system events, and async (queues) whenever the work is slow or the caller shouldn't have to wait.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 8 ===================== -->
+<section id="m8">
+  <span class="modtag">Module 08</span>
+  <h2>REST API Deep Dive</h2>
+  <p>REST is the workhorse of web APIs, so it deserves its own module. Here's everything you need to design clean, correct REST APIs.</p>
+
+  <h3>HTTP Methods (GET, POST, PUT, PATCH, DELETE)</h3>
+  <p><strong>Simple Definition:</strong> HTTP methods (also called "verbs") tell the server what action you want on a resource. Each has a clear meaning, and using them correctly makes your API predictable.</p>
+  <div class="tablewrap">
+  <table>
+    <tr><th>Method</th><th>Meaning</th><th>Example</th><th>Idempotent?</th></tr>
+    <tr><td>GET</td><td>Read data (no changes)</td><td>Get a user's profile</td><td>Yes</td></tr>
+    <tr><td>POST</td><td>Create a new resource</td><td>Create a new order</td><td>No</td></tr>
+    <tr><td>PUT</td><td>Replace a resource fully</td><td>Replace entire profile</td><td>Yes</td></tr>
+    <tr><td>PATCH</td><td>Update part of a resource</td><td>Change just the email</td><td>Usually</td></tr>
+    <tr><td>DELETE</td><td>Remove a resource</td><td>Delete an order</td><td>Yes</td></tr>
+  </table>
+  </div>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Think of a document: GET = read it, POST = create a new one, PUT = rewrite the whole thing, PATCH = edit one line, DELETE = shred it.</div>
+
+  <h3>Endpoints and Resource Naming</h3>
+  <p><strong>Simple Definition:</strong> An endpoint is the URL that represents a resource. Good REST uses nouns (not verbs) and plurals, with hierarchy showing relationships. The HTTP method supplies the action, so the URL just names the thing.</p>
+  <pre><code>✅ Good:  GET /users/42/orders        (orders of user 42)
+✅ Good:  POST /users                 (create a user)
+❌ Bad:   GET /getUserOrders?id=42    (verb in URL)
+❌ Bad:   POST /createNewUser         (action in URL)</code></pre>
+
+  <h3>JSON</h3>
+  <p><strong>Simple Definition:</strong> JSON (JavaScript Object Notation) is the standard text format for sending data in REST APIs. It's human-readable, made of key–value pairs, lists, and nested objects. Almost every language can read and write it.</p>
+  <pre><code>{
+  "id": 42,
+  "name": "Asha",
+  "email": "asha@example.com",
+  "roles": ["user", "admin"]
+}</code></pre>
+
+  <h3>Query Parameters</h3>
+  <p><strong>Simple Definition:</strong> Query parameters are extra key–value options added after a <code>?</code> in the URL to filter, sort, search, or paginate — without changing which resource you're hitting. They're for refining a GET request.</p>
+  <pre><code>GET /products?category=shoes&sort=price&limit=20&page=2</code></pre>
+
+  <h3>Request and Response Body</h3>
+  <p><strong>Simple Definition:</strong> The request body carries the data you send (usually with POST/PUT/PATCH) — like the new user's details. The response body carries the data the server sends back — like the created resource or an error message. GET requests typically have no body.</p>
+
+  <h3>Status Codes (2xx, 3xx, 4xx, 5xx)</h3>
+  <p><strong>Simple Definition:</strong> A status code is a 3-digit number the server returns to say how the request went. The first digit gives the category.</p>
+  <div class="tablewrap">
+  <table>
+    <tr><th>Range</th><th>Meaning</th><th>Common codes</th></tr>
+    <tr><td>2xx</td><td>Success</td><td>200 OK, 201 Created, 204 No Content</td></tr>
+    <tr><td>3xx</td><td>Redirection</td><td>301 Moved, 304 Not Modified</td></tr>
+    <tr><td>4xx</td><td>Client's fault</td><td>400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found, 429 Too Many Requests</td></tr>
+    <tr><td>5xx</td><td>Server's fault</td><td>500 Internal Error, 502 Bad Gateway, 503 Unavailable</td></tr>
+  </table>
+  </div>
+  <div class="box tip"><span class="t">⚠️ Interview Tip</span>Remember: 4xx = "you messed up" (fix your request), 5xx = "we messed up" (server problem). Returning the right code is part of good API design.</div>
+
+  <h3>API Design Best Practices</h3>
+  <ul>
+    <li>Use nouns + plurals for resources; let HTTP methods be the verbs.</li>
+    <li>Return correct status codes and consistent error formats.</li>
+    <li>Version your API from day one.</li>
+    <li>Paginate large lists; never return everything at once.</li>
+    <li>Secure with HTTPS, auth, and rate limits.</li>
+    <li>Keep responses predictable and documented.</li>
+  </ul>
+
+  <h3>Idempotency</h3>
+  <p><strong>Simple Definition:</strong> An operation is idempotent if doing it many times has the same effect as doing it once. GET, PUT, DELETE are naturally idempotent; POST usually isn't (it creates a new thing each time). This matters because networks fail and clients retry — idempotency prevents duplicates.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Pressing an elevator button 5 times = same result as once (idempotent). Withdrawing $100 five times = very different (not idempotent).</div>
+
+  <h3>Pagination</h3>
+  <p><strong>Simple Definition:</strong> Pagination breaks a large list into smaller "pages" so you don't fetch millions of rows at once. It keeps responses fast and memory-friendly.</p>
+  <h4>Offset-based Pagination</h4>
+  <p>Uses <code>?limit=20&offset=40</code> ("skip 40, give 20"). Simple and lets you jump to any page, but gets slow on huge datasets and can show duplicates/skips if data changes between pages.</p>
+  <h4>Cursor-based Pagination</h4>
+  <p>Uses a pointer to the last item seen: <code>?limit=20&cursor=abc123</code> ("give 20 after this item"). Fast and stable even as data changes, but you can't jump to an arbitrary page. Best for infinite-scroll feeds.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+  O["Offset: SKIP 40 LIMIT 20<br/>(slow on big tables)"] -.vs.- C["Cursor: WHERE id > 1020 LIMIT 20<br/>(fast, stable)"]
+    </div>
+  </div>
+
+  <h3>API Versioning</h3>
+  <p><strong>Simple Definition:</strong> Versioning lets you change an API without breaking existing apps that rely on the old behavior. You publish v2 while v1 keeps working.</p>
+  <h4>URL Versioning</h4>
+  <p>Put the version in the path: <code>/v1/users</code>, <code>/v2/users</code>. Very visible and easy to route; the most common approach.</p>
+  <h4>Header Versioning</h4>
+  <p>Put the version in a request header (e.g., <code>Accept: application/vnd.api.v2+json</code>). Keeps URLs clean but is less obvious and harder to test in a browser.</p>
+
+  <h3>Rate Limiting in APIs</h3>
+  <p><strong>Simple Definition:</strong> Rate limiting caps how many requests a client can make in a time window (e.g., 100/minute) to prevent abuse, ensure fairness, and protect the system. Exceeding it returns <code>429 Too Many Requests</code>. (Algorithms in Module 20.)</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>An amusement-park ride that lets only a fixed number of people on per minute so it doesn't get overwhelmed.</div>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>Good REST = noun-based URLs, correct HTTP methods & status codes, idempotency for safe retries, pagination for big lists, versioning for change, and rate limiting for protection.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 9 ===================== -->
+<section id="m9">
+  <span class="modtag">Module 09</span>
+  <h2>SQL Databases</h2>
+  <p>SQL (relational) databases organize data into neat tables with strict rules. They've powered serious applications for decades because they keep data accurate and let you ask powerful questions.</p>
+
+  <h3>Relational Databases</h3>
+  <p><strong>Simple Definition:</strong> A relational database stores data in tables that can be linked ("related") to each other. You interact with it using SQL (Structured Query Language). It enforces a fixed structure (schema) and strong rules so data stays consistent. It's the default choice when correctness and relationships matter.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A well-organized Excel workbook where each sheet is a table, rows are records, and sheets reference each other by ID.</div>
+  <p><strong>Real-World Tech Example:</strong> PostgreSQL, MySQL, Oracle — used for banking, e-commerce orders, and user accounts.</p>
+
+  <h3>Tables, Rows, Columns</h3>
+  <p><strong>Simple Definition:</strong> A <em>table</em> holds one type of thing (e.g., Users). Each <em>row</em> is one record (one user). Each <em>column</em> is one attribute (name, email). Every row has a value for each column, giving a clean grid.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TB
+  subgraph Users["📋 Users Table"]
+    direction LR
+    H["id | name | email"]
+    R1["1 | Asha | asha@x.com"]
+    R2["2 | Ravi | ravi@x.com"]
+  end
+    </div>
+  </div>
+
+  <h3>Constraints</h3>
+  <p><strong>Simple Definition:</strong> Constraints are rules the database enforces to keep data valid — like NOT NULL (must have a value), UNIQUE (no duplicates), and CHECK (value must satisfy a condition). They stop bad data from ever being saved.</p>
+
+  <h3>Primary Key and Foreign Key</h3>
+  <p><strong>Simple Definition:</strong> A <em>primary key</em> is a column that uniquely identifies each row (like a user's <code>id</code>) — no duplicates, never empty. A <em>foreign key</em> is a column in one table that points to the primary key of another, creating a link. Together they connect tables reliably.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Your Aadhaar/SSN is a primary key (uniquely you). An order form listing your ID is a foreign key pointing back to you.</div>
+
+  <h3>Joins and Relationships</h3>
+  <p><strong>Simple Definition:</strong> A <em>join</em> combines rows from two tables based on a related column, letting you answer questions that span tables (e.g., "show each order with its customer's name"). Relationships describe how tables connect.</p>
+  <h4>One-to-One</h4>
+  <p>Each row in A matches exactly one row in B. Example: a user and their single passport record.</p>
+  <h4>One-to-Many</h4>
+  <p>One row in A links to many rows in B. Example: one customer has many orders. (The most common relationship.)</p>
+  <h4>Many-to-Many</h4>
+  <p>Rows in A link to many in B and vice versa, handled with a "join table." Example: students and courses — each student takes many courses, each course has many students.</p>
+  <div class="diagram">
+    <div class="mermaid">
+erDiagram
+  CUSTOMER ||--o{ ORDER : places
+  STUDENT }o--o{ COURSE : enrolls
+  USER ||--|| PASSPORT : has
+    </div>
+    <div class="cap">One-to-one, one-to-many, and many-to-many relationships.</div>
+  </div>
+
+  <h3>ACID Properties</h3>
+  <p><strong>Simple Definition:</strong> ACID is the set of guarantees that make SQL transactions trustworthy. They ensure your data is never left in a broken, half-done state.</p>
+  <ul>
+    <li><strong>Atomicity</strong> — All steps of a transaction happen, or none do. A money transfer either debits <em>and</em> credits, or nothing changes.</li>
+    <li><strong>Consistency</strong> — A transaction moves the database from one valid state to another, never breaking rules/constraints.</li>
+    <li><strong>Isolation</strong> — Concurrent transactions don't mess each other up; each behaves as if running alone.</li>
+    <li><strong>Durability</strong> — Once committed, data survives crashes and power loss (it's written to permanent storage).</li>
+  </ul>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Bank transfer: Atomicity = no money vanishes mid-transfer; Durability = once the receipt prints, it's permanent even if the power fails.</div>
+
+  <h3>Transactions</h3>
+  <p><strong>Simple Definition:</strong> A transaction groups several operations into one all-or-nothing unit. If any step fails, the whole group is rolled back. This is how databases keep multi-step operations safe.</p>
+
+  <h3>Isolation Levels</h3>
+  <p><strong>Simple Definition:</strong> Isolation levels control how much transactions can "see" each other's in-progress work. Higher isolation = more correctness but less concurrency (slower); lower = faster but risks anomalies.</p>
+  <div class="tablewrap">
+  <table>
+    <tr><th>Level</th><th>Prevents</th><th>Trade-off</th></tr>
+    <tr><td>Read Uncommitted</td><td>Almost nothing (can read "dirty" uncommitted data)</td><td>Fastest, least safe</td></tr>
+    <tr><td>Read Committed</td><td>Dirty reads</td><td>Common default</td></tr>
+    <tr><td>Repeatable Read</td><td>Dirty + non-repeatable reads</td><td>Stronger</td></tr>
+    <tr><td>Serializable</td><td>Everything (acts fully sequential)</td><td>Safest, slowest</td></tr>
+  </table>
+  </div>
+
+  <h3>Indexing</h3>
+  <p><strong>Simple Definition:</strong> An index is an extra data structure that lets the database find rows fast without scanning the whole table — like a book's index. It dramatically speeds up reads on indexed columns but slightly slows writes and uses extra space.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Finding "Mitochondria" via a textbook's index in seconds vs flipping through every page.</div>
+  <h4>B-tree Index</h4>
+  <p>The default, all-purpose index. Keeps data sorted, so it's great for equality <em>and</em> range queries (<code>&gt;</code>, <code>&lt;</code>, BETWEEN, sorting).</p>
+  <h4>Hash Index</h4>
+  <p>Maps keys to locations via hashing. Very fast for exact-match lookups (<code>=</code>), but useless for ranges or sorting.</p>
+  <h4>Composite Index</h4>
+  <p>An index on multiple columns together (e.g., <code>(last_name, first_name)</code>). Helps queries filtering on those columns in order. Column order matters a lot.</p>
+  <h4>Index Trade-offs</h4>
+  <p>Indexes speed reads but cost write performance (each write updates indexes) and storage. Over-indexing hurts; index the columns you actually filter/sort/join on.</p>
+  <div class="box tip"><span class="t">⚠️ Interview Tip</span>"Add an index" is the #1 first answer for a slow query — but mention the write/storage cost to show depth.</div>
+
+  <h3>Normalization vs Denormalization</h3>
+  <p><strong>Simple Definition:</strong> <em>Normalization</em> splits data into many tables to avoid duplication (each fact stored once) — great for write integrity. <em>Denormalization</em> deliberately duplicates data into fewer tables to make reads faster (fewer joins). It's a classic read-speed vs write-simplicity trade-off.</p>
+  <div class="tablewrap">
+  <table>
+    <tr><th></th><th>Normalized</th><th>Denormalized</th></tr>
+    <tr><td>Data duplication</td><td>Minimal</td><td>Intentional</td></tr>
+    <tr><td>Reads</td><td>Slower (joins)</td><td>Faster (fewer joins)</td></tr>
+    <tr><td>Writes/updates</td><td>Simple, safe</td><td>Must update copies</td></tr>
+    <tr><td>Best for</td><td>OLTP, integrity</td><td>Read-heavy, analytics</td></tr>
+  </table>
+  </div>
+
+  <h3>Connection Pooling</h3>
+  <p><strong>Simple Definition:</strong> Opening a new database connection is expensive. A connection pool keeps a set of ready-made connections that requests borrow and return, instead of creating one each time. This boosts performance and protects the database from too many connections.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A pool of taxis waiting at a stand — you grab one and return it, rather than building a new car for each trip.</div>
+
+  <h3>Database Migrations and Schema Evolution</h3>
+  <p><strong>Simple Definition:</strong> As an app grows, its tables must change (new columns, new tables). Migrations are versioned, repeatable scripts that safely apply these schema changes across environments. They let the database evolve without manual, error-prone edits.</p>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>Choose SQL when you need relationships, complex queries, and ACID guarantees. Master primary/foreign keys, transactions, isolation levels, and indexing — they appear in nearly every backend.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 10 ===================== -->
+<section id="m10">
+  <span class="modtag">Module 10</span>
+  <h2>NoSQL Databases</h2>
+  <p>NoSQL ("Not Only SQL") databases trade some of SQL's strictness for flexibility and massive scale. They come in several types, each built for a different shape of data.</p>
+
+  <h3>Why NoSQL is Needed</h3>
+  <p><strong>Simple Definition:</strong> As apps reached billions of users and huge, fast-changing data, the rigid schema and single-machine tendencies of SQL became painful. NoSQL databases were built to scale out across many machines easily, handle flexible/unstructured data, and deliver very high read/write throughput. They relax some guarantees to gain speed and scale.</p>
+
+  <h3>Scaling Challenges with SQL</h3>
+  <p><strong>Simple Definition:</strong> SQL databases are hard to scale horizontally because joins, transactions, and strict consistency are tough to maintain across many machines. They scale up (bigger box) more easily than out (more boxes). When one machine isn't enough, NoSQL's design makes spreading data simpler.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A single perfectly organized library is easy to run, but splitting one collection across 100 buildings while keeping perfect cross-references is hard — that's SQL at scale.</div>
+
+  <h3>Key-Value Databases (Redis, DynamoDB)</h3>
+  <p><strong>Simple Definition:</strong> The simplest NoSQL type: store a value under a unique key, like a giant dictionary. Lookups by key are blazing fast. Great for caching, sessions, and simple lookups; not for complex queries.</p>
+  <p><strong>Real-World Tech Example:</strong> Redis (in-memory cache), Amazon DynamoDB (managed, massive scale).</p>
+
+  <h3>Document Databases (MongoDB)</h3>
+  <p><strong>Simple Definition:</strong> Store data as flexible JSON-like "documents," each of which can have its own structure. Perfect when data is nested and varies between records (product catalogs, user profiles). You can query inside documents.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A folder of forms where each form can have different fields — no single rigid template required.</div>
+
+  <h3>Graph Databases (Neo4j)</h3>
+  <p><strong>Simple Definition:</strong> Built to store and traverse <em>relationships</em> — nodes (things) connected by edges (relationships). Ideal when connections are the main point: social networks, recommendations, fraud rings. Finding "friends of friends" is fast and natural.</p>
+  <p><strong>Real-World Tech Example:</strong> LinkedIn-style connections, fraud detection, recommendation engines.</p>
+
+  <h3>Columnar Databases (Cassandra, HBase)</h3>
+  <p><strong>Simple Definition:</strong> Store data by columns rather than rows, and distribute across many nodes. Excellent for huge write volumes and analytical reads over specific columns. Designed for scale and availability across data centers.</p>
+  <p><strong>Real-World Tech Example:</strong> Cassandra powers Netflix and Instagram's high-write workloads.</p>
+
+  <h3>Time-Series Databases</h3>
+  <p><strong>Simple Definition:</strong> Specialized for data stamped with time — metrics, sensor readings, stock prices — where you mostly append new points and query by time ranges. Optimized for fast writes and time-based aggregation.</p>
+  <p><strong>Real-World Tech Example:</strong> InfluxDB, TimescaleDB, Prometheus for monitoring metrics.</p>
+
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  N["🗂️ NoSQL Types"] --> KV["🔑 Key-Value<br/>Redis, DynamoDB"]
+  N --> DOC["📄 Document<br/>MongoDB"]
+  N --> GR["🕸️ Graph<br/>Neo4j"]
+  N --> COL["📊 Columnar<br/>Cassandra, HBase"]
+  N --> TS["⏱️ Time-Series<br/>InfluxDB"]
+    </div>
+  </div>
+
+  <h3>SQL vs NoSQL — When to Use Which</h3>
+  <div class="tablewrap">
+  <table>
+    <tr><th>Aspect</th><th>SQL</th><th>NoSQL</th></tr>
+    <tr><td>Schema</td><td>Fixed, strict</td><td>Flexible</td></tr>
+    <tr><td>Scaling</td><td>Vertical (mostly)</td><td>Horizontal (easy)</td></tr>
+    <tr><td>Consistency</td><td>Strong (ACID)</td><td>Often eventual (BASE)</td></tr>
+    <tr><td>Queries</td><td>Complex joins</td><td>Simple, key-based</td></tr>
+    <tr><td>Best for</td><td>Transactions, relationships</td><td>Huge scale, flexible/changing data</td></tr>
+    <tr><td>Examples</td><td>Banking, orders, inventory</td><td>Feeds, sessions, IoT, catalogs</td></tr>
+  </table>
+  </div>
+  <div class="box tip"><span class="t">⚠️ Interview Tip</span>It's not "SQL vs NoSQL" — real systems use both (polyglot persistence): SQL for orders/payments, Redis for cache, Cassandra for the activity feed.</div>
+
+  <h3>BASE Properties</h3>
+  <p><strong>Simple Definition:</strong> BASE is NoSQL's relaxed counterpart to ACID, favoring availability and scale over immediate consistency.</p>
+  <ul>
+    <li><strong>Basically Available</strong> — The system stays responsive even during failures (it always answers, perhaps with slightly stale data).</li>
+    <li><strong>Soft state</strong> — Data may be "in flux"/changing in the background, not guaranteed perfectly settled at every instant.</li>
+    <li><strong>Eventual consistency</strong> — If writes stop, all copies will <em>eventually</em> agree, but not instantly.</li>
+  </ul>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A like count that briefly shows 1,000 to you and 1,002 to a friend, then syncs to the same number a second later — fine for likes, not for bank balances.</div>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>Pick the NoSQL type that matches your data shape: key-value for lookups/caching, document for flexible records, graph for relationships, columnar for huge writes, time-series for metrics. Accept BASE/eventual consistency where strict ACID isn't required.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 11 ===================== -->
+<section id="m11">
+  <span class="modtag">Module 11</span>
+  <h2>Storage Systems</h2>
+  <p>Not all storage is a "database." Files, videos, backups, and search indexes need different kinds of storage. Here are the main types and when to use each.</p>
+
+  <h3>Block Storage</h3>
+  <p><strong>Simple Definition:</strong> Block storage splits data into fixed-size chunks ("blocks") and presents them as a raw disk that an operating system or database can format and use. It's very fast and low-level, like a hard drive attached to your server. You build file systems or databases on top of it.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>An empty bookshelf with numbered slots — you decide how to organize the books.</div>
+  <p><strong>Real-World Tech Example:</strong> AWS EBS, used as the disk for databases and VMs.</p>
+
+  <h3>File Storage</h3>
+  <p><strong>Simple Definition:</strong> File storage organizes data as files inside folders (a hierarchy), accessed over a network so many machines can share it. It's familiar and easy, like a shared network drive. Good for shared documents and content, but harder to scale to internet size.</p>
+  <p><strong>Real-World Tech Example:</strong> Network drives, AWS EFS, Google Drive-style shares.</p>
+
+  <h3>Object / Blob Storage (S3-style)</h3>
+  <p><strong>Simple Definition:</strong> Object storage keeps each file as an "object" with a unique key and metadata, in a flat space (no real folders). It scales almost infinitely, is cheap, and is accessed over HTTP APIs. Perfect for images, videos, backups, and static assets — but you can't edit part of an object; you replace the whole thing.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A valet parking system: you hand over your car (object) and get a ticket (key); you don't care where it's parked, you just retrieve it by ticket.</div>
+  <p><strong>Real-World Tech Example:</strong> Amazon S3 stores virtually all of Netflix's and Dropbox's media.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+  B["🧱 Block<br/>raw disk, fast,<br/>for DBs/VMs"] --- F["📁 File<br/>folders, shared<br/>network drive"] --- O["🪣 Object<br/>key+metadata,<br/>infinite scale, media"]
+    </div>
+    <div class="cap">Three storage models from lowest-level (block) to most scalable (object).</div>
+  </div>
+
+  <h3>Storage Tiers (Hot, Warm, Cold)</h3>
+  <p><strong>Simple Definition:</strong> Cloud storage comes in tiers by access frequency and price. <em>Hot</em> = accessed often, fast, pricey. <em>Warm</em> = occasional access, cheaper. <em>Cold/archive</em> = rarely accessed, very cheap, but slow to retrieve. Moving old data to colder tiers saves a lot of money.</p>
+  <p><strong>Real-World Tech Example:</strong> S3 Standard (hot) → S3 Infrequent Access (warm) → S3 Glacier (cold).</p>
+
+  <h3>Data Warehouse Basics</h3>
+  <p><strong>Simple Definition:</strong> A data warehouse is a large store optimized for analytics (OLAP) — combining data from many sources to run big reports and find trends. It's tuned for reading huge volumes, not for live transactions. Data is usually loaded via ETL pipelines (Module 18).</p>
+  <p><strong>Real-World Tech Example:</strong> Snowflake, Google BigQuery, Amazon Redshift.</p>
+
+  <h3>Search Engines and Indexing (Elasticsearch-style)</h3>
+  <p><strong>Simple Definition:</strong> A search engine builds special indexes so you can find documents by their content quickly, even across millions of records. The core trick is an <em>inverted index</em>: a map from each word to the list of documents containing it. This makes text search nearly instant.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>The index at the back of a book: look up a word and instantly get every page it appears on — instead of reading the whole book.</div>
+  <p><strong>Real-World Tech Example:</strong> Elasticsearch powers search and log analytics at Uber, GitHub, and many others.</p>
+
+  <h3>Full-Text Search vs Structured Query</h3>
+  <p><strong>Simple Definition:</strong> A <em>structured query</em> (SQL) filters on exact fields ("price &lt; 100 AND category = shoes"). <em>Full-text search</em> understands language — matching words, handling typos, ranking by relevance ("blu runing shoez" still finds blue running shoes). Use structured queries for precise data, full-text search for human language.</p>
+  <div class="tablewrap">
+  <table>
+    <tr><th></th><th>Structured Query</th><th>Full-Text Search</th></tr>
+    <tr><td>Matches</td><td>Exact field conditions</td><td>Words, typos, relevance</td></tr>
+    <tr><td>Returns</td><td>All matching rows equally</td><td>Ranked by relevance score</td></tr>
+    <tr><td>Tool</td><td>SQL databases</td><td>Elasticsearch, Lucene</td></tr>
+  </table>
+  </div>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>Use block storage for databases, file storage for shared files, and object storage for media/backups at scale. Move cold data to cheaper tiers, use a data warehouse for analytics, and a search engine (inverted index) for fast text search.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 12 ===================== -->
+<section id="m12">
+  <span class="modtag">Module 12</span>
+  <h2>Caching</h2>
+  <p>Caching is the single most effective performance technique in system design. A cache stores copies of data in fast memory so repeated requests are answered instantly instead of hitting the slow database every time.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Keeping your most-used books on your desk instead of walking to the library each time. The desk is the cache.</div>
+
+  <h3>Why Cache is Important</h3>
+  <p><strong>Simple Definition:</strong> Databases and disks are relatively slow; memory (RAM) is thousands of times faster. By keeping frequently used data in a cache, you cut response times from tens of milliseconds to under a millisecond, and you take huge load off the database. This improves speed, scale, and cost all at once. The challenge is keeping cached copies fresh.</p>
+
+  <h3>Cache Hit and Cache Miss</h3>
+  <p><strong>Simple Definition:</strong> A <em>cache hit</em> is when the data you want is already in the cache (fast!). A <em>cache miss</em> is when it isn't, so you must fetch it from the database and usually store it in the cache for next time. The percentage of hits is the "hit ratio" — higher is better.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  A["Request data"] --> B{"In cache?"}
+  B -->|"Hit ✅"| C["Return from cache (fast)"]
+  B -->|"Miss ❌"| D[("Fetch from DB")]
+  D --> E["Store in cache"]
+  E --> F["Return to user"]
+    </div>
+    <div class="cap">The cache hit/miss flow.</div>
+  </div>
+
+  <h3>TTL (Time To Live)</h3>
+  <p><strong>Simple Definition:</strong> TTL is how long a cached item stays valid before it's automatically discarded. A short TTL keeps data fresh but causes more misses; a long TTL is faster but risks staleness. It's the simplest way to expire cache entries.</p>
+
+  <h3>Caching Strategies (Read &amp; Write Patterns)</h3>
+  <div class="tablewrap">
+  <table>
+    <tr><th>Strategy</th><th>How it works</th><th>Trade-off</th></tr>
+    <tr><td>Read Through</td><td>App asks cache; on miss, the <em>cache itself</em> loads from DB and returns it</td><td>Simple reads; first read is slow</td></tr>
+    <tr><td>Write Through</td><td>Every write goes to cache <em>and</em> DB at the same time</td><td>Always fresh; slower writes</td></tr>
+    <tr><td>Write Around</td><td>Writes go straight to DB, skipping cache; cache filled on later reads</td><td>Avoids caching rarely-read data; first read is a miss</td></tr>
+    <tr><td>Write Back</td><td>Writes go to cache first, flushed to DB later in batches</td><td>Very fast writes; risk of data loss if cache fails before flush</td></tr>
+  </table>
+  </div>
+  <h4>Read Through Cache</h4>
+  <p>The application always talks to the cache; the cache is responsible for fetching missing data from the database. Keeps app code simple.</p>
+  <h4>Write Through Cache</h4>
+  <p>Data is written to the cache and database together, so the cache is never stale — at the cost of slightly slower writes.</p>
+  <h4>Write Around Cache</h4>
+  <p>Writes bypass the cache and go to the database; the cache only fills when that data is later read. Avoids polluting the cache with data nobody reads.</p>
+  <h4>Write Back (Write Behind) Cache</h4>
+  <p>Writes hit the cache instantly and are saved to the database asynchronously later. Fastest writes, but you can lose recent writes if the cache crashes before flushing.</p>
+
+  <h3>Cache Eviction Policies</h3>
+  <p><strong>Simple Definition:</strong> A cache has limited space, so when it's full it must remove ("evict") something to make room. The eviction policy decides what to throw out.</p>
+  <ul>
+    <li><strong>LRU (Least Recently Used)</strong> — Evict the item not used for the longest time. Most popular and usually a great default.</li>
+    <li><strong>LFU (Least Frequently Used)</strong> — Evict the item used the fewest times overall. Good when popularity is stable.</li>
+    <li><strong>FIFO (First In First Out)</strong> — Evict the oldest-inserted item, regardless of use.</li>
+    <li><strong>MRU (Most Recently Used)</strong> — Evict the most recently used item (useful in rare scan patterns).</li>
+    <li><strong>LIFO (Last In First Out)</strong> — Evict the most recently inserted item.</li>
+  </ul>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>LRU = cleaning your fridge by tossing the food you haven't touched in the longest time.</div>
+
+  <h3>Distributed Caching</h3>
+  <p><strong>Simple Definition:</strong> When one cache server isn't enough, you spread the cache across many machines, using consistent hashing to decide which server holds which key. This gives huge cache capacity and high availability. Redis Cluster and Memcached do this.</p>
+
+  <h3>Cache Invalidation Strategies</h3>
+  <p><strong>Simple Definition:</strong> Invalidation is removing or updating stale cache entries when the underlying data changes. Options include TTL expiry, deleting the key on write, or updating the cache on write. It's famously hard — "there are only two hard things in computer science: cache invalidation and naming things."</p>
+  <div class="box tip"><span class="t">⚠️ Interview Tip</span>A common, robust pattern is "cache-aside + delete on write": on update, delete the cache key so the next read repopulates fresh data.</div>
+
+  <h3>CDN as a Cache Layer</h3>
+  <p><strong>Simple Definition:</strong> A CDN (Module 6) is essentially a giant geographic cache for static content, sitting closest to users. It's the first caching layer for images, videos, and files, cutting both latency and origin load.</p>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>Cache hot, read-heavy data in fast memory; choose a write strategy (through/around/back) based on freshness vs speed needs; use LRU eviction and a solid invalidation plan; scale with distributed caching and front everything static with a CDN.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 13 ===================== -->
+<section id="m13">
+  <span class="modtag">Module 13</span>
+  <h2>Load Balancer</h2>
+  <p>A load balancer distributes incoming traffic across multiple servers so no single server is overwhelmed and the system stays up if a server dies. It's the gateway that makes horizontal scaling work.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A supermarket receptionist sending each customer to whichever checkout counter is free, keeping all lines balanced.</div>
+
+  <h3>Why Load Balancers Are Needed</h3>
+  <p><strong>Simple Definition:</strong> One server can only handle so much traffic, and if it fails the whole app goes down. A load balancer spreads requests across many servers, removes failed ones from rotation, and gives clients a single stable address. This delivers both scalability (handle more) and availability (survive failures). It's the foundation of any multi-server system.</p>
+
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  C["📱 Clients"] --> LB["⚖️ Load Balancer<br/>(+ health checks)"]
+  LB --> S1["🖥️ Server 1 ✅"]
+  LB --> S2["🖥️ Server 2 ✅"]
+  LB -. "removed (unhealthy)" .-> S3["🖥️ Server 3 ❌"]
+    </div>
+    <div class="cap">The load balancer routes traffic only to healthy servers.</div>
+  </div>
+
+  <h3>Layer 4 vs Layer 7 Load Balancing</h3>
+  <p><strong>Simple Definition:</strong> <em>Layer 4</em> balances based on network info (IP and port) without looking at the content — fast and simple. <em>Layer 7</em> looks inside the request (URL, headers, cookies) and can route intelligently — e.g., send <code>/images</code> to one group and <code>/api</code> to another. L7 is smarter but does a bit more work.</p>
+  <div class="tablewrap">
+  <table>
+    <tr><th></th><th>Layer 4 (Transport)</th><th>Layer 7 (Application)</th></tr>
+    <tr><td>Sees</td><td>IP &amp; port only</td><td>Full request (URL, headers)</td></tr>
+    <tr><td>Speed</td><td>Very fast</td><td>Slightly slower</td></tr>
+    <tr><td>Routing</td><td>Basic</td><td>Content-based, smart</td></tr>
+  </table>
+  </div>
+
+  <h3>Load Balancing Algorithms</h3>
+  <h4>Round Robin</h4>
+  <p>Send each new request to the next server in order, looping around. Simple and fair when servers are equal.</p>
+  <h4>Least Connections</h4>
+  <p>Send to the server currently handling the fewest active connections. Better when requests vary in duration.</p>
+  <h4>Weighted Round Robin</h4>
+  <p>Like round robin, but stronger servers get a higher "weight" and thus more requests. Good for mixed hardware.</p>
+  <h4>IP Hash</h4>
+  <p>Hash the client's IP to always send them to the same server. Useful for basic session affinity without extra storage.</p>
+  <h4>GEO-based Routing</h4>
+  <p>Route users to the data center nearest to their location, reducing latency. Used by global services.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Round robin = dealing cards one-by-one to each player. Least connections = giving the next task to whoever's least busy.</div>
+
+  <h3>Health Checks</h3>
+  <p><strong>Simple Definition:</strong> The load balancer regularly pings each server (e.g., a <code>/health</code> endpoint) to confirm it's alive and responding. Unhealthy servers are automatically removed from rotation and added back when they recover. This is what makes failover automatic.</p>
+
+  <h3>Sticky Sessions (Session Affinity)</h3>
+  <p><strong>Simple Definition:</strong> Sticky sessions tie a user to one specific server for their whole session, so server-stored session data stays accessible. It's a workaround for stateful servers, but it hurts even load distribution and breaks if that server dies. Prefer stateless servers with shared session storage instead.</p>
+  <div class="box tip"><span class="t">⚠️ Interview Tip</span>If asked about sticky sessions, mention the better alternative: keep servers stateless and store sessions in Redis, so any server can serve any user.</div>
+
+  <h3>Load Balancer vs API Gateway vs Reverse Proxy</h3>
+  <div class="tablewrap">
+  <table>
+    <tr><th>Component</th><th>Main Job</th><th>Focus</th></tr>
+    <tr><td>Reverse Proxy</td><td>Front servers; forward requests, TLS, caching</td><td>Generic middleman for servers</td></tr>
+    <tr><td>Load Balancer</td><td>Distribute traffic across many servers + health checks</td><td>Scaling & availability</td></tr>
+    <tr><td>API Gateway</td><td>Route + auth + rate limit + transform for APIs</td><td>API management features</td></tr>
+  </table>
+  </div>
+  <p>They overlap a lot — a load balancer is a kind of reverse proxy, and an API gateway often includes load balancing. The difference is their primary purpose.</p>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>Load balancers enable horizontal scaling and high availability. Choose L4 for raw speed, L7 for smart content-based routing; use health checks for auto-failover; and prefer stateless servers over sticky sessions.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 14 ===================== -->
+<section id="m14">
+  <span class="modtag">Module 14</span>
+  <h2>Replication</h2>
+  <p>Replication means keeping copies of your data on multiple machines. It improves availability (if one copy dies, others survive), read performance (spread reads across copies), and disaster recovery. The tricky part is keeping copies in sync.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Photocopying an important document and storing copies in several safes — if one safe is destroyed, you still have the data.</div>
+
+  <h3>Single Leader Replication</h3>
+  <p><strong>Simple Definition:</strong> One node is the <em>leader</em> (handles all writes); the others are <em>followers</em> (replicas) that copy the leader's changes and serve reads. Writes are simple and consistent because they go to one place, but the leader is a write bottleneck and a single point of failure (mitigated by failover). This is the most common setup.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  W["✍️ Writes"] --> L["👑 Leader"]
+  L -->|"replicate"| F1["📄 Follower 1 (reads)"]
+  L -->|"replicate"| F2["📄 Follower 2 (reads)"]
+  R["👁️ Reads"] --> F1
+  R --> F2
+    </div>
+    <div class="cap">Single-leader: all writes to the leader, reads spread across followers.</div>
+  </div>
+
+  <h3>Multi-Leader Replication</h3>
+  <p><strong>Simple Definition:</strong> Multiple nodes can accept writes (often one leader per region), then sync with each other. This improves write availability and lets each region write locally (low latency), but creates <em>conflicts</em> when the same data is changed in two places at once, which you must resolve.</p>
+  <p><strong>Real-World Tech Example:</strong> Used for multi-region apps and collaborative editing where each region needs fast local writes.</p>
+
+  <h3>Leaderless Replication</h3>
+  <p><strong>Simple Definition:</strong> There's no leader; the client (or a coordinator) writes to several nodes directly and reads from several too. Consistency is achieved by reading/writing to enough nodes (quorum). It's highly available and fault-tolerant. Dynamo and Cassandra use this style.</p>
+
+  <h3>Sync vs Async Replication</h3>
+  <p><strong>Simple Definition:</strong> In <em>synchronous</em> replication the leader waits for replicas to confirm before telling the client "done" — safer (no data loss) but slower. In <em>asynchronous</em> replication the leader replies immediately and replicates in the background — faster but you can lose recent writes if the leader crashes before they're copied.</p>
+  <div class="tablewrap">
+  <table>
+    <tr><th></th><th>Synchronous</th><th>Asynchronous</th></tr>
+    <tr><td>Speed</td><td>Slower (waits)</td><td>Faster</td></tr>
+    <tr><td>Data safety</td><td>No loss on failover</td><td>May lose recent writes</td></tr>
+    <tr><td>Used when</td><td>Correctness critical</td><td>Performance critical</td></tr>
+  </table>
+  </div>
+
+  <h3>Quorum Reads and Writes</h3>
+  <p><strong>Simple Definition:</strong> In leaderless systems, a quorum is a minimum number of nodes that must agree. With N copies, if writes go to W nodes and reads check R nodes, and <code>W + R &gt; N</code>, then reads are guaranteed to see the latest write. It's a tunable knob between consistency and availability.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A committee of 5 where any decision needs at least 3 votes — overlapping majorities guarantee everyone hears the latest decision.</div>
+
+  <h3>Read Replicas</h3>
+  <p><strong>Simple Definition:</strong> Read replicas are follower copies dedicated to serving read queries, taking load off the primary. They're the standard way to scale read-heavy applications. Writes still go to the leader; reads fan out to replicas.</p>
+
+  <h3>Replication Lag and Its Impact</h3>
+  <p><strong>Simple Definition:</strong> Replication lag is the delay before a write on the leader appears on the replicas. During this gap, a replica may return stale data — e.g., you post a comment but don't see it because your read hit a lagging replica. This causes confusing "read-your-writes" problems (Module 16).</p>
+  <div class="box tip"><span class="t">⚠️ Interview Tip</span>To avoid users not seeing their own writes, route their reads to the leader for a short time after they write, or pin them to an up-to-date replica.</div>
+
+  <h3>Cross-Region Replication</h3>
+  <p><strong>Simple Definition:</strong> Copying data across data centers in different geographic regions, so users worldwide get low latency and the system survives a whole-region outage. The challenge is that distance increases lag and conflict potential, and it raises cost.</p>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>Single-leader is the safe default (writes to leader, reads to replicas). Use multi-leader/leaderless + quorums for multi-region availability. Always account for replication lag — it's the source of many "I don't see my data" bugs.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 15 ===================== -->
+<section id="m15">
+  <span class="modtag">Module 15</span>
+  <h2>Partitioning (Sharding)</h2>
+  <p>When data is too big for one machine, you split it across many — this is partitioning, or "sharding." Each shard holds a slice of the data. Replication makes copies; partitioning splits the data itself.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Splitting one huge warehouse into several smaller warehouses by product category — electronics here, clothing there — so each is manageable.</div>
+
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  D["🗄️ Huge Dataset"] --> S1["Shard 1<br/>users A–H"]
+  D --> S2["Shard 2<br/>users I–P"]
+  D --> S3["Shard 3<br/>users Q–Z"]
+    </div>
+    <div class="cap">Partitioning splits one big dataset into smaller, independent shards.</div>
+  </div>
+
+  <h3>Partition by Key (Range Partitioning)</h3>
+  <p><strong>Simple Definition:</strong> Data is split by ranges of a key — e.g., users A–H on shard 1, I–P on shard 2. Range queries ("all users L–N") are efficient because related data sits together. The downside: ranges can become unbalanced, creating hotspots (e.g., lots of names starting with 'S').</p>
+
+  <h3>Partition by Hash</h3>
+  <p><strong>Simple Definition:</strong> Run the key through a hash function and use the result to pick a shard. This spreads data evenly and avoids hotspots, but you lose efficient range queries because related keys scatter across shards. Great when you mostly look things up by exact key.</p>
+  <div class="tablewrap">
+  <table>
+    <tr><th></th><th>Range Partitioning</th><th>Hash Partitioning</th></tr>
+    <tr><td>Range queries</td><td>Efficient ✅</td><td>Poor ❌</td></tr>
+    <tr><td>Even distribution</td><td>Risk of hotspots</td><td>Usually even ✅</td></tr>
+    <tr><td>Best for</td><td>Time/alphabetical scans</td><td>Key lookups at scale</td></tr>
+  </table>
+  </div>
+
+  <h3>Consistent Hashing for Sharding</h3>
+  <p><strong>Simple Definition:</strong> Consistent hashing (from Module 4) places shards on a ring so that adding or removing a shard moves only a small slice of data, not everything. It's the standard way to shard so the cluster can grow/shrink smoothly. Virtual nodes are added to keep the load even.</p>
+
+  <h3>Secondary Index Partitioning</h3>
+  <p><strong>Simple Definition:</strong> The shard is usually chosen by the primary key, but you often need to query by <em>other</em> fields (e.g., find users by city). Secondary indexes let you do that, and they too must be partitioned. There are two ways to do it (below).</p>
+  <h4>Global vs Local Secondary Indexes</h4>
+  <ul>
+    <li><strong>Local index</strong> — Each shard indexes only its own data. Writes are simple (one shard), but a query by the secondary field must ask <em>every</em> shard ("scatter-gather"), which is slower to read.</li>
+    <li><strong>Global index</strong> — One index across all shards, itself partitioned by the indexed field. Reads are fast (go to one place), but writes are more complex (must update an index possibly on another shard).</li>
+  </ul>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Local = asking every branch library if they have a book. Global = one central catalog that tells you exactly which branch has it.</div>
+
+  <h3>Hotspots and Challenges</h3>
+  <p><strong>Simple Definition:</strong> A hotspot (or "hot shard") is when one shard gets far more traffic than others — e.g., a celebrity's data, or all writes hitting the "newest" shard. It defeats the purpose of sharding. Fixes include better key choice, adding randomness to keys, or splitting the hot key.</p>
+  <div class="box tip"><span class="t">⚠️ Interview Tip</span>Choosing a good <em>shard key</em> is the most important decision. A bad key (like timestamp for write-heavy data) creates hotspots. Pick a key with high cardinality and even access.</div>
+
+  <h3>Rebalancing Shards</h3>
+  <p><strong>Simple Definition:</strong> Over time shards grow unevenly or you add machines, so data must be redistributed — "rebalancing." Good schemes (like consistent hashing or fixed virtual partitions) move minimal data and avoid downtime. Poorly planned rebalancing can overload the network and the cluster.</p>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>Partition to scale beyond one machine. Hash partitioning spreads load evenly; range partitioning enables scans. Pick the shard key carefully to avoid hotspots, and use consistent hashing so rebalancing moves little data.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 16 ===================== -->
+<section id="m16">
+  <span class="modtag">Module 16</span>
+  <h2>CAP Theorem &amp; Consistency Models</h2>
+  <p>When data lives on multiple machines, you face fundamental trade-offs about consistency and availability. CAP and the consistency models explain what you can and cannot guarantee.</p>
+
+  <h3>The CAP Theorem</h3>
+  <p><strong>Simple Definition:</strong> CAP says a distributed data store can guarantee at most <em>two</em> of three properties at the same time during a network failure: Consistency, Availability, and Partition tolerance. Since network failures (partitions) are unavoidable, you really must choose between Consistency and Availability when one happens.</p>
+  <h4>Consistency</h4>
+  <p>Every read sees the most recent write — all nodes show the same data at the same time.</p>
+  <h4>Availability</h4>
+  <p>Every request gets a (non-error) response, even if some nodes are down — but it might be slightly stale.</p>
+  <h4>Partition Tolerance</h4>
+  <p>The system keeps working even when the network between nodes breaks and messages are lost.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  CAP["CAP — pick 2"] --> CP["CP: Consistent + Partition-tolerant<br/>(may reject requests)<br/>e.g. HBase, MongoDB"]
+  CAP --> AP["AP: Available + Partition-tolerant<br/>(may return stale data)<br/>e.g. Cassandra, DynamoDB"]
+  CAP --> CA["CA: Consistent + Available<br/>(only without partitions —<br/>single-node / not realistic at scale)"]
+    </div>
+  </div>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>During a phone outage between two bank branches: CP = refuse withdrawals until they reconnect (stay correct). AP = allow withdrawals at both (stay open, risk inconsistency).</div>
+
+  <h3>Trade-offs in Distributed Systems</h3>
+  <p>Because partitions will happen, the real choice is CP vs AP. Banks lean CP (correctness over uptime); social feeds and shopping carts lean AP (uptime over perfect freshness). There's no universally "right" answer — it depends on what's worse for your users: wrong data or no data.</p>
+
+  <h3>PACELC Theorem</h3>
+  <p><strong>Simple Definition:</strong> PACELC extends CAP: <em>if</em> there's a Partition (P), choose Availability or Consistency (A/C); <em>Else</em> (E), during normal operation, choose between Latency and Consistency (L/C). It captures that even without failures, you trade speed for consistency.</p>
+  <div class="box tip"><span class="t">⚠️ Interview Tip</span>PACELC shows maturity: "Even with no partition, stronger consistency costs latency." E.g., DynamoDB is PA/EL by default (favors availability and low latency).</div>
+
+  <h3>Consistency Models</h3>
+  <p>These describe what guarantees a system gives about how fresh and ordered your reads are — from strictest to loosest.</p>
+  <h4>Strong Consistency</h4>
+  <p>Every read instantly reflects the latest write, everywhere. Simplest to reason about, but slower and less available. Needed for money and inventory.</p>
+  <h4>Eventual Consistency</h4>
+  <p>Reads may be stale for a while, but if writes stop, all copies eventually converge. Fast and highly available; fine for likes, view counts, feeds.</p>
+  <h4>Causal Consistency</h4>
+  <p>Operations that are causally related (a reply must come after its message) are seen in the right order by everyone, while unrelated operations can be seen in any order. A practical middle ground.</p>
+  <h4>Read-Your-Writes Consistency</h4>
+  <p>You always see your own writes immediately (even if others see them later). Prevents the "I posted but it vanished" experience.</p>
+  <h4>Monotonic Reads and Writes</h4>
+  <p><em>Monotonic reads</em>: once you've seen a newer value, you'll never later see an older one (no going backward in time). <em>Monotonic writes</em>: your writes are applied in the order you made them.</p>
+  <h4>Session Consistency</h4>
+  <p>Guarantees like read-your-writes and monotonic reads hold <em>within a single user session</em>. A popular, practical guarantee that gives a smooth personal experience without full strong consistency.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Read-your-writes = after you change your profile photo, <em>you</em> see it immediately even if friends see the old one for a minute.</div>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>During a network partition you must choose Consistency or Availability (CAP); even normally, consistency costs latency (PACELC). Pick the weakest consistency model that still gives a good user experience — strong for money, session/eventual for feeds.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 17 ===================== -->
+<section id="m17">
+  <span class="modtag">Module 17</span>
+  <h2>Message Queue</h2>
+  <p>A message queue lets parts of a system communicate by passing messages, so slow work can happen in the background and components don't depend on each other being available at the same moment.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A restaurant's order-ticket rail: waiters clip up orders and move on; the kitchen works through tickets at its own pace. The rail is the queue.</div>
+
+  <h3>Sync vs Async Processing</h3>
+  <p><strong>Simple Definition:</strong> In <em>synchronous</em> processing, the user waits while the work finishes. In <em>asynchronous</em> processing, the request is accepted, dropped into a queue, and the user gets an instant "we've got it" while workers do the heavy job later. Async keeps apps responsive and absorbs spikes.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+  P["📤 Producer<br/>(web server)"] --> Q["📩 Message Queue"]
+  Q --> C1["⚙️ Consumer/Worker 1"]
+  Q --> C2["⚙️ Consumer/Worker 2"]
+  C1 --> DB[("🗄️ DB")]
+    </div>
+    <div class="cap">Producers add messages; independent consumers process them at their own pace.</div>
+  </div>
+
+  <h3>FIFO Queue</h3>
+  <p><strong>Simple Definition:</strong> First-In-First-Out: messages are processed in the exact order they arrived. Important when order matters, like processing bank transactions in sequence. It can limit parallelism since strict order must be preserved.</p>
+
+  <h3>Priority Queue</h3>
+  <p><strong>Simple Definition:</strong> Messages have priorities, and higher-priority ones are processed first regardless of arrival order. Useful when some tasks are urgent (a paid-user request) and others can wait (a routine email).</p>
+
+  <h3>Pub/Sub (Publish/Subscribe)</h3>
+  <p><strong>Simple Definition:</strong> Publishers send messages to a "topic," and multiple subscribers each receive a copy. It's one-to-many broadcasting, decoupling senders from receivers — the publisher doesn't know or care who's listening. Great for fan-out events.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A newspaper publisher: they print one edition (publish), and every subscriber gets their own copy delivered.</div>
+  <p><strong>Real-World Tech Example:</strong> Kafka, Google Pub/Sub, and RabbitMQ power event broadcasting across services.</p>
+
+  <h3>Push vs Pull Model</h3>
+  <p><strong>Simple Definition:</strong> In <em>push</em>, the queue actively sends messages to consumers as they arrive (low latency, but can overwhelm slow consumers). In <em>pull</em>, consumers request messages when they're ready (consumer controls pace, better backpressure). Kafka uses pull; many traditional brokers push.</p>
+
+  <h3>Poison Messages</h3>
+  <p><strong>Simple Definition:</strong> A poison message is one that repeatedly fails processing (maybe it's malformed), causing endless retries that clog the system. The fix is to detect repeated failures and move it aside (to a dead letter queue) instead of retrying forever.</p>
+
+  <h3>Duplicate Messages</h3>
+  <p><strong>Simple Definition:</strong> Due to retries and network issues, the same message can be delivered more than once. Consumers must handle this — usually by being <em>idempotent</em> (processing twice = same result) or tracking processed message IDs.</p>
+
+  <h3>Message Ordering Guarantees</h3>
+  <p><strong>Simple Definition:</strong> Whether messages are guaranteed to arrive in the order sent. Strict global ordering limits scalability, so systems like Kafka guarantee order only <em>within a partition</em>. You design keys so related messages share a partition and stay ordered.</p>
+
+  <h3>Dead Letter Queues (DLQ)</h3>
+  <p><strong>Simple Definition:</strong> A separate queue where messages that can't be processed (after several retries) are parked for later inspection. It keeps bad messages from blocking the main queue and gives engineers a place to debug failures.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A "return to sender / problem mail" bin at the post office for letters that can't be delivered, instead of jamming the main sorting line.</div>
+
+  <h3>Delivery Guarantees</h3>
+  <div class="tablewrap">
+  <table>
+    <tr><th>Guarantee</th><th>Meaning</th><th>Risk</th><th>Use case</th></tr>
+    <tr><td>At-most-once</td><td>Delivered 0 or 1 time</td><td>May be lost</td><td>Metrics where loss is OK</td></tr>
+    <tr><td>At-least-once</td><td>Delivered 1+ times</td><td>May duplicate</td><td>Most systems (+ idempotency)</td></tr>
+    <tr><td>Exactly-once</td><td>Delivered exactly 1 time</td><td>Hard & costly to achieve</td><td>Payments, billing</td></tr>
+  </table>
+  </div>
+  <div class="box tip"><span class="t">⚠️ Interview Tip</span>"Exactly-once" is very hard end-to-end. The practical answer is "at-least-once delivery + idempotent consumers," which behaves like exactly-once.</div>
+
+  <h3>Kafka-style Log-based Architecture</h3>
+  <p><strong>Simple Definition:</strong> Instead of deleting a message once read, Kafka stores all messages in an append-only <em>log</em> (split into partitions). Consumers track their own position ("offset") and can replay history. This enables multiple independent readers, replay after bugs, and massive throughput.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+  P["Producer"] --> Log["📜 Append-only Log<br/>[m0][m1][m2][m3]→"]
+  Log --> A["Consumer A (offset=2)"]
+  Log --> B["Consumer B (offset=0, replaying)"]
+    </div>
+    <div class="cap">A log keeps messages so different consumers read at their own offsets and can replay.</div>
+  </div>
+  <p><strong>Real-World Tech Example:</strong> LinkedIn built Kafka; it now backs event pipelines at Uber, Netflix, and most large companies.</p>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>Queues decouple components and enable async processing, smoothing spikes. Plan for duplicates (idempotency), failures (DLQ), and ordering (per-partition). Use log-based systems like Kafka when you need replay and many consumers.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 18 ===================== -->
+<section id="m18">
+  <span class="modtag">Module 18</span>
+  <h2>Data Processing</h2>
+  <p>Once you've collected data, you need to process it — to compute reports, power analytics, or react to events. Processing comes in two main styles (batch and stream) and several pipeline patterns.</p>
+
+  <h3>Batch Processing</h3>
+  <p><strong>Simple Definition:</strong> Collect a large amount of data and process it all together at scheduled times (hourly, nightly). It's efficient and simple for huge volumes where instant results aren't needed, like generating daily reports. The downside is latency — results aren't fresh.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Doing all your week's laundry in one big load on Sunday.</div>
+  <p><strong>Real-World Tech Example:</strong> Hadoop and Spark batch jobs for nightly analytics.</p>
+
+  <h3>Stream Processing</h3>
+  <p><strong>Simple Definition:</strong> Process each event the moment it arrives, continuously, giving near-instant results. It's needed when freshness matters — fraud detection, live dashboards, alerting. It's more complex than batch because the data never stops.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Washing each dish right after you use it, instead of piling them up.</div>
+  <p><strong>Real-World Tech Example:</strong> Apache Flink, Kafka Streams, Spark Streaming for real-time analytics.</p>
+
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+  subgraph Batch["📦 Batch"]
+    b1["Collect all day"] --> b2["Process at night"] --> b3["Report next morning"]
+  end
+  subgraph Stream["🌊 Stream"]
+    s1["Event arrives"] --> s2["Process instantly"] --> s3["Result in seconds"]
+  end
+    </div>
+  </div>
+
+  <h3>ETL Pipelines (Extract, Transform, Load)</h3>
+  <p><strong>Simple Definition:</strong> ETL moves data from sources into a warehouse for analysis. <em>Extract</em> pulls raw data from databases/APIs, <em>Transform</em> cleans and reshapes it, and <em>Load</em> stores it in the warehouse. (A newer variant, ELT, loads first then transforms inside the warehouse.)</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Cooking: gather ingredients (extract), chop and cook them (transform), plate the dish (load).</div>
+
+  <h3>MapReduce Concept</h3>
+  <p><strong>Simple Definition:</strong> MapReduce is a model for processing huge datasets across many machines in two steps. <em>Map</em> breaks the work into pieces and processes each in parallel (producing key-value pairs); <em>Reduce</em> combines the results by key. It made "big data" processing on commodity machines possible.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+  IN["Big File"] --> M1["Map → (word,1)"]
+  IN --> M2["Map → (word,1)"]
+  M1 --> SH["Shuffle by key"]
+  M2 --> SH
+  SH --> R1["Reduce → (word, total)"]
+  R1 --> OUT["Word counts"]
+    </div>
+    <div class="cap">Classic word-count: map emits (word,1), reduce sums counts per word.</div>
+  </div>
+  <p><strong>Real-World Tech Example:</strong> Google invented it; Hadoop popularized the open-source version.</p>
+
+  <h3>Real-Time Analytics</h3>
+  <p><strong>Simple Definition:</strong> Computing metrics and insights on data as it flows in, so dashboards and decisions reflect the present, not yesterday. Built on stream processing, it powers live counts, trending topics, and instant alerts.</p>
+
+  <h3>Event-Driven Data Pipelines</h3>
+  <p><strong>Simple Definition:</strong> Instead of polling on a schedule, components react to events (a new order, a click) as they happen, often via a message log like Kafka. Each stage consumes events, processes, and emits new events. This makes pipelines flexible, decoupled, and real-time.</p>
+
+  <h3>Lambda vs Kappa Architecture</h3>
+  <p><strong>Simple Definition:</strong> Two designs for combining historical and real-time processing. <em>Lambda</em> runs two paths — a batch layer for accurate historical results plus a speed layer for fresh results — then merges them (powerful but complex, two codebases). <em>Kappa</em> simplifies this by using a single stream-processing path for everything, replaying the log when it needs to reprocess history.</p>
+  <div class="tablewrap">
+  <table>
+    <tr><th></th><th>Lambda</th><th>Kappa</th></tr>
+    <tr><td>Paths</td><td>Batch + Stream (two)</td><td>Stream only (one)</td></tr>
+    <tr><td>Complexity</td><td>Higher (two codebases)</td><td>Lower</td></tr>
+    <tr><td>Reprocessing</td><td>Re-run batch</td><td>Replay the stream/log</td></tr>
+  </table>
+  </div>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>Use batch for cheap, large, non-urgent processing and streams for real-time needs. ETL feeds warehouses; MapReduce parallelizes big jobs. Prefer Kappa (single stream path) for simplicity unless you genuinely need Lambda's separate batch layer.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 19 ===================== -->
+<section id="m19">
+  <span class="modtag">Module 19</span>
+  <h2>Fault Tolerance &amp; High Availability</h2>
+  <p>Things fail — disks die, code crashes, people make mistakes. Fault tolerance is designing so the <em>system</em> keeps working even when <em>parts</em> fail. High availability is the result: the service stays up.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A plane with multiple engines: if one fails, the others keep it flying safely to a landing.</div>
+
+  <h3>Types of Failures</h3>
+  <h4>Hardware Failures</h4>
+  <p>Disks, servers, network cards, and whole data centers eventually fail. At scale, failures are constant, so designs assume hardware <em>will</em> break and add redundancy.</p>
+  <h4>Software Failures</h4>
+  <p>Bugs, memory leaks, crashes, and bad deployments. These can cascade across machines (a bad release everywhere), so safe deploys and isolation matter.</p>
+  <h4>Human Errors</h4>
+  <p>The most common cause of outages — wrong config, accidental deletes, fat-finger commands. Mitigate with automation, reviews, staged rollouts, and easy rollback.</p>
+
+  <h3>Recovery and Reliability</h3>
+  <p><strong>Simple Definition:</strong> Reliability is the system doing the right thing despite faults; recovery is how it returns to normal after a failure. Techniques include retries, replication, backups, and automated failover. The goal is to make failures invisible (or at least brief) to users.</p>
+
+  <h3>Active-Active vs Active-Passive</h3>
+  <p><strong>Simple Definition:</strong> In <em>active-active</em>, multiple nodes handle traffic at once, so a failure just shifts load to the rest (no downtime, but more complex). In <em>active-passive</em>, a standby waits idle and takes over only when the active node fails (simpler, but there's a brief switch-over delay and idle resources).</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+  subgraph AA["Active-Active"]
+    L1["LB"] --> N1["Node A (live)"]
+    L1 --> N2["Node B (live)"]
+  end
+  subgraph AP["Active-Passive"]
+    L2["LB"] --> P1["Node A (live)"]
+    P1 -. "failover" .-> P2["Node B (standby)"]
+  end
+    </div>
+  </div>
+
+  <h3>Failover Strategies</h3>
+  <p><strong>Simple Definition:</strong> Failover is automatically switching to a healthy backup when the primary fails. Good failover detects failure quickly (health checks), promotes a replica, and redirects traffic — ideally within seconds and without losing data. Poorly tested failover is a top cause of outages.</p>
+
+  <h3>Redundancy Patterns</h3>
+  <p><strong>Simple Definition:</strong> Redundancy means having spare copies of every critical component (servers, databases, network paths, power) so no single failure takes you down. The core principle is eliminating "single points of failure" (SPOFs).</p>
+  <div class="box tip"><span class="t">⚠️ Interview Tip</span>When asked to improve availability, hunt for the single point of failure first — one load balancer, one database, one region — and add redundancy there.</div>
+
+  <h3>Disaster Recovery (RPO &amp; RTO)</h3>
+  <p><strong>Simple Definition:</strong> Disaster recovery is your plan for big failures (a region goes down). Two key metrics define your goals:</p>
+  <ul>
+    <li><strong>RPO (Recovery Point Objective)</strong> — How much <em>data</em> you can afford to lose, measured in time. RPO of 5 min = you may lose the last 5 minutes of data. Drives backup/replication frequency.</li>
+    <li><strong>RTO (Recovery Time Objective)</strong> — How long you can afford to be <em>down</em>. RTO of 1 hour = you must be back within an hour. Drives failover automation.</li>
+  </ul>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>RPO = how often you save your document (lose work since last save). RTO = how fast you can get a working computer again after yours dies.</div>
+
+  <h3>Multi-Region Architecture</h3>
+  <p><strong>Simple Definition:</strong> Running your system in multiple geographic regions so a whole-region outage doesn't take you offline, and users get low latency from a nearby region. It's the gold standard for availability — but costs more and adds data-sync complexity.</p>
+
+  <h3>Geo-Replication</h3>
+  <p><strong>Simple Definition:</strong> Continuously copying data across regions so each region has a usable copy. It enables multi-region reads and disaster recovery, but introduces replication lag and possible conflicts (see Module 14/16).</p>
+
+  <h3>Chaos Engineering Basics</h3>
+  <p><strong>Simple Definition:</strong> Deliberately breaking parts of your system in production (in a controlled way) to discover weaknesses <em>before</em> real failures do. By regularly "killing" servers, you prove your redundancy and failover actually work. Netflix pioneered this with "Chaos Monkey."</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A fire drill — you start small controlled fires to make sure the alarms, sprinklers, and exits all work before a real fire.</div>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>Assume everything fails. Remove single points of failure with redundancy, use health-check-driven failover, define RPO/RTO targets, go multi-region for top availability, and verify it all with chaos testing.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 20 ===================== -->
+<section id="m20">
+  <span class="modtag">Module 20</span>
+  <h2>Distributed System Patterns</h2>
+  <p>These are battle-tested patterns for building reliable distributed systems — handling overload, failures, coordination, and transactions across services.</p>
+
+  <h3>Rate Limiting</h3>
+  <p><strong>Simple Definition:</strong> Rate limiting caps how many requests a client can make in a time window, protecting your system from abuse and overload. There are several algorithms, each balancing accuracy, smoothness, and memory.</p>
+  <div class="tablewrap">
+  <table>
+    <tr><th>Algorithm</th><th>How it works</th><th>Trade-off</th></tr>
+    <tr><td>Token Bucket</td><td>Tokens refill at a steady rate; each request spends one. Allows bursts up to bucket size.</td><td>Flexible, allows bursts — most popular</td></tr>
+    <tr><td>Leaky Bucket</td><td>Requests queue and drain at a fixed rate, smoothing output.</td><td>Smooth, steady flow; no bursts</td></tr>
+    <tr><td>Fixed Window Counter</td><td>Count requests per fixed window (e.g., per minute), reset each window.</td><td>Simple, but allows spikes at window edges</td></tr>
+    <tr><td>Sliding Window Log</td><td>Keep timestamps of each request, count those within the last window.</td><td>Very accurate, but memory-heavy</td></tr>
+    <tr><td>Sliding Window Counter</td><td>Blend of previous and current window counts (weighted).</td><td>Good accuracy with low memory — great default</td></tr>
+  </table>
+  </div>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Token bucket = an arcade where coins drip into your cup over time; you can spend a burst of saved coins, but long-term you're limited by the drip rate.</div>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+  R["Request"] --> B{"Token in bucket?"}
+  B -->|"Yes"| A["✅ Allow (remove 1 token)"]
+  B -->|"No"| D["❌ Reject (429)"]
+  T["⏱️ Refill tokens<br/>at fixed rate"] --> B
+    </div>
+    <div class="cap">Token bucket rate limiting.</div>
+  </div>
+
+  <h3>Idempotency Keys</h3>
+  <p><strong>Simple Definition:</strong> A unique key the client attaches to a request so that if it's accidentally sent twice (due to a retry), the server recognizes the duplicate and performs the action only once. Essential for safe retries in payments and orders.</p>
+  <p><strong>Real-World Tech Example:</strong> Stripe requires an <code>Idempotency-Key</code> header so a retried charge doesn't bill the customer twice.</p>
+
+  <h3>Distributed Locks</h3>
+  <p><strong>Simple Definition:</strong> A lock that works across multiple machines, ensuring only one process does a critical action at a time (e.g., only one worker processes a job). Often built with Redis or ZooKeeper. Tricky because the lock holder might crash, so locks need timeouts.</p>
+
+  <h3>Leader Election</h3>
+  <p><strong>Simple Definition:</strong> A process where distributed nodes agree on one "leader" to coordinate work, and automatically elect a new one if it fails. Prevents conflicting decisions. Tools like ZooKeeper, etcd, and Raft handle this.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A group project automatically picking a team lead, and instantly choosing a new one if the lead leaves.</div>
+
+  <h3>Circuit Breaker Pattern</h3>
+  <p><strong>Simple Definition:</strong> Like an electrical breaker, it "trips" to stop calling a failing service after too many failures, returning errors instantly instead of waiting and piling up. After a cooldown it tests with a few requests; if healthy, it closes again. This prevents cascading failures.</p>
+  <div class="diagram">
+    <div class="mermaid">
+stateDiagram-v2
+  [*] --> Closed
+  Closed --> Open: too many failures
+  Open --> HalfOpen: after cooldown
+  HalfOpen --> Closed: test succeeds
+  HalfOpen --> Open: test fails
+    </div>
+  </div>
+
+  <h3>Retry with Exponential Backoff</h3>
+  <p><strong>Simple Definition:</strong> When a request fails, retry it — but wait progressively longer between attempts (1s, 2s, 4s, 8s…), ideally with random "jitter." This gives the struggling service time to recover and prevents a stampede of synchronized retries.</p>
+  <div class="box tip"><span class="t">⚠️ Interview Tip</span>Always pair retries with backoff + jitter and a max attempt count. Naive instant retries can turn a small blip into a full outage (a "retry storm").</div>
+
+  <h3>Bulkhead Pattern</h3>
+  <p><strong>Simple Definition:</strong> Isolate resources into separate "compartments" so a failure in one doesn't sink the whole system — like watertight bulkheads in a ship. For example, give each downstream dependency its own thread pool so one slow service can't exhaust all threads.</p>
+
+  <h3>Timeout and Deadline Propagation</h3>
+  <p><strong>Simple Definition:</strong> Every remote call should have a timeout so it doesn't wait forever. <em>Deadline propagation</em> passes a shared deadline down a chain of services, so once the overall time budget is spent, every service stops working on that doomed request instead of wasting effort.</p>
+
+  <h3>Backpressure and Flow Control</h3>
+  <p><strong>Simple Definition:</strong> When a component is overwhelmed, backpressure is its way of signaling upstream to slow down (or pause), instead of collapsing. It keeps the system stable under load by matching intake to capacity.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A kitchen telling waiters to stop taking orders when it's swamped, rather than accepting orders it can never cook.</div>
+
+  <h3>Saga Pattern for Distributed Transactions</h3>
+  <p><strong>Simple Definition:</strong> A way to keep data consistent across multiple services without a single global transaction. A saga is a sequence of local transactions; if one step fails, it runs <em>compensating</em> actions to undo the previous steps. Used in microservices where each service has its own database.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Booking a trip: book flight → book hotel → book car. If the car fails, you cancel the hotel and flight (compensations) to undo the trip.</div>
+
+  <h3>Two-Phase Commit (2PC)</h3>
+  <p><strong>Simple Definition:</strong> A protocol to commit a transaction across multiple databases atomically. Phase 1: a coordinator asks all participants "can you commit?" Phase 2: if all say yes, it tells everyone to commit; otherwise everyone aborts. It guarantees all-or-nothing but is slow and blocks if the coordinator fails — so sagas are often preferred at scale.</p>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>Protect against overload (rate limiting, backpressure), failure (circuit breaker, retry+backoff, bulkhead, timeouts), and coordinate safely (idempotency keys, distributed locks, leader election). For cross-service consistency, prefer sagas over 2PC at scale.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 21 ===================== -->
+<section id="m21">
+  <span class="modtag">Module 21</span>
+  <h2>Architecture Styles</h2>
+  <p>How you structure your whole application — as one big unit or many small ones — shapes everything: speed of development, scalability, and reliability. Here are the main styles and patterns.</p>
+
+  <h3>Monolithic Architecture</h3>
+  <p><strong>Simple Definition:</strong> The entire application is built and deployed as one single unit — all features in one codebase, one process, one database. It's simple to build, test, and deploy early on. But as it grows, it becomes hard to change, scale selectively, or develop in parallel; one bug can crash everything.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A Swiss Army knife — everything in one tool. Convenient, but you can't upgrade just the scissors.</div>
+
+  <h3>Microservices Architecture</h3>
+  <p><strong>Simple Definition:</strong> The app is split into many small, independent services, each owning one capability (users, payments, search) and its own database, communicating over the network. Teams develop, deploy, and scale each service independently. The trade-off is operational complexity — networking, monitoring, and data consistency get harder.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  subgraph Mono["🧱 Monolith"]
+    M["One app: Users + Orders + Payments + Search<br/>(single deploy, single DB)"]
+  end
+  subgraph Micro["🧩 Microservices"]
+    G["API Gateway"] --> U["User Svc + DB"]
+    G --> O["Order Svc + DB"]
+    G --> Pm["Payment Svc + DB"]
+  end
+    </div>
+  </div>
+  <p><strong>Real-World Tech Example:</strong> Netflix and Amazon famously moved from monoliths to hundreds/thousands of microservices.</p>
+
+  <h3>Serverless Architecture</h3>
+  <p><strong>Simple Definition:</strong> You write functions and the cloud runs them on demand, automatically scaling and charging only for actual usage — you never manage servers. Great for spiky or event-driven workloads and fast development. Downsides: cold-start latency, vendor lock-in, and limits on long-running tasks.</p>
+  <p><strong>Real-World Tech Example:</strong> AWS Lambda, used for image processing, webhooks, and lightweight APIs.</p>
+
+  <h3>Event-Driven Architecture</h3>
+  <p><strong>Simple Definition:</strong> Services communicate by emitting and reacting to <em>events</em> ("OrderPlaced") rather than calling each other directly. This decouples components — producers don't know who consumes — making the system flexible and scalable. It's harder to trace and debug flows, though.</p>
+
+  <h3>Service-Oriented Architecture (SOA)</h3>
+  <p><strong>Simple Definition:</strong> An older predecessor to microservices: the app is built from reusable services, often communicating through a central "enterprise service bus." Services tend to be larger and more shared than microservices, and the central bus can become a bottleneck.</p>
+
+  <h3>Database per Service Pattern</h3>
+  <p><strong>Simple Definition:</strong> In microservices, each service owns its own private database; no other service touches it directly. This keeps services independent and loosely coupled, but means cross-service queries and transactions need APIs or sagas instead of joins.</p>
+  <div class="box tip"><span class="t">⚠️ Interview Tip</span>If microservices share one database, you don't really have microservices — you have a distributed monolith with all the pain and none of the benefits.</div>
+
+  <h3>CQRS (Command Query Responsibility Segregation)</h3>
+  <p><strong>Simple Definition:</strong> Separate the model for <em>writing</em> data (commands) from the model for <em>reading</em> it (queries), often using different data stores optimized for each. Reads can be denormalized for speed while writes stay clean. It adds complexity, so use it only where read and write needs differ greatly.</p>
+
+  <h3>Event Sourcing</h3>
+  <p><strong>Simple Definition:</strong> Instead of storing only the current state, store every change as an immutable sequence of events. The current state is rebuilt by replaying events. This gives a full audit history and time-travel, but is more complex and queries need projections. Often paired with CQRS.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A bank statement: instead of just "balance = $500," you keep every deposit and withdrawal, and the balance is the sum of them.</div>
+
+  <h3>Strangler Fig Pattern</h3>
+  <p><strong>Simple Definition:</strong> A safe way to migrate a monolith to microservices gradually. You put a proxy in front, then slowly route specific features to new services while the old system handles the rest, until the monolith is fully replaced. Named after a vine that slowly grows over and replaces a tree.</p>
+
+  <h3>Service Discovery</h3>
+  <p><strong>Simple Definition:</strong> In microservices, services come and go and change addresses, so they need a way to find each other. A service registry keeps a live directory; services look up where a dependency currently lives. Tools: Consul, Eureka, Kubernetes DNS.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A constantly updated company phone directory, so you can always reach a colleague even if they switched desks.</div>
+
+  <h3>Inter-Service Communication (Sync vs Async)</h3>
+  <p><strong>Simple Definition:</strong> Services talk either <em>synchronously</em> (direct request/response, e.g., REST/gRPC — simple but creates tight coupling and chained failures) or <em>asynchronously</em> (via events/queues — resilient and decoupled but eventually consistent). Most real systems mix both, using sync for immediate needs and async for everything else.</p>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>Start monolithic for simplicity; move to microservices only when scale and team size demand it (use the strangler fig to migrate). Give each service its own DB, communicate async where possible, and reach for CQRS/event sourcing only when the complexity pays off.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 22 ===================== -->
+<section id="m22">
+  <span class="modtag">Module 22</span>
+  <h2>Security &amp; Identity</h2>
+  <p>Security protects your users and data. The two core questions are "who are you?" (authentication) and "what are you allowed to do?" (authorization), plus protecting data in transit and at rest.</p>
+
+  <h3>Authentication vs Authorization</h3>
+  <p><strong>Simple Definition:</strong> <em>Authentication (AuthN)</em> verifies <em>who you are</em> (login with password, fingerprint). <em>Authorization (AuthZ)</em> decides <em>what you're allowed to do</em> once identified (can you delete this file?). Authentication always comes first; authorization follows.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>At an airport: showing your passport is authentication (proving who you are); your boarding pass is authorization (which flight/seat you may board).</div>
+
+  <h3>OAuth 2.0</h3>
+  <p><strong>Simple Definition:</strong> A standard that lets you grant one app limited access to your data on another service <em>without sharing your password</em>. The service gives the app a temporary access token with specific permissions. This powers "Login with Google/Facebook."</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A hotel key card: the front desk (Google) gives you a card (token) that opens only your room and the gym (specific scopes), not the whole hotel — and it expires.</div>
+
+  <h3>JWT (JSON Web Tokens)</h3>
+  <p><strong>Simple Definition:</strong> A compact, signed token that carries user info (claims) and can be verified without a database lookup. After login, the server issues a JWT; the client sends it with each request, and the server trusts it because the signature proves it wasn't tampered with. It enables stateless authentication.</p>
+  <div class="box tip"><span class="t">⚠️ Interview Tip</span>JWTs can't be easily revoked before they expire, so keep their lifetime short and use refresh tokens. Never put secrets in a JWT — its contents are readable (just signed, not encrypted).</div>
+
+  <h3>SSO (Single Sign-On)</h3>
+  <p><strong>Simple Definition:</strong> Log in once and access many related applications without logging in again. A central identity provider authenticates you and vouches for you to each app. Improves user experience and centralizes security.</p>
+  <p><strong>Real-World Tech Example:</strong> Logging into Gmail also signs you into YouTube, Drive, and Docs.</p>
+
+  <h3>RBAC (Role-Based Access Control)</h3>
+  <p><strong>Simple Definition:</strong> Permissions are grouped into <em>roles</em> (admin, editor, viewer), and users are assigned roles. You manage access by role rather than per-user, which scales well. Simple and the most common authorization model.</p>
+
+  <h3>ABAC (Attribute-Based Access Control)</h3>
+  <p><strong>Simple Definition:</strong> Access decisions use <em>attributes</em> of the user, resource, and context (department, time of day, location, ownership). More flexible and fine-grained than RBAC, but more complex to manage. Example: "editors can edit only documents in their own department, during work hours."</p>
+  <div class="tablewrap">
+  <table>
+    <tr><th></th><th>RBAC</th><th>ABAC</th></tr>
+    <tr><td>Based on</td><td>Roles</td><td>Attributes &amp; context</td></tr>
+    <tr><td>Flexibility</td><td>Lower</td><td>Higher (fine-grained)</td></tr>
+    <tr><td>Complexity</td><td>Simple</td><td>Complex</td></tr>
+  </table>
+  </div>
+
+  <h3>Encryption at Rest vs in Transit</h3>
+  <p><strong>Simple Definition:</strong> <em>In transit</em> = data encrypted while moving over networks (via TLS/HTTPS), so eavesdroppers can't read it. <em>At rest</em> = data encrypted while stored on disk/database, so stolen drives or backups are useless without keys. You need both for real protection.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>In transit = an armored truck carrying cash. At rest = a locked vault storing it.</div>
+
+  <h3>HTTPS and Certificate Management</h3>
+  <p><strong>Simple Definition:</strong> HTTPS uses TLS certificates to prove a site's identity and encrypt traffic. Certificates are issued by trusted authorities, expire, and must be renewed/rotated. Mismanaged (expired) certificates are a frequent, embarrassing cause of outages.</p>
+
+  <h3>API Key Management</h3>
+  <p><strong>Simple Definition:</strong> API keys identify and authenticate applications calling your API. They must be kept secret, rotated regularly, scoped to least privilege, and revocable if leaked. Never hard-code keys in client code or commit them to source control.</p>
+
+  <h3>Secrets Management</h3>
+  <p><strong>Simple Definition:</strong> Passwords, API keys, and certificates ("secrets") should be stored in a dedicated, encrypted vault — not in code or config files. Tools provide access control, rotation, and audit logs. This prevents leaked credentials, a top breach cause.</p>
+  <p><strong>Real-World Tech Example:</strong> HashiCorp Vault, AWS Secrets Manager.</p>
+
+  <h3>Common Security Threats</h3>
+  <ul>
+    <li><strong>SQL Injection</strong> — Attackers sneak malicious SQL into inputs to read/alter your database. <em>Fix:</em> use parameterized queries, never build SQL by concatenating user input.</li>
+    <li><strong>XSS (Cross-Site Scripting)</strong> — Attackers inject malicious JavaScript that runs in other users' browsers. <em>Fix:</em> escape/sanitize output and use Content Security Policy.</li>
+    <li><strong>CSRF (Cross-Site Request Forgery)</strong> — Tricks a logged-in user's browser into making unwanted requests. <em>Fix:</em> use anti-CSRF tokens and <code>SameSite</code> cookies.</li>
+  </ul>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>SQL injection = slipping a fake instruction into a form that the clerk blindly carries out. CSRF = someone forging a check using your already-signed checkbook.</div>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>Authenticate (who) then authorize (what) — RBAC for most, ABAC for fine-grained. Encrypt data in transit (HTTPS) and at rest, store secrets in a vault, rotate keys/certs, and defend against SQLi, XSS, and CSRF with proven techniques.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 23 ===================== -->
+<section id="m23">
+  <span class="modtag">Module 23</span>
+  <h2>Monitoring and Observability</h2>
+  <p>You can't fix what you can't see. Monitoring tells you <em>that</em> something is wrong; observability helps you understand <em>why</em>. Together they keep systems healthy and incidents short.</p>
+
+  <h3>Three Pillars: Logs, Metrics, Traces</h3>
+  <p><strong>Simple Definition:</strong> Observability rests on three data types. <em>Logs</em> are timestamped text records of discrete events ("user 42 failed login"). <em>Metrics</em> are numeric measurements over time (CPU %, requests/sec). <em>Traces</em> follow a single request as it travels through many services, showing where time is spent. You need all three.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+  O["🔭 Observability"] --> L["📝 Logs<br/>(what happened)"]
+  O --> M["📈 Metrics<br/>(how much / how fast)"]
+  O --> T["🧵 Traces<br/>(where time went)"]
+    </div>
+  </div>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Logs = a diary of events; Metrics = your fitness tracker's numbers; Traces = a GPS route showing exactly where you got stuck.</div>
+
+  <h3>API Monitoring</h3>
+  <p><strong>Simple Definition:</strong> Continuously watching your APIs for availability, response time, and errors, often with synthetic test requests. It catches problems before users complain. The core API metrics are throughput, latency, and error rate (below).</p>
+
+  <h3>Throughput</h3>
+  <p><strong>Simple Definition:</strong> How many requests the system handles per unit of time (e.g., requests per second). It measures capacity. Watching throughput reveals traffic patterns and whether you're nearing limits.</p>
+
+  <h3>Latency (p50, p95, p99)</h3>
+  <p><strong>Simple Definition:</strong> Latency is how long a request takes. Averages hide pain, so we use percentiles: <em>p50</em> (median) = typical experience; <em>p95</em> = the slowest 5% of requests; <em>p99</em> = the slowest 1%. The "tail" (p95/p99) reveals the bad experiences real users hit.</p>
+  <div class="box tip"><span class="t">⚠️ Interview Tip</span>Always quote tail latency (p99), not just the average. "Average is fine" can hide that 1 in 100 users waits 5 seconds.</div>
+
+  <h3>Error Rates</h3>
+  <p><strong>Simple Definition:</strong> The percentage of requests that fail (typically 5xx responses). A rising error rate is one of the clearest signals of trouble and a common trigger for alerts. Tracked alongside latency and throughput as the "golden signals."</p>
+
+  <h3>Health Checks</h3>
+  <p><strong>Simple Definition:</strong> Lightweight endpoints (e.g., <code>/health</code>) that report whether a service and its dependencies are working. Load balancers and orchestrators use them to route traffic away from sick instances and restart them.</p>
+
+  <h3>System Resource Metrics</h3>
+  <p><strong>Simple Definition:</strong> Beyond the app, you monitor the machine's vital signs to spot bottlenecks:</p>
+  <ul>
+    <li><strong>CPU Usage</strong> — How busy the processor is; sustained high CPU means compute is the bottleneck.</li>
+    <li><strong>Memory Usage</strong> — RAM consumed; running out causes crashes or slow swapping.</li>
+    <li><strong>Disk I/O</strong> — Read/write activity to storage; a bottleneck for data-heavy apps and databases.</li>
+    <li><strong>Network I/O</strong> — Data flowing in/out; saturated networks cause latency and timeouts.</li>
+  </ul>
+
+  <h3>Distributed Tracing</h3>
+  <p><strong>Simple Definition:</strong> Following one request across many microservices by attaching a shared trace ID, so you can see the full journey and pinpoint which service caused the slowdown or error. Essential in microservices where one click touches dozens of services. Tools: Jaeger, Zipkin, OpenTelemetry.</p>
+
+  <h3>Alerting Strategies</h3>
+  <p><strong>Simple Definition:</strong> Rules that notify engineers when metrics cross dangerous thresholds. Good alerting is actionable and rare — alert on user-facing symptoms (high error rate, slow latency), not every minor blip, to avoid "alert fatigue" where people ignore alarms.</p>
+
+  <h3>SLA, SLO, SLI</h3>
+  <p><strong>Simple Definition:</strong> Three related reliability terms, from measurement to promise:</p>
+  <ul>
+    <li><strong>SLI (Indicator)</strong> — The actual measured number (e.g., "99.95% of requests succeeded").</li>
+    <li><strong>SLO (Objective)</strong> — Your internal target for that indicator (e.g., "99.9% success").</li>
+    <li><strong>SLA (Agreement)</strong> — A formal promise to customers, with penalties if broken (e.g., "99.9% uptime or we refund you").</li>
+  </ul>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>SLI = your actual exam score; SLO = the score you aim for; SLA = a deal with your parents that has consequences if you miss it.</div>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+  SLI["📏 SLI (measured)"] --> SLO["🎯 SLO (target)"] --> SLA["📜 SLA (promise + penalty)"]
+    </div>
+  </div>
+
+  <h3>On-Call and Incident Response Basics</h3>
+  <p><strong>Simple Definition:</strong> Engineers take turns being "on-call" to respond to alerts 24/7. When an incident hits, the flow is: detect → acknowledge → mitigate (stop the bleeding) → resolve → run a blameless postmortem to learn and prevent recurrence. The goal is fast recovery and continuous improvement, not blame.</p>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>Combine logs, metrics, and traces for full observability. Track the golden signals (latency at p99, throughput, errors) plus resource metrics, alert only on actionable symptoms, and define SLIs/SLOs/SLAs to make reliability measurable.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 24 ===================== -->
+<section id="m24">
+  <span class="modtag">Module 24</span>
+  <h2>Specialized Data Structures &amp; Techniques</h2>
+  <p>Some clever data structures solve "impossible at scale" problems by trading a little accuracy or space for massive speed and memory savings. These show up constantly in real large-scale systems.</p>
+
+  <h3>Bloom Filters</h3>
+  <p><strong>Simple Definition:</strong> A tiny, super-fast structure that tells you whether an item is <em>definitely not</em> in a set or <em>possibly</em> in it. It can have false positives ("maybe") but never false negatives. It uses a fraction of the memory of storing the actual items, perfect for quick "have I seen this?" checks.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A bouncer with a rough memory: "I'm sure that name is NOT on the list" (reliable) or "that name might be on the list, let me double-check" (possible false positive).</div>
+  <p><strong>Real-World Tech Example:</strong> Databases (Cassandra, HBase) use them to skip disk reads for keys that don't exist; web crawlers use them to avoid re-crawling URLs.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+  X["Check 'item'"] --> H["hash to bits"] --> Q{"All bits set?"}
+  Q -->|"No"| N["✅ Definitely NOT present"]
+  Q -->|"Yes"| M["🤔 Possibly present (verify)"]
+    </div>
+  </div>
+
+  <h3>HyperLogLog (Cardinality Estimation)</h3>
+  <p><strong>Simple Definition:</strong> Counts the number of <em>unique</em> items in a huge stream using tiny memory (kilobytes for billions of items), accepting a small error (~2%). Exactly counting unique visitors would need enormous memory; HyperLogLog estimates it cheaply.</p>
+  <p><strong>Real-World Tech Example:</strong> Redis uses it to count unique visitors; Google/Reddit use it for "unique views" at scale.</p>
+
+  <h3>Geohashing (Location-Based Systems)</h3>
+  <p><strong>Simple Definition:</strong> Encodes a latitude/longitude into a short string where nearby places share similar prefixes. This turns "find things near me" into a fast prefix search instead of comparing distances to everything. Foundational for maps and ride-sharing.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Postal codes: nearby addresses share the same prefix, so you can quickly group locations by area.</div>
+  <p><strong>Real-World Tech Example:</strong> Uber and food-delivery apps use geohashing (and similar grids) to find nearby drivers/restaurants fast.</p>
+
+  <h3>Count-Min Sketch</h3>
+  <p><strong>Simple Definition:</strong> Estimates how <em>frequently</em> each item appears in a stream using small, fixed memory, with a slight overcount possible. Great for finding "heavy hitters" (most frequent items) without storing exact counts for millions of items.</p>
+  <p><strong>Real-World Tech Example:</strong> Finding trending hashtags or top queries in real time.</p>
+
+  <h3>Merkle Trees (Data Integrity)</h3>
+  <p><strong>Simple Definition:</strong> A tree of hashes where each leaf is the hash of a data block and each parent hashes its children, up to one "root hash." Comparing root hashes quickly tells whether two large datasets differ, and you can drill down to find exactly which block changed — without comparing everything.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Verifying two giant books are identical by comparing one "fingerprint" number instead of reading every page.</div>
+  <p><strong>Real-World Tech Example:</strong> Git, blockchains (Bitcoin), and Cassandra/DynamoDB use Merkle trees to detect differences between replicas efficiently.</p>
+
+  <h3>Skip Lists</h3>
+  <p><strong>Simple Definition:</strong> A linked list with extra "express lane" layers that let you skip ahead, giving fast (logarithmic) search, insert, and delete — similar to a balanced tree but simpler to implement. Used where you need ordered data with quick operations.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Express vs local subway lines: express trains skip stops so you reach a distant station faster, then switch to local for the exact stop.</div>
+  <p><strong>Real-World Tech Example:</strong> Redis uses skip lists for its sorted sets (e.g., leaderboards).</p>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>Probabilistic structures trade tiny error for huge savings: Bloom filters for set membership, HyperLogLog for unique counts, Count-Min Sketch for frequencies. Geohashing powers location search, Merkle trees verify integrity, and skip lists give fast ordered access.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 25 ===================== -->
+<section id="m25">
+  <span class="modtag">Module 25</span>
+  <h2>Cost &amp; Trade-off Analysis</h2>
+  <p>Great system design isn't just about what's technically best — it's about what's <em>worth it</em>. Every choice has a cost, and engineers must balance performance, reliability, and money.</p>
+
+  <h3>Infrastructure Cost Estimation</h3>
+  <p><strong>Simple Definition:</strong> Roughly calculating what a system will cost to run — compute (servers), storage, bandwidth (data transfer), and managed services. Like capacity estimation, it uses simple math from your traffic and data assumptions. It prevents nasty surprise bills and guides architecture.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Budgeting a road trip: fuel + tolls + food + hotels. You estimate before you go, not after the bill arrives.</div>
+
+  <h3>Storage vs Compute Cost Trade-offs</h3>
+  <p><strong>Simple Definition:</strong> Often you can trade one resource for another. <em>Precomputing</em> and storing results (more storage) saves repeated calculation (less compute), and vice versa. The right balance depends on which is cheaper for your workload and how often data is read vs recomputed.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Cooking meals in bulk and freezing them (storage) vs cooking fresh each time (compute). Bulk saves effort if you eat them often.</div>
+
+  <h3>Multi-Region Cost Implications</h3>
+  <p><strong>Simple Definition:</strong> Running in multiple regions boosts availability and lowers latency, but multiplies cost — duplicate infrastructure, plus expensive cross-region data transfer. You weigh the reliability/latency gains against significantly higher spend, and often go multi-region only for critical workloads.</p>
+
+  <h3>Caching ROI</h3>
+  <p><strong>Simple Definition:</strong> Caching costs money (memory servers) but saves money (fewer database queries, less compute) and improves speed. The "return on investment" is high when data is read far more than it changes. For rarely-read or constantly-changing data, a cache may cost more than it saves.</p>
+  <div class="box tip"><span class="t">⚠️ Interview Tip</span>Caching is almost always worth it for read-heavy data — but mention the hidden costs: memory spend, stale-data risk, and invalidation complexity.</div>
+
+  <h3>Build vs Buy Decisions</h3>
+  <p><strong>Simple Definition:</strong> Whether to build a capability in-house or use an existing product/managed service. Buying is faster and offloads maintenance but costs subscription fees and gives less control; building gives control and may be cheaper at huge scale but takes time and engineers. Buy commodity pieces, build your unique differentiators.</p>
+  <div class="tablewrap">
+  <table>
+    <tr><th></th><th>Build</th><th>Buy</th></tr>
+    <tr><td>Speed to launch</td><td>Slow</td><td>Fast</td></tr>
+    <tr><td>Control/customization</td><td>Full</td><td>Limited</td></tr>
+    <tr><td>Ongoing burden</td><td>You maintain it</td><td>Vendor maintains it</td></tr>
+    <tr><td>Best for</td><td>Your core differentiator</td><td>Commodity needs (auth, email, payments)</td></tr>
+  </table>
+  </div>
+
+  <h3>Cloud Pricing Models (On-Demand, Reserved, Spot)</h3>
+  <p><strong>Simple Definition:</strong> Cloud providers sell compute three main ways, trading flexibility for price.</p>
+  <ul>
+    <li><strong>On-Demand</strong> — Pay per use, no commitment. Most flexible, most expensive. For unpredictable or short-term needs.</li>
+    <li><strong>Reserved</strong> — Commit to 1–3 years for a big discount (up to ~70%). For steady, predictable baseline load.</li>
+    <li><strong>Spot</strong> — Use spare capacity at huge discounts (up to ~90%), but it can be taken away anytime. For fault-tolerant, interruptible jobs (batch, ML training).</li>
+  </ul>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>On-demand = booking a hotel night-by-night; Reserved = a yearly lease at a discount; Spot = last-minute standby airline seats — cheap, but you might get bumped.</div>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>Estimate costs early and design to the budget. Trade storage for compute (and vice versa) wisely, justify caching/multi-region by ROI, buy commodities and build your differentiators, and mix on-demand + reserved + spot to cut cloud bills.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 26 ===================== -->
+<section id="m26">
+  <span class="modtag">Module 26</span>
+  <h2>End-to-End System Design Case Studies</h2>
+  <p>Now we combine everything into 12 complete designs. For each: the problem, a full architecture diagram, and the key design decisions. This is exactly how system-design interviews work — connect the building blocks to solve a real product.</p>
+
+  <h3>26.1 — URL Shortener (TinyURL)</h3>
+  <p><strong>The problem:</strong> Turn a long URL into a short one (e.g., <code>tiny.cc/abc123</code>) that redirects to the original. It's extremely read-heavy (far more clicks than creations) and must redirect with very low latency.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  U["👤 User"] --> LB["⚖️ Load Balancer"]
+  LB --> API["🖥️ App Servers"]
+  API -->|"create"| KGS["🔢 Key Generation / Counter"]
+  API --> Cache["⚡ Redis Cache (hot links)"]
+  Cache -->|"miss"| DB[("🗄️ DB: shortCode → longURL")]
+  API --> AN["📊 Analytics Queue → Store"]
+    </div>
+    <div class="cap">URL shortener architecture: cache-first redirects, separate key generation, async analytics.</div>
+  </div>
+  <h4>Hash Generation</h4>
+  <p>Two approaches: (1) hash the long URL (e.g., MD5) and take the first few characters — simple but risks collisions; (2) use a global counter and Base62-encode it (0–9, a–z, A–Z) into a short string — collision-free and ordered. Base62 with 7 characters yields ~3.5 trillion unique codes. Most designs prefer the counter approach with a key-generation service.</p>
+  <h4>Redirect Flow</h4>
+  <p>User hits <code>/abc123</code> → server looks up the code (cache first, then DB) → returns an HTTP <code>301/302</code> redirect to the long URL. Caching hot links makes this sub-millisecond.</p>
+  <h4>Analytics Tracking</h4>
+  <p>On each redirect, fire an event (timestamp, location, device) into a message queue so analytics are computed asynchronously without slowing the redirect.</p>
+  <h4>Capacity Estimation</h4>
+  <pre><code>New URLs: 100M/day → ~1,160 writes/sec
+Reads (clicks): 100× writes → ~116,000 reads/sec (very read-heavy → cache!)
+Storage: 100M/day × 500 bytes × 365 × 5 yrs ≈ 90 TB
+Short code: Base62, 7 chars = 62^7 ≈ 3.5 trillion codes</code></pre>
+
+  <h3>26.2 — Social Media Feed (Twitter / Instagram)</h3>
+  <p><strong>The problem:</strong> Show each user a timeline of posts from people they follow, fast, at massive scale. The core challenge is generating billions of personalized feeds efficiently.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  P["👤 User posts"] --> WS["✍️ Write Service"]
+  WS --> PDB[("🗄️ Posts DB")]
+  WS --> FO["📤 Fan-out Service"]
+  FO --> TL["⚡ Timeline Cache (per follower)"]
+  R["👁️ User opens app"] --> RS["📖 Read Service"]
+  RS --> TL
+  RS -->|"celebrity posts merged in"| PDB
+  WS --> Media["🖼️ Media → Object Store + CDN"]
+    </div>
+    <div class="cap">Hybrid feed: fan-out-on-write for normal users, fan-out-on-read for celebrities.</div>
+  </div>
+  <h4>Fan-out on Write vs Fan-out on Read</h4>
+  <p><em>Fan-out on write</em> (push): when you post, copy it into all your followers' precomputed timelines immediately → reads are instant, but a post by someone with millions of followers is hugely expensive to write. <em>Fan-out on read</em> (pull): build the timeline when a user opens the app by fetching recent posts from everyone they follow → cheap writes, but slower reads. Most platforms use a <strong>hybrid</strong>.</p>
+  <h4>Timeline Generation</h4>
+  <p>Normal users' posts are pushed into followers' Redis timeline caches (fan-out on write). Reads simply fetch the precomputed list — fast.</p>
+  <h4>Celebrity User Problem</h4>
+  <p>Pushing a celebrity's post to 100M followers would overwhelm the system. Solution: <em>don't</em> fan-out celebrity posts; instead, when a user reads their feed, merge in celebrity posts on the fly (fan-out on read). This hybrid keeps both writes and reads manageable.</p>
+  <h4>Media Storage and CDN</h4>
+  <p>Photos/videos go to object storage (S3) and are served via CDN edge servers near users. The feed stores only references (URLs), not the media itself.</p>
+
+  <h3>26.3 — Chat / Messaging (WhatsApp / Slack)</h3>
+  <p><strong>The problem:</strong> Deliver messages instantly and reliably between users, support groups, show who's online, and never lose a message. Needs real-time, persistent connections.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  A["📱 Sender"] -->|"WebSocket"| GW["🔌 Connection/Gateway Servers"]
+  GW --> MS["💬 Message Service"]
+  MS --> Q["📩 Queue"]
+  Q --> Store[("🗄️ Message Store")]
+  MS -->|"if online (WebSocket)"| B["📱 Receiver"]
+  MS -->|"if offline"| Push["🔔 Push Notification (APNs/FCM)"]
+  Pres["🟢 Presence Service"] --- GW
+    </div>
+    <div class="cap">Chat architecture using persistent WebSocket connections and a message store for delivery.</div>
+  </div>
+  <h4>One-to-One Messaging</h4>
+  <p>Clients hold a persistent WebSocket connection to gateway servers. A message goes sender → gateway → message service → stored → delivered to the recipient's connection (or push notification if offline). The store guarantees nothing is lost.</p>
+  <h4>Group Chat</h4>
+  <p>The message service looks up all group members and delivers a copy to each (fan-out). For huge groups, this is batched. Each member's unread/delivery state is tracked.</p>
+  <h4>Online Presence</h4>
+  <p>A presence service tracks who's connected via heartbeats over the WebSocket. When a connection drops or misses heartbeats, the user is marked offline. Status changes are pushed to relevant contacts.</p>
+  <h4>Message Delivery Guarantees</h4>
+  <p>Messages get states: sent → delivered → read (WhatsApp's ticks). Acknowledgements and retries with stored state ensure at-least-once delivery; message IDs dedupe duplicates.</p>
+  <h4>End-to-End Encryption Basics</h4>
+  <p>With E2E encryption, messages are encrypted on the sender's device and only decryptable by the recipient — servers relay ciphertext they can't read. WhatsApp uses the Signal Protocol, exchanging public keys so only endpoints hold the decryption keys.</p>
+
+  <h3>26.4 — Ride Sharing (Uber / Lyft)</h3>
+  <p><strong>The problem:</strong> Match riders to nearby drivers in real time, track moving locations continuously, and price dynamically — all with low latency over a city's geography.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  D["🚗 Driver app (location every few sec)"] --> LOC["📍 Location Service"]
+  LOC --> GEO["🗺️ Geospatial Index (geohash/QuadTree)"]
+  Rider["🧍 Rider requests ride"] --> Match["🤝 Matching Service"]
+  Match --> GEO
+  Match --> Surge["💲 Surge Pricing Service"]
+  Match --> Trip["🧾 Trip Service"]
+  Trip --> Pay["💳 Payment"]
+    </div>
+    <div class="cap">Ride-sharing core: continuous location updates feed a geospatial index used for matching.</div>
+  </div>
+  <h4>Real-Time Location Tracking</h4>
+  <p>Driver apps send GPS coordinates every few seconds to a location service, which keeps current positions in fast in-memory storage. This high write volume is handled with horizontal scaling and is often kept in memory rather than a traditional DB.</p>
+  <h4>Driver-Rider Matching</h4>
+  <p>When a rider requests, the matching service queries the geospatial index for nearby available drivers, ranks them by ETA, and offers the trip. It must be fast and avoid offering the same driver to two riders (locking).</p>
+  <h4>Surge Pricing</h4>
+  <p>When demand in an area exceeds supply, prices rise to balance them and attract drivers. A pricing service computes a multiplier per geographic zone in near real time based on the supply/demand ratio.</p>
+  <h4>Geospatial Indexing</h4>
+  <p>To find "drivers near me" fast, locations are indexed using geohashing (Module 24) or QuadTrees, turning a proximity search into an efficient lookup instead of scanning every driver.</p>
+
+  <h3>26.5 — Video Streaming (YouTube / Netflix)</h3>
+  <p><strong>The problem:</strong> Let users upload and watch video at massive scale, with smooth playback on any device and network speed. Storage, bandwidth, and global delivery are the challenges.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  U["📤 Uploader"] --> UP["Upload Service"]
+  UP --> Raw["🗄️ Raw Video (Object Store)"]
+  Raw --> TR["⚙️ Transcoding Pipeline (queue + workers)"]
+  TR --> Multi["🎞️ Multiple resolutions/bitrates"]
+  Multi --> CDN["🌍 CDN Edge Servers"]
+  V["👁️ Viewer"] --> CDN
+  V --> Rec["🤖 Recommendation Service"]
+  Meta[("Metadata DB")] --- V
+    </div>
+    <div class="cap">Video pipeline: upload → transcode into many formats → distribute via CDN.</div>
+  </div>
+  <h4>Video Upload and Transcoding</h4>
+  <p>Raw uploads land in object storage, then a transcoding pipeline (a queue feeding many workers) converts each video into multiple resolutions and bitrates (240p–4K) and chunks them. This is a compute-intensive batch job done once per video.</p>
+  <h4>Adaptive Bitrate Streaming</h4>
+  <p>The player automatically switches quality based on your current network speed — dropping to lower resolution when bandwidth falls, raising it when it recovers — so playback never stops to buffer. Protocols: HLS, DASH.</p>
+  <h4>CDN for Video Delivery</h4>
+  <p>Encoded chunks are pushed to CDN edge servers worldwide, so your video streams from a nearby server. Netflix even places its own caches inside ISPs. This is what makes global streaming affordable and smooth.</p>
+  <h4>Recommendation System Basics</h4>
+  <p>A recommendation service suggests what to watch next using your history and similar users (collaborative filtering) plus content features. It runs largely offline (batch) and serves precomputed suggestions quickly.</p>
+
+  <h3>26.6 — E-commerce / Payment System</h3>
+  <p><strong>The problem:</strong> Let users browse, add to cart, and pay reliably — without overselling stock or double-charging cards. Correctness and consistency are paramount.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  U["🛒 User"] --> GW["🚪 API Gateway"]
+  GW --> Cat["📦 Catalog Service"]
+  GW --> Inv["📊 Inventory Service"]
+  GW --> Order["🧾 Order Service"]
+  Order --> Pay["💳 Payment Service (idempotent)"]
+  Pay --> PG["🏦 External Payment Gateway"]
+  Order --> Q["📩 Events: ship, notify"]
+    </div>
+    <div class="cap">E-commerce as microservices; payment uses idempotency keys to prevent double charges.</div>
+  </div>
+  <h4>Inventory Management</h4>
+  <p>Stock counts must stay accurate under concurrent buyers. Use atomic decrements and reservations (hold stock during checkout with a timeout) so two people can't buy the last item. This often needs strong consistency (SQL transactions).</p>
+  <h4>Order Processing</h4>
+  <p>An order moves through states (created → paid → shipped → delivered). Because it spans services (inventory, payment, shipping), a <em>saga</em> (Module 20) coordinates the steps with compensating actions if any step fails.</p>
+  <h4>Payment Gateway Integration</h4>
+  <p>The payment service calls an external gateway (Stripe/Razorpay) and listens for webhooks confirming success/failure. Sensitive card data is handled by the gateway (PCI compliance), not stored by you.</p>
+  <h4>Idempotency in Payments</h4>
+  <p>Network retries must never double-charge. Each payment carries an <em>idempotency key</em> so the system processes a given charge exactly once, even if the request arrives twice. (See Module 20.)</p>
+  <div class="box tip"><span class="t">⚠️ Interview Tip</span>For payments and inventory, always mention idempotency + strong consistency + reservations. This is exactly where eventual consistency is the <em>wrong</em> choice.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 26 (continued) ===================== -->
+<section>
+  <span class="modtag">Module 26 · continued</span>
+  <h2 style="border:none;">Case Studies 26.7 – 26.12</h2>
+
+  <h3>26.7 — Notification System</h3>
+  <p><strong>The problem:</strong> Send notifications to millions of users across push, email, and SMS — reliably, in the right priority, without spamming anyone. It must handle many channels and huge volume.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  Svc["📨 Services trigger notifications"] --> Q["📩 Notification Queue (by priority)"]
+  Q --> Disp["🧭 Dispatcher"]
+  Disp --> Tmpl["📝 Template Service"]
+  Disp --> Pref["⚙️ User Preferences / Rate Limit"]
+  Disp --> Push["🔔 Push (APNs/FCM)"]
+  Disp --> Email["✉️ Email (SES)"]
+  Disp --> SMS["📱 SMS (Twilio)"]
+    </div>
+    <div class="cap">Notification system: queued requests dispatched to the right channel with templates and rate limits.</div>
+  </div>
+  <h4>Push, Email, SMS Channels</h4>
+  <p>Each channel has its own provider and adapter (APNs/FCM for push, SES for email, Twilio for SMS). The dispatcher picks channels based on the notification type and the user's preferences. A clean abstraction lets you add channels easily.</p>
+  <h4>Priority and Batching</h4>
+  <p>Urgent notifications (OTP, security alerts) use a high-priority queue and go instantly; low-priority ones (marketing, digests) are batched and sent together to save cost and reduce noise.</p>
+  <h4>Rate Limiting per User</h4>
+  <p>Cap how many notifications a single user gets in a period so you don't annoy or spam them. Implemented with per-user counters (Module 20 algorithms) and respecting quiet hours.</p>
+  <h4>Template Management</h4>
+  <p>Messages are stored as templates with placeholders ("Hi {name}, your order {id} shipped"). This supports localization and lets non-engineers edit content, while the system fills in user-specific data at send time.</p>
+
+  <h3>26.8 — Distributed Cache (Redis-like)</h3>
+  <p><strong>The problem:</strong> Build a fast key-value cache spread across many nodes, handling huge throughput, surviving node failures, and staying balanced as nodes are added/removed.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  C["Clients"] --> Ring["🔵 Consistent Hash Ring"]
+  Ring --> N1["Node 1 (+ replica)"]
+  Ring --> N2["Node 2 (+ replica)"]
+  Ring --> N3["Node 3 (+ replica)"]
+    </div>
+    <div class="cap">Keys are mapped to nodes via consistent hashing; each node has replicas for resilience.</div>
+  </div>
+  <h4>Eviction Policies at Scale</h4>
+  <p>Each node enforces eviction (usually LRU) within its memory limit (Module 12). At scale you tune policies per workload and monitor hit ratios, since a poor policy across thousands of nodes wastes huge memory.</p>
+  <h4>Consistent Hashing for Nodes</h4>
+  <p>Keys map to nodes on a hash ring with virtual nodes, so adding/removing a node moves only a small fraction of keys and load stays even (Module 4). This is what makes the cache cluster elastic.</p>
+  <h4>Cache Stampede Problem</h4>
+  <p>When a popular key expires, thousands of requests miss simultaneously and all hammer the database at once (a "stampede" or "thundering herd"). Fixes: a lock/single-flight so only one request rebuilds the value, slightly randomized TTLs, and serving stale data while refreshing in the background.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A stampede is everyone rushing one ticket counter the instant tickets release; the fix is letting one person fetch for the group while others wait.</div>
+
+  <h3>26.9 — Search Autocomplete (Typeahead)</h3>
+  <p><strong>The problem:</strong> Suggest completions as the user types each letter, within milliseconds, ranked by popularity and relevance. Latency is the dominant constraint.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  K["⌨️ User types 'sys'"] --> API["Autocomplete Service"]
+  API --> Trie["🌳 Trie / Prefix Index (in memory)"]
+  Trie --> Rank["📊 Ranking (popularity, personalization)"]
+  Rank --> Out["Top suggestions"]
+  Logs["🔎 Search logs"] -->|"batch build"| Trie
+    </div>
+    <div class="cap">Typeahead: an in-memory prefix tree (trie) returns ranked suggestions per keystroke.</div>
+  </div>
+  <h4>Trie Data Structure</h4>
+  <p>A trie (prefix tree) stores words by shared prefixes, so finding all completions of "sys" is a fast walk down the tree. It's kept in memory for speed, and popular completions can be precomputed at each node.</p>
+  <h4>Ranking and Personalization</h4>
+  <p>Suggestions are ordered by frequency/popularity, recency, and the user's own history/location. Rankings are computed offline from search logs and attached to trie nodes for instant lookup.</p>
+  <h4>Low-Latency Requirements</h4>
+  <p>Because suggestions fire on every keystroke, responses must be a few milliseconds. This demands in-memory data, edge caching, and often debouncing on the client (waiting a beat before querying).</p>
+
+  <h3>26.10 — Rate Limiter as a Standalone System</h3>
+  <p><strong>The problem:</strong> Enforce request limits consistently across many servers and data centers — per user, per IP, and per API — without becoming a bottleneck itself.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  R["Incoming request"] --> RL["🚦 Rate Limiter (at gateway)"]
+  RL --> Store["⚡ Central Redis (counters)"]
+  RL -->|"under limit"| Allow["✅ Forward to service"]
+  RL -->|"over limit"| Block["❌ 429 Too Many Requests"]
+    </div>
+    <div class="cap">A shared counter store lets all servers enforce one global limit.</div>
+  </div>
+  <h4>Distributed Rate Limiting</h4>
+  <p>If each server counts separately, a user could exceed the global limit by spreading requests across servers. So counters live in a shared fast store (Redis), giving one consistent view. Atomic operations keep counts accurate under concurrency.</p>
+  <h4>Sliding Window at Scale</h4>
+  <p>The sliding-window-counter algorithm (Module 20) gives smooth, accurate limits with low memory and is implemented atomically in Redis so thousands of servers agree on the count.</p>
+  <h4>Per-User vs Per-IP vs Per-API Limits</h4>
+  <p>Different keys serve different goals: per-user for fairness among accounts, per-IP to stop anonymous abuse, per-API to protect specific expensive endpoints. Real systems combine all three with different thresholds.</p>
+
+  <h3>26.11 — Web Crawler</h3>
+  <p><strong>The problem:</strong> Systematically download billions of web pages to build a search index — politely, without re-visiting the same page, and distributed across many machines.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  Seed["🌱 Seed URLs"] --> Frontier["🗂️ URL Frontier (priority queue)"]
+  Frontier --> Fetch["⬇️ Fetcher workers"]
+  Fetch --> Parse["🧩 Parser (extract links)"]
+  Parse --> Dedup["🔎 Bloom filter (seen?)"]
+  Dedup -->|"new URLs"| Frontier
+  Fetch --> Store["🗄️ Page Store → Indexer"]
+    </div>
+    <div class="cap">Crawler loop: fetch → parse → dedupe → enqueue new links, all distributed.</div>
+  </div>
+  <h4>Politeness Policy</h4>
+  <p>The crawler respects each site's <code>robots.txt</code> and limits how often it hits a single domain, so it doesn't overload servers. It spaces out requests per host and honors crawl-delay rules.</p>
+  <h4>URL Frontier</h4>
+  <p>The frontier is the queue of URLs waiting to be crawled, prioritized by importance and freshness, and organized so politeness (per-host rate limits) is enforced. It's the brain that decides what to crawl next.</p>
+  <h4>Duplicate Detection (Bloom Filter)</h4>
+  <p>With billions of URLs, checking "have we seen this?" against a database is too slow. A Bloom filter (Module 24) gives a fast, memory-tiny membership test to skip already-crawled URLs.</p>
+  <h4>Distributed Crawling</h4>
+  <p>Work is split across many machines, typically partitioned by domain (so politeness is easy to enforce per host). A coordinator and shared frontier keep them from duplicating effort.</p>
+
+  <h3>26.12 — Ticket Booking System (BookMyShow)</h3>
+  <p><strong>The problem:</strong> Sell seats for events/movies where many people compete for the same seats at once — without double-booking — and survive massive flash-sale spikes.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  U["🧍 Users"] --> Wait["⏳ Virtual Waiting Room (flash sales)"]
+  Wait --> API["🎟️ Booking Service"]
+  API --> Lock["🔒 Seat Lock (Redis, with TTL)"]
+  Lock --> DB[("🗄️ Seats DB (transaction)")]
+  API --> Pay["💳 Payment (idempotent)"]
+  Pay -->|"success"| Confirm["✅ Confirm seat"]
+  Pay -->|"timeout"| Release["🔓 Release seat"]
+    </div>
+    <div class="cap">Booking flow: temporarily lock a seat, confirm on payment, auto-release on timeout.</div>
+  </div>
+  <h4>Concurrency and Locking</h4>
+  <p>Two users must never get the same seat. The system locks a seat the moment one user selects it, using a database transaction or a distributed lock with a timeout, so others see it as unavailable. Strong consistency is essential here.</p>
+  <h4>Seat Reservation</h4>
+  <p>When you pick a seat it's <em>temporarily held</em> (e.g., 5–10 minutes) while you pay. If payment succeeds it's confirmed; if you abandon or time out, the lock auto-expires and the seat returns to the pool.</p>
+  <h4>Handling Flash Sales</h4>
+  <p>For huge launches, a virtual waiting room queues users and admits them in controlled batches, protecting the backend from a sudden stampede. Caching seat-availability views and aggressive rate limiting also help absorb the spike.</p>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>Each case study is just the building blocks (Modules 1–25) recombined. The recurring moves: cache read-heavy data, queue slow/async work, shard for scale, lock + transactions for correctness, and CDN for media. Identify the dominant constraint first, then pick the patterns that solve it.</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<!-- ===================== MODULE 27 ===================== -->
+<section id="m27">
+  <span class="modtag">Module 27</span>
+  <h2>Real-World Architecture Discussions</h2>
+  <p>Finally, let's look at how famous companies actually built their systems — what specific problem each faced and the clever architecture that solved it. These are the real stories behind the patterns.</p>
+
+  <h3>Instagram Architecture</h3>
+  <p><strong>The problem:</strong> A tiny team had to serve explosive growth of photos and a read-heavy feed with minimal engineers.</p>
+  <p><strong>The solution:</strong> Instagram famously stayed pragmatic — PostgreSQL for core data (users, relationships), sharded across many machines as it grew; Redis/Memcached for heavy caching; object storage + CDN for photos; and a hybrid feed (push for normal users, pull for celebrities). They kept the stack simple and "boring" on purpose, scaling proven tools rather than chasing novelty. The lesson: well-understood components, sharded and cached aggressively, can serve hundreds of millions.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Like running a giant restaurant chain with a small, simple, repeatable menu — easy to scale because it's not over-engineered.</div>
+
+  <h3>Netflix CDN and Microservices</h3>
+  <p><strong>The problem:</strong> Stream video to hundreds of millions globally without buffering, while moving fast as a large engineering org — and survive failures gracefully.</p>
+  <p><strong>The solution:</strong> Two big moves. (1) <strong>Open Connect</strong>, Netflix's own CDN — purpose-built caching appliances placed inside ISPs, so your show streams from a box in (or near) your ISP. (2) A massive <strong>microservices</strong> architecture on AWS — hundreds of independently deployable services — with resilience patterns like circuit breakers (Hystrix) and proactive failure testing via <strong>Chaos Monkey</strong>. This gives both buttery-smooth streaming and high availability despite constant component failures.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  V["👁️ Viewer"] --> OC["📦 Open Connect appliance (in ISP)"]
+  V --> MS["🧩 Microservices on AWS"]
+  MS --> CB["🔌 Circuit Breakers"]
+  MS --> CM["🐒 Chaos Monkey (failure testing)"]
+    </div>
+  </div>
+
+  <h3>WhatsApp Erlang Architecture</h3>
+  <p><strong>The problem:</strong> Support hundreds of millions of always-connected users with real-time messaging — using a famously tiny engineering team.</p>
+  <p><strong>The solution:</strong> WhatsApp built on <strong>Erlang</strong>, a language/runtime designed for telecom: it handles millions of lightweight concurrent processes and persistent connections per server, with built-in fault tolerance ("let it crash" + supervisors). This let a handful of engineers run a service for ~900M users on relatively few servers — each server holding millions of live connections. The lesson: matching the technology to the problem (massive concurrency) can beat brute force.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>Choosing the perfect specialized tool — like using a telephone exchange's own technology to run... a messaging service.</div>
+
+  <h3>Uber Geo-Sharding and Real-Time Matching</h3>
+  <p><strong>The problem:</strong> Match riders and drivers in real time across the globe, with constantly moving locations and city-level demand spikes.</p>
+  <p><strong>The solution:</strong> Uber shards data and processing <em>geographically</em> — the world is divided into cells (using systems like Google's S2 / their H3 hexagonal grid), so "find nearby drivers" is a local lookup within a few cells. Real-time location updates flow through high-throughput pipelines (Kafka), and matching/dispatch services operate per region. Surge pricing is computed per geographic zone from live supply/demand. Geo-sharding keeps each query local and fast even at global scale.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  W["🌍 World split into hex cells (H3)"] --> C1["Cell shard A: drivers+riders"]
+  W --> C2["Cell shard B: drivers+riders"]
+  C1 --> M["🤝 Local matching + surge"]
+  C2 --> M
+    </div>
+  </div>
+
+  <h3>Amazon DynamoDB Design</h3>
+  <p><strong>The problem:</strong> Amazon needed a database that's always available and scales infinitely for shopping carts and similar workloads — even during failures and Black Friday spikes.</p>
+  <p><strong>The solution:</strong> DynamoDB (born from the Dynamo paper) is a leaderless, key-value/document store that chooses <strong>availability</strong> over strong consistency (AP in CAP). It uses <strong>consistent hashing</strong> to spread data, <strong>replication</strong> across nodes, <strong>quorums</strong> (tunable W/R) for reads/writes, <strong>vector clocks/versioning</strong> to detect conflicts, and <strong>Merkle trees</strong> to sync replicas. The result is predictable single-digit-millisecond latency at any scale, fully managed. It's the textbook example of trading strict consistency for availability and scale.</p>
+  <div class="box tip"><span class="t">⚠️ Interview Tip</span>DynamoDB ties together half this guide: consistent hashing, replication, quorums, eventual consistency, and Merkle trees. It's a favorite reference design.</div>
+
+  <h3>Google Search Infrastructure (High Level)</h3>
+  <p><strong>The problem:</strong> Index essentially the entire web and answer queries in a fraction of a second for billions of users.</p>
+  <p><strong>The solution:</strong> Google <strong>crawls</strong> the web (Module 26.11), builds a massive <strong>inverted index</strong> (word → pages) sharded across thousands of machines, and ranks results (originally PageRank + hundreds of signals today). It pioneered <strong>MapReduce</strong> (batch processing at scale), <strong>GFS/Bigtable</strong> (distributed storage), and serves queries by fanning out to many index shards in parallel and merging the top results — all in ~200ms. The lesson: extreme parallelism over distributed indexes plus heavy precomputation.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  Q["🔎 Query"] --> Root["Aggregator"]
+  Root --> S1["Index shard 1"]
+  Root --> S2["Index shard 2"]
+  Root --> S3["Index shard 3"]
+  S1 --> Merge["Merge + rank top results"]
+  S2 --> Merge
+  S3 --> Merge
+  Merge --> R["Results (~200ms)"]
+    </div>
+  </div>
+
+  <h3>Facebook News Feed Ranking (High Level)</h3>
+  <p><strong>The problem:</strong> Out of thousands of possible posts, decide which to show each user, in what order, to maximize relevance — instantly, for billions of users.</p>
+  <p><strong>The solution:</strong> Facebook combines <strong>fan-out</strong> feed generation (Module 26.2) with a <strong>ranking model</strong>: for each candidate post it predicts how likely you are to engage (like, comment, share, dwell) using ML, then sorts by a relevance score rather than pure chronology. Candidate posts are gathered, scored by a model fed hundreds of signals (relationship, post type, recency, past behavior), and the top ones are cached for fast delivery. Heavy ML scoring happens largely offline/near-real-time so reads stay fast. The lesson: relevance is a machine-learning ranking problem layered on top of a scalable feed pipeline.</p>
+  <div class="box ex"><span class="t">💡 Real-Life Example</span>A smart personal newspaper editor who, every time you open it, reshuffles all available stories to put the ones <em>you</em> care about on the front page.</div>
+  <div class="box key"><span class="t">📌 Key Takeaway</span>Real architectures aren't magic — they're the same primitives matched to a specific dominant problem: Instagram (simple + sharded + cached), Netflix (own CDN + microservices + chaos), WhatsApp (right language for concurrency), Uber (geo-sharding), DynamoDB (AP + consistent hashing + quorums), Google (parallel inverted index), Facebook (ML ranking on a feed pipeline).</div>
+  <a class="backtop" href="#top">↑ Back to top</a>
+</section>
+
+<section style="background:linear-gradient(135deg,#1e40af,#2563eb); color:#fff;">
+  <h2 style="color:#fff; border-bottom-color:rgba(255,255,255,.3);">🎓 You've Reached the End — Congratulations!</h2>
+  <p style="color:#eaf1ff;">You've now walked through all <strong>27 modules</strong> of system design, from the core components to real-world architectures used by Instagram, Netflix, Uber, Amazon, Google, and Facebook.</p>
+  <p style="color:#eaf1ff;"><strong>How to use this guide:</strong> Revisit modules before interviews, redraw the diagrams from memory, and for any new product ask: <em>What's the dominant constraint? Which building blocks solve it? What are the trade-offs?</em> That mindset is system design.</p>
+  <a class="backtop" href="#top" style="color:#fff;">↑ Back to top</a>
+</section>
+</div>
+</main>
+</div>
+</body>
+</html>
