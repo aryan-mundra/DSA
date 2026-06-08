@@ -5557,20 +5557,31 @@ Output: 16</pre></div>
         <div class="solution">
             <h3>Solution (Java-style Pseudocode):</h3>
             <pre id="code-countnice">
-int numberOfSubarrays(int[] nums, int k) {
-    return atMost(nums, k) - atMost(nums, k - 1);
-}
-int atMost(int[] nums, int k) {
-    int left = 0, count = 0, odds = 0;
-    for (int right = 0; right &lt; nums.length; right++) {
-        if (nums[right] % 2 == 1) odds++;
-        while (odds &gt; k) {
-            if (nums[left] % 2 == 1) odds--;
-            left++;
-        }
-        count += right - left + 1;
+class Solution {
+    public int numberOfSubarrays(int[] nums, int k) {
+        return atMost(nums, k) - atMost(nums, k - 1);
     }
-    return count;
+    private int atMost(int[] nums, int k) {
+        int left = 0;
+        int oddCount = 0;
+        int ans = 0;
+        for (int right = 0; right &lt; nums.length; right++) {
+            if (isOdd(nums[right])) {
+                oddCount++;
+            }
+            while (oddCount &gt; k) {
+                if (isOdd(nums[left])) {
+                    oddCount--;
+                }
+                left++;
+            }
+            ans += right - left + 1;
+        }
+        return ans;
+    }
+    private boolean isOdd(int num) {
+        return num % 2 != 0;
+    }
 }
             </pre>
             <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(1)</p></div>
@@ -5964,19 +5975,22 @@ Output: -1</pre></div>
         <div class="solution">
             <h3>Solution (Java-style Pseudocode):</h3>
             <pre id="code-findpivot">
-int pivotIndex(int[] nums) {
-    int totalSum = 0;
-    for (int num : nums) totalSum += num;
-
-    int leftSum = 0;
-    for (int i = 0; i &lt; nums.length; i++) {
-        int rightSum = totalSum - leftSum - nums[i];
-
-        if (leftSum == rightSum) return i;
-
-        leftSum += nums[i];
+class Solution {
+    public int pivotIndex(int[] nums) {
+        int totalSum = 0;
+        for (int i = 0; i &lt; nums.length; i++) {
+            totalSum = totalSum + nums[i];
+        }
+        int leftSum = 0;
+        for (int i = 0; i &lt; nums.length; i++) {
+            int rightSum = totalSum - leftSum - nums[i];
+            if (leftSum == rightSum) {
+                return i;
+            }
+            leftSum = leftSum + nums[i];
+        }
+        return -1;
     }
-    return -1;
 }
             </pre>
             <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(1)</p></div>
@@ -6880,22 +6894,46 @@ Output: 10</pre></div>
             </div>
             <div class="step-info" id="singleelem-info">Click Play or Step to start</div>
             <div class="array-container" id="singleelem-array"></div>
-            <div class="result-box" id="singleelem-result">left=0 | right=8</div>
+            <div class="result-box" id="singleelem-result">low=1 | high=7</div>
         </div>
         <div class="solution">
             <h3>Solution (Java-style Pseudocode):</h3>
             <pre id="code-singleelem">
-int singleNonDuplicate(int[] nums) {
-    int left = 0, right = nums.length - 1;
-    while (left &lt; right) {
-        int mid = left + (right - left) / 2;
-        if (mid % 2 == 1) mid--;
-        if (nums[mid] == nums[mid + 1])
-            left = mid + 2;
-        else
-            right = mid;
+class Solution {
+    public int singleNonDuplicate(int[] arr) {
+        int n = arr.length;
+        if (n == 1) {
+            return arr[0];
+        }
+        if (arr[0] != arr[1]) {
+            return arr[0];
+        }
+        if (arr[n - 1] != arr[n - 2]) {
+            return arr[n - 1];
+        }
+        int low = 1;
+        int high = n - 2;
+        while (low &lt;= high) {
+            int mid = (low + high) / 2;
+            if (arr[mid] != arr[mid - 1] &amp;&amp; arr[mid] != arr[mid + 1]) {
+                return arr[mid];
+            }
+            if (mid % 2 == 0) { // even index
+                if (arr[mid] == arr[mid + 1]) {
+                    low = mid + 1;
+                } else {
+                    high = mid - 1;
+                }
+            } else { // odd index
+                if (arr[mid] == arr[mid - 1]) {
+                    low = mid + 1;
+                } else {
+                    high = mid - 1;
+                }
+            }
+        }
+        return -1;
     }
-    return nums[left];
 }
             </pre>
             <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(log n) | <strong>Space:</strong> O(1)</p></div>
@@ -17356,39 +17394,39 @@ function buildAtMostOddSnaps(arr, k, phaseNum) {
     let left = 0, count = 0, odds = 0;
     let loggedFirstShrink = false;
     snaps.push(Object.assign({
-        left:0,right:-1,count:0,odds:0,lines:[3],msg:`<code>atMost(nums, ${k})</code>: start.`,
+        left:0,right:-1,count:0,odds:0,lines:[4],msg:`<code>atMost(nums, ${k})</code>: start.`,
         commentary:`<strong>atMost(${k})</strong> counts subarrays whose odd count is ≤ ${k}. Grow <code>right</code>; if odds exceed ${k}, shrink from <code>left</code>. Each step adds every valid window ending at <code>right</code>.`
     }, ph));
-    snaps.push(Object.assign({left:0,right:-1,count:0,odds:0,lines:[4],msg:`<code>int left=0, count=0, odds=0</code>.`}, ph));
+    snaps.push(Object.assign({left:0,right:-1,count:0,odds:0,lines:[5,6,7],msg:`<code>int left=0, oddCount=0, ans=0</code>.`}, ph));
     for (let right = 0; right < arr.length; right++) {
-        snaps.push(Object.assign({left,right,count,odds,lines:[5],msg:`<code>for</code>: right=${right}.`}, ph));
+        snaps.push(Object.assign({left,right,count,odds,lines:[8],msg:`<code>for</code>: right=${right}.`}, ph));
         if (arr[right] % 2 === 1) {
             odds++;
-            snaps.push(Object.assign({left,right,count,odds,lines:[6],msg:`<code>if nums[${right}]=${arr[right]} % 2 == 1</code> → true. <code>odds++</code>=${odds}.`}, ph));
+            snaps.push(Object.assign({left,right,count,odds,lines:[9,10],msg:`<code>isOdd(nums[${right}])</code> → true. <code>oddCount++</code>=${odds}.`}, ph));
         } else {
-            snaps.push(Object.assign({left,right,count,odds,lines:[6],msg:`<code>if nums[${right}]=${arr[right]} % 2 == 1</code> → false.`}, ph));
+            snaps.push(Object.assign({left,right,count,odds,lines:[9],msg:`<code>isOdd(nums[${right}])</code> → false.`}, ph));
         }
         while (odds > k) {
             const shrinkComm = !loggedFirstShrink
                 ? `<strong>Too many odds</strong> in <code>[left..right]</code> — advance <code>left</code> until the window has at most ${k} odd numbers.`
                 : undefined;
             loggedFirstShrink = true;
-            snaps.push(Object.assign({left,right,count,odds,lines:[7],msg:`<code>while</code>: odds=${odds} &gt; ${k} → true.`}, shrinkComm ? { commentary: shrinkComm } : {}, ph));
+            snaps.push(Object.assign({left,right,count,odds,lines:[12],msg:`<code>while</code>: oddCount=${odds} &gt; ${k} → true.`}, shrinkComm ? { commentary: shrinkComm } : {}, ph));
             if (arr[left] % 2 === 1) {
                 odds--;
-                snaps.push(Object.assign({left,right,count,odds,lines:[8],msg:`<code>if nums[${left}]=${arr[left]} % 2 == 1</code> → true. <code>odds--</code>=${odds}.`}, ph));
+                snaps.push(Object.assign({left,right,count,odds,lines:[13,14],msg:`<code>isOdd(nums[${left}])</code> → true. <code>oddCount--</code>=${odds}.`}, ph));
             } else {
-                snaps.push(Object.assign({left,right,count,odds,lines:[8],msg:`<code>if nums[${left}]=${arr[left]} % 2 == 1</code> → false.`}, ph));
+                snaps.push(Object.assign({left,right,count,odds,lines:[13],msg:`<code>isOdd(nums[${left}])</code> → false.`}, ph));
             }
             left++;
-            snaps.push(Object.assign({left,right,count,odds,lines:[9],msg:`<code>left++</code> = ${left}.`}, ph));
+            snaps.push(Object.assign({left,right,count,odds,lines:[16],msg:`<code>left++</code> = ${left}.`}, ph));
         }
-        snaps.push(Object.assign({left,right,count,odds,lines:[7],msg:`<code>while</code>: odds=${odds} &gt; ${k} → false.`}, ph));
+        snaps.push(Object.assign({left,right,count,odds,lines:[12],msg:`<code>while</code>: oddCount=${odds} &gt; ${k} → false.`}, ph));
         count += right - left + 1;
-        snaps.push(Object.assign({left,right,count,odds,lines:[11],msg:`<code>count += ${right-left+1}</code>. count=${count}.`}, ph));
+        snaps.push(Object.assign({left,right,count,odds,lines:[18],msg:`<code>ans += ${right-left+1}</code>. ans=${count}.`}, ph));
     }
     snaps.push(Object.assign({
-        left,right:arr.length-1,count,odds,lines:[13],msg:`<code>return count</code> = ${count}.`,
+        left,right:arr.length-1,count,odds,lines:[20],msg:`<code>return ans</code> = ${count}.`,
         commentary:`<strong>Phase total</strong>: <code>atMost(${k})</code> = <strong>${count}</strong> subarrays (all endings with ≤ ${k} odds in the window).`
     }, ph));
     return {snaps, result: count};
@@ -17416,18 +17454,18 @@ function initCountNice() {
     const s = countNiceState.snapshots;
     s.push({
         phase:'setup', phaseK:null,
-        left:-1,right:-1,count:0,odds:0,lines:[0,1],msg:`Call <code>numberOfSubarrays(nums, ${cnK})</code>.`,
+        left:-1,right:-1,count:0,odds:0,lines:[1,2],msg:`Call <code>numberOfSubarrays(nums, ${cnK})</code>.`,
         commentary:`<strong>Nice subarrays</strong> end at each index with exactly ${cnK} odd numbers. We never count “exactly k” directly — we subtract two “at most” passes.`
     });
     s.push({
         phase:'setup', phaseK:null,
-        left:-1,right:-1,count:0,odds:0,lines:[1],msg:`<code>return atMost(nums, ${cnK}) - atMost(nums, ${cnK-1})</code>.`
+        left:-1,right:-1,count:0,odds:0,lines:[2],msg:`<code>return atMost(nums, ${cnK}) - atMost(nums, ${cnK-1})</code>.`
     });
     const r1 = buildAtMostOddSnaps(cnArr, cnK, 1);
     s.push(...r1.snaps);
     s.push({
         phase:'between', phaseK:null,
-        left:-1,right:-1,count:0,odds:0,count1:r1.result,lines:[1],msg:`atMost(${cnK}) = ${r1.result}. Now computing atMost(${cnK-1}).`,
+        left:-1,right:-1,count:0,odds:0,count1:r1.result,lines:[2],msg:`atMost(${cnK}) = ${r1.result}. Now computing atMost(${cnK-1}).`,
         commentary:`<strong>Second pass</strong>: run the same window with bound <code>${cnK - 1}</code>. Subtracting removes subarrays with fewer than ${cnK} odds, leaving exactly ${cnK}.`
     });
     const r2 = buildAtMostOddSnaps(cnArr, cnK - 1, 2);
@@ -17435,7 +17473,7 @@ function initCountNice() {
     s.push(...r2.snaps);
     s.push({
         phase:'final', phaseK:null,
-        left:-1,right:-1,count:0,odds:0,count1:r1.result,count2:r2.result,answer:r1.result-r2.result,lines:[1],
+        left:-1,right:-1,count:0,odds:0,count1:r1.result,count2:r2.result,answer:r1.result-r2.result,lines:[2],
         msg:`atMost(${cnK})=${r1.result} - atMost(${cnK-1})=${r2.result} = ${r1.result-r2.result}. Done!`,
         commentary:`<strong>Answer: ${r1.result - r2.result}</strong> — <code>${r1.result} − ${r2.result}</code> subarrays with exactly ${cnK} odd numbers.`
     });
@@ -18304,31 +18342,58 @@ function initSingleElem(){
     const c=document.getElementById('singleelem-array');
     c.innerHTML=seArr.map((v,i)=>`<div class="array-cell" id="se-${i}">${v}<span class="idx">${i}</span></div>`).join('');
     seState.step=-1;seState.snapshots=[];const s=seState.snapshots;
-    let l=0,r=seArr.length-1;
-    s.push({l,r,mid:-1,lines:[0],msg:'Call <code>singleNonDuplicate(nums)</code>.'});
-    s.push({l,r,mid:-1,lines:[1],msg:`<code>int left=0, right=${r}</code>.`});
-    while(l<r){
-        s.push({l,r,mid:-1,lines:[2],msg:`<code>while left=${l} &lt; right=${r}</code> → true.`});
-        let m=Math.floor(l+(r-l)/2);
-        s.push({l,r,mid:m,lines:[3],msg:`<code>int mid = ${m}</code>.`});
-        if(m%2===1){s.push({l,r,mid:m,lines:[4],msg:`<code>mid%2==1</code> → <code>mid--</code> = ${m-1}.`});m--;}
-        else{s.push({l,r,mid:m,lines:[4],msg:`<code>mid%2==0</code> → no change.`});}
-        if(seArr[m]===seArr[m+1]){
-            s.push({l,r,mid:m,lines:[5],msg:`<code>if nums[${m}]==${seArr[m]}==nums[${m+1}]</code> → true. Single is right.`});
-            l=m+2;
-            s.push({l,r,mid:m,lines:[6],msg:`<code>left = mid + 2</code> = ${l}.`});
-        }else{
-            s.push({l,r,mid:m,lines:[7],msg:`<code>else</code> nums[${m}]=${seArr[m]}≠nums[${m+1}]=${seArr[m+1]}. Single is left.`});
-            r=m;
-            s.push({l,r,mid:m,lines:[8],msg:`<code>right = mid</code> = ${r}.`});
+    const n=seArr.length;
+    s.push({l:-1,r:-1,mid:-1,lines:[1,2],msg:'Call <code>singleNonDuplicate(arr)</code>.'});
+    s.push({l:-1,r:-1,mid:-1,lines:[2],msg:`<code>int n = ${n}</code>.`});
+    if(n===1){
+        s.push({l:-1,r:-1,mid:0,found:true,lines:[3,4],msg:`<code>n == 1</code> → <code>return arr[0] = ${seArr[0]}</code>.`});
+    }else if(seArr[0]!==seArr[1]){
+        s.push({l:-1,r:-1,mid:0,found:true,lines:[6,7],msg:`<code>arr[0] != arr[1]</code> → <code>return arr[0] = ${seArr[0]}</code>.`});
+    }else if(seArr[n-1]!==seArr[n-2]){
+        s.push({l:-1,r:-1,mid:n-1,found:true,lines:[9,10],msg:`<code>arr[${n-1}] != arr[${n-2}]</code> → <code>return arr[${n-1}] = ${seArr[n-1]}</code>.`});
+    }else{
+        let low=1,high=n-2;
+        s.push({l:low,r:high,mid:-1,lines:[12,13],msg:`<code>low = 1</code>, <code>high = ${high}</code>.`});
+        while(low<=high){
+            s.push({l:low,r:high,mid:-1,lines:[14],msg:`<code>while low=${low} &lt;= high=${high}</code> → true.`});
+            const mid=Math.floor((low+high)/2);
+            s.push({l:low,r:high,mid,lines:[15],msg:`<code>mid = (${low}+${high})/2 = ${mid}</code>.`});
+            const isolated=seArr[mid]!==seArr[mid-1]&&seArr[mid]!==seArr[mid+1];
+            s.push({l:low,r:high,mid,lines:[16],msg:`<code>arr[${mid}]</code> vs neighbors: ${isolated?'unique → return':'paired'}.`});
+            if(isolated){
+                s.push({l:low,r:high,mid,found:true,lines:[17],msg:`<code>return arr[${mid}] = ${seArr[mid]}</code>.`});
+                break;
+            }
+            if(mid%2===0){
+                s.push({l:low,r:high,mid,lines:[19],msg:`<code>mid % 2 == 0</code> (even index).`});
+                if(seArr[mid]===seArr[mid+1]){
+                    low=mid+1;
+                    s.push({l:low,r:high,mid,lines:[20,21],msg:`<code>arr[mid] == arr[mid+1]</code> → <code>low = mid + 1 = ${low}</code>.`});
+                }else{
+                    high=mid-1;
+                    s.push({l:low,r:high,mid,lines:[22,23],msg:`<code>else</code> → <code>high = mid - 1 = ${high}</code>.`});
+                }
+            }else{
+                s.push({l:low,r:high,mid,lines:[25],msg:`<code>mid % 2 == 1</code> (odd index).`});
+                if(seArr[mid]===seArr[mid-1]){
+                    low=mid+1;
+                    s.push({l:low,r:high,mid,lines:[26,27],msg:`<code>arr[mid] == arr[mid-1]</code> → <code>low = mid + 1 = ${low}</code>.`});
+                }else{
+                    high=mid-1;
+                    s.push({l:low,r:high,mid,lines:[28,29],msg:`<code>else</code> → <code>high = mid - 1 = ${high}</code>.`});
+                }
+            }
+        }
+        if(!s.some(x=>x.found)){
+            s.push({l:low,r:high,mid:-1,lines:[14],msg:`<code>while low=${low} &lt;= high=${high}</code> → false.`});
+            s.push({l:low,r:high,mid:-1,lines:[33],msg:'<code>return -1</code>.'});
         }
     }
-    s.push({l,r,mid:l,lines:[9],msg:`<code>return nums[${l}]</code> = ${seArr[l]}. Found!`});
     document.getElementById('singleelem-info').textContent='Click Play or Step to start';
-    document.getElementById('singleelem-result').textContent='left=0 | right=8';
+    document.getElementById('singleelem-result').textContent=`low=1 | high=${n-2}`;
     highlightLines('code-singleelem',[]);
 }
-function renderSingleElem(){const st=seState.step;if(st<0){initSingleElem();return;}const snap=seState.snapshots[Math.min(st,seState.snapshots.length-1)];seArr.forEach((v,i)=>{const el=document.getElementById(`se-${i}`);el.className='array-cell';if(i===snap.mid)el.classList.add('mid-ptr');if(i===snap.l)el.classList.add('left-ptr');if(i===snap.r)el.classList.add('right-ptr');});document.getElementById('singleelem-info').innerHTML=snap.msg+`<span class="step-counter">Step ${st+1}/${seState.snapshots.length}</span>`;document.getElementById('singleelem-result').textContent=`left=${snap.l} | right=${snap.r}`;highlightLines('code-singleelem',getSingleElemLines(snap));}
+function renderSingleElem(){const st=seState.step;if(st<0){initSingleElem();return;}const snap=seState.snapshots[Math.min(st,seState.snapshots.length-1)];seArr.forEach((v,i)=>{const el=document.getElementById(`se-${i}`);el.className='array-cell';if(i===snap.mid)el.classList.add('mid-ptr');if(i===snap.l)el.classList.add('left-ptr');if(i===snap.r)el.classList.add('right-ptr');if(snap.found&&i===snap.mid)el.style.background='#c6f6d5';else el.style.background='';});document.getElementById('singleelem-info').innerHTML=snap.msg+`<span class="step-counter">Step ${st+1}/${seState.snapshots.length}</span>`;const lr=snap.l>=0?`low=${snap.l} | high=${snap.r}`:'edge checks';document.getElementById('singleelem-result').textContent=lr;highlightLines('code-singleelem',getSingleElemLines(snap));}
 function animSingleElem(a){if(a==='reset'){clearInterval(seState.timer);seState.playing=false;initSingleElem();return;}if(a==='prev'){seState.step=Math.max(0,seState.step-1);renderSingleElem();return;}if(a==='step'){seState.step=Math.min(seState.step+1,seState.snapshots.length-1);renderSingleElem();return;}if(a==='play'){if(seState.playing){clearInterval(seState.timer);seState.playing=false;return;}seState.playing=true;seState.timer=setInterval(()=>{seState.step++;if(seState.step>=seState.snapshots.length){clearInterval(seState.timer);seState.playing=false;return;}renderSingleElem();},900);}}
 
 // ===== SEARCH IN ROTATED SORTED ARRAY (LC 33) =====
@@ -23313,16 +23378,16 @@ function initFindPivot() {
     fpState.step = -1; fpState.snapshots = [];
     const s = fpState.snapshots;
     s.push({
-        cur:-1,leftSum:0,totalSum:0,totIdx:-1,lines:[0],msg:'Call <code>pivotIndex(nums)</code>.',
+        cur:-1,leftSum:0,totalSum:0,totIdx:-1,lines:[1,2],msg:'Call <code>pivotIndex(nums)</code>.',
         commentary:'<strong>Pivot</strong> = index where sum strictly <em>left</em> equals sum strictly <em>right</em> (the middle value is excluded from both sides).'
     });
-    s.push({cur:-1,leftSum:0,totalSum:0,totIdx:-1,lines:[1],msg:'<code>int totalSum = 0</code>.'});
+    s.push({cur:-1,leftSum:0,totalSum:0,totIdx:-1,lines:[2],msg:'<code>int totalSum = 0</code>.'});
     let totalSum = 0;
     for (let j = 0; j < fpArr.length; j++) {
         totalSum += fpArr[j];
         const step = {
-            cur:-1,leftSum:0,totalSum,totIdx:j,lines:[2],
-            msg:`<code>for (num : nums)</code>: add <code>nums[${j}] = ${fpArr[j]}</code> → <code>totalSum = ${totalSum}</code>.`
+            cur:-1,leftSum:0,totalSum,totIdx:j,lines:[3,4],
+            msg:`<code>totalSum = totalSum + nums[${j}]</code>: add <code>${fpArr[j]}</code> → <code>totalSum = ${totalSum}</code>.`
         };
         if (j === 0) {
             step.commentary = '<strong>First pass:</strong> add every element once so we know the full array sum for later.';
@@ -23331,32 +23396,32 @@ function initFindPivot() {
     }
     let leftSum = 0;
     s.push({
-        cur:-1,leftSum:0,totalSum,totIdx:-1,lines:[4],msg:'<code>int leftSum = 0</code>.',
+        cur:-1,leftSum:0,totalSum,totIdx:-1,lines:[6],msg:'<code>int leftSum = 0</code>.',
         commentary:'<strong>Second pass:</strong> grow <code>leftSum</code> as you move. For each <code>i</code>, the right side is <code>totalSum − leftSum − nums[i]</code> — no inner loop over the rest of the array.'
     });
     for (let i = 0; i < fpArr.length; i++) {
-        s.push({cur:i,leftSum,totalSum,totIdx:-1,lines:[5],msg:`<code>for</code>: i=${i} &lt; ${fpArr.length} → true.`});
+        s.push({cur:i,leftSum,totalSum,totIdx:-1,lines:[7],msg:`<code>for</code>: i=${i} &lt; ${fpArr.length} → true.`});
         const rightSum = totalSum - leftSum - fpArr[i];
         s.push({
-            cur:i,leftSum,totalSum,rightSum,totIdx:-1,lines:[6],
+            cur:i,leftSum,totalSum,rightSum,totIdx:-1,lines:[8],
             msg:`<code>int rightSum = totalSum - leftSum - nums[${i}]</code> = ${totalSum} − ${leftSum} − ${fpArr[i]} = <strong>${rightSum}</strong>.`
         });
         if (leftSum === rightSum) {
             s.push({
-                cur:i,leftSum,totalSum,rightSum,totIdx:-1,found:true,lines:[8],
+                cur:i,leftSum,totalSum,rightSum,totIdx:-1,found:true,lines:[9,10],
                 msg:`<code>if (leftSum == rightSum)</code> → <strong>true</strong>. <code>return ${i}</code> — pivot index.`,
                 commentary:'<strong>Found it.</strong> Left and right sums match, so this index is the pivot. If we never see a match, the answer is <code>-1</code>.'
             });
             break;
         }
         s.push({
-            cur:i,leftSum,totalSum,rightSum,totIdx:-1,lines:[8],
+            cur:i,leftSum,totalSum,rightSum,totIdx:-1,lines:[9],
             msg:`<code>if (leftSum == rightSum)</code> → false (${leftSum} ≠ ${rightSum}).`
         });
         leftSum += fpArr[i];
         s.push({
-            cur:i,leftSum,totalSum,rightSum,totIdx:-1,lines:[10],
-            msg:`<code>leftSum += nums[${i}]</code> → <code>leftSum = ${leftSum}</code>.`
+            cur:i,leftSum,totalSum,rightSum,totIdx:-1,lines:[12],
+            msg:`<code>leftSum = leftSum + nums[${i}]</code> → <code>leftSum = ${leftSum}</code>.`
         });
     }
     document.getElementById('findpivot-info').textContent = 'Click Play or Step to start';
