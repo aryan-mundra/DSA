@@ -250,7 +250,7 @@
 <div class="container">
     <header>
         <h1>DSA Quick Revision - Rules &amp; Templates</h1>
-        <p>9 Topics &bull; All Essential Patterns &bull; Last Minute Reference</p>
+        <p>11 Topics &bull; All Essential Patterns &bull; Last Minute Reference</p>
     </header>
 
     <nav>
@@ -258,10 +258,12 @@
         <a href="#prefix-sum" onclick="openAndScroll(event,'prefix-sum')">Prefix Sum</a>
         <a href="#binary-search" onclick="openAndScroll(event,'binary-search')">Binary Search</a>
         <a href="#monotonic-stack" onclick="openAndScroll(event,'monotonic-stack')">Monotonic Stack</a>
+        <a href="#two-pointers" onclick="openAndScroll(event,'two-pointers')">Two Pointers</a>
         <a href="#greedy" onclick="openAndScroll(event,'greedy')">Greedy</a>
         <a href="#recursion" onclick="openAndScroll(event,'recursion')">Recursion</a>
         <a href="#top-k" onclick="openAndScroll(event,'top-k')">Top K Elements</a>
         <a href="#binary-trees" onclick="openAndScroll(event,'binary-trees')">Binary Trees</a>
+        <a href="#graphs" onclick="openAndScroll(event,'graphs')">Graph BFS/DFS</a>
         <a href="#dp" onclick="openAndScroll(event,'dp')">Dynamic Programming</a>
     </nav>
 
@@ -275,9 +277,9 @@
     </div>
     <div class="topic-body">
         <div class="intro-box">
-            <p><strong>When to use:</strong> Contiguous subarray/substring problems with POSITIVE numbers</p>
+            <p><strong>When to use:</strong> Contiguous subarray/substring problems &mdash; frequency, distinct chars, fixed length, etc.</p>
             <p><strong>Keywords:</strong> "longest", "shortest", "maximum sum", "minimum length", "at most K"</p>
-            <p><strong>Does NOT work</strong> when array has NEGATIVE numbers (use Prefix Sum instead)</p>
+            <p><strong>Sum/product windows with NEGATIVE numbers:</strong> use Prefix Sum + HashMap instead (shrinking can increase sum)</p>
         </div>
 
         <div class="guide-box">
@@ -297,7 +299,7 @@
 
             <div class="guide-item">
                 <div class="guide-rule">Rule #3 &mdash; Shortest Subarray/Substring</div>
-                <div class="guide-explain">Use this when the problem asks for the SHORTEST or MINIMUM length subarray/substring. It's the opposite of Rule #2. Here, you keep expanding until the window becomes valid, then try to shrink it as much as possible while it's still valid &mdash; update your answer DURING shrinking (because you want the smallest valid window).</div>
+                <div class="guide-explain">Use this when the problem asks for the SHORTEST subarray with sum &ge; target (all POSITIVE numbers). It's the opposite of Rule #2. Keep expanding until valid, then shrink as much as possible while still valid &mdash; update your answer DURING shrinking. For &ldquo;contains all chars of pattern&rdquo; use Rule #5 instead.</div>
                 <div class="guide-example"><strong>Example:</strong> "Find the smallest subarray with sum &ge; 7."<br><strong>Input:</strong> arr = [2, 3, 1, 2, 4, 3], target = 7<br><strong>Output:</strong> 2 &mdash; the subarray [4, 3] has sum 7 and is the shortest.</div>
             </div>
 
@@ -340,14 +342,20 @@ for (int right = 0; right &lt; n; right++) {
 return maxSum;</pre>
             <div class="complexity-box"><strong>Time:</strong> O(N) &nbsp;|&nbsp; <strong>Space:</strong> O(1)</div>
             <div class="key-problems"><h4>Key Problems:</h4>
-                <p>Maximum Sum Subarray of Size K | Maximum Average Subarray I (LC 643) | Sliding Window Maximum (LC 239)</p>
+                <p>Maximum Sum Subarray of Size K | Maximum Average Subarray I (LC 643)</p>
             </div>
         </div>
 
         <div class="rule-card">
             <h3 style="border-color: #1565c0; color: #1565c0;">Rule #2 &mdash; Longest Subarray/Substring (Update AFTER Shrink)</h3>
             <div class="when-to-use"><p>Find LONGEST subarray/substring. "At most K" distinct elements. Shrink until valid, then update.</p></div>
-<pre>int left = 0, best = 0;
+<pre>// Example: Longest Substring with At Most K Distinct Characters
+boolean isValid() {
+    return map.size() &lt;= k;  // window is valid when distinct chars &le; K
+}
+
+// ---------- Main Template ----------
+int left = 0, best = 0;
 
 for (int right = 0; right &lt; n; right++) {
     add(arr[right]);                   // Expand
@@ -368,7 +376,7 @@ return best;</pre>
 
         <div class="rule-card">
             <h3 style="border-color: #1565c0; color: #1565c0;">Rule #3 &mdash; Shortest Subarray/Substring (Update DURING Shrink)</h3>
-            <div class="when-to-use"><p>Find SHORTEST. "Sum &ge; target", "contains all characters of pattern". Update DURING shrink.</p></div>
+            <div class="when-to-use"><p>Find SHORTEST with sum &ge; target (all POSITIVE numbers). Update DURING shrink. For &ldquo;contains all chars of pattern&rdquo; use Rule #5.</p></div>
 <pre>int left = 0, best = Integer.MAX_VALUE;
 
 for (int right = 0; right &lt; n; right++) {
@@ -383,7 +391,7 @@ for (int right = 0; right &lt; n; right++) {
 return best == Integer.MAX_VALUE ? 0 : best;</pre>
             <div class="complexity-box"><strong>Time:</strong> O(N) &nbsp;|&nbsp; <strong>Space:</strong> O(1) or O(K)</div>
             <div class="key-problems"><h4>Key Problems:</h4>
-                <p>Minimum Size Subarray Sum (LC 209) | Minimum Window Substring (LC 76)</p>
+                <p>Minimum Size Subarray Sum (LC 209)</p>
             </div>
         </div>
 
@@ -399,10 +407,10 @@ int atMostK(int[] arr, int k) {
     int left = 0, count = 0;
 
     for (int right = 0; right &lt; arr.length; right++) {
-        freq.merge(arr[right], 1, Integer::sum);
+        freq.put(arr[right], freq.getOrDefault(arr[right], 0) + 1);
 
         while (freq.size() &gt; k) {
-            freq.merge(arr[left], -1, Integer::sum);
+            freq.put(arr[left], freq.get(arr[left]) - 1);
             if (freq.get(arr[left]) == 0) freq.remove(arr[left]);
             left++;
         }
@@ -416,19 +424,48 @@ int atMostK(int[] arr, int k) {
             </div>
         </div>
 
+        <div style="background: #fff8e1; border-left: 4px solid #f9a825; padding: 14px 16px; margin: 0 0 16px 0; border-radius: 0 8px 8px 0; font-size: 0.92em; line-height: 1.6;">
+            <strong style="color: #e65100;">Why can&rsquo;t sliding window directly count &ldquo;exactly K&rdquo;?</strong>
+            <p style="margin-top: 8px;">Sliding window counts subarrays using <code>right &minus; left + 1</code>. This formula assumes: &ldquo;if the big window is valid, every smaller window inside it is also valid.&rdquo; For <strong>&ldquo;at most K&rdquo;</strong> this is true &mdash; shrinking can never add new distinct elements. But for <strong>&ldquo;exactly K&rdquo;</strong> this breaks &mdash; smaller sub-windows might have fewer than K distinct.</p>
+
+            <p style="margin-top: 10px;"><strong>Example 1: <code>right &minus; left + 1</code> fails</strong><br>
+            Array: [1, 2, 1], K = 2. At right = 2, window = [1, 2, 1], left = 0, distinct = 2. Valid!<br>
+            Formula: count = <code>right &minus; left + 1</code> = 3. But:</p>
+            <table style="width: 100%; margin: 6px 0; border-collapse: collapse; font-size: 0.95em;">
+                <tr style="background: #fff3e0;"><th style="padding: 4px 8px; text-align: left; border: 1px solid #ffe0b2;">Subarray</th><th style="padding: 4px 8px; text-align: center; border: 1px solid #ffe0b2;">Distinct</th><th style="padding: 4px 8px; text-align: center; border: 1px solid #ffe0b2;">Exactly 2?</th></tr>
+                <tr><td style="padding: 4px 8px; border: 1px solid #ffe0b2;">[1, 2, 1] (start at 0)</td><td style="padding: 4px 8px; text-align: center; border: 1px solid #ffe0b2;">2</td><td style="padding: 4px 8px; text-align: center; border: 1px solid #ffe0b2;">Yes</td></tr>
+                <tr><td style="padding: 4px 8px; border: 1px solid #ffe0b2;">[2, 1] (start at 1)</td><td style="padding: 4px 8px; text-align: center; border: 1px solid #ffe0b2;">2</td><td style="padding: 4px 8px; text-align: center; border: 1px solid #ffe0b2;">Yes</td></tr>
+                <tr style="background: #ffebee;"><td style="padding: 4px 8px; border: 1px solid #ffe0b2;">[1] (start at 2)</td><td style="padding: 4px 8px; text-align: center; border: 1px solid #ffe0b2;">1</td><td style="padding: 4px 8px; text-align: center; border: 1px solid #ffe0b2; color: #c62828;"><strong>No!</strong></td></tr>
+            </table>
+            <p>Counted 3, but only 2 are correct. Okay, what if we use <code>right &minus; left</code> instead?</p>
+
+            <p style="margin-top: 10px;"><strong>Example 2: <code>right &minus; left</code> also fails</strong><br>
+            Array: [1, 1, 2, 1, 1], K = 2. At right = 4, window = [1, 1, 2, 1, 1], left = 0, distinct = 2. Valid!<br>
+            <code>right &minus; left + 1</code> = 5, <code>right &minus; left</code> = 4. But:</p>
+            <table style="width: 100%; margin: 6px 0; border-collapse: collapse; font-size: 0.95em;">
+                <tr style="background: #fff3e0;"><th style="padding: 4px 8px; text-align: left; border: 1px solid #ffe0b2;">Subarray</th><th style="padding: 4px 8px; text-align: center; border: 1px solid #ffe0b2;">Distinct</th><th style="padding: 4px 8px; text-align: center; border: 1px solid #ffe0b2;">Exactly 2?</th></tr>
+                <tr><td style="padding: 4px 8px; border: 1px solid #ffe0b2;">[1, 1, 2, 1, 1] (start at 0)</td><td style="padding: 4px 8px; text-align: center; border: 1px solid #ffe0b2;">2</td><td style="padding: 4px 8px; text-align: center; border: 1px solid #ffe0b2;">Yes</td></tr>
+                <tr><td style="padding: 4px 8px; border: 1px solid #ffe0b2;">[1, 2, 1, 1] (start at 1)</td><td style="padding: 4px 8px; text-align: center; border: 1px solid #ffe0b2;">2</td><td style="padding: 4px 8px; text-align: center; border: 1px solid #ffe0b2;">Yes</td></tr>
+                <tr><td style="padding: 4px 8px; border: 1px solid #ffe0b2;">[2, 1, 1] (start at 2)</td><td style="padding: 4px 8px; text-align: center; border: 1px solid #ffe0b2;">2</td><td style="padding: 4px 8px; text-align: center; border: 1px solid #ffe0b2;">Yes</td></tr>
+                <tr style="background: #ffebee;"><td style="padding: 4px 8px; border: 1px solid #ffe0b2;">[1, 1] (start at 3)</td><td style="padding: 4px 8px; text-align: center; border: 1px solid #ffe0b2;">1</td><td style="padding: 4px 8px; text-align: center; border: 1px solid #ffe0b2; color: #c62828;"><strong>No!</strong></td></tr>
+                <tr style="background: #ffebee;"><td style="padding: 4px 8px; border: 1px solid #ffe0b2;">[1] (start at 4)</td><td style="padding: 4px 8px; text-align: center; border: 1px solid #ffe0b2;">1</td><td style="padding: 4px 8px; text-align: center; border: 1px solid #ffe0b2; color: #c62828;"><strong>No!</strong></td></tr>
+            </table>
+            <p>Correct count = <strong>3</strong>. But <code>right &minus; left + 1</code> = 5 (wrong), <code>right &minus; left</code> = 4 (also wrong!). This time <strong>two</strong> subarrays at the tail are invalid. The number of invalid sub-windows depends on how many same-valued elements sit at the end &mdash; it could be 1, 2, 5, or any number. There&rsquo;s no fixed adjustment that works. That&rsquo;s why we use <code>atMost(K) &minus; atMost(K&minus;1)</code> instead.</p>
+        </div>
+
         <div class="rule-card">
             <h3 style="border-color: #1565c0; color: #1565c0;">Rule #5 &mdash; Minimum Window Substring (Have/Need Pattern)</h3>
             <div class="when-to-use"><p>Find minimum window containing all chars of pattern. Anagrams. Permutation check.</p></div>
 <pre>Map&lt;Character, Integer&gt; need = new HashMap&lt;&gt;(), have = new HashMap&lt;&gt;();
 for (char c : pattern.toCharArray())
-    need.merge(c, 1, Integer::sum);
+    need.put(c, need.getOrDefault(c, 0) + 1);
 
 int required = need.size(), formed = 0;
 int left = 0, minLen = Integer.MAX_VALUE, minStart = 0;
 
 for (int right = 0; right &lt; s.length(); right++) {
     char c = s.charAt(right);
-    have.merge(c, 1, Integer::sum);
+    have.put(c, have.getOrDefault(c, 0) + 1);
 
     if (need.containsKey(c) &amp;&amp; have.get(c).equals(need.get(c)))
         formed++;
@@ -439,7 +476,7 @@ for (int right = 0; right &lt; s.length(); right++) {
             minStart = left;
         }
         char lc = s.charAt(left);
-        have.merge(lc, -1, Integer::sum);
+        have.put(lc, have.get(lc) - 1);
         if (need.containsKey(lc) &amp;&amp; have.get(lc) &lt; need.get(lc))
             formed--;
         left++;
@@ -452,10 +489,62 @@ return minLen == Integer.MAX_VALUE ? "" : s.substring(minStart, minStart + minLe
             </div>
         </div>
 
+        <div style="background: #fff8e1; border-left: 4px solid #f9a825; padding: 14px 16px; margin: 0 0 16px 0; border-radius: 0 8px 8px 0; font-size: 0.92em; line-height: 1.6;">
+            <strong style="color: #e65100;">Why does the template use two hashmaps? Can&rsquo;t we use just one?</strong>
+            <p style="margin-top: 8px;">Yes, <strong>one hashmap works perfectly.</strong> The two-hashmap approach (<code>need</code> + <code>have</code>) exists for readability &mdash; it&rsquo;s easy to see &ldquo;what I need vs what I have.&rdquo; But in an interview, the single-hashmap version is shorter and equally correct.</p>
+
+            <p style="margin-top: 10px;"><strong>Two-hashmap approach (template above):</strong></p>
+            <ul style="margin: 4px 0 4px 20px;">
+                <li><code>need</code> = character counts from pattern (never changes)</li>
+                <li><code>have</code> = character counts in current window (keeps changing)</li>
+                <li><code>formed</code> = how many characters have met their required count</li>
+                <li>Validity check: <code>formed == required</code> &rarr; O(1)</li>
+            </ul>
+
+            <p style="margin-top: 10px;"><strong>Single-hashmap approach:</strong></p>
+            <ol style="margin: 4px 0 4px 20px;">
+                <li>Start with pattern counts in the map: <code>{A:2, B:1, C:1}</code></li>
+                <li>As you expand, decrement the count. When a count goes from positive to 0, that character&rsquo;s need is fulfilled &rarr; <code>remaining--</code></li>
+                <li>When <code>remaining == 0</code>, window is valid &rarr; update answer with <code>Math.min</code>, then shrink</li>
+                <li>As you shrink, increment the count back. When it goes from 0 to positive, you&rsquo;ve lost a needed character &rarr; <code>remaining++</code></li>
+            </ol>
+<pre style="background: #1e1e2e; color: #cdd6f4; padding: 12px; border-radius: 6px; margin-top: 8px; font-size: 0.95em;">Map&lt;Character, Integer&gt; map = new HashMap&lt;&gt;();
+for (char c : t.toCharArray()) map.put(c, map.getOrDefault(c, 0) + 1);
+int remaining = t.length();
+int left = 0, minLen = Integer.MAX_VALUE, minStart = 0;
+
+for (int right = 0; right &lt; s.length(); right++) {
+    char rc = s.charAt(right);
+    if (map.containsKey(rc)) {
+        if (map.get(rc) &gt; 0) remaining--;
+        map.put(rc, map.get(rc) - 1);
+    }
+
+    while (remaining == 0) {
+        if (right - left + 1 &lt; minLen) {
+            minLen = right - left + 1;
+            minStart = left;
+        }
+        char lc = s.charAt(left);
+        if (map.containsKey(lc)) {
+            map.put(lc, map.get(lc) + 1);
+            if (map.get(lc) &gt; 0) remaining++;
+        }
+        left++;
+    }
+}</pre>
+        </div>
+
         <div class="rule-card">
             <h3 style="border-color: #1565c0; color: #1565c0;">Rule #6 &mdash; Counting All Valid Subarrays</h3>
             <div class="when-to-use"><p>Count ALL valid subarrays (not just longest/shortest). Product &lt; K, Sum &lt; K.</p></div>
-<pre>int left = 0;
+<pre>// Example: Subarray Product Less Than K (LC 713)
+boolean isValid() {
+    return product &lt; k;  // window is valid when product stays below K
+}
+
+// ---------- Main Template ----------
+int left = 0;
 long count = 0;
 
 for (int right = 0; right &lt; n; right++) {
@@ -481,7 +570,8 @@ return count;</pre>
                 <tr><th>Problem Type</th><th>Template</th></tr>
                 <tr><td>Fixed size K</td><td>Rule #1: if (size &gt; k) shrink</td></tr>
                 <tr><td>Longest subarray/string</td><td>Rule #2: while(!valid) shrink, then update</td></tr>
-                <tr><td>Shortest subarray/string</td><td>Rule #3: while(valid) update, then shrink</td></tr>
+                <tr><td>Shortest subarray (sum &ge; target, positive)</td><td>Rule #3: while(valid) update, then shrink</td></tr>
+                <tr><td>Max in fixed window K</td><td>Monotonic Stack Rule #3: monotonic deque</td></tr>
                 <tr><td>Exactly K distinct</td><td>Rule #4: atMost(K) &minus; atMost(K&minus;1)</td></tr>
                 <tr><td>Contains all of pattern</td><td>Rule #5: have/need + formed counter</td></tr>
                 <tr><td>Count all valid subarrays</td><td>Rule #6: count += (right &minus; left + 1)</td></tr>
@@ -509,13 +599,13 @@ return count;</pre>
             <div class="guide-item">
                 <div class="guide-rule">Rule #1 &mdash; Basic Prefix Sum</div>
                 <div class="guide-explain">Use this when you need to find the sum of elements between two indices many times. Instead of adding up elements every time (which is slow), you build a prefix sum array once, and then any range sum is just one subtraction. Think of it like a running total &mdash; prefix[5] tells you the sum of elements from index 0 to 5.</div>
-                <div class="guide-example"><strong>Example:</strong> "Given an array, answer multiple queries: what is the sum from index L to R?"<br><strong>Input:</strong> nums = [1, 2, 3, 4, 5], query: sum from index 1 to 3<br><strong>Output:</strong> 9 &mdash; because 2 + 3 + 4 = 9. With prefix array [1,3,6,10,15], answer = prefix[3] &minus; prefix[0] = 10 &minus; 1 = 9.</div>
+                <div class="guide-example"><strong>Example:</strong> "Find total marks from subject index 1 to 3." (LC 303 &mdash; Range Sum Query)<br><strong>Input:</strong> marks = [10, 20, 30, 40, 50], query: indices 1 to 3<br><strong>Output:</strong> 90 &mdash; because 20 + 30 + 40 = 90. Build prefix (0-indexed): prefix[0]=10, prefix[1]=30, prefix[2]=60, prefix[3]=100, prefix[4]=150. Answer = prefix[3] &minus; prefix[0] = 100 &minus; 10 = 90. Formula: prefix[R] &minus; (L &gt; 0 ? prefix[L&minus;1] : 0).</div>
             </div>
 
             <div class="guide-item">
                 <div class="guide-rule">Rule #2 &mdash; Prefix Sum + HashMap</div>
                 <div class="guide-explain">Use this when the problem says "count subarrays with sum equal to K" and the array can have NEGATIVE numbers. Sliding window won't work here because shrinking the window might increase the sum (due to negatives). Instead, as you build the prefix sum, you check: "have I seen (currentPrefix &minus; K) before?" If yes, that means there's a subarray summing to K ending here.</div>
-                <div class="guide-example"><strong>Example:</strong> "Count subarrays with sum equal to 3."<br><strong>Input:</strong> nums = [1, 2, 3, &minus;2, 5], k = 3<br><strong>Output:</strong> 4 &mdash; subarrays [1,2], [3], [3,&minus;2,2... wait], let's trace: prefix = [1,3,6,4,9]. At prefix=3, we check 3&minus;3=0 (exists, count++). At prefix=6, 6&minus;3=3 (exists, count++). And so on.</div>
+                <div class="guide-example"><strong>Example:</strong> "Count subarrays with sum equal to 3."<br><strong>Input:</strong> nums = [1, 2, 3, &minus;2, 5], k = 3<br><strong>Output:</strong> 4 &mdash; subarrays [1,2], [3], [2,3,&minus;2], [&minus;2,5]. Trace: running prefix = 1, 3, 6, 4, 9. At each step add <code>map.get(prefix &minus; 3)</code> to count.</div>
             </div>
 
             <div class="guide-item">
@@ -535,6 +625,12 @@ return count;</pre>
                 <div class="guide-explain">Use this when you need to perform many "add value to a range" operations. Instead of looping through every element in the range each time, you just mark the start and end of each update in a difference array. At the end, one prefix sum pass gives you the final values. Very useful for booking/scheduling problems.</div>
                 <div class="guide-example"><strong>Example:</strong> "You have 5 seats (all 0). Add +2 to seats 1-3, add +3 to seats 2-4."<br><strong>Input:</strong> n = 5, updates = [[1,3,2], [2,4,3]]<br><strong>Output:</strong> [0, 2, 5, 5, 3] &mdash; seat 2 gets both +2 and +3 = 5.</div>
             </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #6 &mdash; Prefix + Suffix Product</div>
+                <div class="guide-explain">Use this when each output depends on ALL other elements multiplied together (not a range sum). Build prefix products left-to-right, then suffix products right-to-left. result[i] = prefix[i] &times; suffix[i].</div>
+                <div class="guide-example"><strong>Example:</strong> "Return array where output[i] is product of all elements except nums[i]."<br><strong>Input:</strong> nums = [1, 2, 3, 4]<br><strong>Output:</strong> [24, 12, 8, 6]</div>
+            </div>
         </div>
 
         <div class="rule-card">
@@ -547,7 +643,7 @@ for (int i = 1; i &lt; n; i++)
 // Query sum of range [L, R]:
 // Answer = prefix[R] - (L &gt; 0 ? prefix[L-1] : 0)</pre>
             <div class="complexity-box"><strong>Build:</strong> O(N) &nbsp;|&nbsp; <strong>Query:</strong> O(1)</div>
-            <div class="key-problems"><h4>Key Problems:</h4><p>Range Sum Query (LC 303) | Find Pivot Index (LC 724) | Product of Array Except Self (LC 238)</p></div>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Range Sum Query (LC 303) | Find Pivot Index (LC 724)</p></div>
         </div>
 
         <div class="rule-card">
@@ -561,7 +657,7 @@ for (int x : nums) {
     prefix += x;
     if (map.containsKey(prefix - k))
         count += map.get(prefix - k);
-    map.merge(prefix, 1, Integer::sum);
+    map.put(prefix, map.getOrDefault(prefix, 0) + 1);
 }
 return count;</pre>
             <div class="complexity-box"><strong>Time:</strong> O(N) &nbsp;|&nbsp; <strong>Space:</strong> O(N)</div>
@@ -580,7 +676,7 @@ for (int x : nums) {
     int mod = ((prefix % k) + k) % k;  // Handle negatives
     if (map.containsKey(mod))
         count += map.get(mod);
-    map.merge(mod, 1, Integer::sum);
+    map.put(mod, map.getOrDefault(mod, 0) + 1);
 }
 return count;</pre>
             <div class="complexity-box"><strong>Time:</strong> O(N) &nbsp;|&nbsp; <strong>Space:</strong> O(K)</div>
@@ -616,13 +712,33 @@ for (int i = 1; i &lt; n; i++)
             <div class="key-problems"><h4>Key Problems:</h4><p>Range Addition (LC 370) | Car Pooling (LC 1094) | Corporate Flight Bookings (LC 1109)</p></div>
         </div>
 
+        <div class="rule-card">
+            <h3 style="border-color: #2e7d32; color: #2e7d32;">Rule #6 &mdash; Prefix + Suffix Product (Product Except Self)</h3>
+            <div class="when-to-use"><p>Output[i] = product of all elements except nums[i]. NOT classic prefix sum &mdash; uses prefix product &times; suffix product.</p></div>
+<pre>int n = nums.length;
+int[] result = new int[n];
+int prefix = 1, suffix = 1;
+
+for (int i = 0; i &lt; n; i++) {
+    result[i] = prefix;
+    prefix *= nums[i];
+}
+for (int i = n - 1; i &gt;= 0; i--) {
+    result[i] *= suffix;
+    suffix *= nums[i];
+}
+return result;</pre>
+            <div class="complexity-box"><strong>Time:</strong> O(N) &nbsp;|&nbsp; <strong>Space:</strong> O(1) extra (output array excluded)</div>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Product of Array Except Self (LC 238)</p></div>
+        </div>
+
         <div class="summary-box">
             <h3>Prefix Sum vs Sliding Window</h3>
             <table class="cheat-table">
                 <tr><th>Use Sliding Window</th><th>Use Prefix Sum</th></tr>
-                <tr><td>All numbers POSITIVE</td><td>Array has NEGATIVE numbers</td></tr>
-                <tr><td>Fixed window size K</td><td>Count subarrays with sum = K</td></tr>
-                <tr><td>Shrinking &rarr; sum decreases</td><td>Sum divisible by K</td></tr>
+                <tr><td>Longest/shortest substring, distinct chars</td><td>Count subarrays with sum = K (any values)</td></tr>
+                <tr><td>Sum &ge; target with all POSITIVE</td><td>Array has NEGATIVE numbers in sum problems</td></tr>
+                <tr><td>At most K distinct / frequency</td><td>Sum divisible by K</td></tr>
             </table>
         </div>
     </div>
@@ -735,19 +851,26 @@ return left;</pre>
 
         <div class="rule-card">
             <h3 style="border-color: #e65100; color: #e65100;">Rule #5 &mdash; Binary Search on Answer (Minimize Max / Maximize Min)</h3>
-            <div class="when-to-use"><p>Binary search on the ANSWER, not the array. Guess answer, check if feasible, adjust.</p></div>
-<pre>int left = minPossibleAnswer, right = maxPossibleAnswer;
-
+            <div class="when-to-use"><p>Binary search on the ANSWER, not the array. Guess answer, check if feasible, adjust. Pick the template that matches minimize vs maximize.</p></div>
+<pre>// MINIMIZE the answer (e.g. minimize max, minimize speed)
+int left = minPossibleAnswer, right = maxPossibleAnswer;
 while (left &lt; right) {
     int mid = left + (right - left) / 2;
-    if (isFeasible(arr, mid, constraint))
-        right = mid;       // Try smaller answer
-    else
-        left = mid + 1;    // Need larger answer
+    if (isFeasible(mid)) right = mid;      // feasible &rarr; try smaller
+    else left = mid + 1;                  // not feasible &rarr; need larger
+}
+return left;
+
+// MAXIMIZE the answer (e.g. maximize min, maximize capacity)
+int left = minPossibleAnswer, right = maxPossibleAnswer;
+while (left &lt; right) {
+    int mid = left + (right - left + 1) / 2;  // ceil mid
+    if (isFeasible(mid)) left = mid;          // feasible &rarr; try larger
+    else right = mid - 1;                     // not feasible &rarr; need smaller
 }
 return left;</pre>
             <div class="complexity-box"><strong>Time:</strong> O(N &times; log(range)) &nbsp;|&nbsp; <strong>Space:</strong> O(1)</div>
-            <div class="key-problems"><h4>Key Problems:</h4><p>Koko Eating Bananas (LC 875) | Capacity To Ship Packages (LC 1011) | Split Array Largest Sum (LC 410)</p></div>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Koko Eating Bananas (LC 875) &mdash; minimize | Capacity To Ship Packages (LC 1011) &mdash; minimize | Split Array Largest Sum (LC 410) &mdash; minimize | Maximize Minimum Sweetness (LC 1231) &mdash; maximize</p></div>
         </div>
 
         <div class="rule-card">
@@ -778,6 +901,7 @@ while (row &lt; m &amp;&amp; col &gt;= 0) {
             <h4>Common Mistakes</h4>
             <p>&#10060; Integer overflow: use <code>mid = left + (right - left) / 2</code></p>
             <p>&#10060; Not identifying monotonic property for binary search on answer</p>
+            <p>&#10060; Minimize vs maximize: minimize uses <code>right = mid</code>; maximize uses <code>left = mid</code> with ceil mid</p>
         </div>
     </div>
 </div>
@@ -811,9 +935,9 @@ while (row &lt; m &amp;&amp; col &gt;= 0) {
             </div>
 
             <div class="guide-item">
-                <div class="guide-rule">Rule #3 &mdash; Trapping Rain Water</div>
-                <div class="guide-explain">Use this when the problem asks how much water can be trapped between bars. For each position, the water level is decided by the SHORTER of the two tallest walls on its left and right. The two-pointer approach is easiest: start from both ends, move the shorter side inward, and calculate water based on the max height seen so far on that side.</div>
-                <div class="guide-example"><strong>Example:</strong> "How much rain water is trapped?"<br><strong>Input:</strong> height = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]<br><strong>Output:</strong> 6 &mdash; water fills up the gaps between the bars.</div>
+                <div class="guide-rule">Rule #3 &mdash; Sliding Window Maximum (Monotonic Deque)</div>
+                <div class="guide-explain">Use this when you need the maximum (or minimum) in every window of size K. A simple sum window is NOT enough &mdash; use a deque that keeps indices in decreasing order of values. Pop from back while current is larger, push index. If front index is out of window, pop front. Front is always the window max.</div>
+                <div class="guide-example"><strong>Example:</strong> "Max in each window of size 3."<br><strong>Input:</strong> nums = [1, 3, &minus;1, &minus;3, 5, 3, 6, 7], k = 3<br><strong>Output:</strong> [3, 3, 5, 5, 6, 7]</div>
             </div>
 
             <div class="guide-item">
@@ -823,10 +947,11 @@ while (row &lt; m &amp;&amp; col &gt;= 0) {
             </div>
 
             <div class="guide-item">
-                <div class="guide-rule">Rule #5 &mdash; Parentheses / Matching</div>
-                <div class="guide-explain">Use this when the problem involves matching pairs like parentheses, brackets, or colliding elements (like asteroids). Push opening brackets onto the stack. When you see a closing bracket, check if it matches the top of the stack. If yes, pop (they cancel out). If no, it's invalid.</div>
-                <div class="guide-example"><strong>Example:</strong> "Check if parentheses are valid."<br><strong>Input:</strong> s = "({[]})"<br><strong>Output:</strong> true &mdash; every opening bracket has a matching closing bracket in the correct order.</div>
+                <div class="guide-rule">Rule #5 &mdash; Next Smaller Element</div>
+                <div class="guide-explain">Use when the problem asks for the next element that is SMALLER than the current one. Mirror of NGE: use an <strong>increasing stack</strong>. When current is smaller than stack top, pop and record &mdash; current is the next smaller for popped indices.</div>
+                <div class="guide-example"><strong>Example:</strong> "For each element, find the next smaller to the right."<br><strong>Input:</strong> arr = [4, 5, 2, 10, 8]<br><strong>Output:</strong> [2, 2, &minus;1, 8, &minus;1]</div>
             </div>
+
         </div>
 
         <div class="rule-card">
@@ -864,23 +989,26 @@ for (int i = 0; i &lt;= n; i++) {
         </div>
 
         <div class="rule-card">
-            <h3 style="border-color: #6a1b9a; color: #6a1b9a;">Rule #3 &mdash; Trapping Rain Water (Two Pointers)</h3>
-            <div class="when-to-use"><p>Water at position i = min(leftMax, rightMax) &minus; height[i]</p></div>
-<pre>int left = 0, right = height.length - 1;
-int leftMax = 0, rightMax = 0, water = 0;
+            <h3 style="border-color: #6a1b9a; color: #6a1b9a;">Rule #3 &mdash; Sliding Window Maximum (Monotonic Deque)</h3>
+            <div class="when-to-use"><p>Max (or min) in every window of size K. Deque stores indices in decreasing value order.</p></div>
+<pre>Deque&lt;Integer&gt; deque = new ArrayDeque&lt;&gt;();
+int[] result = new int[n - k + 1];
 
-while (left &lt; right) {
-    if (height[left] &lt; height[right]) {
-        if (height[left] &gt;= leftMax) leftMax = height[left];
-        else water += leftMax - height[left];
-        left++;
-    } else {
-        if (height[right] &gt;= rightMax) rightMax = height[right];
-        else water += rightMax - height[right];
-        right--;
-    }
-}</pre>
-            <div class="complexity-box"><strong>Time:</strong> O(N) &nbsp;|&nbsp; <strong>Space:</strong> O(1)</div>
+for (int i = 0; i &lt; n; i++) {
+    while (!deque.isEmpty() &amp;&amp; deque.peekFirst() &lt; i - k + 1)
+        deque.pollFirst();                         // Remove out-of-window index
+
+    while (!deque.isEmpty() &amp;&amp; nums[deque.peekLast()] &lt; nums[i])
+        deque.pollLast();                          // Keep deque decreasing
+
+    deque.offerLast(i);
+
+    if (i &gt;= k - 1)
+        result[i - k + 1] = nums[deque.peekFirst()];
+}
+return result;</pre>
+            <div class="complexity-box"><strong>Time:</strong> O(N) &nbsp;|&nbsp; <strong>Space:</strong> O(K)</div>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Sliding Window Maximum (LC 239)</p></div>
         </div>
 
         <div class="rule-card">
@@ -898,16 +1026,21 @@ while (k &gt; 0) { stack.pop(); k--; }
         </div>
 
         <div class="rule-card">
-            <h3 style="border-color: #6a1b9a; color: #6a1b9a;">Rule #5 &mdash; Collision / Matching (Asteroids, Parentheses)</h3>
-<pre>// Valid Parentheses
-for (char c : s.toCharArray()) {
-    if (c == '(') stack.push(')');
-    else if (c == '{') stack.push('}');
-    else if (c == '[') stack.push(']');
-    else if (stack.isEmpty() || stack.pop() != c)
-        return false;
-}
-return stack.isEmpty();</pre>
+            <h3 style="border-color: #6a1b9a; color: #6a1b9a;">Rule #5 &mdash; Next Smaller Element (Increasing Stack)</h3>
+            <div class="when-to-use"><p>Mirror of NGE. Pop while <code>stack.peek() &gt; current</code>. Remaining in stack have no next smaller (&rarr; &minus;1).</p></div>
+<pre>int[] result = new int[n];
+Arrays.fill(result, -1);
+Stack&lt;Integer&gt; stack = new Stack&lt;&gt;();  // Stores indices
+
+for (int i = 0; i &lt; n; i++) {
+    while (!stack.isEmpty() &amp;&amp; arr[stack.peek()] &gt; arr[i]) {
+        int idx = stack.pop();
+        result[idx] = arr[i];  // Current is NSE for popped element
+    }
+    stack.push(i);
+}</pre>
+            <div class="complexity-box"><strong>Time:</strong> O(N) &nbsp;|&nbsp; <strong>Space:</strong> O(N)</div>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Next Smaller Element | Stock Span Problem (previous smaller) | Sum of Subarray Minimums (LC 907)</p></div>
         </div>
 
         <div class="summary-box">
@@ -917,6 +1050,7 @@ return stack.isEmpty();</pre>
                 <tr><td>Next Greater Element</td><td>Decreasing</td><td>stack.peek() &lt; current</td></tr>
                 <tr><td>Next Smaller Element</td><td>Increasing</td><td>stack.peek() &gt; current</td></tr>
                 <tr><td>Largest Rectangle</td><td>Increasing</td><td>stack.peek() &ge; current</td></tr>
+                <tr><td>Sliding Window Maximum</td><td>Monotonic Deque</td><td>smaller back / out-of-window front</td></tr>
                 <tr><td>Build smallest number</td><td>Decreasing</td><td>stack.peek() &gt; current</td></tr>
             </table>
         </div>
@@ -930,10 +1064,138 @@ return stack.isEmpty();</pre>
     </div>
 </div>
 
-<!-- ==================== 5. GREEDY ==================== -->
+<!-- ==================== 5. TWO POINTERS ==================== -->
+<div class="topic" id="two-pointers">
+    <div class="topic-header" style="background: #fff9c4;" onclick="toggleTopic(this)">
+        <h2>5. Two Pointers</h2>
+        <span class="arrow">&#9660;</span>
+    </div>
+    <div class="topic-body">
+        <div class="intro-box">
+            <p><strong>What:</strong> Two indices moving through data to avoid nested loops &rarr; often O(N) instead of O(N&sup2;).</p>
+            <p><strong>Four types:</strong> Opposite ends &nbsp;|&nbsp; Slow/Fast &nbsp;|&nbsp; Reader/Writer &nbsp;|&nbsp; Dutch National Flag (3 pointers)</p>
+        </div>
+
+        <div class="guide-box">
+            <h3>When to Use Which Rule?</h3>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #1 &mdash; Opposite Ends</div>
+                <div class="guide-explain">Use when array/string is SORTED (or you compare from both sides). Start <code>left = 0</code>, <code>right = n - 1</code>. Move the pointer that helps satisfy the condition. Works for pair sums, palindrome check, trapping rain water, container area.</div>
+                <div class="guide-example"><strong>Example:</strong> "Two sum in sorted array, target = 9."<br><strong>Input:</strong> numbers = [2, 7, 11, 15]<br><strong>Output:</strong> [1, 2] &mdash; 2 + 7 = 9.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #2 &mdash; Slow / Fast (Floyd)</div>
+                <div class="guide-explain">Use on linked lists or sequences for cycle detection, finding middle, or kth from end. Slow moves 1 step, fast moves 2 steps. If they meet, there is a cycle. For middle: when fast reaches end, slow is at middle.</div>
+                <div class="guide-example"><strong>Example:</strong> "Does linked list have a cycle?"<br><strong>Input:</strong> list with tail pointing back to index 1<br><strong>Output:</strong> true &mdash; slow and fast eventually meet.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #3 &mdash; Same Direction (Reader / Writer)</div>
+                <div class="guide-explain">Use when removing elements in-place or merging sorted arrays. Writer tracks where to place next valid element; reader scans ahead. Both start at 0, reader always moves, writer moves only on valid write.</div>
+                <div class="guide-example"><strong>Example:</strong> "Remove duplicates from sorted array."<br><strong>Input:</strong> nums = [1, 1, 2]<br><strong>Output:</strong> 2, nums = [1, 2, _]</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #4 &mdash; Dutch National Flag (3 Pointers)</div>
+                <div class="guide-explain">Use when array has exactly 3 categories (0/1/2, low/mid/high) and you need in-place sort in one pass. <code>low</code> boundary for 0s, <code>high</code> boundary for 2s, <code>mid</code> scans. See 0 &rarr; swap to low++. See 1 &rarr; mid++. See 2 &rarr; swap to high-- (don't advance mid yet).</div>
+                <div class="guide-example"><strong>Example:</strong> "Sort array of 0s, 1s, and 2s."<br><strong>Input:</strong> nums = [2, 0, 2, 1, 1, 0]<br><strong>Output:</strong> [0, 0, 1, 1, 2, 2]</div>
+            </div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #f9a825; color: #e65100;">Rule #1 &mdash; Opposite Ends (Sorted Pairs / Palindrome / Water)</h3>
+            <div class="when-to-use"><p>Sorted two-sum, palindrome check, trapping rain water, container with most water.</p></div>
+<pre>int left = 0, right = n - 1;
+
+while (left &lt; right) {
+    if (conditionMet) { /* record answer */ left++; right--; }
+    else if (needSmallerSum) right--;
+    else left++;
+}
+
+// Trapping Rain Water: move shorter side, add water from max on that side
+// Valid Palindrome: skip non-alnum, compare s[left] vs s[right]</pre>
+            <div class="complexity-box"><strong>Time:</strong> O(N) &nbsp;|&nbsp; <strong>Space:</strong> O(1)</div>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Two Sum II (LC 167) | Valid Palindrome (LC 125) | Trapping Rain Water (LC 42) | Container With Most Water (LC 11)</p></div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #f9a825; color: #e65100;">Rule #2 &mdash; Slow / Fast (Cycle &amp; Middle)</h3>
+<pre>// Cycle detection
+ListNode slow = head, fast = head;
+while (fast != null &amp;&amp; fast.next != null) {
+    slow = slow.next;
+    fast = fast.next.next;
+    if (slow == fast) return true;   // cycle found
+}
+
+// Find middle
+while (fast != null &amp;&amp; fast.next != null) {
+    slow = slow.next;
+    fast = fast.next.next;
+}
+// slow is middle (or first middle if even length)</pre>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Linked List Cycle (LC 141) | Middle of Linked List (LC 876) | Happy Number (LC 202)</p></div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #f9a825; color: #e65100;">Rule #3 &mdash; Same Direction (In-Place Remove / Merge)</h3>
+<pre>// Remove duplicates in sorted array
+int write = 1;
+for (int read = 1; read &lt; n; read++) {
+    if (nums[read] != nums[read - 1])
+        nums[write++] = nums[read];
+}
+return write;
+
+// Merge two sorted arrays (write from end)
+int i = m - 1, j = n - 1, k = m + n - 1;
+while (i &gt;= 0 &amp;&amp; j &gt;= 0)
+    nums[k--] = (nums[i] &gt; nums[j]) ? nums[i--] : nums[j--];</pre>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Remove Duplicates from Sorted Array (LC 26) | Move Zeroes (LC 283) | Merge Sorted Array (LC 88)</p></div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #f9a825; color: #e65100;">Rule #4 &mdash; Dutch National Flag (3 Pointers)</h3>
+            <div class="when-to-use"><p>Sort 3 values in-place in O(N). Generalizes to any 3-way partition.</p></div>
+<pre>int low = 0, mid = 0, high = n - 1;
+
+while (mid &lt;= high) {
+    if (nums[mid] == 0) {
+        swap(nums, low++, mid++);    // 0 goes to front
+    } else if (nums[mid] == 1) {
+        mid++;                       // 1 stays in middle zone
+    } else {                         // nums[mid] == 2
+        swap(nums, mid, high--);     // 2 goes to back; recheck mid
+    }
+}
+
+void swap(int[] a, int i, int j) {
+    int t = a[i]; a[i] = a[j]; a[j] = t;
+}</pre>
+            <div class="complexity-box"><strong>Time:</strong> O(N) &nbsp;|&nbsp; <strong>Space:</strong> O(1)</div>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Sort Colors (LC 75) | Sort Array By Parity II (variant)</p></div>
+        </div>
+
+        <div class="summary-box">
+            <h3>Two Pointers Quick Reference</h3>
+            <table class="cheat-table">
+                <tr><th>Signal</th><th>Pointer Style</th></tr>
+                <tr><td>Sorted array pair / palindrome / water</td><td>Opposite ends</td></tr>
+                <tr><td>Linked list cycle / middle</td><td>Slow &amp; fast</td></tr>
+                <tr><td>Remove duplicates / in-place filter</td><td>Reader &amp; writer</td></tr>
+                <tr><td>Sort 0/1/2 or 3-way partition</td><td>low / mid / high</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 6. GREEDY ==================== -->
 <div class="topic" id="greedy">
     <div class="topic-header" style="background: #e0f2f1;" onclick="toggleTopic(this)">
-        <h2>5. Greedy Approach</h2>
+        <h2>6. Greedy Approach</h2>
         <span class="arrow">&#9660;</span>
     </div>
     <div class="topic-body">
@@ -946,44 +1208,62 @@ return stack.isEmpty();</pre>
             <h3>When to Use Which Rule?</h3>
 
             <div class="guide-item">
-                <div class="guide-rule">Rule #1 &mdash; Interval Scheduling</div>
-                <div class="guide-explain">Use this when you have a list of intervals (like meetings or events) and need to find the maximum number of non-overlapping ones, or remove the minimum number to make them non-overlapping. The trick is to sort by END time, then greedily pick intervals that don't overlap with the last picked one. Sorting by end time works because finishing early leaves room for more intervals.</div>
+                <div class="guide-rule">Rule #1 &mdash; Non-Overlapping Intervals (Sort by End)</div>
+                <div class="guide-explain">Use when you need the MAXIMUM number of non-overlapping intervals, or the MINIMUM number to remove. Sort by END time, then greedily pick intervals that start at or after the last picked end. Finishing early leaves room for more intervals.</div>
                 <div class="guide-example"><strong>Example:</strong> "Find minimum number of intervals to remove to make the rest non-overlapping."<br><strong>Input:</strong> intervals = [[1,2], [2,3], [3,4], [1,3]]<br><strong>Output:</strong> 1 &mdash; remove [1,3] and the remaining [1,2], [2,3], [3,4] don't overlap.</div>
             </div>
 
             <div class="guide-item">
-                <div class="guide-rule">Rule #2 &mdash; Minimum Meeting Rooms</div>
+                <div class="guide-rule">Rule #2 &mdash; Merge Intervals (Sort by Start)</div>
+                <div class="guide-explain">Use when overlapping intervals must be COMBINED into fewer intervals. Sort by START time. If current interval overlaps the last merged one (start &le; last end), extend the end. Otherwise, add a new interval.</div>
+                <div class="guide-example"><strong>Example:</strong> "Merge overlapping intervals."<br><strong>Input:</strong> intervals = [[1,3], [2,6], [8,10], [15,18]]<br><strong>Output:</strong> [[1,6], [8,10], [15,18]]</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #3 &mdash; Minimum Meeting Rooms</div>
                 <div class="guide-explain">Use this when you need to find the maximum number of overlapping events at any point (like how many meeting rooms you need). The trick: separate start times and end times, sort both. Walk through them &mdash; each start means +1 room needed, each end means &minus;1 room freed. Track the maximum rooms needed at any point.</div>
                 <div class="guide-example"><strong>Example:</strong> "How many meeting rooms do you need?"<br><strong>Input:</strong> meetings = [[0,30], [5,10], [15,20]]<br><strong>Output:</strong> 2 &mdash; meetings [0,30] and [5,10] overlap, so you need 2 rooms at time 5.</div>
             </div>
 
             <div class="guide-item">
-                <div class="guide-rule">Rule #3 &mdash; Jump Game</div>
+                <div class="guide-rule">Rule #4 &mdash; Jump Game</div>
                 <div class="guide-explain">Use this when you're at each position and can jump some steps forward, and you need to know if you can reach the end (or the minimum jumps to reach it). Keep track of the farthest position you can reach. If at any index you're beyond the farthest reachable, you're stuck. For minimum jumps, be greedy: always jump to the position that lets you go the farthest next.</div>
                 <div class="guide-example"><strong>Example:</strong> "Can you reach the last index?"<br><strong>Input:</strong> nums = [2, 3, 1, 1, 4]<br><strong>Output:</strong> true &mdash; jump 1 step from index 0 to 1, then 3 steps to the end.</div>
             </div>
 
             <div class="guide-item">
-                <div class="guide-rule">Rule #4 &mdash; Buy/Sell Stock</div>
+                <div class="guide-rule">Rule #5 &mdash; Buy/Sell Stock</div>
                 <div class="guide-explain">Use this when you have stock prices over time and want maximum profit. For ONE transaction: track the minimum price seen so far, and at each day calculate profit = today's price &minus; minimum. For UNLIMITED transactions: just add up every upward movement (whenever tomorrow's price is higher than today's, take that profit).</div>
                 <div class="guide-example"><strong>Example (one transaction):</strong> "Buy once, sell once for max profit."<br><strong>Input:</strong> prices = [7, 1, 5, 3, 6, 4]<br><strong>Output:</strong> 5 &mdash; buy at 1, sell at 6.</div>
             </div>
 
             <div class="guide-item">
-                <div class="guide-rule">Rule #5 &mdash; Gas Station</div>
+                <div class="guide-rule">Rule #6 &mdash; Gas Station</div>
                 <div class="guide-explain">Use this when you're going around a circular route and need to find the starting point where you won't run out of fuel. First check: if total gas &lt; total cost, it's impossible. Otherwise, walk through the stations. If at any point your current gas goes negative, the start must be AFTER that station (reset current gas and update start). The answer is guaranteed to be unique.</div>
                 <div class="guide-example"><strong>Example:</strong> "Find starting gas station to complete the circuit."<br><strong>Input:</strong> gas = [1,2,3,4,5], cost = [3,4,5,1,2]<br><strong>Output:</strong> 3 &mdash; start at station 3 (gas=4, cost=1), you can complete the full circle.</div>
             </div>
 
             <div class="guide-item">
-                <div class="guide-rule">Rule #6 &mdash; Partition Labels</div>
+                <div class="guide-rule">Rule #7 &mdash; Partition Labels</div>
                 <div class="guide-explain">Use this when you need to cut a string into as many parts as possible such that each character appears in at most one part. First, record the LAST index where each character appears. Then scan left to right &mdash; expand the current partition's end to include the farthest reach of every character you encounter. When you reach the end of the current partition, cut there.</div>
                 <div class="guide-example"><strong>Example:</strong> "Partition the string so each letter appears in at most one part."<br><strong>Input:</strong> s = "ababcbacadefegdehijhklij"<br><strong>Output:</strong> [9, 7, 8] &mdash; "ababcbaca" (9 chars), "defegde" (7 chars), "hijhklij" (8 chars).</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #8 &mdash; Task Scheduler</div>
+                <div class="guide-explain">Use when tasks have a cooling interval <code>n</code> between identical tasks. Sort task frequencies. The most frequent task creates idle slots: <code>(maxFreq - 1) * (n + 1)</code>. Fill idle slots with other tasks. Answer = <code>tasks.length + max(0, idle)</code>.</div>
+                <div class="guide-example"><strong>Example:</strong> "Minimum intervals to finish all tasks with cooldown n=2."<br><strong>Input:</strong> tasks = ["A","A","A","B","B","B"], n = 2<br><strong>Output:</strong> 8 &mdash; e.g. A &rarr; B &rarr; idle &rarr; A &rarr; B &rarr; idle &rarr; A &rarr; B</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #9 &mdash; Fractional Knapsack</div>
+                <div class="guide-explain">Use when you can take PART of an item (unlike 0/1 knapsack). Sort by value/weight ratio descending. Greedily take full items while capacity allows; take a fraction of the next item if needed. Greedy is optimal here.</div>
+                <div class="guide-example"><strong>Example:</strong> "Maximize value with capacity 50."<br><strong>Input:</strong> items = [[10,60], [20,100], [30,120]] (weight, value)<br><strong>Output:</strong> 240 &mdash; take all of item 1 and 2, fraction of item 3.</div>
             </div>
         </div>
 
         <div class="rule-card">
-            <h3 style="border-color: #00695c; color: #00695c;">Rule #1 &mdash; Interval Scheduling (Sort by End Time)</h3>
+            <h3 style="border-color: #00695c; color: #00695c;">Rule #1 &mdash; Non-Overlapping Intervals (Sort by End Time)</h3>
 <pre>Arrays.sort(intervals, (a, b) -&gt; a[1] - b[1]);  // Sort by END
 int count = 0, lastEnd = Integer.MIN_VALUE;
 
@@ -993,11 +1273,27 @@ for (int[] interval : intervals) {
         lastEnd = interval[1];
     }
 }</pre>
-            <div class="key-problems"><h4>Key Problems:</h4><p>Non-overlapping Intervals (LC 435) | Merge Intervals (LC 56)</p></div>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Non-overlapping Intervals (LC 435) | Maximum Length of Pair Chain (LC 646)</p></div>
         </div>
 
         <div class="rule-card">
-            <h3 style="border-color: #00695c; color: #00695c;">Rule #2 &mdash; Minimum Meeting Rooms (Sort Start &amp; End Separately)</h3>
+            <h3 style="border-color: #00695c; color: #00695c;">Rule #2 &mdash; Merge Intervals (Sort by Start Time)</h3>
+<pre>Arrays.sort(intervals, (a, b) -&gt; a[0] - b[0]);  // Sort by START
+List&lt;int[]&gt; merged = new ArrayList&lt;&gt;();
+
+for (int[] interval : intervals) {
+    if (merged.isEmpty() || interval[0] &gt; merged.get(merged.size() - 1)[1])
+        merged.add(interval);
+    else
+        merged.get(merged.size() - 1)[1] =
+            Math.max(merged.get(merged.size() - 1)[1], interval[1]);
+}
+return merged.toArray(new int[merged.size()][]);</pre>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Merge Intervals (LC 56) | Insert Interval (LC 57)</p></div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #00695c; color: #00695c;">Rule #3 &mdash; Minimum Meeting Rooms (Sort Start &amp; End Separately)</h3>
 <pre>Arrays.sort(starts);
 Arrays.sort(ends);
 int rooms = 0, maxRooms = 0, i = 0, j = 0;
@@ -1009,7 +1305,7 @@ while (i &lt; n) {
         </div>
 
         <div class="rule-card">
-            <h3 style="border-color: #00695c; color: #00695c;">Rule #3 &mdash; Jump Game (Track Max Reachable)</h3>
+            <h3 style="border-color: #00695c; color: #00695c;">Rule #4 &mdash; Jump Game (Track Max Reachable)</h3>
 <pre>// Can Jump?
 int maxReach = 0;
 for (int i = 0; i &lt; nums.length; i++) {
@@ -1027,7 +1323,7 @@ for (int i = 0; i &lt; nums.length - 1; i++) {
         </div>
 
         <div class="rule-card">
-            <h3 style="border-color: #00695c; color: #00695c;">Rule #4 &mdash; Buy/Sell Stock</h3>
+            <h3 style="border-color: #00695c; color: #00695c;">Rule #5 &mdash; Buy/Sell Stock</h3>
 <pre>// One Transaction: track min price
 int minPrice = Integer.MAX_VALUE, maxProfit = 0;
 for (int price : prices) {
@@ -1042,7 +1338,7 @@ for (int i = 1; i &lt; prices.length; i++)
         </div>
 
         <div class="rule-card">
-            <h3 style="border-color: #00695c; color: #00695c;">Rule #5 &mdash; Gas Station (Track Total &amp; Current Balance)</h3>
+            <h3 style="border-color: #00695c; color: #00695c;">Rule #6 &mdash; Gas Station (Track Total &amp; Current Balance)</h3>
 <pre>int totalGas = 0, currentGas = 0, startIndex = 0;
 for (int i = 0; i &lt; n; i++) {
     int diff = gas[i] - cost[i];
@@ -1054,7 +1350,7 @@ return totalGas &gt;= 0 ? startIndex : -1;</pre>
         </div>
 
         <div class="rule-card">
-            <h3 style="border-color: #00695c; color: #00695c;">Rule #6 &mdash; Partition Labels</h3>
+            <h3 style="border-color: #00695c; color: #00695c;">Rule #7 &mdash; Partition Labels</h3>
 <pre>int[] lastIndex = new int[26];
 for (int i = 0; i &lt; s.length(); i++)
     lastIndex[s.charAt(i) - 'a'] = i;
@@ -1067,18 +1363,68 @@ for (int i = 0; i &lt; s.length(); i++) {
 }</pre>
         </div>
 
+        <div class="rule-card">
+            <h3 style="border-color: #00695c; color: #00695c;">Rule #8 &mdash; Task Scheduler (Frequency + Idle Slots)</h3>
+            <div class="when-to-use"><p>Most frequent task dictates minimum frame layout. Fill idle gaps with other tasks.</p></div>
+<pre>int[] freq = new int[26];
+for (char c : tasks) freq[c - 'A']++;
+
+Arrays.sort(freq);
+int maxFreq = freq[25];
+
+// Idle slots created by the most frequent task
+int idle = (maxFreq - 1) * (n + 1);
+
+// Fill idle slots with remaining task counts
+for (int i = 24; i &gt;= 0 &amp;&amp; freq[i] &gt; 0; i--)
+    idle -= Math.min(maxFreq - 1, freq[i]);
+
+return tasks.length + Math.max(0, idle);</pre>
+            <div class="complexity-box"><strong>Time:</strong> O(N) &nbsp;|&nbsp; <strong>Space:</strong> O(1)</div>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Task Scheduler (LC 621) | Rearrange String k Distance Apart (LC 358)</p></div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #00695c; color: #00695c;">Rule #9 &mdash; Fractional Knapsack (Sort by Value/Weight)</h3>
+            <div class="when-to-use"><p>Items can be split. Greedy by ratio works; 0/1 knapsack needs DP instead.</p></div>
+<pre>// items[i] = [weight, value]
+Arrays.sort(items, (a, b) -&gt;
+    Double.compare((double) b[1] / b[0], (double) a[1] / a[0]));  // ratio desc
+
+double totalValue = 0;
+int remaining = capacity;
+
+for (int[] item : items) {
+    int w = item[0], v = item[1];
+    if (w &lt;= remaining) {
+        totalValue += v;
+        remaining -= w;
+    } else {
+        totalValue += v * ((double) remaining / w);  // take fraction
+        break;
+    }
+}
+return totalValue;</pre>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Fractional Knapsack (classic) | Maximum Units on a Truck (LC 1710)</p></div>
+        </div>
+
         <div class="summary-box">
-            <h3>Greedy vs DP</h3>
-            <p><strong>Greedy works:</strong> Activity Selection, Fractional Knapsack, Stock Buy/Sell</p>
+            <h3>Interval Greedy: Sort by End vs Start</h3>
+            <table class="cheat-table">
+                <tr><th>Problem</th><th>Sort By</th><th>Rule</th></tr>
+                <tr><td>Max non-overlapping / min remove</td><td>End time</td><td>Rule #1</td></tr>
+                <tr><td>Merge overlapping intervals</td><td>Start time</td><td>Rule #2</td></tr>
+            </table>
+            <p style="margin-top:12px;"><strong>Greedy works:</strong> Activity Selection, Fractional Knapsack, Stock Buy/Sell</p>
             <p><strong>Greedy FAILS:</strong> 0/1 Knapsack, Coin Change (arbitrary coins) &rarr; use DP</p>
         </div>
     </div>
 </div>
 
-<!-- ==================== 6. RECURSION ==================== -->
+<!-- ==================== 7. RECURSION ==================== -->
 <div class="topic" id="recursion">
     <div class="topic-header" style="background: #fce4ec;" onclick="toggleTopic(this)">
-        <h2>6. Recursion &amp; Backtracking</h2>
+        <h2>7. Recursion &amp; Backtracking</h2>
         <span class="arrow">&#9660;</span>
     </div>
     <div class="topic-body">
@@ -1200,10 +1546,10 @@ for (int i = 0; i &lt; s.length(); i++) {
     </div>
 </div>
 
-<!-- ==================== 7. TOP K ELEMENTS ==================== -->
+<!-- ==================== 8. TOP K ELEMENTS ==================== -->
 <div class="topic" id="top-k">
     <div class="topic-header" style="background: #fff8e1;" onclick="toggleTopic(this)">
-        <h2>7. Top K Elements</h2>
+        <h2>8. Top K Elements</h2>
         <span class="arrow">&#9660;</span>
     </div>
     <div class="topic-body">
@@ -1253,7 +1599,7 @@ return minHeap.peek();  // Kth largest</pre>
         <div class="rule-card">
             <h3 style="border-color: #f57f17; color: #e65100;">Rule #2 &mdash; K Most Frequent (Frequency Map + Min-Heap)</h3>
 <pre>Map&lt;Integer, Integer&gt; freq = new HashMap&lt;&gt;();
-for (int num : nums) freq.merge(num, 1, Integer::sum);
+for (int num : nums) freq.put(num, freq.getOrDefault(num, 0) + 1);
 
 PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;(
     (a, b) -&gt; freq.get(a) - freq.get(b)
@@ -1305,10 +1651,10 @@ while (!minHeap.isEmpty()) {
     </div>
 </div>
 
-<!-- ==================== 8. BINARY TREES ==================== -->
+<!-- ==================== 9. BINARY TREES ==================== -->
 <div class="topic" id="binary-trees">
     <div class="topic-header" style="background: #e8eaf6;" onclick="toggleTopic(this)">
-        <h2>8. Binary Trees</h2>
+        <h2>9. Binary Trees</h2>
         <span class="arrow">&#9660;</span>
     </div>
     <div class="topic-body">
@@ -1456,10 +1802,119 @@ boolean validate(TreeNode node, long min, long max) {
     </div>
 </div>
 
-<!-- ==================== 9. DYNAMIC PROGRAMMING ==================== -->
+<!-- ==================== 10. GRAPH BFS/DFS ==================== -->
+<div class="topic" id="graphs">
+    <div class="topic-header" style="background: #e1f5fe;" onclick="toggleTopic(this)">
+        <h2>10. Graph BFS / DFS</h2>
+        <span class="arrow">&#9660;</span>
+    </div>
+    <div class="topic-body">
+        <div class="intro-box">
+            <p><strong>What:</strong> Traverse nodes and edges &mdash; DFS goes deep (stack/recursion), BFS goes level by level (queue).</p>
+            <p><strong>Keywords:</strong> islands, connected components, shortest path (unweighted), course schedule, dependencies</p>
+        </div>
+
+        <div class="guide-box">
+            <h3>When to Use Which Rule?</h3>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #1 &mdash; DFS (Explore Deep)</div>
+                <div class="guide-explain">Use for flood fill, counting islands, path existence, or any problem where you need to explore all reachable nodes from a start. Mark visited, recurse/stack into unvisited neighbors. On grids, DFS 4 or 8 directions.</div>
+                <div class="guide-example"><strong>Example:</strong> "Count islands of '1' in a grid."<br><strong>Input:</strong> grid with 1 land, 0 water<br><strong>Output:</strong> number of connected land regions.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #2 &mdash; BFS (Shortest Path Unweighted)</div>
+                <div class="guide-explain">Use when you need the SHORTEST number of steps/edges in an unweighted graph or grid. BFS explores all nodes at distance d before d+1, so the first time you reach the target is the shortest path.</div>
+                <div class="guide-example"><strong>Example:</strong> "Shortest path in a grid from top-left to bottom-right (4 directions)."<br><strong>Output:</strong> minimum steps to reach destination.</div>
+            </div>
+
+            <div class="guide-item">
+                <div class="guide-rule">Rule #3 &mdash; Topological Sort</div>
+                <div class="guide-explain">Use for dependency ordering: courses/prerequisites, build order, alien dictionary. If A must come before B, edge A&rarr;B. Kahn's algorithm (BFS on indegree) or DFS post-order. Cycle in topo graph = impossible ordering.</div>
+                <div class="guide-example"><strong>Example:</strong> "Can you finish all courses?" (LC 207)<br><strong>Input:</strong> numCourses = 2, prerequisites = [[1,0]]<br><strong>Output:</strong> true</div>
+            </div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #0277bd; color: #0277bd;">Rule #1 &mdash; DFS (Grid / Adjacency List)</h3>
+<pre>// Grid DFS (islands)
+void dfs(int r, int c) {
+    if (r &lt; 0 || c &lt; 0 || r &gt;= rows || c &gt;= cols || grid[r][c] == '0')
+        return;
+    grid[r][c] = '0';   // mark visited
+    dfs(r + 1, c); dfs(r - 1, c); dfs(r, c + 1); dfs(r, c - 1);
+}
+
+// Graph DFS (adjacency list)
+void dfs(int node, boolean[] visited, List&lt;List&lt;Integer&gt;&gt; graph) {
+    visited[node] = true;
+    for (int nei : graph.get(node))
+        if (!visited[nei]) dfs(nei, visited, graph);
+}</pre>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Number of Islands (LC 200) | Max Area of Island (LC 695) | Clone Graph (LC 133)</p></div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #0277bd; color: #0277bd;">Rule #2 &mdash; BFS (Shortest Path / Level Order)</h3>
+<pre>Queue&lt;int[]&gt; queue = new LinkedList&lt;&gt;();
+boolean[][] visited = new boolean[rows][cols];
+queue.offer(new int[]{startR, startC, 0});
+visited[startR][startC] = true;
+
+while (!queue.isEmpty()) {
+    int[] cur = queue.poll();
+    int r = cur[0], c = cur[1], dist = cur[2];
+    if (r == targetR &amp;&amp; c == targetC) return dist;
+
+    for (int[] d : directions) {
+        int nr = r + d[0], nc = c + d[1];
+        if (inBounds(nr, nc) &amp;&amp; !visited[nr][nc] &amp;&amp; grid[nr][nc] != '#') {
+            visited[nr][nc] = true;
+            queue.offer(new int[]{nr, nc, dist + 1});
+        }
+    }
+}</pre>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Shortest Path in Binary Matrix (LC 1091) | Rotting Oranges (LC 994) | Word Ladder (LC 127)</p></div>
+        </div>
+
+        <div class="rule-card">
+            <h3 style="border-color: #0277bd; color: #0277bd;">Rule #3 &mdash; Topological Sort (Kahn's BFS)</h3>
+<pre>int[] indegree = new int[n];
+for (int[] e : edges) indegree[e[1]]++;
+
+Queue&lt;Integer&gt; queue = new LinkedList&lt;&gt;();
+for (int i = 0; i &lt; n; i++)
+    if (indegree[i] == 0) queue.offer(i);
+
+int order = 0;
+while (!queue.isEmpty()) {
+    int node = queue.poll();
+    order++;
+    for (int nei : graph.get(node)) {
+        if (--indegree[nei] == 0) queue.offer(nei);
+    }
+}
+return order == n;   // false if cycle exists</pre>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Course Schedule (LC 207) | Course Schedule II (LC 210) | Alien Dictionary (LC 269)</p></div>
+        </div>
+
+        <div class="summary-box">
+            <h3>DFS vs BFS on Graphs</h3>
+            <table class="cheat-table">
+                <tr><th>Use DFS</th><th>Use BFS</th></tr>
+                <tr><td>Islands, flood fill, explore all nodes</td><td>Shortest path (unweighted)</td></tr>
+                <tr><td>Cycle detection (with state)</td><td>Level-by-level spread (rotting oranges)</td></tr>
+                <tr><td>Topo sort (DFS post-order variant)</td><td>Topo sort (Kahn's indegree)</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 11. DYNAMIC PROGRAMMING ==================== -->
 <div class="topic" id="dp">
     <div class="topic-header" style="background: #eceff1;" onclick="toggleTopic(this)">
-        <h2>9. Dynamic Programming</h2>
+        <h2>11. Dynamic Programming</h2>
         <span class="arrow">&#9660;</span>
     </div>
     <div class="topic-body">
@@ -1485,8 +1940,8 @@ boolean validate(TreeNode node, long min, long max) {
 
             <div class="guide-item">
                 <div class="guide-rule">Rule #3 &mdash; 0/1 Knapsack (Take or Skip)</div>
-                <div class="guide-explain">Use this when you have items and each item can be used AT MOST ONCE, and you need to hit a target sum or maximize value. The key is iterating the capacity RIGHT to LEFT in the inner loop. Why? Because going left to right would mean you might use the same item twice (since dp[j &minus; num] would already reflect the current item). Right to left ensures each item is only counted once.</div>
-                <div class="guide-example"><strong>Example:</strong> "Can you partition [1, 5, 11, 5] into two subsets with equal sum?"<br><strong>Input:</strong> nums = [1, 5, 11, 5], total = 22, target = 11<br><strong>Output:</strong> true &mdash; subset [1, 5, 5] sums to 11 and [11] sums to 11.</div>
+                <div class="guide-explain">Use when each item is used AT MOST ONCE. Iterate capacity RIGHT to LEFT so the same item is not reused. Boolean dp answers &ldquo;can we reach target?&rdquo; (Partition). Counting dp answers &ldquo;how many ways?&rdquo; (Target Sum after +/- transform).</div>
+                <div class="guide-example"><strong>Example (boolean):</strong> "Can you partition [1, 5, 11, 5] into equal sums?" &rarr; true.<br><strong>Example (counting):</strong> "Target Sum: nums=[1,1,1,1,1], target=3" &rarr; 10 ways to assign +/-.</div>
             </div>
 
             <div class="guide-item">
@@ -1545,12 +2000,23 @@ dp[i][j] = grid[i][j] + Math.min(dp[i-1][j], dp[i][j-1]);</pre>
 
         <div class="rule-card">
             <h3 style="border-color: #37474f; color: #37474f;">Rule #3 &mdash; 0/1 Knapsack (Take or Skip &mdash; RIGHT to LEFT)</h3>
-<pre>boolean[] dp = new boolean[target + 1];
+            <div class="when-to-use"><p>Each item used at most once. Boolean = &ldquo;can we reach target?&rdquo; Counting = &ldquo;how many ways?&rdquo;</p></div>
+<pre>// Can reach target? (Partition Equal Subset Sum)
+boolean[] dp = new boolean[target + 1];
 dp[0] = true;
 for (int num : nums)
     for (int j = target; j &gt;= num; j--)   // RIGHT to LEFT (each item once)
-        dp[j] = dp[j] || dp[j - num];</pre>
-            <div class="key-problems"><h4>Key Problems:</h4><p>Partition Equal Subset Sum (LC 416) | Target Sum (LC 494)</p></div>
+        dp[j] = dp[j] || dp[j - num];
+
+// Count ways (Target Sum: treat +num as add, -num as skip in subset)
+// sum(P) - sum(N) = target, sum(P) + sum(N) = total &rarr; sum(P) = (total + target) / 2
+int subsetSum = (total + target) / 2;
+int[] ways = new int[subsetSum + 1];
+ways[0] = 1;
+for (int num : nums)
+    for (int j = subsetSum; j &gt;= num; j--)
+        ways[j] += ways[j - num];</pre>
+            <div class="key-problems"><h4>Key Problems:</h4><p>Partition Equal Subset Sum (LC 416) &mdash; boolean | Target Sum (LC 494) &mdash; count ways</p></div>
         </div>
 
         <div class="rule-card">
@@ -1619,7 +2085,8 @@ for (int i = 1; i &lt;= n; i++)
                 <tr><th>Keywords</th><th>Pattern</th></tr>
                 <tr><td>Climbing, ways, count</td><td>Linear DP (#1)</td></tr>
                 <tr><td>Grid, path, robot</td><td>Grid DP (#2)</td></tr>
-                <tr><td>Subset, partition, target</td><td>0/1 Knapsack (#3) &mdash; RIGHT to LEFT</td></tr>
+                <tr><td>Subset, partition (can reach?)</td><td>0/1 Knapsack boolean (#3) &mdash; RIGHT to LEFT</td></tr>
+                <tr><td>Target sum, count +/- ways</td><td>0/1 Knapsack counting (#3) &mdash; RIGHT to LEFT</td></tr>
                 <tr><td>Coins, unlimited, ways</td><td>Unbounded Knapsack (#4) &mdash; LEFT to RIGHT</td></tr>
                 <tr><td>Common, two strings</td><td>LCS (#5)</td></tr>
                 <tr><td>Increasing, chain</td><td>LIS (#6)</td></tr>
@@ -1877,7 +2344,7 @@ function genSW5(){
     var need={A:1,B:1,C:1},have={},req=3,formed=0,l=0,mL=999,mS=0;
     s.push(SS(1,'Declare need & have HashMaps',{},{a:a,xtra:'need={}, have={}'}));
     s.push(SS(2,'for each char in pattern...',{},{a:a,xtra:'pattern="ABC"'}));
-    s.push(SS(3,'need.merge(c,1) \u2192 need={A:1,B:1,C:1}',{required:req},{a:a,map:{A:1,B:1,C:1}}));
+    s.push(SS(3,'need.put(c, need.getOrDefault(c,0)+1) \u2192 need={A:1,B:1,C:1}',{required:req},{a:a,map:{A:1,B:1,C:1}}));
     s.push(SS(5,'required=need.size()=3, formed=0',{required:req,formed:0},{a:a}));
     s.push(SS(6,'left=0, minLen=\u221E, minStart=0',{left:0,minLen:'\u221E'},{a:a}));
     s.push(SS(8,'Enter for loop: right=0 to '+(a.length-1),{},{a:a}));
@@ -1942,18 +2409,17 @@ function genSW6(){
 
 // ===== PREFIX SUM =====
 function genPS1(){
-    var nums=[1,2,3,4,5],s=[],pfx=[];
-    s.push(SS(1,'int[] prefix = new int[n]',{},{a:nums,xtra:'Allocate prefix array'}));
-    pfx[0]=nums[0];
-    s.push(SS(2,'prefix[0] = nums[0] = '+nums[0],{},{a:nums,h:[0],xtra:'prefix = ['+pfx.join(',')+']'}));
-    s.push(SS(3,'Enter for loop: i = 1 to n\u22121',{},{a:nums}));
-    for(var i=1;i<nums.length;i++){
-        pfx[i]=pfx[i-1]+nums[i];
-        s.push(SS(4,'prefix['+i+'] = prefix['+(i-1)+']+nums['+i+'] = '+pfx[i-1]+'+'+nums[i]+' = '+pfx[i],{},{a:pfx.slice(),h:[i],xtra:'prefix = ['+pfx.join(',')+']'}));
+    var marks=[10,20,30,40,50],s=[],pfx=[0];
+    s.push(SS(1,'int[] prefix = new int[n+1], prefix[0] = 0',{},{a:marks,xtra:'marks=[10,20,30,40,50], prefix=[0]'}));
+    s.push(SS(2,'Enter for loop: i = 1 to n',{},{a:marks}));
+    for(var i=1;i<=marks.length;i++){
+        pfx[i]=pfx[i-1]+marks[i-1];
+        s.push(SS(3,'prefix['+i+'] = prefix['+(i-1)+']+marks['+(i-1)+'] = '+pfx[i-1]+'+'+marks[i-1]+' = '+pfx[i],{},{a:marks,h:[i-1],xtra:'prefix = ['+pfx.join(',')+']'}));
     }
-    s.push(SS(6,'// Query sum of range [L, R]:',{},{a:pfx,xtra:'Now we can query any range in O(1)'}));
-    s.push(SS(7,'sum(1,3) = prefix[3] \u2212 prefix[0] = '+pfx[3]+' \u2212 '+pfx[0]+' = '+(pfx[3]-pfx[0]),{},{a:pfx,w:[1,3],res:'sum(1,3) = '+(pfx[3]-pfx[0])}));
-    return{test:'nums=[1,2,3,4,5], sum(1,3) \u2192 9',steps:s};
+    s.push(SS(5,'// Query: total marks from subject 1 to 3',{},{a:pfx,xtra:'Now we can query any range in O(1)'}));
+    s.push(SS(6,'sum(1,3) = prefix[3+1] \u2212 prefix[1] = '+pfx[4]+' \u2212 '+pfx[1]+' = '+(pfx[4]-pfx[1]),{},{a:pfx,w:[1,4],res:'sum(1,3) = '+(pfx[4]-pfx[1])+' = 90'}));
+    s.push(SS(7,'Without prefix sum: every query O(N). With it: O(1) \u2714',{result:90},{a:pfx,res:90}));
+    return{test:'marks=[10,20,30,40,50], sum(1,3) \u2192 90',steps:s};
 }
 
 function genPS2(){
@@ -1972,7 +2438,7 @@ function genPS2(){
             s.push(SS(8,'count += map.get('+need+')='+found+' \u2192 count='+cnt,{count:cnt},{a:nums,h:[i],map:Object.assign({},map)}));
         }
         map[pfx]=(map[pfx]||0)+1;
-        s.push(SS(9,'map.merge('+pfx+', 1)',{},{a:nums,h:[i],map:Object.assign({},map)}));
+        s.push(SS(9,'map.put('+pfx+', map.getOrDefault('+pfx+',0)+1)',{},{a:nums,h:[i],map:Object.assign({},map)}));
     }
     s.push(SS(11,'Return count = '+cnt+' \u2714',{result:cnt},{a:nums,res:cnt}));
     return{test:'nums=[1,1,1], k=2 \u2192 2',steps:s};
@@ -1995,7 +2461,7 @@ function genPS3(){
             s.push(SS(9,'count += map.get('+mod+')='+found+' \u2192 count='+cnt,{count:cnt},{a:nums,h:[i],map:Object.assign({},map)}));
         }
         map[mod]=(map[mod]||0)+1;
-        s.push(SS(10,'map.merge('+mod+', 1)',{},{a:nums,h:[i],map:Object.assign({},map)}));
+        s.push(SS(10,'map.put('+mod+', map.getOrDefault('+mod+',0)+1)',{},{a:nums,h:[i],map:Object.assign({},map)}));
     }
     s.push(SS(12,'Return count = '+cnt+' \u2714',{result:cnt},{a:nums,res:cnt}));
     return{test:'nums=[4,5,0,-2,-3,1], k=5 \u2192 7',steps:s};
@@ -2195,27 +2661,16 @@ function genMS2(){
 }
 
 function genMS3(){
-    var ht=[4,2,0,3,2,5],s=[],l=0,r=5,lm=0,rm=0,w=0;
-    s.push(SS(1,'left=0, right='+r,{left:0,right:5},{a:ht,p:{L:0,R:5}}));
-    s.push(SS(2,'leftMax=0, rightMax=0, water=0',{leftMax:0,rightMax:0,water:0},{a:ht}));
-    while(l<r){
-        s.push(SS(4,'while(left='+l+' < right='+r+')',{},{a:ht,p:{L:l,R:r}}));
-        if(ht[l]<ht[r]){
-            s.push(SS(5,'height['+l+']='+ht[l]+' < height['+r+']='+ht[r]+' \u2192 left side',{},{a:ht,p:{L:l,R:r}}));
-            if(ht[l]>=lm){lm=ht[l];s.push(SS(6,'height['+l+']='+ht[l]+' \u2265 leftMax \u2192 leftMax='+lm,{leftMax:lm},{a:ht,p:{L:l,R:r},h:[l]}));}
-            else{w+=lm-ht[l];s.push(SS(7,'water += '+lm+'\u2212'+ht[l]+'='+(lm-ht[l])+', total='+w,{water:w},{a:ht,p:{L:l,R:r},h:[l]}));}
-            l++;
-            s.push(SS(8,'left++ \u2192 left='+l,{left:l},{a:ht,p:{L:l,R:r}}));
-        }else{
-            s.push(SS(9,'height['+l+']='+ht[l]+' \u2265 height['+r+']='+ht[r]+' \u2192 right side',{},{a:ht,p:{L:l,R:r}}));
-            if(ht[r]>=rm){rm=ht[r];s.push(SS(10,'height['+r+']='+ht[r]+' \u2265 rightMax \u2192 rightMax='+rm,{rightMax:rm},{a:ht,p:{L:l,R:r},h:[r]}));}
-            else{w+=rm-ht[r];s.push(SS(11,'water += '+rm+'\u2212'+ht[r]+'='+(rm-ht[r])+', total='+w,{water:w},{a:ht,p:{L:l,R:r},h:[r]}));}
-            r--;
-            s.push(SS(12,'right-- \u2192 right='+r,{right:r},{a:ht,p:{L:l,R:r}}));
-        }
+    var nums=[1,3,-1,-3,5,3,6,7],k=3,s=[],dq=[],res=[];
+    s.push(SS(1,'// Sliding Window Maximum: monotonic deque (indices)',{},{a:nums,xtra:'k=3, deque keeps decreasing values'}));
+    for(var i=0;i<nums.length;i++){
+        while(dq.length&&dq[0]<i-k+1)dq.shift();
+        while(dq.length&&nums[dq[dq.length-1]]<nums[i])dq.pop();
+        dq.push(i);
+        if(i>=k-1){res.push(nums[dq[0]]);s.push(SS(3,'i='+i+': window max = nums['+dq[0]+'] = '+nums[dq[0]],{},{a:nums,w:[i-k+1,i],h:[dq[0]],xtra:'result so far: ['+res.join(',')+']'}));}
     }
-    s.push(SS(14,'Total water = '+w+' \u2714',{result:w},{a:ht,res:w}));
-    return{test:'height=[4,2,0,3,2,5] \u2192 water=9',steps:s};
+    s.push(SS(5,'Window maxes = ['+res.join(',')+'] \u2714',{result:res.join(',')},{a:nums,res:'['+res.join(',')+']'}));
+    return{test:'nums=[1,3,-1,-3,5,3,6,7], k=3 \u2192 [3,3,5,5,6,7]',steps:s};
 }
 
 function genMS4(){
@@ -2242,29 +2697,45 @@ function genMS4(){
 }
 
 function genMS5(){
-    var str='({[]})',a=str.split(''),s=[],stk=[];
-    var map={'(':')','{':'}','[':']'};
-    var lineMap={'(':3,'{':4,'[':5};
-    s.push(SS(1,'// Valid Parentheses',{},{a:a,xtra:'Check if brackets are balanced'}));
-    s.push(SS(2,'Enter for loop: each char in s',{},{a:a,stk:[]}));
+    var a=[4,5,2,10,8],s=[],res=[-1,-1,-1,-1,-1],stk=[];
+    s.push(SS(1,'// Next Smaller Element: increasing stack',{},{a:a,xtra:'Pop while stack.peek() > current'}));
+    s.push(SS(2,'Arrays.fill(result, -1)',{},{a:a,xtra:'result=[-1,-1,-1,-1,-1]'}));
     for(var i=0;i<a.length;i++){
-        var c=a[i];
-        if(map[c]){
-            var ln=lineMap[c]||3;
-            stk.push(map[c]);
-            s.push(SS(ln,'\''+c+'\' is opening \u2192 push \''+map[c]+'\'',{},{a:a,h:[i],stk:stk.slice(),stkP:true}));
-        }else{
-            var top=stk.length?stk[stk.length-1]:'';
-            if(stk.length&&top===c){
-                stk.pop();
-                s.push(SS(6,'\''+c+'\' matches stack top \u2192 pop! \u2714',{},{a:a,h:[i],stk:stk.slice(),stkO:true}));
-            }else{
-                s.push(SS(7,'Mismatch! return false \u2718',{},{a:a,h:[i],stk:stk.slice()}));
-            }
+        s.push(SS(4,'i='+i+', arr['+i+']='+a[i],{i:i},{a:a,h:[i],stk:stk.slice()}));
+        while(stk.length&&a[stk[stk.length-1]]>a[i]){
+            var idx=stk.pop();
+            res[idx]=a[i];
+            s.push(SS(5,'pop idx='+idx+', result['+idx+']='+a[i],{},{a:a,h:[i],stk:stk.slice(),d:[idx],xtra:'result=['+res.join(',')+']'}));
         }
+        stk.push(i);
+        s.push(SS(6,'push '+i,{},{a:a,h:[i],stk:stk.slice(),stkP:true}));
     }
-    s.push(SS(9,'stack.isEmpty()? YES \u2192 return true \u2714',{result:'true'},{a:a,d:[0,1,2,3,4,5],res:'true'}));
-    return{test:'s="({[]})" \u2192 true',steps:s};
+    s.push(SS(8,'NSE = ['+res.join(',')+'] \u2714',{result:res.join(',')},{a:res,res:'['+res.join(',')+']'}));
+    return{test:'arr=[4,5,2,10,8] \u2192 NSE=[2,2,-1,8,-1]',steps:s};
+}
+
+// ===== TWO POINTERS =====
+function genTP4(){
+    var nums=[2,0,2,1,1,0],s=[],low=0,mid=0,high=nums.length-1;
+    s.push(SS(1,'low=0, mid=0, high='+(nums.length-1),{low:0,mid:0,high:high},{a:nums.slice(),p:{low:0,mid:0,high:high}}));
+    var step=2;
+    while(mid<=high){
+        s.push(SS(step,'nums[mid]='+nums[mid]+' at mid='+mid,{},{a:nums.slice(),p:{low:low,mid:mid,high:high},h:[mid]}));
+        if(nums[mid]===0){
+            var t=nums[low];nums[low]=nums[mid];nums[mid]=t;low++;mid++;
+            s.push(SS(step+1,'==0: swap low/mid, low++, mid++',{low:low,mid:mid},{a:nums.slice(),p:{low:low,mid:mid,high:high}}));
+        }else if(nums[mid]===1){
+            mid++;
+            s.push(SS(step+1,'==1: mid++',{mid:mid},{a:nums.slice(),p:{low:low,mid:mid,high:high}}));
+        }else{
+            var t2=nums[mid];nums[mid]=nums[high];nums[high]=t2;high--;
+            s.push(SS(step+1,'==2: swap mid/high, high--',{high:high},{a:nums.slice(),p:{low:low,mid:mid,high:high}}));
+        }
+        step+=2;
+        if(step>12)break;
+    }
+    s.push(SS(14,'Sorted: ['+nums.join(',')+'] \u2714',{result:nums.join(',')},{a:nums,d:[0,1,2,3,4,5],res:'[0,0,1,1,2,2]'}));
+    return{test:'nums=[2,0,2,1,1,0] \u2192 [0,0,1,1,2,2]',steps:s};
 }
 
 // ===== GREEDY =====
@@ -2286,6 +2757,23 @@ function genGR1(){
     }
     s.push(SS(9,'Max non-overlapping='+cnt+', removed='+(sorted.length-cnt)+' \u2714',{result:sorted.length-cnt},{res:'remove '+(sorted.length-cnt)}));
     return{test:'intervals=[[1,2],[2,3],[1,3],[3,4]] \u2192 remove 1',steps:s};
+}
+
+function genGR2Merge(){
+    var iv=[[1,3],[2,6],[8,10],[15,18]],sorted=iv.slice().sort(function(a,b){return a[0]-b[0];}),s=[],merged=[];
+    s.push(SS(1,'Sort by START: [[1,3],[2,6],[8,10],[15,18]]',{},{html:'<div class="av-tree">Sort by start time before merging</div>'}));
+    for(var i=0;i<sorted.length;i++){
+        var cur=sorted[i];
+        if(!merged.length||cur[0]>merged[merged.length-1][1]){
+            merged.push(cur.slice());
+            s.push(SS(3,'Add ['+cur[0]+','+cur[1]+'] as new interval',{},{html:'<div class="av-tree">merged: '+merged.map(function(x){return'['+x[0]+','+x[1]+']';}).join(' ')+'</div>'}));
+        }else{
+            merged[merged.length-1][1]=Math.max(merged[merged.length-1][1],cur[1]);
+            s.push(SS(4,'Overlap! extend end to '+merged[merged.length-1][1],{},{html:'<div class="av-tree">merged: '+merged.map(function(x){return'['+x[0]+','+x[1]+']';}).join(' ')+'</div>'}));
+        }
+    }
+    s.push(SS(5,'Result: [[1,6],[8,10],[15,18]] \u2714',{result:'[[1,6],[8,10],[15,18]]'},{res:'[[1,6],[8,10],[15,18]]'}));
+    return{test:'intervals=[[1,3],[2,6],[8,10],[15,18]] \u2192 [[1,6],[8,10],[15,18]]',steps:s};
 }
 
 function genGR2(){
@@ -2373,6 +2861,34 @@ function genGR6(){
     }
     s.push(SS(10,'Result: ['+result.join(',')+'] \u2714',{result:'['+result.join(',')+']'},{a:a,res:'['+result.join(',')+']'}));
     return{test:'s="abcabdef" \u2192 [5,1,1,1]',steps:s};
+}
+
+function genGR7(){
+    var tasks='AAABBB'.split(''),n=2,s=[],freq=new Array(26).fill(0);
+    for(var i=0;i<tasks.length;i++)freq[tasks[i].charCodeAt(0)-65]++;
+    s.push(SS(1,'Count task frequencies',{},{a:tasks,xtra:'A=3, B=3'}));
+    freq.sort(function(a,b){return a-b;});
+    var maxF=freq[25],idle=(maxF-1)*(n+1);
+    s.push(SS(3,'maxFreq='+maxF+', idle=('+maxF+'-1)*('+(n+1)+')='+idle,{maxFreq:maxF,idle:idle},{a:tasks}));
+    for(var j=24;j>=0&&freq[j]>0;j--)idle-=Math.min(maxF-1,freq[j]);
+    s.push(SS(5,'Fill idle with other tasks \u2192 idle='+idle,{idle:idle},{a:tasks}));
+    var ans=tasks.length+Math.max(0,idle);
+    s.push(SS(7,'Answer = tasks.length + max(0,idle) = '+ans+' \u2714',{result:ans},{a:tasks,res:ans}));
+    return{test:'tasks=AAABBB, n=2 \u2192 8',steps:s};
+}
+
+function genGR8(){
+    var items=[[10,60],[20,100],[30,120]],cap=50,s=[],rem=cap,total=0;
+    s.push(SS(1,'Sort by value/weight ratio descending',{},{html:'<div class="av-tree">[10,60] ratio=6.0\n[20,100] ratio=5.0\n[30,120] ratio=4.0</div>'}));
+    s.push(SS(2,'capacity=50, total=0',{capacity:cap,total:0},{}));
+    total+=60;rem-=10;
+    s.push(SS(3,'Take [10,60] fully \u2192 total=60, rem=40',{total:60,remaining:40},{}));
+    total+=100;rem-=20;
+    s.push(SS(4,'Take [20,100] fully \u2192 total=160, rem=20',{total:160,remaining:20},{}));
+    total+=120*(20/30);
+    s.push(SS(5,'Take 20/30 of [30,120] \u2192 +80',{total:240},{res:'240.0'}));
+    s.push(SS(6,'Max value = 240 \u2714',{result:240},{res:'240'});
+    return{test:'capacity=50, items=[[10,60],[20,100],[30,120]] \u2192 240',steps:s};
 }
 
 // ===== RECURSION =====
@@ -2761,13 +3277,14 @@ var G={
     'prefix-sum':[genPS1,genPS2,genPS3,genPS4,genPS5],
     'binary-search':[genBS1,genBS2,genBS3,genBS4,genBS5,genBS6],
     'monotonic-stack':[genMS1,genMS2,genMS3,genMS4,genMS5],
-    'greedy':[genGR1,genGR2,genGR3,genGR4,genGR5,genGR6],
+    'greedy':[genGR1,genGR2Merge,genGR2,genGR3,genGR4,genGR5,genGR6,genGR7,genGR8],
     'recursion':[genRC1,genRC2,genRC3,genRC4,genRC5],
     'top-k':[genTK1,genTK2,genTK3,genTK4],
     'binary-trees':[genBT1,genBT2,genBT3,genBT4,genBT5,genBT6,genBT7],
     'dp':[genDP1,genDP2,genDP3,genDP4,genDP5,genDP6,genDP7,genDP8]
 };
-for(var t in G)G[t].forEach(function(g,i){ANIMS[t+'-'+(i+1)]=g();});
+for(var t in G)G[t].forEach(function(g,i){if(g)ANIMS[t+'-'+(i+1)]=g();});
+ANIMS['two-pointers-4']=genTP4();
 
 function setup(){
     var topics=document.querySelectorAll('.topic');

@@ -326,6 +326,25 @@
             background: #ffb84d;
             color: #1a202c;
         }
+        .practice-modal-gfg-link {
+            display: none;
+            align-items: center;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9em;
+            text-decoration: none;
+            background: #2f8d46;
+            color: white;
+            border: 2px solid #267a3a;
+        }
+        .practice-modal-gfg-link.visible {
+            display: inline-flex;
+        }
+        .practice-modal-gfg-link:hover {
+            background: #3da858;
+            color: white;
+        }
         .practice-modal-body {
             padding: 24px;
             overflow-y: auto;
@@ -4098,6 +4117,7 @@ public static int partition(int[] a, int low, int high) {
         </div>
         <div class="question-description">
             <p><strong>Problem:</strong> Given an integer <code>n</code>, print a right-angled triangle of stars with <code>n</code> rows. Row <code>i</code> (1-indexed) contains <code>i</code> stars.</p>
+            <p><strong>Reference:</strong> <a href="https://www.geeksforgeeks.org/problems/right-triangle/0" target="_blank" rel="noopener noreferrer">GeeksforGeeks — Right Triangle</a></p>
         </div>
         <div class="test-cases">
             <div class="test-case">
@@ -4146,6 +4166,7 @@ public static void rightTriangle(int n) {
         </div>
         <div class="question-description">
             <p><strong>Problem:</strong> Given an integer <code>n</code>, print an inverted right-angled triangle. Row <code>i</code> (1-indexed) contains <code>n - i + 1</code> stars.</p>
+            <p><strong>Reference:</strong> <a href="https://www.geeksforgeeks.org/problems/inverted-triangle-of-stars0110/1" target="_blank" rel="noopener noreferrer">GeeksforGeeks — Inverted Triangle of Stars</a></p>
         </div>
         <div class="test-cases">
             <div class="test-case">
@@ -4194,6 +4215,7 @@ public static void invertedRightTriangle(int n) {
         </div>
         <div class="question-description">
             <p><strong>Problem:</strong> Given an integer <code>n</code>, print a centered pyramid of stars with <code>n</code> rows. Each row is centered using leading spaces.</p>
+            <p><strong>Reference:</strong> <a href="https://www.geeksforgeeks.org/problems/pyramid-patterns/1" target="_blank" rel="noopener noreferrer">GeeksforGeeks — Pyramid Pattern</a></p>
         </div>
         <div class="test-cases">
             <div class="test-case">
@@ -4460,6 +4482,7 @@ public static void numberTriangle(int n) {
         </div>
         <div class="question-description">
             <p><strong>Problem:</strong> Given an integer <code>n</code>, print Floyd's Triangle — a right-angled triangle of consecutive natural numbers starting from 1. Row <code>i</code> has <code>i</code> numbers.</p>
+            <p><strong>Reference:</strong> <a href="https://www.geeksforgeeks.org/problems/floyds-triangle1222/1" target="_blank" rel="noopener noreferrer">GeeksforGeeks — Floyd's Triangle</a></p>
         </div>
         <div class="test-cases">
             <div class="test-case">
@@ -4505,11 +4528,12 @@ public static void floydsTriangle(int n) {
     <!-- ===== 9. PASCAL'S TRIANGLE ===== -->
     <div class="question-card">
         <div class="question-header">
-            <span class="question-title">9. Pascal's Triangle</span>
+            <span class="question-title">9. Pascal's Triangle (LC 118)</span>
             <span class="difficulty medium">Medium</span>
         </div>
         <div class="question-description">
             <p><strong>Problem:</strong> Given an integer <code>n</code>, print the first <code>n</code> rows of Pascal's Triangle. Each element is the sum of the two elements directly above it. The edges are always 1.</p>
+            <p><strong>Reference:</strong> <a href="https://leetcode.com/problems/pascals-triangle/" target="_blank" rel="noopener noreferrer">LeetCode — Pascal's Triangle</a></p>
         </div>
         <div class="test-cases">
             <div class="test-case">
@@ -4626,6 +4650,7 @@ public static void hollowSquare(int n) {
                 <li>1 &le; nums.length &le; 10^5</li>
                 <li>1 &le; k &le; nums.length</li>
             </ul>
+            <p><strong>Reference:</strong> <a href="https://www.geeksforgeeks.org/problems/max-sum-subarray-of-size-k5313/1" target="_blank" rel="noopener noreferrer">GeeksforGeeks — Max Sum Subarray of Size K</a></p>
         </div>
         <div class="test-cases">
             <div class="test-case">
@@ -7335,6 +7360,7 @@ int minSpeedOnTime(int[] dist, double hour) {
         </div>
         <div class="question-description">
             <p><strong>Problem:</strong> Allocate <code>n</code> books to <code>k</code> students such that the maximum pages any student reads is minimized. Each student gets contiguous books.</p>
+            <p><strong>Reference:</strong> <a href="https://www.geeksforgeeks.org/problems/allocate-minimum-number-of-pages0937/1" target="_blank" rel="noopener noreferrer">GeeksforGeeks — Allocate Minimum Pages</a></p>
         </div>
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: pages = [12,34,67,90], k = 2
@@ -7384,6 +7410,7 @@ int allocatePages(int[] pages, int k) {
         </div>
         <div class="question-description">
             <p><strong>Problem:</strong> Place <code>k</code> cows in <code>n</code> stalls. Maximize the minimum distance between any two cows.</p>
+            <p><strong>Reference:</strong> <a href="https://www.geeksforgeeks.org/problems/aggressive-cows/1" target="_blank" rel="noopener noreferrer">GeeksforGeeks — Aggressive Cows</a></p>
         </div>
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: stalls = [1,2,4,8,9], k = 3
@@ -8384,7 +8411,7 @@ int jobSequencing(int[] deadline, int[] profit) {
         </div>
         <div class="question-description">
             <p><strong>Problem:</strong> Given positions of mice and holes, assign each mouse to a hole (one-to-one) to minimize the maximum time any mouse takes to reach its hole. Return that minimum time.</p>
-            <p><strong>Reference:</strong> <a href="https://www.geeksforgeeks.org/problems/assign-mice-to-holes/1" target="_blank">GeeksforGeeks — Assign Mice to Holes</a></p>
+            <p><strong>Reference:</strong> <a href="https://www.geeksforgeeks.org/problems/assign-mice-holes/1" target="_blank">GeeksforGeeks — Assign Mice to Holes</a></p>
         </div>
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: mice = [4,-4], holes = [4,0]
@@ -8418,7 +8445,7 @@ int assignMiceToHoles(int[] mice, int[] holes) {
         </div>
         <div class="question-description">
             <p><strong>Problem:</strong> Given a string of 'P' (police) and 'T' (thief) characters and distance d, find the maximum thieves any single police can catch. A police at index i can catch thieves in [i-d, i+d].</p>
-            <p><strong>Reference:</strong> <a href="https://www.geeksforgeeks.org/problems/police-and-thieves/1" target="_blank">GeeksforGeeks — Police and Thieves</a></p>
+            <p><strong>Reference:</strong> <a href="https://www.geeksforgeeks.org/problems/police-and-thieves--141631/1" target="_blank">GeeksforGeeks — Police and Thieves</a></p>
         </div>
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "TPAPPAP", d = 2
@@ -8662,6 +8689,7 @@ int jump(int[] nums) {
         </div>
         <div class="question-description">
             <p><strong>Problem:</strong> Move n disks from source rod to destination rod using an auxiliary rod. Only one disk can be moved at a time, and a larger disk cannot sit on a smaller disk. Print the sequence of moves.</p>
+            <p><strong>Reference:</strong> <a href="https://www.geeksforgeeks.org/problems/tower-of-hanoi-1587115621/1" target="_blank" rel="noopener noreferrer">GeeksforGeeks — Tower of Hanoi</a></p>
         </div>
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: n = 2
@@ -8719,11 +8747,12 @@ void printReverse(String s, int idx) {
     <!-- 3. Find First & Last Occurrence -->
     <div class="question-card">
         <div class="question-header">
-            <span class="question-title">Find First &amp; Last Occurrence of Element</span>
+            <span class="question-title">Find First &amp; Last Occurrence of Element (LC 34)</span>
             <span class="difficulty easy">Easy</span>
         </div>
         <div class="question-description">
             <p><strong>Problem:</strong> Given a sorted array and a target, find the first and last index of the target using recursion. Return [-1, -1] if not found.</p>
+            <p><strong>Reference:</strong> <a href="https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/" target="_blank" rel="noopener noreferrer">LeetCode — Find First and Last Position</a></p>
         </div>
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: arr = [1,3,3,3,5,6], target = 3
@@ -8836,11 +8865,12 @@ String moveXToEnd(String s, int idx, int count) {
     <!-- 6. Remove All Duplicates in String -->
     <div class="question-card">
         <div class="question-header">
-            <span class="question-title">Remove All Duplicates in String</span>
+            <span class="question-title">Remove All Duplicates in String (LC 1047)</span>
             <span class="difficulty easy">Easy</span>
         </div>
         <div class="question-description">
             <p><strong>Problem:</strong> Given a string, remove adjacent duplicate characters recursively until no adjacent duplicates remain.</p>
+            <p><strong>Reference:</strong> <a href="https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/" target="_blank" rel="noopener noreferrer">LeetCode — Remove All Adjacent Duplicates In String</a></p>
         </div>
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "abbaca"
@@ -8876,6 +8906,7 @@ String removeDuplicates(String s, int idx, StringBuilder built) {
         </div>
         <div class="question-description">
             <p><strong>Problem:</strong> Given a string, print all subsequences (including empty). A subsequence keeps relative order but may skip characters.</p>
+            <p><strong>Reference:</strong> <a href="https://www.geeksforgeeks.org/problems/power-set4302/1" target="_blank" rel="noopener noreferrer">GeeksforGeeks — All Subsequences of a String</a></p>
         </div>
         <div class="test-cases">
             <div class="test-case"><h4>Test Case 1:</h4><pre>Input: s = "abc"
@@ -13302,6 +13333,7 @@ int uniquePathsWithObstacles(int[][] grid) {
                 <span class="practice-modal-title" id="practice-modal-title">Random Question</span>
                 <div class="practice-modal-actions">
                     <a id="practice-modal-leetcode-link" class="practice-modal-leetcode-link" href="#" target="_blank" rel="noopener noreferrer">Open on LeetCode</a>
+                    <a id="practice-modal-gfg-link" class="practice-modal-gfg-link" href="#" target="_blank" rel="noopener noreferrer">Open on GFG</a>
                     <button type="button" id="btn-jump-to-question">View on page</button>
                     <button type="button" id="btn-another-random">Another</button>
                     <button type="button" id="btn-close-random-modal" aria-label="Close">&times;</button>
@@ -13713,9 +13745,11 @@ const LEETCODE_PROBLEM_LINKS = {
     "1011": "https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/",
     "1081": "https://leetcode.com/problems/smallest-subsequence-of-distinct-characters/",
     "1092": "https://leetcode.com/problems/shortest-common-supersequence/",
+    "1047": "https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/",
     "1094": "https://leetcode.com/problems/car-pooling/",
     "1109": "https://leetcode.com/problems/corporate-flight-bookings/",
     "1143": "https://leetcode.com/problems/longest-common-subsequence/",
+    "118": "https://leetcode.com/problems/pascals-triangle/",
     "1248": "https://leetcode.com/problems/count-number-of-nice-subarrays/",
     "1314": "https://leetcode.com/problems/matrix-block-sum/",
     "1358": "https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/",
@@ -13871,8 +13905,17 @@ function getLeetCodeUrlForTitle(titleText) {
 function getLeetCodeUrlForCard(card) {
     if (!card) return null;
     if (card.dataset.leetcodeUrl) return card.dataset.leetcodeUrl;
+    const link = card.querySelector('a[href*="leetcode.com/problems/"]');
+    if (link) return link.getAttribute('href');
     const titleNode = card.querySelector('.question-title');
     return getLeetCodeUrlForTitle(titleNode ? titleNode.textContent.trim() : '');
+}
+
+function getGfgUrlForCard(card) {
+    if (!card) return null;
+    if (card.dataset.gfgUrl) return card.dataset.gfgUrl;
+    const link = card.querySelector('a[href*="geeksforgeeks.org"]');
+    return link ? link.getAttribute('href') : null;
 }
 
 function updatePracticeLeetCodeLink(cardOrTitle) {
@@ -13888,6 +13931,24 @@ function updatePracticeLeetCodeLink(cardOrTitle) {
         linkEl.href = '#';
         linkEl.classList.remove('visible');
     }
+}
+
+function updatePracticeGfgLink(card) {
+    const linkEl = document.getElementById('practice-modal-gfg-link');
+    if (!linkEl) return;
+    const url = card && card.nodeType === 1 ? getGfgUrlForCard(card) : null;
+    if (url) {
+        linkEl.href = url;
+        linkEl.classList.add('visible');
+    } else {
+        linkEl.href = '#';
+        linkEl.classList.remove('visible');
+    }
+}
+
+function updatePracticePlatformLinks(card) {
+    updatePracticeLeetCodeLink(card);
+    updatePracticeGfgLink(card);
 }
 
 function buildQuestionCardClone(card) {
@@ -13952,7 +14013,7 @@ function showRandomQuestionModal(card) {
     const titleText = titleNode ? titleNode.textContent.trim() : 'Random Question';
 
     if (titleEl) titleEl.textContent = titleText;
-    updatePracticeLeetCodeLink(card);
+    updatePracticePlatformLinks(card);
 
     body.innerHTML = '';
     const clone = buildQuestionCardClone(card);
