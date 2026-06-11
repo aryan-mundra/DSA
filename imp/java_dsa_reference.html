@@ -442,7 +442,7 @@ List&lt;String&gt; list = Arrays.stream(str.split("\\."))
 <div class="category-header">
   <div class="category-icon">Aa</div>
   <span class="category-title">Strings</span>
-  <span class="category-count">6 topics</span>
+  <span class="category-count">7 topics</span>
 </div>
 
 <div class="card" data-tags="string functions methods builtin length charAt substring">
@@ -542,6 +542,22 @@ while (left &lt; right) {
     right--;
 }
 String reversed = new String(arr);</code></pre>
+</div></div>
+
+<div class="card" data-tags="string char array to string valueOf new String conversion">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to convert a <code>char[]</code> to a <code>String</code>?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>char[] a = {'h', 'e', 'l', 'l', 'o'};
+
+<span class="cmt">// Method 1: String.valueOf() — most common</span>
+String s = String.valueOf(a);   <span class="cmt">// "hello"</span>
+
+<span class="cmt">// Method 2: String constructor</span>
+String s2 = new String(a);      <span class="cmt">// "hello"</span></code></pre>
+<div class="note">Use <code>String.valueOf(a)</code> after in-place edits on a char array (e.g. two-pointer reverse) to get the final string.</div>
 </div></div>
 
 <div class="card" data-tags="string extract character charAt substring">
@@ -1166,7 +1182,7 @@ for (int num : set) {
 <div class="category-header">
   <div class="category-icon">#</div>
   <span class="category-title">HashMap</span>
-  <span class="category-count">7 topics</span>
+  <span class="category-count">8 topics</span>
 </div>
 
 <div class="card" data-tags="hashmap create new put initialize">
@@ -1269,6 +1285,22 @@ for (char c : s.toCharArray()) {
 if (map.containsValue(5)) {
     System.out.println("Value exists");
 }</code></pre>
+</div></div>
+
+<div class="card" data-tags="hashmap equals compare two maps sliding window anagram">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to check if two <code>HashMap</code>s are equal?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>HashMap&lt;Character, Integer&gt; windowMap = new HashMap&lt;&gt;();
+HashMap&lt;Character, Integer&gt; pMap = new HashMap&lt;&gt;();
+
+<span class="cmt">// true when both maps have the same keys and values</span>
+if (windowMap.equals(pMap)) {
+    System.out.println("Maps match");
+}</code></pre>
+<div class="note">Common in sliding-window problems (e.g. anagram in a window): build a frequency map for the pattern, update a window map as you slide, then compare with <code>windowMap.equals(pMap)</code>.</div>
 </div></div>
 
 <div class="card" data-tags="hashmap array store index value key">

@@ -120,6 +120,18 @@
             margin-bottom: 12px;
             border-bottom: 1px solid rgba(255,255,255,0.15);
         }
+        .nav-practice-actions,
+        .nav-practice-utils {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .practice-hint {
+            flex: 1 1 100%;
+            text-align: center;
+        }
         .btn-random-question {
             background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
             color: white;
@@ -140,6 +152,137 @@
             opacity: 0.45;
             cursor: not-allowed;
             box-shadow: none;
+        }
+        .btn-view-recent {
+            background: rgba(255,255,255,0.14);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.4);
+            padding: 9px 16px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s, transform 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-view-recent:hover {
+            background: rgba(255,255,255,0.24);
+            border-color: rgba(255,255,255,0.65);
+            transform: translateY(-1px);
+        }
+        .recent-queue-badge {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            min-width: 22px;
+            height: 22px;
+            padding: 0 6px;
+            border-radius: 999px;
+            background: #667eea;
+            color: white;
+            font-size: 0.78em;
+            font-weight: 700;
+            line-height: 1;
+        }
+        .recent-queue-badge.visible { display: inline-flex; }
+        .recent-queue-note {
+            font-size: 0.92em;
+            color: #4a5568;
+            margin: 0 0 16px;
+            line-height: 1.55;
+        }
+        .recent-queue-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .recent-queue-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+        }
+        .recent-queue-item:hover {
+            background: #f7fafc;
+            border-color: #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.12);
+        }
+        .recent-queue-item.is-newest {
+            border-color: #c3dafe;
+            background: #ebf4ff;
+        }
+        .recent-queue-rank {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #edf2f7;
+            color: #4a5568;
+            font-size: 0.82em;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .recent-queue-item.is-newest .recent-queue-rank {
+            background: #667eea;
+            color: white;
+        }
+        .recent-queue-meta { flex: 1; min-width: 0; }
+        .recent-queue-title {
+            font-weight: 600;
+            color: #2d3748;
+            line-height: 1.35;
+        }
+        .recent-queue-topic {
+            font-size: 0.84em;
+            color: #718096;
+            margin-top: 3px;
+        }
+        .recent-queue-diff {
+            flex-shrink: 0;
+            font-size: 0.72em;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 999px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .recent-queue-diff.easy { background: #c6f6d5; color: #22543d; }
+        .recent-queue-diff.medium { background: #feebc8; color: #7b341e; }
+        .recent-queue-diff.hard { background: #fed7d7; color: #742a2a; }
+        .recent-queue-empty {
+            text-align: center;
+            color: #718096;
+            padding: 36px 16px;
+            line-height: 1.6;
+        }
+        #btn-clear-recent-queue {
+            background: white;
+            color: #c53030;
+            border: 2px solid #fc8181 !important;
+        }
+        #btn-clear-recent-queue:hover { background: #fff5f5; }
+        @media (max-width: 480px) {
+            .btn-random-question,
+            .btn-view-recent {
+                flex: 1 1 calc(50% - 8px);
+                justify-content: center;
+                min-width: 0;
+                padding-left: 10px;
+                padding-right: 10px;
+                font-size: 0.82em;
+            }
+            .nav-practice-actions { width: 100%; }
+            .nav-practice-utils { width: 100%; }
+            .btn-topic-util { flex: 1; text-align: center; }
         }
         .btn-topic-util {
             background: rgba(255,255,255,0.12);
@@ -3619,9 +3762,17 @@
         <div class="page-main">
         <nav>
             <div class="nav-practice-bar">
-                <button type="button" id="btn-random-question" class="btn-random-question" disabled title="Select one or more topics below first">Random Question</button>
-                <button type="button" id="btn-select-all-topics" class="btn-topic-util">Select all</button>
-                <button type="button" id="btn-clear-topics" class="btn-topic-util">Clear all</button>
+                <div class="nav-practice-actions">
+                    <button type="button" id="btn-random-question" class="btn-random-question" disabled title="Select one or more topics below first">Random Question</button>
+                    <button type="button" id="btn-view-recent-queue" class="btn-view-recent" title="Questions shown recently — excluded from the next random picks">
+                        View recent 20
+                        <span class="recent-queue-badge" id="recent-queue-badge">0</span>
+                    </button>
+                </div>
+                <div class="nav-practice-utils">
+                    <button type="button" id="btn-select-all-topics" class="btn-topic-util">Select all</button>
+                    <button type="button" id="btn-clear-topics" class="btn-topic-util">Clear all</button>
+                </div>
                 <span id="practice-selection-hint" class="practice-hint">Tick topics below for practice mode</span>
             </div>
             <ul class="nav-topics-list">
@@ -13343,6 +13494,20 @@ int uniquePathsWithObstacles(int[][] grid) {
         </div>
     </div>
 
+    <div id="recent-queue-modal" class="practice-modal" aria-hidden="true" role="dialog" aria-labelledby="recent-queue-modal-title">
+        <div class="practice-modal-backdrop" id="recent-queue-modal-backdrop"></div>
+        <div class="practice-modal-panel">
+            <div class="practice-modal-header">
+                <span class="practice-modal-title" id="recent-queue-modal-title">Recent questions</span>
+                <div class="practice-modal-actions">
+                    <button type="button" id="btn-clear-recent-queue">Clear history</button>
+                    <button type="button" id="btn-close-recent-queue-modal" aria-label="Close">&times;</button>
+                </div>
+            </div>
+            <div class="practice-modal-body" id="recent-queue-modal-body"></div>
+        </div>
+    </div>
+
     <button type="button" class="scroll-top" id="scroll-top-btn" aria-label="Scroll to top" title="Back to top">&#8593;</button>
 
 <script>
@@ -13760,7 +13925,146 @@ const LEETCODE_PROBLEM_LINKS = {
 };
 
 const PRACTICE_STORAGE_KEY = 'leetcodeGuidePracticeTopics';
+const PRACTICE_RECENT_QUEUE_KEY = 'leetcodeGuidePracticeRecentQueue';
+const PRACTICE_RECENT_QUEUE_SIZE = 20;
 let practiceLastCardId = null;
+
+function loadPracticeRecentQueue() {
+    try {
+        const raw = localStorage.getItem(PRACTICE_RECENT_QUEUE_KEY);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+function savePracticeRecentQueue(queue) {
+    try {
+        localStorage.setItem(PRACTICE_RECENT_QUEUE_KEY, JSON.stringify(queue));
+    } catch (e) { /* ignore */ }
+}
+
+function enqueuePracticeRecent(practiceId) {
+    if (!practiceId) return;
+    const queue = loadPracticeRecentQueue().filter(function(id) { return id !== practiceId; });
+    queue.push(practiceId);
+    while (queue.length > PRACTICE_RECENT_QUEUE_SIZE) {
+        queue.shift();
+    }
+    savePracticeRecentQueue(queue);
+}
+
+function getPracticeRecentIdSet() {
+    return new Set(loadPracticeRecentQueue());
+}
+
+function getPracticeCardMeta(practiceId) {
+    const card = document.querySelector('.question-card[data-practice-id="' + practiceId + '"]');
+    if (!card) {
+        return { id: practiceId, title: '(Question not found)', topic: '', difficulty: '' };
+    }
+    const titleNode = card.querySelector('.question-title');
+    const diffNode = card.querySelector('.difficulty');
+    const section = card.closest('section[id]');
+    let topic = '';
+    if (section) {
+        const header = section.querySelector('.section-header h2');
+        topic = header ? header.textContent.trim() : section.id;
+    }
+    return {
+        id: practiceId,
+        title: titleNode ? titleNode.textContent.trim() : 'Unknown question',
+        topic: topic,
+        difficulty: diffNode ? diffNode.textContent.trim().toLowerCase() : ''
+    };
+}
+
+function updateRecentQueueButton() {
+    const badge = document.getElementById('recent-queue-badge');
+    if (!badge) return;
+    const count = loadPracticeRecentQueue().length;
+    badge.textContent = String(count);
+    badge.classList.toggle('visible', count > 0);
+}
+
+function renderRecentQueueModal() {
+    const body = document.getElementById('recent-queue-modal-body');
+    if (!body) return;
+
+    const queue = loadPracticeRecentQueue();
+    if (!queue.length) {
+        body.innerHTML = '<p class="recent-queue-empty">No recent questions yet.<br>Use <strong>Random Question</strong> to start building your history.<br>Up to 20 questions are remembered here.</p>';
+        return;
+    }
+
+    const items = queue.slice().reverse();
+    let html = '<p class="recent-queue-note"><strong>' + queue.length + ' / 20</strong> in memory. These questions are skipped on the next random picks until they leave the queue. Newest first. Click a row to jump to it on the page.</p><ol class="recent-queue-list">';
+    items.forEach(function(practiceId, index) {
+        const meta = getPracticeCardMeta(practiceId);
+        const diffHtml = meta.difficulty
+            ? '<span class="recent-queue-diff ' + meta.difficulty + '">' + meta.difficulty + '</span>'
+            : '';
+        html += '<li class="recent-queue-item' + (index === 0 ? ' is-newest' : '') + '" data-practice-id="' + meta.id + '" tabindex="0" role="button">' +
+            '<span class="recent-queue-rank">' + (index + 1) + '</span>' +
+            '<div class="recent-queue-meta">' +
+            '<div class="recent-queue-title">' + meta.title + '</div>' +
+            (meta.topic ? '<div class="recent-queue-topic">' + meta.topic + '</div>' : '') +
+            '</div>' + diffHtml + '</li>';
+    });
+    html += '</ol>';
+    body.innerHTML = html;
+
+    body.querySelectorAll('.recent-queue-item').forEach(function(row) {
+        function go() {
+            const practiceId = row.dataset.practiceId;
+            if (!practiceId) return;
+            closeRecentQueueModal();
+            practiceLastCardId = practiceId;
+            jumpToPracticeQuestion();
+        }
+        row.addEventListener('click', go);
+        row.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                go();
+            }
+        });
+    });
+}
+
+function openRecentQueueModal() {
+    renderRecentQueueModal();
+    updateRecentQueueButton();
+    const modal = document.getElementById('recent-queue-modal');
+    if (!modal) return;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    updateScrollTopButton();
+}
+
+function closeRecentQueueModal() {
+    const modal = document.getElementById('recent-queue-modal');
+    if (!modal) return;
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    if (!document.getElementById('random-question-modal')?.classList.contains('open')) {
+        document.body.style.overflow = '';
+    }
+    updateScrollTopButton();
+}
+
+function clearRecentQueue() {
+    if (!loadPracticeRecentQueue().length) return;
+    if (!window.confirm('Clear all recent question history? Random picks will no longer skip these questions.')) return;
+    try {
+        localStorage.removeItem(PRACTICE_RECENT_QUEUE_KEY);
+    } catch (e) { /* ignore */ }
+    renderRecentQueueModal();
+    updateRecentQueueButton();
+}
 
 function getPracticeQuestionCards(scope) {
     const root = scope || document;
@@ -13997,7 +14301,16 @@ function pickRandomPracticeCard() {
     });
 
     if (!cards.length) return null;
-    return cards[Math.floor(Math.random() * cards.length)];
+
+    const recentIds = getPracticeRecentIdSet();
+    let eligible = cards.filter(function(card) {
+        return !recentIds.has(card.dataset.practiceId);
+    });
+
+    // Pool smaller than the queue — all questions were shown recently; allow a repeat.
+    if (!eligible.length) eligible = cards;
+
+    return eligible[Math.floor(Math.random() * eligible.length)];
 }
 
 function showRandomQuestionModal(card) {
@@ -14008,6 +14321,8 @@ function showRandomQuestionModal(card) {
     const titleEl = document.getElementById('practice-modal-title');
 
     practiceLastCardId = card.dataset.practiceId;
+    enqueuePracticeRecent(practiceLastCardId);
+    updateRecentQueueButton();
 
     const titleNode = card.querySelector('.question-title');
     const titleText = titleNode ? titleNode.textContent.trim() : 'Random Question';
@@ -14029,7 +14344,9 @@ function closeRandomQuestionModal() {
     const modal = document.getElementById('random-question-modal');
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
+    if (!document.getElementById('recent-queue-modal')?.classList.contains('open')) {
+        document.body.style.overflow = '';
+    }
     updateScrollTopButton();
 }
 
@@ -14077,8 +14394,12 @@ function initPracticeMode() {
 
     bindPracticeButton('btn-random-question', openRandomQuestion);
     bindPracticeButton('btn-another-random', openRandomQuestion);
+    bindPracticeButton('btn-view-recent-queue', openRecentQueueModal);
     bindPracticeButton('btn-close-random-modal', closeRandomQuestionModal);
     bindPracticeButton('practice-modal-backdrop', closeRandomQuestionModal);
+    bindPracticeButton('btn-close-recent-queue-modal', closeRecentQueueModal);
+    bindPracticeButton('recent-queue-modal-backdrop', closeRecentQueueModal);
+    bindPracticeButton('btn-clear-recent-queue', clearRecentQueue);
     bindPracticeButton('btn-jump-to-question', jumpToPracticeQuestion);
 
     bindPracticeButton('btn-select-all-topics', function() {
@@ -14096,13 +14417,17 @@ function initPracticeMode() {
     });
 
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeRandomQuestionModal();
+        if (e.key === 'Escape') {
+            closeRandomQuestionModal();
+            closeRecentQueueModal();
+        }
     });
 
     getPracticeQuestionCards(document).forEach(ensureCardPracticeId);
     loadPracticeSelection();
     injectSectionPracticeCheckboxes();
     updatePracticeUI();
+    updateRecentQueueButton();
 }
 
 function runPageInit(name, fn) {
