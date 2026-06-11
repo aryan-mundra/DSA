@@ -36,12 +36,46 @@
   }
   .sidebar h2{color:#fff; font-size:18px; margin:4px 8px 14px;}
   .sidebar .sub{font-size:12px; color:#8fa6cf; margin:0 8px 18px;}
-  .sidebar a{
+  .sidebar a, .sidebar .nav-topic-btn{
     display:block; color:#cdd9ee; text-decoration:none; padding:7px 10px;
     border-radius:8px; font-size:13.5px; margin-bottom:2px;
+    border:none; background:none; width:100%; text-align:left; cursor:pointer;
+    font-family:inherit; line-height:inherit;
   }
-  .sidebar a:hover{background:#1c2f52; color:#fff;}
-  .sidebar a .num{display:inline-block; width:26px; color:#6f8ec9; font-weight:700;}
+  .sidebar a:hover, .sidebar .nav-topic-btn:hover{background:#1c2f52; color:#fff;}
+  .sidebar a .num, .sidebar .nav-topic-btn .num{display:inline-block; width:26px; color:#6f8ec9; font-weight:700;}
+  .sidebar .nav-topic-btn::after{
+    content:'›'; float:right; color:#6f8ec9; font-size:16px; font-weight:700;
+  }
+  h3[id], h4[id]{scroll-margin-top:24px;}
+
+  /* Drill-down nav panels */
+  .nav-panels{position:relative;}
+  .nav-panel{display:none;}
+  .nav-panel.active{display:block;}
+  .nav-back{
+    display:flex; align-items:center; gap:6px; width:100%;
+    background:#1c2f52; color:#fff; border:none; border-radius:8px;
+    padding:8px 10px; margin-bottom:12px; font-size:13px; font-weight:600;
+    cursor:pointer; font-family:inherit;
+  }
+  .nav-back:hover{background:#253d6b;}
+  .nav-module-title{
+    font-size:13px; font-weight:700; color:#fff; margin:0 8px 10px;
+    line-height:1.4; padding-bottom:10px; border-bottom:1px solid #2a4068;
+  }
+  .nav-subtopic{
+    display:block; color:#b8c9e8; text-decoration:none; padding:6px 10px 6px 14px;
+    border-radius:8px; font-size:12.8px; margin-bottom:1px; line-height:1.45;
+  }
+  .nav-subtopic:hover{background:#1c2f52; color:#fff;}
+  .nav-subtopic.is-h4{padding-left:26px; font-size:12px; color:#9eb3d4;}
+  .nav-subtopic.is-module-top{
+    font-weight:600; color:#dbe7ff; margin-bottom:8px; padding-left:10px;
+    border-bottom:1px solid #243a5e; border-radius:0; padding-bottom:8px;
+  }
+  .nav-subtopic.is-module-top:hover{border-radius:8px;}
+  .nav-empty{font-size:12px; color:#8fa6cf; padding:8px 10px; font-style:italic;}
   .content{flex:1; min-width:0; padding:34px 46px 80px;}
   .content-inner{max-width:980px; margin:0 auto;}
 
@@ -126,43 +160,24 @@
 </style>
 </head>
 <body>
-<button class="menubtn" onclick="document.querySelector('.sidebar').classList.toggle('open');document.querySelector('.overlay').classList.toggle('open');">☰ Menu</button>
-<div class="overlay" onclick="document.querySelector('.sidebar').classList.remove('open');this.classList.remove('open');"></div>
+<button class="menubtn" id="menubtn" type="button">☰ Menu</button>
+<div class="overlay" id="overlay"></div>
 <div class="layout">
-<nav class="sidebar" id="top">
+<nav class="sidebar">
   <h2>📐 System Design</h2>
   <div class="sub">Complete Beginner's Guide · 27 Modules</div>
-  <a href="#m1"><span class="num">01</span>Core Components</a>
-  <a href="#m2"><span class="num">02</span>Data vs Compute Intensive</a>
-  <a href="#m3"><span class="num">03</span>Functional vs Non-Functional</a>
-  <a href="#m4"><span class="num">04</span>Scalability Patterns</a>
-  <a href="#m5"><span class="num">05</span>DNS</a>
-  <a href="#m6"><span class="num">06</span>Networking &amp; Edge</a>
-  <a href="#m7"><span class="num">07</span>APIs &amp; Communication</a>
-  <a href="#m8"><span class="num">08</span>REST API Deep Dive</a>
-  <a href="#m9"><span class="num">09</span>SQL Databases</a>
-  <a href="#m10"><span class="num">10</span>NoSQL Databases</a>
-  <a href="#m11"><span class="num">11</span>Storage Systems</a>
-  <a href="#m12"><span class="num">12</span>Caching</a>
-  <a href="#m13"><span class="num">13</span>Load Balancer</a>
-  <a href="#m14"><span class="num">14</span>Replication</a>
-  <a href="#m15"><span class="num">15</span>Partitioning (Sharding)</a>
-  <a href="#m16"><span class="num">16</span>CAP &amp; Consistency</a>
-  <a href="#m17"><span class="num">17</span>Message Queue</a>
-  <a href="#m18"><span class="num">18</span>Data Processing</a>
-  <a href="#m19"><span class="num">19</span>Fault Tolerance &amp; HA</a>
-  <a href="#m20"><span class="num">20</span>Distributed Patterns</a>
-  <a href="#m21"><span class="num">21</span>Architecture Styles</a>
-  <a href="#m22"><span class="num">22</span>Security &amp; Identity</a>
-  <a href="#m23"><span class="num">23</span>Monitoring &amp; Observability</a>
-  <a href="#m24"><span class="num">24</span>Special Data Structures</a>
-  <a href="#m25"><span class="num">25</span>Cost &amp; Trade-offs</a>
-  <a href="#m26"><span class="num">26</span>Case Studies (12)</a>
-  <a href="#m27"><span class="num">27</span>Real-World Architectures</a>
+  <div class="nav-panels">
+    <div class="nav-panel nav-topics active" id="nav-topics"></div>
+    <div class="nav-panel nav-subtopics" id="nav-subtopics">
+      <button class="nav-back" id="nav-back" type="button">← Back to Topics</button>
+      <div class="nav-module-title" id="nav-module-title"></div>
+      <div id="nav-subtopics-list"></div>
+    </div>
+  </div>
 </nav>
 <main class="content">
 <div class="content-inner">
-<header class="hero">
+<header class="hero" id="top">
   <h1>📐 System Design — The Complete Beginner's Guide</h1>
   <p>All 27 modules explained in plain English, with real-life analogies, real-world tech examples, and diagrams. No prior experience needed — just curiosity. Use the menu (☰ on mobile) to jump to any topic.</p>
 </header>
@@ -2251,5 +2266,179 @@ flowchart TD
 </div>
 </main>
 </div>
+<script>
+(function () {
+  var sidebar = document.querySelector('.sidebar');
+  var overlay = document.getElementById('overlay');
+  var menubtn = document.getElementById('menubtn');
+  var topicsPanel = document.getElementById('nav-topics');
+  var subtopicsPanel = document.getElementById('nav-subtopics');
+  var subtopicsList = document.getElementById('nav-subtopics-list');
+  var moduleTitleEl = document.getElementById('nav-module-title');
+  var navBack = document.getElementById('nav-back');
+  var usedIds = {};
+
+  function slugify(text) {
+    return text.toLowerCase()
+      .replace(/&amp;/g, 'and')
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
+  }
+
+  function uniqueId(base) {
+    var id = base;
+    var n = 2;
+    while (usedIds[id]) {
+      id = base + '-' + n;
+      n++;
+    }
+    usedIds[id] = true;
+    return id;
+  }
+
+  function assignHeadingIds(section) {
+    var prefix = section.id;
+    section.querySelectorAll('h3, h4').forEach(function (heading) {
+      if (heading.id) {
+        usedIds[heading.id] = true;
+        return;
+      }
+      var slug = slugify(heading.textContent);
+      heading.id = uniqueId(prefix + (slug ? '-' + slug : '-section'));
+    });
+  }
+
+  function shortTitle(fullTitle) {
+    return fullTitle
+      .replace(/^Module \d+\s*[-—]\s*/i, '')
+      .replace(/^26\.\d+\s*[-—]\s*/i, '')
+      .trim();
+  }
+
+  function buildNav() {
+    var sections = document.querySelectorAll('section[id^="m"]');
+    sections.forEach(assignHeadingIds);
+
+    sections.forEach(function (section) {
+      var modTag = section.querySelector('.modtag');
+      var num = modTag ? modTag.textContent.replace(/Module\s*/i, '').trim() : '';
+      var title = section.querySelector('h2') ? section.querySelector('h2').textContent : section.id;
+      var label = shortTitle(title);
+
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'nav-topic-btn';
+      btn.dataset.module = section.id;
+      btn.innerHTML = '<span class="num">' + num + '</span>' + label;
+      btn.addEventListener('click', function () {
+        showSubtopics(section.id, num, title);
+      });
+      topicsPanel.appendChild(btn);
+    });
+  }
+
+  function showTopics() {
+    topicsPanel.classList.add('active');
+    subtopicsPanel.classList.remove('active');
+  }
+
+  function showSubtopics(moduleId, num, title) {
+    var section = document.getElementById(moduleId);
+    if (!section) return;
+
+    moduleTitleEl.textContent = (num ? 'Module ' + num + ' · ' : '') + title;
+    subtopicsList.innerHTML = '';
+
+    var topLink = document.createElement('a');
+    topLink.className = 'nav-subtopic is-module-top';
+    topLink.href = '#' + moduleId;
+    topLink.textContent = '↗ View full module';
+    topLink.addEventListener('click', closeMobileMenu);
+    subtopicsList.appendChild(topLink);
+
+    var headings = section.querySelectorAll('h3, h4');
+    if (!headings.length) {
+      var empty = document.createElement('div');
+      empty.className = 'nav-empty';
+      empty.textContent = 'No subtopics in this module.';
+      subtopicsList.appendChild(empty);
+    } else {
+      headings.forEach(function (heading) {
+        var link = document.createElement('a');
+        link.className = 'nav-subtopic' + (heading.tagName === 'H4' ? ' is-h4' : '');
+        link.href = '#' + heading.id;
+        link.textContent = heading.textContent;
+        link.addEventListener('click', closeMobileMenu);
+        subtopicsList.appendChild(link);
+      });
+    }
+
+    topicsPanel.classList.remove('active');
+    subtopicsPanel.classList.add('active');
+    subtopicsPanel.scrollTop = 0;
+  }
+
+  function openMobileMenu() {
+    sidebar.classList.add('open');
+    overlay.classList.add('open');
+  }
+
+  function closeMobileMenu() {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('open');
+  }
+
+  function toggleMobileMenu() {
+    if (sidebar.classList.contains('open')) {
+      closeMobileMenu();
+    } else {
+      openMobileMenu();
+    }
+  }
+
+  menubtn.addEventListener('click', toggleMobileMenu);
+  overlay.addEventListener('click', function () {
+    closeMobileMenu();
+    showTopics();
+  });
+  navBack.addEventListener('click', showTopics);
+
+  document.querySelectorAll('.backtop').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (sidebar.classList.contains('open')) {
+        closeMobileMenu();
+        showTopics();
+      }
+    });
+  });
+
+  function initNav() {
+    buildNav();
+    if (location.hash) {
+      var id = location.hash.slice(1);
+      var el = document.getElementById(id);
+      if (el) {
+        var sec = el.closest('section[id^="m"]');
+        if (sec && (el.tagName === 'H3' || el.tagName === 'H4' || sec.id === id)) {
+          var modTag = sec.querySelector('.modtag');
+          var num = modTag ? modTag.textContent.replace(/Module\s*/i, '').trim() : '';
+          var title = sec.querySelector('h2') ? sec.querySelector('h2').textContent : '';
+          showSubtopics(sec.id, num, title);
+        }
+      }
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initNav);
+  } else {
+    initNav();
+  }
+})();
+</script>
 </body>
 </html>

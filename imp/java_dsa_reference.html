@@ -300,7 +300,7 @@ kbd{background:var(--surface2);border:1px solid var(--border);border-radius:4px;
 <div class="category-header">
   <div class="category-icon">&#8644;</div>
   <span class="category-title">Type Conversions</span>
-  <span class="category-count">4 topics</span>
+  <span class="category-count">6 topics</span>
 </div>
 
 <div class="card" data-tags="int string convert valueOf toString">
@@ -367,6 +367,53 @@ char ch = (char) ascii;  <span class="cmt">// Result: 'A'</span></code></pre>
 <h4>Using Character class</h4>
 <pre><code>int num = Character.getNumericValue('5');  <span class="cmt">// 5</span>
 char ch = Character.forDigit(5, 10);      <span class="cmt">// '5'</span></code></pre>
+</div></div>
+
+<div class="card" data-tags="ascii case conversion uppercase lowercase char letter">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">ASCII Case Conversion</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>ASCII value of <span class="str">'A'</span> = <span class="num">65</span>
+ASCII value of <span class="str">'a'</span> = <span class="num">97</span>
+Difference = <span class="num">32</span></code></pre>
+<div class="note"><strong>Rule</strong> (only for English letters A&ndash;Z and a&ndash;z):<br>
+Uppercase &rarr; Lowercase: <code>+32</code><br>
+Lowercase &rarr; Uppercase: <code>-32</code></div>
+<h4>Examples</h4>
+<pre><code><span class="str">'A'</span> + <span class="num">32</span> = <span class="str">'a'</span>
+<span class="str">'Z'</span> + <span class="num">32</span> = <span class="str">'z'</span>
+
+<span class="str">'a'</span> - <span class="num">32</span> = <span class="str">'A'</span>
+<span class="str">'z'</span> - <span class="num">32</span> = <span class="str">'Z'</span></code></pre>
+<div class="warn">&#9888;&#65039; Works only for alphabetic ASCII characters, not for digits or symbols.</div>
+</div></div>
+
+<div class="card" data-tags="string char lowercase uppercase toLowerCase toUpperCase Character">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q"><code>String</code> vs <code>char</code> (Java)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>Type      Lowercase                  Uppercase
+<span class="type">String</span>    str.toLowerCase()          str.toUpperCase()
+<span class="type">char</span>      Character.toLowerCase(ch)  Character.toUpperCase(ch)</code></pre>
+<h4>Examples</h4>
+<pre><code>String s = <span class="str">"HELLO"</span>;
+s = s.toLowerCase();  <span class="cmt">// "hello"</span>
+
+char ch = <span class="str">'H'</span>;
+ch = Character.toLowerCase(ch);  <span class="cmt">// 'h'</span></code></pre>
+<div class="note"><strong>Remember</strong><br>
+<code>String</code> is an object &rarr; has methods like <code>toLowerCase()</code>.<br>
+<code>char</code> is a primitive type &rarr; no methods, use the <code>Character</code> class.</div>
+<div class="comparison">
+<div class="comp-bad"><div class="comp-label">&#10060; Wrong</div>
+<pre><code>ch.toLowerCase();</code></pre></div>
+<div class="comp-good"><div class="comp-label">&#9989; Correct</div>
+<pre><code>Character.toLowerCase(ch);</code></pre></div>
+</div>
 </div></div>
 
 <div class="card" data-tags="string list split format convert">
