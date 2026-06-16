@@ -692,7 +692,7 @@ for (int[] row : matrix) {
 <div class="category-header">
   <div class="category-icon">&#9776;</div>
   <span class="category-title">ArrayList</span>
-  <span class="category-count">6 topics</span>
+  <span class="category-count">8 topics</span>
 </div>
 
 <div class="card" data-tags="arraylist sort ascending Collections.sort">
@@ -729,6 +729,19 @@ list.sort(Comparator.reverseOrder());
 <span class="cmt">// Method 3: Sort ascending then reverse</span>
 Collections.sort(list);
 Collections.reverse(list);</code></pre>
+</div></div>
+
+<div class="card" data-tags="list reverse Collections.reverse arraylist linkedlist in-place">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How to reverse a <code>List</code> in Java?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<span class="method-tag">Collections.reverse()</span>
+<div class="note">In-place reverse (most common) — modifies the original list, does not return a new one.</div>
+<pre><code>List&lt;Integer&gt; list = new ArrayList&lt;&gt;(Arrays.asList(1, 2, 3, 4, 5));
+
+Collections.reverse(list);  <span class="cmt">// [5, 4, 3, 2, 1]</span></code></pre>
 </div></div>
 
 <div class="card" data-tags="arraylist length size isEmpty">
@@ -798,6 +811,21 @@ list.stream().forEach(n -&gt; System.out.println(n));   <span class="cmt">// lam
 if (list.size() == 0) {
     System.out.println("List is empty");
 }</code></pre>
+</div></div>
+
+<div class="card" data-tags="arraylist list int array row add 2d pairs">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">How do you create and add a row <code>[1, 2]</code> to a <code>List&lt;int[]&gt;</code>?</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<pre><code>List&lt;int[]&gt; ans = new ArrayList&lt;&gt;();
+
+ans.add(new int[]{1, 2});</code></pre>
+<div class="note">This adds one row:</div>
+<pre><code>[
+ [1, 2]
+]</code></pre>
 </div></div>
 
 </section>
