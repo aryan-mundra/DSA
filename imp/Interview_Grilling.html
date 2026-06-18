@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ruthless Interview Grilling — Aryan Mundra (SDE-2, Java Backend)</title>
+<style>
+  :root {
+    --bg: #f6f8fa;
+    --panel: #ffffff;
+    --panel-2: #f0f3f7;
+    --border: #d0d7de;
+    --text: #1f2328;
+    --muted: #59636e;
+    --accent: #bc4c00;
+    --accent-2: #0969da;
+    --green: #1a7f37;
+    --red: #cf222e;
+    --q: #4338ca;
+    --code-bg: #f3f5f8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 16px;
+  }
+  header {
+    background: linear-gradient(135deg, #fff7ed, #ffe8d6);
+    border-bottom: 2px solid var(--accent);
+    padding: 32px 24px;
+    text-align: center;
+  }
+  header h1 { margin: 0 0 6px; font-size: 28px; }
+  header p { margin: 4px 0; color: var(--muted); }
+  .warn {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 8px 16px;
+    background: rgba(207,34,46,0.08);
+    border: 1px solid var(--red);
+    border-radius: 6px;
+    color: #a40e26;
+    font-size: 14px;
+  }
+  .container { max-width: 1000px; margin: 0 auto; padding: 24px; }
+
+  .controls {
+    position: sticky; top: 0; z-index: 10;
+    background: var(--bg);
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+  }
+  .controls input {
+    flex: 1; min-width: 220px;
+    padding: 10px 14px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 15px;
+  }
+  .controls button {
+    padding: 10px 16px;
+    background: var(--panel-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .controls button:hover { border-color: var(--accent-2); }
+
+  .toc {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin: 20px 0;
+  }
+  .toc h2 { margin-top: 0; font-size: 18px; }
+  .toc ol { margin: 0; padding-left: 22px; columns: 2; }
+  .toc a { color: var(--accent-2); text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+
+  section { margin: 34px 0; }
+  section > h2 {
+    font-size: 22px;
+    border-left: 4px solid var(--accent);
+    padding-left: 12px;
+    margin-bottom: 6px;
+  }
+  .section-intro { color: var(--muted); font-style: italic; margin: 4px 0 18px; font-size: 14px; }
+
+  details.q {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin: 12px 0;
+    overflow: hidden;
+  }
+  details.q[open] { border-color: var(--accent-2); }
+  summary.q-head {
+    cursor: pointer;
+    padding: 16px 18px;
+    font-weight: 600;
+    color: var(--q);
+    list-style: none;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  summary.q-head::-webkit-details-marker { display: none; }
+  summary.q-head:hover { background: var(--panel-2); }
+  .q-badge {
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-top: 2px;
+  }
+  .b-warm { background: rgba(63,185,80,0.15); color: var(--green); border: 1px solid var(--green); }
+  .b-mid  { background: rgba(88,166,255,0.15); color: var(--accent-2); border: 1px solid var(--accent-2); }
+  .b-hard { background: rgba(240,136,62,0.15); color: var(--accent); border: 1px solid var(--accent); }
+  .b-kill { background: rgba(248,81,73,0.15); color: var(--red); border: 1px solid var(--red); }
+
+  .q-body { padding: 0 18px 18px; border-top: 1px solid var(--border); }
+  .answer {
+    background: var(--panel-2);
+    border-left: 3px solid var(--green);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 12px 0;
+  }
+  .answer .label { color: var(--green); font-weight: 700; font-size: 13px; letter-spacing: .5px; }
+
+  .followup {
+    margin: 14px 0 0;
+    padding-left: 16px;
+    border-left: 2px dashed var(--accent);
+  }
+  .followup .fq {
+    color: var(--accent);
+    font-weight: 600;
+    margin: 10px 0 4px;
+  }
+  .followup .fq::before { content: "↳ Follow-up: "; color: var(--red); font-weight: 700; }
+
+  code {
+    background: var(--code-bg);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: "SF Mono", Consolas, Monaco, monospace;
+    font-size: 13.5px;
+    color: #bc4c00;
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  pre code { background: none; padding: 0; color: #1f2328; }
+  .trap {
+    background: rgba(248,81,73,0.08);
+    border: 1px solid rgba(248,81,73,0.4);
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  .trap b { color: var(--red); }
+  ul.tight { margin: 8px 0; }
+  ul.tight li { margin: 4px 0; }
+  .kw { color: var(--accent-2); font-weight: 600; }
+  footer { text-align: center; color: var(--muted); padding: 40px 20px; font-size: 13px; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 14px; }
+  th, td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; }
+  th { background: var(--panel-2); }
+
+  /* ===== Mobile responsiveness ===== */
+  @media (max-width: 768px) {
+    .toc ol { columns: 1; }
+  }
+
+  @media (max-width: 600px) {
+    body { font-size: 15px; }
+    header { padding: 20px 16px; }
+    header h1 { font-size: 20px; }
+    header p { font-size: 13px; line-height: 1.45; }
+    .warn { font-size: 12px; padding: 8px 12px; line-height: 1.5; }
+
+    .container { padding: 12px; }
+
+    /* Stack search and buttons; let buttons share a row */
+    .controls { gap: 8px; padding: 10px 0; }
+    .controls input { flex: 1 1 100%; min-width: 0; font-size: 16px; } /* 16px avoids iOS zoom-on-focus */
+    .controls button { flex: 1 1 calc(50% - 4px); }
+
+    .toc { padding: 14px 16px; }
+    .toc ol { padding-left: 18px; }
+
+    section { margin: 24px 0; }
+    section > h2 { font-size: 17px; line-height: 1.3; }
+    .section-intro { font-size: 12.5px; }
+
+    /* Stack the difficulty badge ABOVE the question so the text gets full width */
+    summary.q-head {
+      display: block;
+      padding: 12px 14px;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.45;
+    }
+    summary.q-head .q-badge { display: inline-block; margin: 0 0 7px; }
+
+    .q-body { padding: 0 14px 14px; font-size: 14px; }
+    .answer { padding: 10px 12px; }
+    .answer p, .answer li { font-size: 14px; line-height: 1.55; }
+    .followup { padding-left: 10px; }
+    .followup .fq { font-size: 14px; line-height: 1.45; }
+
+    pre { font-size: 12px; padding: 12px; }
+    code { font-size: 12.5px; word-break: break-word; }
+
+    /* Tables wrap to fit; scroll only if a row is genuinely too wide */
+    table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 13px; }
+    th, td { padding: 6px 8px; }
+  }
+
+  @media (max-width: 380px) {
+    .controls button { flex: 1 1 100%; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🔥 The Ruthless Interview Grilling</h1>
+  <p><strong>Candidate:</strong> Aryan Mundra — Java Backend Developer (SDE-2)</p>
+  <p><strong>Interviewer mindset:</strong> "Every line on this resume is a claim. I will make you defend all of them."</p>
+  <div class="warn">⚠️ Difficulty: <span class="q-badge b-warm">WARMUP</span> <span class="q-badge b-mid">CORE</span> <span class="q-badge b-hard">DEEP</span> <span class="q-badge b-kill">HOPE-CRUSHER</span></div>
+</header>
+
+<div class="container">
+
+  <div class="controls">
+    <input type="text" id="search" placeholder="🔎 Filter questions (e.g. 'redis', 'kafka', 'idempotency')...">
+    <button onclick="setAll(true)">Expand all</button>
+    <button onclick="setAll(false)">Collapse all</button>
+  </div>
+
+  <div class="toc">
+    <h2>How this interview will go</h2>
+    <p style="color:var(--muted); font-size:14px; margin-top:0;">I start easy, then I pick the most impressive line on your resume and keep digging until you either really understand it or admit you don't. The answers below are written in plain English so they are easy to read and remember. Read the question, try to answer out loud, then check.</p>
+    <ol>
+      <li><a href="#metrics">Resume Metrics Interrogation</a></li>
+      <li><a href="#java">Java &amp; JVM at Your Scale</a></li>
+      <li><a href="#concurrency">Concurrency &amp; Threading</a></li>
+      <li><a href="#spring">Spring Boot &amp; Spring Internals</a></li>
+      <li><a href="#security">Spring Security &amp; OAuth 2.0</a></li>
+      <li><a href="#redis">Redis &amp; Caching Strategy</a></li>
+      <li><a href="#kafka">Kafka &amp; Event-Driven</a></li>
+      <li><a href="#sql">SQL / Oracle Tuning</a></li>
+      <li><a href="#payments">Payments, Idempotency &amp; Consistency</a></li>
+      <li><a href="#design">Distributed Systems &amp; System Design</a></li>
+      <li><a href="#k8s">Kubernetes / OpenShift</a></li>
+      <li><a href="#solid">SOLID &amp; Design Patterns</a></li>
+      <li><a href="#projects">Projects &amp; Research</a></li>
+      <li><a href="#rapid">Rapid-Fire Hope-Crushers</a></li>
+    </ol>
+  </div>
+
+  <!-- ================= METRICS ================= -->
+  <section id="metrics">
+    <h2>1. Resume Metrics Interrogation</h2>
+    <p class="section-intro">"You put numbers on paper. Numbers are promises. Prove them."</p>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-mid">CORE</span> You claim you "reduced recharge workflow latency by 55% (900ms → 400ms)" with a Redis caching strategy. Walk me through exactly what was slow, what you cached, and how you measured the 900ms and the 400ms.</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p>The slow part was loading the recharge plans. One request took about 900ms. Most of that time was the database doing a big join to fetch plans, plus a call to another service for offers.</p>
+          <p>Those plans don't change often (only a few times a day), but lots of users ask for them. So they are perfect to <span class="kw">cache</span>. I saved the ready-made plan list in <span class="kw">Redis</span> (a fast in-memory store) with a key like <code>plans:{circle}</code>. Now most requests get the answer straight from Redis and skip the slow database work. That brought it down to about 400ms.</p>
+          <p>I measured both numbers from our monitoring tool (<span class="kw">APM</span>), comparing the same time of day before and after, so I wasn't comparing a busy hour to a quiet one.</p>
+        </div>
+
+        <div class="followup">
+          <p class="fq">55% off the p95? Or the average? Because those are very different claims. Which one, and what was the p99?</p>
+          <div class="answer"><span class="label">ANSWER</span><p>It was the <span class="kw">p95</span> — that means 95% of requests were faster than this number. I use p95 because it shows what slow users actually feel, not just the lucky average. The p99 (the slowest 1%) improved less, around 30–35%, because those are mostly cache misses and other slow bits that caching alone can't fix.</p></div>
+        </div>
+
+        <div class="followup">
+          <p class="fq">A cache hit ratio of 90%. How did you actually compute that, and what did you do about the 10% misses that still hit Oracle during peak?</p>
+          <div class="answer"><span class="label">ANSWER</span><p>Redis tells you. It tracks hits and misses, and hit ratio = hits ÷ (hits + misses) — ours was about 90%. The 10% misses mostly happen right when a cached item expires and many users ask at once — they all rush to the database together (called a <span class="kw">cache stampede</span>). I fixed that two ways: add a small random time to expiry so they don't all expire together, and let only one request rebuild the cache while the others wait a moment.</p></div>
+        </div>
+
+        <div class="followup">
+          <p class="fq">You used a TTL. So your data is stale for the entire TTL window. On a payments-adjacent system, how do you justify serving a customer a plan price that might be wrong?</p>
+          <div class="answer"><span class="label">ANSWER</span><p>Important point: I only cache the plan list for <span class="kw">showing on screen</span>. The real price the customer actually pays is checked again from the database at payment time. So a slightly old list never causes a wrong charge — at worst the user sees a plan that just changed, and checkout corrects it. And when a price really must update instantly, the catalog service sends an event (over Kafka) and we delete that cached item right away. So the timer is the backup, and the event is the instant fix.</p></div>
+        </div>
+
+        <div class="trap"><b>Why I'm asking:</b> Most people can't tell the difference between "cache to be fast" and "money must be correct." If you had told me you cache the real price and charge from it, this part of the interview would be over — badly.</div>
+      </div>
+    </details>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-mid">CORE</span> "Cutting plan-fetch response times by 40%" on SQL/Oracle. 40% relative to what baseline, and how do I know it wasn't just because traffic was lower that week?</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p>The "before" number came from the database's own reports and our slow-query logs, not from one random moment. The trick is I looked at how much work the query did <span class="kw">per run</span> (how many data blocks it read), not just the clock time. Work-per-run doesn't change when traffic changes — so when that dropped about 40%, it proves the query itself got cheaper, not that the week was quiet. The fix was adding the right <span class="kw">index</span> so the database could jump straight to the rows instead of scanning the whole table.</p>
+        </div>
+        <div class="followup">
+          <p class="fq">"Buffer gets per execution dropped." Good. But adding an index isn't free. What did that index cost you on the write path, and how did you decide it was worth it?</p>
+          <div class="answer"><span class="label">ANSWER</span><p>An index makes reads faster but writes a little slower, because every insert or update must also update the index. But these plan tables are read millions of times and changed only a few times a day. So faster reads easily win. I checked that writes to these tables were not on any busy path, so the small write cost didn't matter.</p></div>
+        </div>
+        <div class="followup">
+          <p class="fq">Show me the difference between an index range scan and a full table scan in the execution plan. What specific line tells you the optimizer chose your index?</p>
+          <div class="answer"><span class="label">ANSWER</span><p>You run <code>EXPLAIN PLAN</code> to see how the database will run the query. If it says <code>TABLE ACCESS FULL</code>, it is reading the whole table — slow. After my index, it says <code>INDEX RANGE SCAN</code> with my index name — that means it used the index to jump to just the rows it needs. I also check that the cost number went down.</p></div>
+        </div>
+        <div class="trap"><b>Kill shot if you flinch:</b> If someone says "I added an index and it got faster" but can't read the plan or name the work-per-run number, I assume they watched a teammate do it. The work-per-run metric is the proof.</div>
+      </div>
+    </details>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-hard">DEEP</span> "Reducing undetected production failures by 60%." How do you measure a failure you didn't detect before? That's a number about things you couldn't see.</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p>Fair point. Before, we found out something broke only when a customer complained or another team noticed. After I added alerts (on error rate, slow responses, and a few key error types), the system told us first. So I counted: how many problems were first reported by a person, versus first caught by an alert? The "person found it first" cases dropped by about 60%. In short, we now catch problems faster, before users feel them.</p>
+        </div>
+        <div class="followup">
+          <p class="fq">What did you alert on? If you say "log errors," I'll ask why your pager isn't going off 4,000 times a night.</p>
+          <div class="answer"><span class="label">ANSWER</span><p>Not every error — that would wake people all night and they'd start ignoring it. I alerted on real signs of trouble: error <em>rate</em> going above normal for a while, responses getting too slow, and a few serious errors like the payment gateway being unreachable. A quick blip doesn't alert anyone; a real, lasting problem does. Dashboards are for looking; alerts are only for "a human must act now."</p></div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= JAVA ================= -->
+  <section id="java">
+    <h2>2. Java &amp; JVM at Your Scale</h2>
+    <p class="section-intro">"You run Java backends at 1.5M+ transactions/day. I only care about the JVM behavior that bites you at that traffic — not textbook trivia."</p>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-hard">DEEP</span> Your service handles 1.5M transactions/day. Walk me through a garbage collection pause causing a latency spike. Which collector, and how would you debug it?</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p>Java cleans up unused memory automatically — that's <span class="kw">garbage collection (GC)</span>. To do a big cleanup, Java sometimes pauses your whole app for a moment ("stop-the-world"). During that pause, no request is served, so users see a sudden slow spike.</p>
+          <p>For a busy service I use the <span class="kw">G1 collector</span>, which is built to keep pauses short, and I tell it a target pause time. To debug, I turn on <span class="kw">GC logs</span> and line up the pause times with the slow spikes in our monitoring. If pauses keep growing, it's usually a <span class="kw">memory leak</span> (we're holding objects we don't need). If pauses are frequent but memory is steady, we're creating too many objects too fast and the young area is too small.</p>
+        </div>
+        <div class="followup">
+          <p class="fq">You said "memory leak in Java." There's a garbage collector. How is a leak even possible?</p>
+          <div class="answer"><span class="label">ANSWER</span><p>Java only deletes objects that nothing is pointing to. A "leak" means we are still pointing to objects we no longer need, so Java thinks they're in use and keeps them. Example: a list marked <code>static</code> that we keep adding to and never clear. It's not Java's fault — it's our code holding on to stuff.</p></div>
+        </div>
+        <div class="followup">
+          <p class="fq">You mentioned <code>ThreadLocal</code> on a pooled thread. Explain that leak precisely — it's a classic in a Spring app on Tomcat.</p>
+          <div class="answer"><span class="label">ANSWER</span><p>Web servers reuse the same worker threads again and again. <code>ThreadLocal</code> stores a value on a thread. If I set a value during a request but forget to remove it, that value stays stuck on the thread forever (a leak), and the next request on that same thread might even see the old user's data (a bug). The fix: always clear it in a <code>finally</code> block — <code>set</code> it, use it, then <code>remove()</code> it.</p></div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= CONCURRENCY ================= -->
+  <section id="concurrency">
+    <h2>3. Concurrency &amp; Threading</h2>
+    <p class="section-intro">"You wrote 'concurrency tuning' on your resume. That word is a magnet for me."</p>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-hard">DEEP</span> Your recharge service calls a payment gateway. You use a thread pool. The gateway gets slow. Walk me through exactly how your entire service dies, and how you'd prevent it.</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p>Your service has a fixed set of worker threads (a <span class="kw">thread pool</span>). Normally a request to the payment gateway takes 50ms and the thread is free again quickly. Now the gateway slows to 5 seconds. Each request now holds its thread for 5 seconds. Soon all threads are stuck waiting, the queue fills up, and <em>even requests that don't touch the gateway</em> can't get a thread. One slow thing takes down the whole service. This is called <span class="kw">cascading failure</span>.</p>
+          <p>How to prevent it:</p>
+          <ul class="tight">
+            <li><span class="kw">Timeouts</span> — don't wait 5 seconds; give up quickly so the thread is freed. This is the most important fix.</li>
+            <li><span class="kw">Bulkhead</span> — give gateway calls their own small pool, so if it fills up, the rest of the app keeps working.</li>
+            <li><span class="kw">Circuit breaker</span> — if the gateway keeps failing, stop calling it for a short while and fail fast, giving it time to recover.</li>
+            <li><span class="kw">Retry carefully</span> — only retry safe operations, with a small wait, not endlessly.</li>
+            <li><span class="kw">Fallback</span> — return a polite "try again" instead of hanging.</li>
+          </ul>
+        </div>
+        <div class="followup">
+          <p class="fq">You said "retry." On a payment. Be very careful. What's the danger?</p>
+          <div class="answer"><span class="label">ANSWER</span><p><span class="kw">Charging the customer twice.</span> Maybe the payment actually went through, but the reply got lost, so we think it failed and retry — now they paid twice. The fix is an <span class="kw">idempotency key</span>: the request carries a unique id, and the payment system remembers it. If the same id comes again, it knows it's the same payment and returns the first result instead of charging again. Only retry payments when you have this in place.</p></div>
+        </div>
+        <div class="followup">
+          <p class="fq">A circuit breaker has three states. Name them and tell me what specifically moves it between each.</p>
+          <div class="answer"><span class="label">ANSWER</span>
+            <ul class="tight">
+              <li><span class="kw">Closed</span> — normal, calls go through. If too many calls fail, it switches to Open.</li>
+              <li><span class="kw">Open</span> — stop calling, fail instantly for a short cooldown. After the cooldown, it switches to Half-Open.</li>
+              <li><span class="kw">Half-Open</span> — let a few test calls through. If they work, go back to Closed. If they fail, go back to Open.</li>
+            </ul>
+            <p>It's like checking if a sick service has recovered before sending it full traffic again.</p>
+          </div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= SPRING ================= -->
+  <section id="spring">
+    <h2>4. Spring Boot &amp; Spring Internals</h2>
+    <p class="section-intro">"Everyone lists Spring Boot. Almost nobody understands the magic. Let's see."</p>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-mid">CORE</span> Singleton-scoped Spring bean is the default. You have a controller (singleton) with an instance field you write to per-request. What's wrong?</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p>By default Spring makes only <span class="kw">one</span> copy of each bean (a "singleton") and shares it for all requests. If you store request data in a field on that shared object, two users hitting it at the same time will overwrite each other's data. So you get wrong, mixed-up results. Rule: keep beans without changing fields. Put per-request data in local variables (inside the method), not in shared fields.</p>
+        </div>
+        <div class="followup">
+          <p class="fq">But Spring lets me inject a prototype/request-scoped bean into my singleton. If I do, does it get a fresh one per request?</p>
+          <div class="answer"><span class="label">ANSWER</span><p>No, not automatically — this trips people up. A singleton gets its dependencies <strong>once</strong> when it's created, so it keeps using that same one. To truly get a fresh one each time, you need a <span class="kw">scoped proxy</span> (<code>@Scope(value="request", proxyMode=TARGET_CLASS)</code>) or inject a provider you call each time. The proxy quietly fetches the right per-request object on every call.</p></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-hard">DEEP</span> Explain <code>@Transactional</code>. Then tell me why calling a <code>@Transactional</code> method from another method in the SAME class does nothing.</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p><code>@Transactional</code> means "do all of this as one unit — if anything fails, undo everything." Spring does this by wrapping your bean in a <span class="kw">proxy</span> (a wrapper). When an outside caller calls your method, the wrapper starts the transaction, runs your code, then saves it (commit) or undoes it (rollback) if there's an error.</p>
+          <p><strong>The same-class trap:</strong> if method <code>a()</code> calls <code>b()</code> in the same class directly, the call goes straight to <code>b()</code> and skips the wrapper. So <code>b()</code>'s <code>@Transactional</code> is ignored. Fix: move <code>b()</code> to a different bean, so the call goes through the wrapper.</p>
+        </div>
+        <div class="followup">
+          <p class="fq">By default, does <code>@Transactional</code> roll back on a checked exception? Trick question — be precise.</p>
+          <div class="answer"><span class="label">ANSWER</span><p>No. By default Spring only undoes (rolls back) on a <span class="kw">runtime exception</span>. If a <span class="kw">checked exception</span> (like <code>IOException</code>) is thrown, Spring actually <em>saves</em> the half-done work. Many people get burned by this. If you want it to roll back on any exception, write <code>@Transactional(rollbackFor = Exception.class)</code>.</p></div>
+        </div>
+        <div class="followup">
+          <p class="fq">Difference between propagation <code>REQUIRED</code> and <code>REQUIRES_NEW</code>, and when does <code>REQUIRES_NEW</code> cause a self-deadlock?</p>
+          <div class="answer"><span class="label">ANSWER</span><p><code>REQUIRED</code> (the default) means "join the transaction already running, or start one if none." <code>REQUIRES_NEW</code> means "always start a brand new separate transaction" — useful for things like saving a log that must stick even if the main work fails. The <span class="kw">deadlock</span> risk: the outer transaction locks a row, then the new inner transaction tries to lock the <em>same</em> row. The inner waits for the outer to finish, but the outer is waiting for the inner — they freeze each other.</p></div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= SECURITY ================= -->
+  <section id="security">
+    <h2>5. Spring Security &amp; OAuth 2.0</h2>
+    <p class="section-intro">"You wrote 'OAuth 2.0' and 'security compliance.' I'm going to find out if you actually understand tokens or just configured a starter."</p>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-mid">CORE</span> You said you used OAuth 2.0. OAuth 2.0 is an <em>authorization</em> framework, not authentication. So what were you actually doing — and don't conflate it with OpenID Connect.</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p>Good catch. Two different ideas:</p>
+          <ul class="tight">
+            <li><span class="kw">Authentication</span> = "who are you?" (login)</li>
+            <li><span class="kw">Authorization</span> = "what are you allowed to do?" (permissions)</li>
+          </ul>
+          <p>OAuth 2.0 is about <span class="kw">authorization</span> — it gives out a <span class="kw">token</span> that says what the holder is allowed to access. <span class="kw">OpenID Connect</span> is a small add-on on top that also handles "who are you" (login). In our system, when one service calls another with no human involved, we used the <span class="kw">client credentials</span> flow — the service gets a token to prove it's allowed.</p>
+        </div>
+        <div class="followup">
+          <p class="fq">Your token is a JWT. The gateway validates it. Does it call the auth server on every request to check it? Yes or no, and defend it.</p>
+          <div class="answer"><span class="label">ANSWER</span><p>No. A <span class="kw">JWT</span> is a signed token — like a sealed ID card. Our service just checks the signature using a public key it already has. No need to phone the auth server every time, so it's fast. (The other kind, an "opaque" token, <em>would</em> need a call every time.)</p></div>
+        </div>
+        <div class="followup">
+          <p class="fq">"Hard to revoke." So a stolen JWT is valid until it expires. How do you handle revocation and logout then?</p>
+          <div class="answer"><span class="label">ANSWER</span><p>True — a JWT stays valid until it expires, which is the downside. So we: (1) make tokens short-lived (a few minutes), so a stolen one is useless quickly; (2) keep a <span class="kw">blocklist</span> in Redis of tokens we want to kill early, and check it; (3) in a serious breach, change the signing key so all old tokens become invalid at once.</p></div>
+        </div>
+        <div class="followup">
+          <p class="fq">Where do you store the JWT on the client? If you say localStorage, I'm worried.</p>
+          <div class="answer"><span class="label">ANSWER</span><p>Not in <code>localStorage</code> — any malicious script on the page can read it (an <span class="kw">XSS</span> attack) and steal the token. For a website, store it in an <code>HttpOnly</code> cookie so JavaScript can't read it. For a mobile app (like MyJio), use the phone's secure storage (Keystore/Keychain).</p></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-hard">DEEP</span> Walk me through the Spring Security filter chain. Where does authentication happen and where does authorization happen?</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p>Think of it like security checkpoints a request passes through, one after another:</p>
+          <ul class="tight">
+            <li>First, an <span class="kw">authentication</span> filter checks who you are — it reads your token, verifies it, and remembers who you are for this request.</li>
+            <li>Later, an <span class="kw">authorization</span> filter checks if you're allowed to do this specific thing, based on your roles.</li>
+            <li>If login is missing or wrong, you get a <span class="kw">401</span>. If you're logged in but not allowed, you get a <span class="kw">403</span>.</li>
+          </ul>
+          <p>So first "who are you," then "are you allowed."</p>
+        </div>
+        <div class="followup">
+          <p class="fq">You said the security context uses a ThreadLocal. Connect this to something you told me earlier about thread pools.</p>
+          <div class="answer"><span class="label">ANSWER</span><p>The "who you are" info is stored on the current thread. Since threads get reused, Spring clears it at the end of each request — otherwise the next request on that thread could think it's the previous user (a big security bug). Also, because it lives on the thread, if you start a new background thread yourself, that info does <em>not</em> carry over automatically; you have to pass it along.</p></div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= REDIS ================= -->
+  <section id="redis">
+    <h2>6. Redis &amp; Caching Strategy</h2>
+    <p class="section-intro">"Redis is on your resume as the hero of your latency win. Let's make sure you didn't just call <code>get</code> and <code>set</code>."</p>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-mid">CORE</span> Name the caching patterns. Which did you use, and why not write-through?</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p>Main ways to cache:</p>
+          <ul class="tight">
+            <li><span class="kw">Cache-aside</span> — app checks the cache first; if it's missing, read the database and put it in the cache. Most common. This is what I used.</li>
+            <li><span class="kw">Read-through</span> — the cache itself loads from the database when missing.</li>
+            <li><span class="kw">Write-through</span> — every write goes to cache and database together (keeps them in sync, but slows writes).</li>
+            <li><span class="kw">Write-behind</span> — write to cache now, save to database later (fast, but you can lose data if it crashes).</li>
+          </ul>
+          <p>I picked cache-aside because we read a lot and write rarely. Write-through would slow down writes for no real benefit, and write-behind could lose data — too risky near payments.</p>
+        </div>
+        <div class="followup">
+          <p class="fq">Define cache penetration, cache breakdown, and cache avalanche. They're different. I want all three and the fix for each.</p>
+          <div class="answer"><span class="label">ANSWER</span>
+            <table>
+              <tr><th>Problem</th><th>In simple words</th><th>Fix</th></tr>
+              <tr><td><span class="kw">Penetration</span></td><td>People keep asking for something that doesn't exist anywhere, so it never gets cached and always hits the database.</td><td>Cache the "not found" answer too, or use a quick filter to reject impossible keys.</td></tr>
+              <tr><td><span class="kw">Breakdown</span></td><td>One very popular item expires, and thousands of requests hit the database at the same moment.</td><td>Let only one request rebuild it; the rest wait briefly.</td></tr>
+              <tr><td><span class="kw">Avalanche</span></td><td>Many items expire at the exact same time (or Redis goes down), flooding the database.</td><td>Add random time to expiry; keep Redis backed up; protect the database.</td></tr>
+            </table>
+          </div>
+        </div>
+        <div class="followup">
+          <p class="fq">Your Redis instance dies completely at peak. 1.5M transactions are flowing. What happens to your service in the next 10 seconds?</p>
+          <div class="answer"><span class="label">ANSWER</span><p>If we did nothing: every request now misses the cache and hits the database at once. The database was sized assuming Redis takes 90% of the load, so it gets overwhelmed, slows down, and the whole service can fall over. To avoid this: (1) treat Redis as a helper, not a must-have — wrap cache calls so if Redis is gone we just go to the database without hanging; (2) run Redis with a backup copy so it recovers in seconds; (3) keep a tiny cache inside the app for the hottest items; (4) protect the database by rejecting some load if needed. Always assume the cache can disappear.</p></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-hard">DEEP</span> Redis is single-threaded for command execution. With 1.5M transactions a day hitting it, isn't that a bottleneck? How is single-threaded fast?</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p>Redis runs commands one at a time on a single thread — and that's actually why it's fast and simple: no waiting on locks, no fighting between threads. Everything is in memory (RAM), so each command takes microseconds; one thread can still do hundreds of thousands per second. The thing to avoid is a slow command (like listing all keys) — since there's one line, one slow command blocks everyone. So use safe commands and never <code>KEYS *</code> in production.</p>
+        </div>
+        <div class="followup">
+          <p class="fq">You said each command is atomic. So how do you do an atomic read-modify-write across multiple commands — like a rate limiter counter check-and-increment?</p>
+          <div class="answer"><span class="label">ANSWER</span><p>The clean way is a small <span class="kw">Lua script</span>. Redis runs the whole script as one step with nobody else jumping in. So you can read the counter, compare it to the limit, and increase it — all safely together. That's how a correct rate limiter is built on Redis.</p></div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= KAFKA ================= -->
+  <section id="kafka">
+    <h2>7. Kafka &amp; Event-Driven Architecture</h2>
+    <p class="section-intro">"'Implemented Kafka-based event-driven flows.' Event-driven systems fail in subtle ways. I live in those failures."</p>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-mid">CORE</span> Why Kafka and not a regular message queue like RabbitMQ? And explain the role of partitions.</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p>Think of Kafka as a long log book of events that it <span class="kw">keeps</span> for a while. Many different readers can read it, and you can re-read old events if needed. A normal queue like RabbitMQ usually deletes a message once it's read. We chose Kafka for high volume, for letting many services react to the same events, and for being able to replay history.</p>
+          <p><span class="kw">Partitions</span> are how Kafka splits a topic into parts so many readers can work in parallel. Inside one partition, order is guaranteed. Across partitions, there's no fixed order. More partitions = more parallel work.</p>
+        </div>
+        <div class="followup">
+          <p class="fq">"Ordering is guaranteed within a partition." So how do you guarantee that all events for a single customer's recharge are processed in order?</p>
+          <div class="answer"><span class="label">ANSWER</span><p>Use the <span class="kw">customer id as the key</span>. Kafka always sends the same key to the same partition. So all of one customer's events land in one partition and are read in order. We don't need global order — we just need per-customer order, and this gives exactly that.</p></div>
+        </div>
+        <div class="followup">
+          <p class="fq">Acknowledge modes / delivery semantics. Tell me how to get exactly-once, and whether you actually had it.</p>
+          <div class="answer"><span class="label">ANSWER</span><p>Three levels: <span class="kw">at-most-once</span> (might lose messages), <span class="kw">at-least-once</span> (never lose, but might get duplicates), and <span class="kw">exactly-once</span> (no loss, no duplicates). Exactly-once is possible inside Kafka but very hard once you also write to a database and call an outside payment system. Honestly, we used <span class="kw">at-least-once</span> plus <span class="kw">idempotent consumers</span> — meaning if a duplicate event arrives, we recognize its id and skip it. That gives the same safe result, and it's the real-world answer.</p></div>
+        </div>
+        <div class="followup">
+          <p class="fq">Consumer lag is climbing. Walk me through diagnosing and fixing it without losing ordering.</p>
+          <div class="answer"><span class="label">ANSWER</span><p><span class="kw">Lag</span> means readers are falling behind producers. First check: did events suddenly spike, or did readers slow down (maybe a slow database call or one bad "poison" message stuck)? Fixes: add more readers (but you can't have more readers than partitions), make each reader faster, or move the stuck bad message to a side "dead-letter" topic so the rest can flow. Order stays safe because one partition is always handled by just one reader.</p></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-kill">HOPE-CRUSHER</span> You publish a "recharge succeeded" event to Kafka AND write to your Oracle DB in the same flow. The DB commit succeeds but the Kafka publish fails. Now your DB says success but no event fired. How do you fix this — and don't say "use a transaction across both," because you can't.</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p>This is the classic "two writes" problem — you can't make the database and Kafka succeed-or-fail together as one. The clean fix is the <span class="kw">Outbox pattern</span>:</p>
+          <ul class="tight">
+            <li>In the <em>same</em> database save as your business data, also insert the event into a small <code>outbox</code> table. Since it's one database save, they always succeed or fail together — no mismatch.</li>
+            <li>A separate small worker reads new rows from the outbox table and sends them to Kafka, marking them as sent.</li>
+            <li>That worker keeps retrying until Kafka accepts it, so the event always gets out eventually. Consumers handle possible duplicates by id.</li>
+          </ul>
+          <p>So instead of an impossible "both at once," you do one safe database save plus a reliable background sender.</p>
+        </div>
+        <div class="followup">
+          <p class="fq">CDC with Debezium reads the redo log. What's the downside versus a simple polling publisher?</p>
+          <div class="answer"><span class="label">ANSWER</span><p><span class="kw">CDC</span> means a tool watches the database's change log and turns changes into events — fast, and it doesn't add query load. The downside: it's more moving parts to run and set up, and it ties you to that database's internals. A simple <span class="kw">polling</span> worker (just checking the outbox table every so often) is much easier to build but adds a little query load and delay. I'd start with polling and move to CDC only when scale demands it.</p></div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= SQL ================= -->
+  <section id="sql">
+    <h2>8. SQL / Oracle Tuning</h2>
+    <p class="section-intro">"You profiled and tuned Oracle queries. Let's see if you understand the database or just ran a wizard."</p>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-mid">CORE</span> A composite index on <code>(a, b, c)</code>. A query filters on <code>b = ? AND c = ?</code> but not <code>a</code>. Does the index help? Explain the leftmost-prefix rule.</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p>Usually no. An index on <code>(a, b, c)</code> is sorted by <code>a</code> first, then <code>b</code>, then <code>c</code> — like a phone book sorted by last name, then first name. If you don't know the last name (<code>a</code>), you can't jump to the right place. This is the <span class="kw">leftmost rule</span>: the index works only if your search starts from the first column. Searching by <code>b</code> and <code>c</code> alone can't use it well. Tip: put the column you always filter on first.</p>
+        </div>
+        <div class="followup">
+          <p class="fq">So how do you order columns in a composite index? Give me the principle.</p>
+          <div class="answer"><span class="label">ANSWER</span><p>Put the columns you check with "equals" first, and any range check (like "date after X") last. A range check stops the index from using the columns after it. So for <code>WHERE status = ? AND created &gt; ?</code>, make the index <code>(status, created)</code>, not the other way. And if the index already contains every column the query needs, the database doesn't even touch the table — even faster.</p></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-hard">DEEP</span> Explain the difference between an optimistic and pessimistic lock, and which you'd use for decrementing a limited recharge offer's remaining quota under high concurrency.</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p><span class="kw">Pessimistic lock</span> = "I expect a fight, so I lock the row first." Others wait until I'm done. Safe, but slow if many people want it.</p>
+          <p><span class="kw">Optimistic lock</span> = "I expect no fight, so I don't lock. I just check at save time whether someone changed it. If yes, I retry." Fast when conflicts are rare.</p>
+          <p>For a hot offer where everyone grabs the <em>same</em> count, fights are common, so plain optimistic retries waste effort. The clean way is one atomic update: <code>UPDATE ... SET qty = qty - 1 WHERE id = ? AND qty &gt; 0</code>. The database handles it safely in one step, and the <code>qty &gt; 0</code> check stops us from going below zero (no overselling). For very high traffic, I'd keep the counter in Redis with an atomic decrease and sync to the database in the background.</p>
+        </div>
+        <div class="followup">
+          <p class="fq">You moved the counter to Redis. Now Redis and Oracle can disagree. What's your consistency story when you oversell because Redis said yes but the reconcile fails?</p>
+          <div class="answer"><span class="label">ANSWER</span><p>Honest trade-off. Redis becomes the fast "yes/no, is there stock" gate, and the database catches up a moment later. To not oversell: (1) the Redis decrease is atomic and never goes below zero, so the gate itself is correct; (2) the database update is saved to a durable log and retried if it fails, so we never silently lose a count; (3) if overselling is truly not allowed (real money/regulated), I keep the database as the boss with that <code>qty &gt; 0</code> update and accept it's a bit slower. Pick based on whether overselling is "annoying" or "illegal." For a recharge offer, a tiny safety buffer is fine.</p></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-mid">CORE</span> What are the SQL isolation levels and which anomaly does each prevent? Then: what's the default in Oracle, and what surprises people about it?</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p>Isolation levels decide how much one transaction can see another's half-finished work. From loosest to strictest:</p>
+          <table>
+            <tr><th>Level</th><th>In simple words</th></tr>
+            <tr><td>Read Uncommitted</td><td>You can see others' unsaved changes (risky). Rarely used.</td></tr>
+            <tr><td>Read Committed</td><td>You only see saved data, but the same query twice can give different results.</td></tr>
+            <tr><td>Repeatable Read</td><td>The same query gives the same rows during your transaction.</td></tr>
+            <tr><td>Serializable</td><td>Strictest — acts as if transactions ran one by one.</td></tr>
+          </table>
+          <p>Oracle's default is <span class="kw">Read Committed</span>. The nice surprise: in Oracle, <span class="kw">readers never block writers and writers never block readers</span> — readers see a stable snapshot. So Oracle doesn't get stuck the way people expect from other databases.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= PAYMENTS ================= -->
+  <section id="payments">
+    <h2>9. Payments, Idempotency &amp; Consistency</h2>
+    <p class="section-intro">"You build payment APIs. This is where I have zero tolerance for hand-waving. Money bugs end careers."</p>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-hard">DEEP</span> Design idempotency for a "create payment" endpoint. The client times out and retries. Walk me through the exact mechanism so the customer is never charged twice — including the race where two identical requests arrive simultaneously.</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p>The app sends a unique <span class="kw">idempotency key</span> (one id per payment attempt, reused if it retries). On the server:</p>
+          <ol>
+            <li>Try to save that key in a table with status "in progress." The key has a <span class="kw">unique constraint</span>, so the database allows only one.</li>
+            <li>If the save <strong>works</strong>, this is the first time — do the payment, then store the result as "done."</li>
+            <li>If the save <strong>fails</strong> (key already there), it's a repeat — if it's "done," return the saved result (no second charge); if it's still "in progress," tell the client to wait.</li>
+          </ol>
+          <p>For the <span class="kw">two-at-once race</span>: both try to save the same key, but the database lets only one win. The other sees "already exists" and waits. So the database itself stops the double charge — no extra locking needed.</p>
+        </div>
+        <div class="followup">
+          <p class="fq">What's the TTL on that idempotency key, and what breaks if you pick it wrong in either direction?</p>
+          <div class="answer"><span class="label">ANSWER</span><p>Keep the key long enough to cover any retry — usually a day or more for payments. <span class="kw">Too short</span>: it expires, a late retry looks brand new, and you charge twice — the exact bug you were preventing. <span class="kw">Too long / forever</span>: storage keeps growing. So set it a bit longer than the longest possible retry, then let it expire.</p></div>
+        </div>
+        <div class="followup">
+          <p class="fq">The customer's money left their account but our DB write failed after the gateway charged them. Now there's money in limbo. How do you reconcile?</p>
+          <div class="answer"><span class="label">ANSWER</span><p>Payments must be built around <span class="kw">checking and matching</span>, not just one request/reply. So: (1) write a "pending" record <em>before</em> calling the gateway, so we always have a trail; (2) listen to the gateway's <span class="kw">callback/webhook</span>, which is the real source of truth, and update our records from it; (3) run a daily <span class="kw">reconciliation job</span> that compares our records with the gateway's report and fixes mismatches (charged but not recorded → record it or refund; recorded but not charged → mark failed). The customer is always made right by this matching loop.</p></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-kill">HOPE-CRUSHER</span> Explain the Saga pattern, then design a recharge saga (debit wallet → call telecom operator → confirm) and tell me exactly what happens if the operator call succeeds but the confirmation step fails.</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p>A <span class="kw">Saga</span> is how you handle a multi-step process across services when you can't lock everything together. You do each step on its own, and for each step you also have an <span class="kw">undo</span> step in case a later step fails.</p>
+          <p><strong>Recharge saga:</strong></p>
+          <ol>
+            <li>Take money from wallet. Undo = refund the wallet.</li>
+            <li>Tell the telecom operator to recharge. Undo = reverse with operator (if possible).</li>
+            <li>Confirm and mark the order done.</li>
+          </ol>
+          <p><strong>If step 2 works but step 3 fails:</strong> the recharge already happened, so we must NOT refund (that gives a free recharge). Instead we <span class="kw">retry the confirm step</span> until it succeeds. Key idea: undo backward only for steps you can undo; for steps you can't undo (operator already recharged), go forward and finish the rest.</p>
+        </div>
+        <div class="followup">
+          <p class="fq">"Refund the wallet as compensation." But what if the compensation itself fails?</p>
+          <div class="answer"><span class="label">ANSWER</span><p>The undo steps must also be safe to retry, and we keep retrying them (from a durable queue) until they work. If one still can't succeed after many tries, it goes to a "needs a human" queue and raises an alert — because now real money is stuck and someone in finance must fix it. We also save the saga's progress, so if the system restarts, it knows where it stopped and continues.</p></div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= DESIGN ================= -->
+  <section id="design">
+    <h2>10. Distributed Systems &amp; System Design</h2>
+    <p class="section-intro">"You wrote 'distributed systems' and 'system design best practices.' Prove you can think at the system level, not just the class level."</p>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-mid">CORE</span> State the CAP theorem precisely. Your recharge system — is it CP or AP, and why? Don't give me the textbook answer; tie it to a real decision.</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p>CAP says: when the network between servers breaks (a "partition"), you must pick one — <span class="kw">stay correct</span> (Consistency) or <span class="kw">stay available</span> (Availability). You can't have both during that break.</p>
+          <p>My real choice: the <span class="kw">money part</span> picks correctness — if servers can't agree, I'd rather reject the payment than risk a wrong balance. A "try again" is fixable; a wrong balance is not. The <span class="kw">browsing part</span> (showing plans) picks availability — keep working even if the list is a few seconds old, because slightly old plans are harmless and we re-check the price at checkout. So different parts make different choices.</p>
+        </div>
+        <div class="followup">
+          <p class="fq">You said "eventual consistency" for the catalog. Define it without using the word "eventually," and tell me what a user actually experiences.</p>
+          <div class="answer"><span class="label">ANSWER</span><p>It means: after a change, all copies will <em>match up</em> within a short time, but for those few seconds different users might see slightly different versions. In practice a user might briefly see a plan that was just removed, or not yet see a brand-new plan. The promise is that everyone catches up soon — not instantly. Fine for a plan list, not fine for a bank balance.</p></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-hard">DEEP</span> Design a rate limiter for the API gateway — you claimed you built one. I want the algorithm, where the state lives, and why your choice handles a distributed multi-instance gateway correctly.</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p>A rate limiter caps how many requests someone can make. Common methods:</p>
+          <ul class="tight">
+            <li><span class="kw">Fixed window</span> — count per minute. Simple, but allows a burst at the edge of two minutes.</li>
+            <li><span class="kw">Sliding window</span> — smoother counting, more accurate.</li>
+            <li><span class="kw">Token bucket</span> — you get tokens that refill steadily; each request spends one. Allows short bursts but caps the steady rate. My favorite for a gateway.</li>
+          </ul>
+          <p><strong>Why store it in Redis:</strong> we have many gateway servers. If each counted on its own, a user could hit each one and get many times the limit. So all servers share one counter in <span class="kw">Redis</span>, and we update it with a small <span class="kw">Lua script</span> so the check-and-count is one safe step. Over the limit → return <code>429 Too Many Requests</code>.</p>
+        </div>
+        <div class="followup">
+          <p class="fq">Redis adds a network hop to every request at the gateway. At 1.5M+/day with peaks, isn't that latency and a SPOF? Optimize it.</p>
+          <div class="answer"><span class="label">ANSWER</span><p>Fair. Options: (1) let each server count locally and sync with Redis every so often — slightly less exact, but rate limiting doesn't need to be perfect, and it's much faster; (2) give each server a share of the total budget; (3) run Redis with a backup so it's not a single point of failure, and the call is sub-millisecond anyway; (4) if Redis is down, allow the traffic through (fail open) for non-critical endpoints rather than blocking real users. The idea: rate limiting can be approximate, so push the work close to each server.</p></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-kill">HOPE-CRUSHER</span> Two of your microservices need the same data. Do you share a database between them? Defend whatever you say — there's a wrong answer here.</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p><span class="kw">No.</span> Each service should own its own database. If two services share one database, a change by one team can break the other, and you can no longer deploy or scale them separately. That quietly turns your microservices back into a tangled monolith.</p>
+          <p>How they share data instead: (1) one service <span class="kw">asks the other</span> through an API; or (2) one service <span class="kw">sends events</span> and the other keeps its own small copy of just the fields it needs. I prefer events so a service isn't stuck waiting on another being up.</p>
+        </div>
+        <div class="followup">
+          <p class="fq">"Each service keeps a local copy." Now you have the same data in 3 places. How do you handle the inevitable drift and a "source of truth" question?</p>
+          <div class="answer"><span class="label">ANSWER</span><p>Pick <span class="kw">one owner</span> for each piece of data — only it can change the data and send updates. The others keep read-only copies. To keep copies correct: process events in order per item (key by id), include a version number so old/late updates are ignored, and run a periodic full re-sync to fix anything missed. If there's ever a disagreement, the owner wins, and anything that must be exact (like a balance) is read from the owner, not the copy.</p></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-hard">DEEP</span> How would you design MyJio's recharge to handle a 10× traffic spike during a festival promotion at midnight? Walk the whole path.</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <ul class="tight">
+            <li><span class="kw">Cache early</span> — warm up the caches before midnight so the first rush doesn't all hit the database.</li>
+            <li><span class="kw">Scale up before the spike</span> — add more servers ahead of time (we know it's coming), not after it starts.</li>
+            <li><span class="kw">Use a queue</span> — accept the request fast, put it on Kafka, and process it just behind. This soaks up the spike instead of crushing everything. The user sees "processing," then a confirmation.</li>
+            <li><span class="kw">Protect the database</span> — it's the hardest to scale. Cache hard, use read copies, and limit how fast it's hit.</li>
+            <li><span class="kw">Stay resilient</span> — circuit breakers and timeouts around the payment gateway and operator, and drop non-essential work if needed.</li>
+            <li><span class="kw">Idempotency everywhere</span> — retries jump during a spike, so make repeats safe.</li>
+            <li><span class="kw">Watch live</span> — dashboards and alerts during the event.</li>
+          </ul>
+          <p>Main idea: turn a sudden rush into a smooth queue, add servers ahead of time, and shield the database.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= K8S ================= -->
+  <section id="k8s">
+    <h2>11. Kubernetes / OpenShift</h2>
+    <p class="section-intro">"You deploy on K8s/OpenShift with 'concurrency tuning.' Most devs treat it as a black box. I won't let you."</p>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-mid">CORE</span> Difference between liveness, readiness, and startup probes. What happens if you misconfigure liveness to point at a slow dependency?</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p>These are health checks Kubernetes runs on your app:</p>
+          <ul class="tight">
+            <li><span class="kw">Liveness</span> — "is the app stuck/dead?" If it fails, Kubernetes <strong>restarts</strong> it.</li>
+            <li><span class="kw">Readiness</span> — "can it take traffic right now?" If it fails, Kubernetes <strong>stops sending traffic</strong> but does not restart it.</li>
+            <li><span class="kw">Startup</span> — "has it finished booting?" Gives a slow-starting app time before the other checks begin.</li>
+          </ul>
+          <p><strong>The mistake:</strong> if liveness checks a dependency like the database, and the database has a brief hiccup, then <em>every</em> pod fails liveness and Kubernetes restarts them <em>all</em> at once — turning a small hiccup into a full outage. And restarting doesn't even help, because the database was the problem. Rule: liveness should only check the app itself; check dependencies in readiness.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-hard">DEEP</span> Your Java pod keeps getting OOMKilled even though the JVM heap looks fine. Why, and how do you fix it?</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p>"OOMKilled" means the container used more memory than its limit, so Kubernetes killed it. The trap: Java uses more memory than just the <span class="kw">heap</span>. There's also thread stacks, class metadata, network buffers, and more. So the heap can look healthy while the <em>total</em> memory goes over the container limit.</p>
+          <p>Fixes: (1) don't set the heap to the full container size — leave room for the extra stuff (use a percentage like 75%); (2) limit the other memory areas and watch the thread count; (3) size the container = heap + extras + a little buffer; (4) if memory keeps growing, it's a real leak — take a heap dump and find what's holding on.</p>
+        </div>
+        <div class="followup">
+          <p class="fq">Before container-awareness, what was the classic bug with the JVM on K8s?</p>
+          <div class="answer"><span class="label">ANSWER</span><p>Old Java versions didn't understand container limits. A pod limited to 1GB on a big 64GB machine would think it had all 64GB and all the CPUs, so it sized its memory and threads way too big — then got killed instantly. Newer Java reads the container limits correctly, which is why keeping an up-to-date Java version matters.</p></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-mid">CORE</span> During a rolling deployment, in-flight requests get dropped and users see errors. Walk me through making it zero-downtime.</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p>The errors happen because Kubernetes shuts down an old pod while it's still handling requests. To avoid it:</p>
+          <ul class="tight">
+            <li><span class="kw">Graceful shutdown</span> — when told to stop, the app stops taking new requests, finishes the ones in progress, then exits. Spring Boot supports this.</li>
+            <li><span class="kw">Small wait before stopping</span> — give Kubernetes a moment to stop routing traffic to the pod before it shuts down, so no new request arrives mid-shutdown.</li>
+            <li><span class="kw">Start new before killing old</span> — bring up new pods and make sure they're ready before removing the old ones.</li>
+            <li><span class="kw">Retries</span> — let the client retry safe requests to cover any tiny gap.</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= SOLID ================= -->
+  <section id="solid">
+    <h2>12. SOLID &amp; Design Patterns</h2>
+    <p class="section-intro">"You wrote 'applying SOLID principles.' Anyone can recite the acronym. I want a real example where you applied one — and where you'd violate one on purpose."</p>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-mid">CORE</span> Recite SOLID, then give me a concrete refactor from your work where the Dependency Inversion Principle mattered.</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p>SOLID is five rules for clean code:</p>
+          <ul class="tight">
+            <li><span class="kw">S</span> — one class, one job.</li>
+            <li><span class="kw">O</span> — add new features by adding code, not by editing old code.</li>
+            <li><span class="kw">L</span> — a subclass should work anywhere its parent works, without surprises.</li>
+            <li><span class="kw">I</span> — many small interfaces are better than one giant one.</li>
+            <li><span class="kw">D</span> — depend on an interface, not a specific class.</li>
+          </ul>
+          <p><strong>Real example (the D):</strong> our recharge code used to call one specific payment gateway class directly. When we added a second gateway, I made a <code>PaymentGateway</code> interface, and the code now talks to the interface. Adding a new gateway is just a new class — no change to the main logic. Bonus: it's easy to test with a fake gateway.</p>
+        </div>
+        <div class="followup">
+          <p class="fq">Give me a Liskov violation that compiles fine but is a real bug. The classic one.</p>
+          <div class="answer"><span class="label">ANSWER</span><p>The <span class="kw">Square extends Rectangle</span> example. A square forces width and height to be equal. So code that sets width = 5 and height = 4 and expects area = 20 breaks when given a square (it gets 16). The code compiles, but the square doesn't behave like a normal rectangle — that's a Liskov violation. The fix is to not force that broken inheritance.</p></div>
+        </div>
+        <div class="followup">
+          <p class="fq">When would you deliberately violate SOLID? If you say "never," you're not senior.</p>
+          <div class="answer"><span class="label">ANSWER</span><p>SOLID is a guide, not a law. I break it when following it adds more complexity than it saves. For example, I won't add an interface "just in case" if there's only one implementation — that's extra clutter for no reason (add it when a second case actually shows up). A small simple data object doesn't need to be split into five tiny classes. The senior move is knowing SOLID exists to make change easier — if a piece won't change, over-engineering it is its own mistake.</p></div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= PROJECTS ================= -->
+  <section id="projects">
+    <h2>13. Projects &amp; Research</h2>
+    <p class="section-intro">"Let's talk about what you built outside Jio — and your publications. I'll test whether you understand them or just have your name on them."</p>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-warm">WARMUP</span> Your Job Portal uses Spring Security with role-based dashboards (Admin, Employer, Candidate). How exactly did you enforce that an Employer can't hit an Admin endpoint?</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p>Two layers. First, in the security config I map URLs to roles — only ADMIN can reach <code>/admin/**</code>, only EMPLOYER can reach <code>/employer/**</code>. Second, I add a role check on the important methods too (<code>@PreAuthorize</code>), so even if a URL rule is wrong, the method still blocks it. The roles come from the logged-in user. Importantly, I never rely on just hiding buttons in the UI — the server always enforces it, because the client can be faked.</p>
+        </div>
+        <div class="followup">
+          <p class="fq">An Employer changes the <code>id</code> in the URL to view another employer's job applications. Your role check passes — they ARE an employer. What's the vulnerability and the fix?</p>
+          <div class="answer"><span class="label">ANSWER</span><p>This is <span class="kw">IDOR</span> — checking the user's <em>role</em> but not whether they <em>own</em> that specific record. They're a valid employer, so the role check passes, but the record isn't theirs. The fix: always check ownership too — the query should be "this job AND owner = current user." Never trust an id from the URL as proof the user is allowed to see it.</p></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-hard">DEEP</span> Your CNN+LSTM depression-detection paper. Why both CNN and LSTM? Why not one? And what's the danger of your reported accuracy?</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">SIMPLE ANSWER</span>
+          <p>They do different jobs. A <span class="kw">CNN</span> is good at spotting small local patterns — like key phrases in the text. An <span class="kw">LSTM</span> is good at understanding a sequence in order — how words build meaning across a sentence. Stacking them lets the CNN pick out useful pieces and the LSTM understand how they flow. It was a strong combo for text before transformers became common.</p>
+          <p><strong>The danger of accuracy:</strong> if most samples are "not depressed," a model can score high just by always guessing "not depressed" — accuracy looks great but it's useless. For a health topic, the number that matters is <span class="kw">recall</span> (did we catch the truly at-risk people?), plus precision and F1. I wouldn't claim it's medically reliable — it was a research project.</p>
+        </div>
+        <div class="followup">
+          <p class="fq">Today, in 2026, would you still use CNN+LSTM for this? If not, what, and what's the catch?</p>
+          <div class="answer"><span class="label">ANSWER</span><p>No — today I'd use a <span class="kw">transformer</span> (like a fine-tuned BERT model). It understands long text better and trains faster in parallel. The catch: transformers need lots of data and compute, and can be overkill for a small dataset. And for a sensitive mental-health use, the bigger concerns become fairness, privacy, and being able to explain the decision — not just the score.</p></div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= RAPID FIRE ================= -->
+  <section id="rapid">
+    <h2>14. Rapid-Fire Hope-Crushers</h2>
+    <p class="section-intro">"We're near the end. Short questions, no time to think. This is where I find out what's actually in your head versus what you rehearsed."</p>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-kill">RAPID</span> Difference between <code>PUT</code> and <code>PATCH</code>, and why does it matter for idempotency?</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">ANSWER</span><p><code>PUT</code> replaces the whole record — doing it many times leaves the same result (<span class="kw">idempotent</span>, safe to retry). <code>PATCH</code> changes part of it and may not be safe to repeat (e.g., "add 10" runs again and again). So on a timeout, PUT is safe to retry; PATCH needs an idempotency key. (Also: GET, PUT, DELETE are idempotent; POST is not.)</p></div>
+      </div>
+    </details>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-kill">RAPID</span> What does <code>@Transactional(readOnly = true)</code> actually buy you?</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">ANSWER</span><p>It tells the system "this only reads, never writes." Then Hibernate skips checking for changes (less work), and the database can use a lighter mode or a read copy. It makes read operations a bit faster and prevents accidental writes.</p></div>
+      </div>
+    </details>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-kill">RAPID</span> N+1 query problem in JPA/Hibernate — what is it and how do you kill it?</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">ANSWER</span><p>You load a list of N things, then for each one it secretly runs one more query to load its related data — so 1 + N queries, which is slow. Fix: load them together in one query with <code>JOIN FETCH</code> (or an <code>@EntityGraph</code>). The trap is it hides until you look at the SQL log, so always check the queries being run.</p></div>
+      </div>
+    </details>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-kill">RAPID</span> 502 vs 503 vs 504 — what's actually broken in each?</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">ANSWER</span><p><code>502</code> — the gateway got a bad reply from the server behind it. <code>503</code> — the server is up but too busy or in maintenance ("not now"). <code>504</code> — the gateway waited for the server and got no reply in time (too slow). Quick memory: 502 = bad reply, 503 = not now, 504 = too slow.</p></div>
+      </div>
+    </details>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-kill">RAPID</span> Your connection pool is exhausted. <code>HikariCP</code>. What three numbers do you check first?</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">ANSWER</span><p>(1) Active vs max connections — are they all in use? (2) How long requests wait to get a connection. (3) How long each connection is held — usually the real cause is connections held too long (a slow query, or a transaction kept open across a network call). Adding more connections rarely fixes it; it just pushes the problem to the database.</p></div>
+      </div>
+    </details>
+
+    <details class="q">
+      <summary class="q-head"><span class="q-badge b-kill">RAPID</span> Final one. You've answered everything well. Tell me something on this resume you'd remove or are least confident about — and be honest, because I'll respect honesty more than a perfect score.</summary>
+      <div class="q-body">
+        <div class="answer"><span class="label">ANSWER (the smart move)</span>
+          <p>This is the trap that isn't. The right move is honest, calm self-awareness — that's exactly what shows you're senior. A good reply:</p>
+          <p><em>"I'd soften the 'exactly-once' Kafka wording — we really ran at-least-once with duplicate-safe consumers, and I'd rather say that exactly. I led the Redis and SQL work end to end, but the OAuth gateway was partly built on a platform team's base — I configured and extended it, didn't build the auth server from scratch. I'm strongest on performance and reliability, and I'd like to go deeper on running CDC tools like Debezium in production."</em></p>
+          <p><strong>Why this works:</strong> it shows you know what you truly owned versus used, you fix any overclaim before I catch it, and you name a real area to grow. Never say "nothing, I'm confident in all of it" — that sounds either dishonest or junior. This question tests your honesty, not your memory.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <footer>
+    <p>Interview-prep stress test written for <strong>Aryan Mundra</strong> — answers in plain English.</p>
+    <p>Tip: read the question, say your answer out loud, <em>then</em> open the answer. If you can survive the follow-up chains here, the real interview will feel easy.</p>
+    <p style="color:var(--accent);">"The point isn't knowing everything — it's understanding deeply instead of bluffing."</p>
+  </footer>
+
+</div>
+
+<script>
+  function setAll(open) {
+    document.querySelectorAll('details.q').forEach(d => d.open = open);
+  }
+  const search = document.getElementById('search');
+  search.addEventListener('input', () => {
+    const term = search.value.toLowerCase().trim();
+    document.querySelectorAll('details.q').forEach(d => {
+      const match = d.textContent.toLowerCase().includes(term);
+      d.style.display = match ? '' : 'none';
+      if (term && match) d.open = true;
+      if (!term) d.open = false;
+    });
+    document.querySelectorAll('section').forEach(s => {
+      const anyVisible = [...s.querySelectorAll('details.q')].some(d => d.style.display !== 'none');
+      s.style.display = (term && !anyVisible) ? 'none' : '';
+    });
+  });
+</script>
+
+</body>
+</html>
