@@ -144,6 +144,32 @@ table.cheat code{background:#eef2f7;padding:1px 5px;border-radius:4px;font-size:
 .aside b{color:#dc2626}
 code{font-family:'SF Mono',Consolas,'Courier New',monospace;font-size:.92em}
 
+/* code-typing space + collapsible pseudocode */
+.codeArea{position:relative;margin:12px 0}
+.codeBar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.codeBtn{display:inline-flex;align-items:center;gap:7px;cursor:pointer;
+  background:var(--key);color:var(--rust2);border:1px solid var(--keyb);
+  border-radius:8px;padding:7px 14px;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  font-weight:600;font-size:.8em;letter-spacing:.2px;transition:background .15s,border-color .15s}
+.codeBtn:hover{background:#e0e7ff;border-color:var(--winb)}
+.codeBtn .chev{display:inline-block;transition:transform .2s;font-size:.85em}
+.codeBtn[aria-expanded="true"] .chev{transform:rotate(90deg)}
+.codeBtn[aria-expanded="true"]{background:#e0e7ff;border-color:var(--winb)}
+.typeBtn .lbl:after{content:'Type'}
+.typeBtn[aria-expanded="true"] .lbl:after{content:'Hide Typing Area'}
+.viewBtn .lbl:after{content:'View Pseudocode'}
+.viewBtn[aria-expanded="true"] .lbl:after{content:'Hide Pseudocode'}
+.codeArea .codeInput{width:100%;min-height:160px;resize:vertical;
+  background:#f8fafc;color:#1e293b;border:1px solid #e2e8f0;border-left:3px solid var(--rust);
+  border-radius:9px;padding:14px 16px;
+  font-family:'SF Mono','JetBrains Mono',Consolas,'Courier New',monospace;
+  font-size:.85em;line-height:1.75;tab-size:4;-moz-tab-size:4;white-space:pre;overflow:auto}
+.codeArea .codeInput:focus{outline:none;border-color:var(--winb);box-shadow:0 0 0 3px rgba(165,180,252,.35)}
+.codeArea .codeInput::placeholder{color:#94a3b8;font-style:italic}
+.codeArea .codeInput{margin-bottom:10px}
+.codeArea pre{margin:0}
+.codeInput.collapsed,pre.collapsed{display:none}
+
 footer{text-align:center;color:var(--soft);font-style:italic;padding:30px;font-size:.9em}
 .totop{position:fixed;bottom:24px;right:24px;width:46px;height:46px;border-radius:50%;
   background:var(--rust);color:#fff;border:0;display:none;align-items:center;justify-content:center;
@@ -388,10 +414,13 @@ int atMostK(int[] arr, int k) {
     int left = 0;
     int count = 0;
     for (int right = 0; right &lt; arr.length; right++) {
-        freq.merge(arr[right], 1, Integer::sum);
+        freq.put(arr[right], freq.getOrDefault(arr[right], 0) + 1);
         while (freq.size() &gt; k) {
-            if (freq.merge(arr[left], -1, Integer::sum) == 0) {
+            int newCount = freq.get(arr[left]) - 1;
+            if (newCount == 0) {
                 freq.remove(arr[left]);
+            } else {
+                freq.put(arr[left], newCount);
             }
             left++;
         }
@@ -411,7 +440,7 @@ int atMostK(int[] arr, int k) {
 <pre>Map&lt;Character,Integer&gt; need = new HashMap&lt;&gt;();
 Map&lt;Character,Integer&gt; have = new HashMap&lt;&gt;();
 for (char c : pattern.toCharArray()) {
-    need.merge(c, 1, Integer::sum);
+    need.put(c, need.getOrDefault(c, 0) + 1);
 }
 int required = need.size();
 int formed = 0;
@@ -420,7 +449,7 @@ int minLen = Integer.MAX_VALUE;
 int minStart = 0;
 for (int right = 0; right &lt; s.length(); right++) {
     char c = s.charAt(right);
-    have.merge(c, 1, Integer::sum);
+    have.put(c, have.getOrDefault(c, 0) + 1);
     if (need.containsKey(c) &amp;&amp; have.get(c).equals(need.get(c))) {
         formed++;
     }
@@ -430,7 +459,7 @@ for (int right = 0; right &lt; s.length(); right++) {
             minStart = left;
         }
         char lc = s.charAt(left);
-        have.merge(lc, -1, Integer::sum);
+        have.put(lc, have.getOrDefault(lc, 0) - 1);
         if (need.containsKey(lc) &amp;&amp; have.get(lc) &lt; need.get(lc)) {
             formed--;
         }
@@ -537,8 +566,8 @@ for (int i = 1; i &lt; n; i++) {
     <div class="rule">
     <h4>Rule #2 &mdash; Prefix Sum + HashMap (count sum = K)</h4>
     <p class="prob"><b>Problem.</b> Count the subarrays whose sum equals k (values may be negative).</p>
-    <div class="tc"><b>Input:</b>  nums = [1,1,1], k = 2
-<b>Output:</b> 2</div>
+    <div class="tc"><b>Input:</b>  nums = [3,4,7,2,-3,1,4,2], k = 7
+<b>Output:</b> 4   (has a negative &mdash; a sliding window would fail here)</div>
 <pre>Map&lt;Integer,Integer&gt; map = new HashMap&lt;&gt;();
 map.put(0, 1);
 int prefix = 0;
@@ -546,7 +575,7 @@ int count = 0;
 for (int x : nums) {
     prefix += x;
     count += map.getOrDefault(prefix - k, 0);
-    map.merge(prefix, 1, Integer::sum);
+    map.put(prefix, map.getOrDefault(prefix, 0) + 1);
 }
 return count;</pre>
     <p class="meta"><b>Time</b> O(N) &nbsp;&middot;&nbsp; <b>Space</b> O(N)</p>
@@ -565,7 +594,7 @@ for (int x : nums) {
     prefix += x;
     int rem = ((prefix % k) + k) % k;     // normalise negative remainders
     count += map.getOrDefault(rem, 0);
-    map.merge(rem, 1, Integer::sum);
+    map.put(rem, map.getOrDefault(rem, 0) + 1);
 }
 return count;</pre>
     <p class="meta"><b>Time</b> O(N) &nbsp;&middot;&nbsp; <b>Space</b> O(K)</p>
@@ -751,8 +780,8 @@ if (arr[mid] == target) {
     <div class="rule">
     <h4>Rule #4 &mdash; Find Peak Element</h4>
     <p class="prob"><b>Problem.</b> Return the index of any peak element (greater than its neighbours).</p>
-    <div class="tc"><b>Input:</b>  nums = [1,2,3,1]
-<b>Output:</b> 2</div>
+    <div class="tc"><b>Input:</b>  nums = [1,2,1,3,5,6,4]
+<b>Output:</b> 5   (index of peak 6; multiple local peaks)</div>
 <pre>while (left &lt; right) {
     int mid = left + (right - left) / 2;
     if (nums[mid] &lt; nums[mid + 1]) {
@@ -769,54 +798,78 @@ return left;</pre>
     <p class="prob"><b>Problem.</b> Minimum eating speed so Koko finishes all banana piles within h hours.</p>
     <div class="tc"><b>Input:</b>  piles = [3,6,7,11], h = 8
 <b>Output:</b> 4</div>
-<pre>// MINIMIZE (e.g. minimize max, minimize speed)
-int left = lo;
-int right = hi;
-while (left &lt; right) {
-    int mid = left + (right - left) / 2;
-    if (isFeasible(mid)) {
-        right = mid;        // feasible -&gt; try smaller
-    } else {
-        left = mid + 1;
-    }
-}
-return left;
+<pre>// PATTERN: binary search the answer space [1 .. max pile], MINIMIZE feasible speed
+int minEatingSpeed(int[] piles, int h) {
+    int lo = 1, hi = 0;
+    for (int p : piles) hi = Math.max(hi, p);   // slowest..fastest possible speed
 
-// MAXIMIZE (e.g. maximize min, maximize capacity)
-int left = lo;
-int right = hi;
-while (left &lt; right) {
-    int mid = left + (right - left + 1) / 2;  // ceil mid (round UP)
-    if (isFeasible(mid)) {
-        left = mid;          // feasible -&gt; try larger
-    } else {
-        right = mid - 1;
+    while (lo &lt; hi) {
+        int mid = lo + (hi - lo) / 2;           // candidate speed
+        if (hoursNeeded(piles, mid) &lt;= h) {
+            hi = mid;          // feasible -&gt; try slower
+        } else {
+            lo = mid + 1;      // too slow -&gt; must speed up
+        }
     }
+    return lo;                 // smallest feasible speed
 }
-return left;
-// Why ceil mid here? This branch does left = mid (not mid + 1). With floor mid,
-// when right = left + 1 you'd get mid = left, set left = mid = left, and loop
-// forever. Rounding UP guarantees mid moves, avoiding the infinite loop.</pre>
+
+long hoursNeeded(int[] piles, int speed) {
+    long hours = 0;
+    for (int p : piles)
+        hours += (p + speed - 1) / speed;       // ceil(p / speed)
+    return hours;
+}
+
+// MAXIMIZE variant (maximize min / capacity): use ceil mid = lo + (hi - lo + 1)/2,
+// set lo = mid on feasible, hi = mid - 1 otherwise. Ceil avoids an infinite loop
+// when hi = lo + 1 (floor mid would keep lo = mid forever).</pre>
     <p class="meta"><b>Time</b> O(N &middot; log range) &nbsp;&middot;&nbsp; <b>Space</b> O(1)</p>
   </div>
 
     <div class="rule">
     <h4>Rule #6 &mdash; Search a 2D Matrix</h4>
-    <p class="prob"><b>Problem.</b> Search a target in a row- and column-sorted matrix.</p>
-    <div class="tc"><b>Input:</b>  matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3
+    <p class="prob"><b>Problem.</b> Search a target in a fully sorted matrix (each row sorted &amp; row[i][0] &gt; row[i&minus;1][last]).</p>
+    <div class="tc"><b>Input:</b>  target = 3
+matrix =
+    ┌────┬────┬────┬────┐
+    │  1 │  3 │  5 │  7 │
+    ├────┼────┼────┼────┤
+    │ 10 │ 11 │ 16 │ 20 │
+    ├────┼────┼────┼────┤
+    │ 23 │ 30 │ 34 │ 60 │
+    └────┴────┴────┴────┘
 <b>Output:</b> true</div>
-<pre>// fully sorted: index as row = mid / cols, col = mid % cols
-// staircase search (rows &amp; cols sorted):
-int row = 0;
-int col = n - 1;
-while (row &lt; m &amp;&amp; col &gt;= 0) {
-    if (matrix[row][col] == target) {
-        return true;
-    } else if (matrix[row][col] &lt; target) {
-        row++;
-    } else {
-        col--;
+<pre>boolean searchMatrix(int[][] matrix, int target) {
+    int m = matrix.length, cols = matrix[0].length;
+
+    // STEP 1: find the candidate row by its [first..last] range
+    int top = 0, bot = m - 1, row = -1;
+    while (top &lt;= bot) {
+        int mid = top + (bot - top) / 2;
+        if (matrix[mid][0] &lt;= target &amp;&amp; target &lt;= matrix[mid][cols - 1]) {
+            row = mid; break;               // target's range is this row
+        } else if (target &lt; matrix[mid][0]) {
+            bot = mid - 1;
+        } else {
+            top = mid + 1;
+        }
     }
+    if (row == -1) return false;
+
+    // STEP 2: binary search inside that row
+    return binarySearch(matrix[row], target);
+}
+
+boolean binarySearch(int[] arr, int target) {
+    int lo = 0, hi = arr.length - 1;
+    while (lo &lt;= hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid] == target) return true;
+        else if (arr[mid] &lt; target) lo = mid + 1;
+        else hi = mid - 1;
+    }
+    return false;
 }</pre>
   </div>
 
@@ -1161,8 +1214,8 @@ while (i &lt; n) {
     <div class="rule">
     <h4>Rule #4 &mdash; Jump Game (track farthest reach)</h4>
     <p class="prob"><b>Problem.</b> Can you reach the last index, jumping up to nums[i] from index i?</p>
-    <div class="tc"><b>Input:</b>  nums = [2,3,1,1,4]
-<b>Output:</b> true</div>
+    <div class="tc"><b>Input:</b>  nums = [3,2,1,0,4]
+<b>Output:</b> false   (stuck at index 3, the 0 &mdash; cannot reach the end)</div>
 <pre>// can reach the end?
 int maxReach = 0;
 for (int i = 0; i &lt; nums.length; i++) {
@@ -1518,7 +1571,7 @@ return minHeap.peek();    // Kth largest</pre>
 <b>Output:</b> [1,2]</div>
 <pre>Map&lt;Integer,Integer&gt; freq = new HashMap&lt;&gt;();
 for (int num : nums) {
-    freq.merge(num, 1, Integer::sum);
+    freq.put(num, freq.getOrDefault(num, 0) + 1);
 }
 PriorityQueue&lt;Integer&gt; minHeap =
     new PriorityQueue&lt;&gt;((a, b) -&gt; freq.get(a) - freq.get(b));
@@ -1677,8 +1730,8 @@ while (!q.isEmpty()) {
     <div class="rule">
     <h4>Rule #4 &mdash; Same Tree / Symmetric</h4>
     <p class="prob"><b>Problem.</b> Is the tree a mirror image of itself?</p>
-    <div class="tc"><b>Input:</b>  root = [1,2,2,3,4,4,3]
-<b>Output:</b> true</div>
+    <div class="tc"><b>Input:</b>  root = [1,2,2,null,3,null,3]
+<b>Output:</b> false   (mirror mismatch &mdash; tests the asymmetric branch)</div>
 <pre>boolean isSameTree(TreeNode p, TreeNode q) {
     if (p == null &amp;&amp; q == null) {
         return true;
@@ -1734,8 +1787,8 @@ while (!q.isEmpty()) {
     <div class="rule">
     <h4>Rule #7 &mdash; BST Operations</h4>
     <p class="prob"><b>Problem.</b> Is the tree a valid binary search tree?</p>
-    <div class="tc"><b>Input:</b>  root = [2,1,3]
-<b>Output:</b> true</div>
+    <div class="tc"><b>Input:</b>  root = [5,1,4,null,null,3,6]
+<b>Output:</b> false   (4&#39;s left child 3 is &lt; root 5 &mdash; only a min/max bound check catches this)</div>
 <pre>boolean valid(TreeNode node, long min, long max) {
     if (node == null) {
         return true;
@@ -1858,8 +1911,8 @@ while (!queue.isEmpty()) {
     <div class="rule">
     <h4>Rule #3 &mdash; Topological Sort (Kahn's BFS)</h4>
     <p class="prob"><b>Problem.</b> Can all courses be finished given prerequisites?</p>
-    <div class="tc"><b>Input:</b>  numCourses = 2, prerequisites = [[1,0]]
-<b>Output:</b> true</div>
+    <div class="tc"><b>Input:</b>  numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[1,3]]
+<b>Output:</b> false   (cycle 1&rarr;3&rarr;1 &mdash; cannot finish)</div>
 <pre>int[] indegree = new int[n];
 for (int[] e : edges) {
     indegree[e[1]]++;
@@ -2102,6 +2155,71 @@ for (int i = 1; i &lt;= n; i++) {
 <script>
 window.addEventListener('scroll',function(){
   document.querySelector('.totop').style.display = window.pageYOffset > 400 ? 'flex' : 'none';
+});
+
+// Give each pattern a code-typing space with a "View Pseudocode" button
+// pinned to the top-right corner; the pseudocode stays hidden until clicked.
+document.querySelectorAll('.rule pre').forEach(function(pre){
+  // measure the pseudocode's natural height before hiding it, so the
+  // typing space can be made a bit taller than this block's pseudocode
+  var codeHeight = pre.offsetHeight;
+  pre.classList.add('collapsed');
+
+  // wrapper around the toolbar + typing space + pseudocode
+  var area = document.createElement('div');
+  area.className = 'codeArea';
+  pre.parentNode.insertBefore(area, pre);
+
+  // toolbar with the two buttons
+  var bar = document.createElement('div');
+  bar.className = 'codeBar';
+  area.appendChild(bar);
+
+  var typeBtn = document.createElement('button');
+  typeBtn.type = 'button';
+  typeBtn.className = 'codeBtn typeBtn';
+  typeBtn.setAttribute('aria-expanded','false');
+  typeBtn.innerHTML = '<span class="chev">&#9654;</span><span class="lbl"></span>';
+  bar.appendChild(typeBtn);
+
+  var viewBtn = document.createElement('button');
+  viewBtn.type = 'button';
+  viewBtn.className = 'codeBtn viewBtn';
+  viewBtn.setAttribute('aria-expanded','false');
+  viewBtn.innerHTML = '<span class="chev">&#9654;</span><span class="lbl"></span>';
+  bar.appendChild(viewBtn);
+
+  // editable typing space — collapsed until "Type" is pressed
+  var ta = document.createElement('textarea');
+  ta.className = 'codeInput collapsed';
+  ta.spellcheck = false;
+  ta.placeholder = 'Type your solution here…';
+  ta.style.minHeight = (codeHeight + 40) + 'px';
+  area.appendChild(ta);
+
+  // move the pseudocode inside the wrapper, below the typing space
+  area.appendChild(pre);
+
+  typeBtn.addEventListener('click', function(){
+    var open = ta.classList.toggle('collapsed') === false;
+    typeBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open) ta.focus();
+  });
+
+  viewBtn.addEventListener('click', function(){
+    var open = pre.classList.toggle('collapsed') === false;
+    viewBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+
+  // let Tab insert a tab inside the typing space instead of leaving it
+  ta.addEventListener('keydown', function(e){
+    if (e.key === 'Tab'){
+      e.preventDefault();
+      var s = ta.selectionStart, en = ta.selectionEnd;
+      ta.value = ta.value.slice(0,s) + '\t' + ta.value.slice(en);
+      ta.selectionStart = ta.selectionEnd = s + 1;
+    }
+  });
 });
 </script>
 </body>
