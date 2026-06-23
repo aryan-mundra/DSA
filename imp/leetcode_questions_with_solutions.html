@@ -3930,6 +3930,13 @@
                     </label>
                     <a href="#bit-manipulation" onclick="scrollToSection(event, 'bit-manipulation')">Bit Manipulation (6)</a>
                 </li>
+                <li class="nav-topic-item">
+                    <label class="topic-select-label" title="Include SQL in random practice">
+                        <input type="checkbox" class="topic-practice-checkbox" data-section-id="sql" data-topic-label="SQL">
+                        <span class="topic-check-icon"></span>
+                    </label>
+                    <a href="#sql" onclick="scrollToSection(event, 'sql')">SQL (40)</a>
+                </li>
 </ul>
 
             <hr class="nav-divider" aria-hidden="true">
@@ -17019,6 +17026,1337 @@ int reverse(int x) {
 }
             </pre>
             <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(log x) | <strong>Space:</strong> O(1)</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== SQL ==================== -->
+<section id="sql" class="section">
+    <div class="section-header">
+        <h2>21. SQL (40 Questions)</h2>
+        <p>Joins, aggregation, window functions and subqueries (MySQL)</p>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/second-highest-salary/">
+        <div class="question-header">
+            <span class="question-title">Second Highest Salary (LC 176)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Return the second highest distinct salary from the Employee table; NULL if it does not exist.</p>
+            <p><strong>Pattern:</strong> Subquery for the max, then take the max strictly below it.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: Employee = [{id:1,salary:100},{id:2,salary:200},{id:3,salary:300}]
+Output: 200</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT MAX(salary) AS SecondHighestSalary
+FROM Employee
+WHERE salary &lt; (SELECT MAX(salary) FROM Employee);
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(1)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/nth-highest-salary/">
+        <div class="question-header">
+            <span class="question-title">Nth Highest Salary (LC 177)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Write a function to return the Nth highest distinct salary; NULL if it does not exist.</p>
+            <p><strong>Pattern:</strong> Stored function with LIMIT offset on a DISTINCT, ordered list.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: Employee = [100,200,300], N = 2
+Output: 200</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+  DECLARE M INT;
+  SET M = N - 1;
+  RETURN (
+    SELECT DISTINCT salary
+    FROM Employee
+    ORDER BY salary DESC
+    LIMIT M, 1
+  );
+END
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n log n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/rank-scores/">
+        <div class="question-header">
+            <span class="question-title">Rank Scores (LC 178)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Rank scores from highest to lowest. Equal scores share a rank, and the next rank is consecutive (no gaps).</p>
+            <p><strong>Pattern:</strong> DENSE_RANK() window function ordered by score descending.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: Scores = [3.50, 3.65, 4.00, 3.85, 4.00, 3.65]
+Output: ranks 4,3,1,2,1,3</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT score,
+       DENSE_RANK() OVER (ORDER BY score DESC) AS &#x27;rank&#x27;
+FROM Scores;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n log n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/consecutive-numbers/">
+        <div class="question-header">
+            <span class="question-title">Consecutive Numbers (LC 180)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Find all numbers that appear at least three times consecutively (by id) in the Logs table.</p>
+            <p><strong>Pattern:</strong> Self-join the table to its next two rows on id and equal num.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: Logs = [(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2)]
+Output: ConsecutiveNums = 1</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT DISTINCT l1.num AS ConsecutiveNums
+FROM Logs l1
+JOIN Logs l2 ON l1.id = l2.id - 1 AND l1.num = l2.num
+JOIN Logs l3 ON l1.id = l3.id - 2 AND l1.num = l3.num;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/department-highest-salary/">
+        <div class="question-header">
+            <span class="question-title">Department Highest Salary (LC 184)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> For each department, find the employee(s) with the highest salary.</p>
+            <p><strong>Pattern:</strong> Group by department to get the max, then match rows with a tuple IN clause.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: highest in IT = 90000 (Max), Sales = 80000 (Henry)
+Output: those rows</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT d.name AS Department, e.name AS Employee, e.salary AS Salary
+FROM Employee e
+JOIN Department d ON e.departmentId = d.id
+WHERE (e.departmentId, e.salary) IN (
+    SELECT departmentId, MAX(salary)
+    FROM Employee
+    GROUP BY departmentId
+);
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/game-play-analysis-iii/">
+        <div class="question-header">
+            <span class="question-title">Game Play Analysis III (LC 534)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> For each player and event date, report the cumulative number of games played up to that date.</p>
+            <p><strong>Pattern:</strong> Running SUM window partitioned by player, ordered by date.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: player 1 plays 1 game on day1, 2 on day2
+Output: 1, then 3</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT player_id, event_date,
+       SUM(games_played) OVER (
+           PARTITION BY player_id ORDER BY event_date
+       ) AS games_played_so_far
+FROM Activity;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n log n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/game-play-analysis-iv/">
+        <div class="question-header">
+            <span class="question-title">Game Play Analysis IV (LC 550)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Report the fraction of players that logged in again the day immediately after their first login, rounded to 2 decimals.</p>
+            <p><strong>Pattern:</strong> Find each player&#x27;s first login, left-join activity on first_date + 1 day.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: 3 players, 1 logs in next day
+Output: 0.33</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT ROUND(
+    COUNT(DISTINCT a.player_id) / COUNT(DISTINCT f.player_id), 2
+) AS fraction
+FROM (
+    SELECT player_id, MIN(event_date) AS first_date
+    FROM Activity
+    GROUP BY player_id
+) f
+LEFT JOIN Activity a
+  ON a.player_id = f.player_id
+ AND a.event_date = f.first_date + INTERVAL 1 DAY;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/managers-with-at-least-5-direct-reports/">
+        <div class="question-header">
+            <span class="question-title">Managers with at Least 5 Direct Reports (LC 570)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Find managers who have at least five direct reports.</p>
+            <p><strong>Pattern:</strong> Group employees by managerId, HAVING count &gt;= 5, look up names.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: John manages 5 employees
+Output: John</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT name
+FROM Employee
+WHERE id IN (
+    SELECT managerId
+    FROM Employee
+    GROUP BY managerId
+    HAVING COUNT(*) &gt;= 5
+);
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/winning-candidate/">
+        <div class="question-header">
+            <span class="question-title">Winning Candidate (LC 574)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Find the candidate who received the most votes and wins the election.</p>
+            <p><strong>Pattern:</strong> Group votes by candidate, order by count descending, take the top one.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: candidate B has the most votes
+Output: B</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT name
+FROM Candidate
+WHERE id = (
+    SELECT candidateId
+    FROM Vote
+    GROUP BY candidateId
+    ORDER BY COUNT(*) DESC
+    LIMIT 1
+);
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/get-highest-answer-rate-question/">
+        <div class="question-header">
+            <span class="question-title">Get Highest Answer Rate Question (LC 578)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Find the question with the highest answer rate (answers / shows). Ties broken by smallest id.</p>
+            <p><strong>Pattern:</strong> Group by question, order by ratio of answer count to show count.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: q285 shown 2 answered 1, q287 shown 1 answered 0
+Output: 285</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT question_id AS survey_log
+FROM SurveyLog
+GROUP BY question_id
+ORDER BY SUM(action = &#x27;answer&#x27;) / SUM(action = &#x27;show&#x27;) DESC
+LIMIT 1;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/count-student-number-in-departments/">
+        <div class="question-header">
+            <span class="question-title">Count Student Number in Departments (LC 580)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Report the number of students in each department, including departments with no students (0).</p>
+            <p><strong>Pattern:</strong> LEFT JOIN department to students, COUNT student ids, order by count then name.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: Math has 0 students
+Output: Math, 0</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT d.dept_name, COUNT(s.student_id) AS student_number
+FROM Department d
+LEFT JOIN Student s ON d.dept_id = s.dept_id
+GROUP BY d.dept_id, d.dept_name
+ORDER BY student_number DESC, d.dept_name;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/investments-in-2016/">
+        <div class="question-header">
+            <span class="question-title">Investments in 2016 (LC 585)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Sum tiv_2016 of policyholders whose tiv_2015 is shared with at least one other, and whose (lat, lon) location is unique.</p>
+            <p><strong>Pattern:</strong> Two filtering subqueries: duplicate tiv_2015 and unique (lat, lon).</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: rows sharing tiv_2015 and unique location
+Output: rounded sum of tiv_2016</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT ROUND(SUM(tiv_2016), 2) AS tiv_2016
+FROM Insurance
+WHERE tiv_2015 IN (
+    SELECT tiv_2015 FROM Insurance GROUP BY tiv_2015 HAVING COUNT(*) &gt; 1
+)
+AND (lat, lon) IN (
+    SELECT lat, lon FROM Insurance GROUP BY lat, lon HAVING COUNT(*) = 1
+);
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/friend-requests-ii-who-has-the-most-friends/">
+        <div class="question-header">
+            <span class="question-title">Friend Requests II: Who Has the Most Friends (LC 602)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Find the person with the most friends and that number of friends from accepted requests.</p>
+            <p><strong>Pattern:</strong> UNION ALL both id columns, group and count, take the top.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: id 3 appears in 3 accepted requests
+Output: id=3, num=3</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT id, COUNT(*) AS num
+FROM (
+    SELECT requester_id AS id FROM RequestAccepted
+    UNION ALL
+    SELECT accepter_id AS id FROM RequestAccepted
+) t
+GROUP BY id
+ORDER BY num DESC
+LIMIT 1;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/tree-node/">
+        <div class="question-header">
+            <span class="question-title">Tree Node (LC 608)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Label each node as Root (no parent), Inner (has parent and children) or Leaf (has parent, no children).</p>
+            <p><strong>Pattern:</strong> CASE on p_id NULL and membership in the set of parent ids.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: node 1 root, 2 inner, 4 leaf
+Output: type per node</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT id,
+    CASE
+        WHEN p_id IS NULL THEN &#x27;Root&#x27;
+        WHEN id IN (SELECT DISTINCT p_id FROM Tree WHERE p_id IS NOT NULL) THEN &#x27;Inner&#x27;
+        ELSE &#x27;Leaf&#x27;
+    END AS type
+FROM Tree;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/shortest-distance-in-a-plane/">
+        <div class="question-header">
+            <span class="question-title">Shortest Distance in a Plane (LC 612)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Find the shortest Euclidean distance between any two distinct points, rounded to 2 decimals.</p>
+            <p><strong>Pattern:</strong> Self-join excluding identical points, MIN of the distance formula.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: points (-1,-1),(0,0),(-1,-2)
+Output: 1.00</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT ROUND(MIN(SQRT(POW(p1.x - p2.x, 2) + POW(p1.y - p2.y, 2))), 2) AS shortest
+FROM Point2D p1
+JOIN Point2D p2 ON (p1.x, p1.y) &lt;&gt; (p2.x, p2.y);
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n^2) | <strong>Space:</strong> O(1)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/second-degree-follower/">
+        <div class="question-header">
+            <span class="question-title">Second Degree Follower (LC 614)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> A second-degree follower is someone who is followed by others and also follows someone. Report each with their follower count.</p>
+            <p><strong>Pattern:</strong> Self-join Follow where a follower is also a followee; count distinct followers.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: Alice followed by 2 and follows Bob
+Output: Alice, 2</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT f1.follower, COUNT(DISTINCT f2.follower) AS num
+FROM Follow f1
+JOIN Follow f2 ON f1.follower = f2.followee
+GROUP BY f1.follower
+ORDER BY f1.follower;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/exchange-seats/">
+        <div class="question-header">
+            <span class="question-title">Exchange Seats (LC 626)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Swap seat ids of consecutive students (1&lt;-&gt;2, 3&lt;-&gt;4, ...). If the count is odd, the last seat stays.</p>
+            <p><strong>Pattern:</strong> CASE on parity; the last odd id is left in place.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: ids 1..5
+Output: 2,1,4,3,5 keep students</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT
+    CASE
+        WHEN id % 2 = 1 AND id = (SELECT MAX(id) FROM Seat) THEN id
+        WHEN id % 2 = 1 THEN id + 1
+        ELSE id - 1
+    END AS id,
+    student
+FROM Seat
+ORDER BY id;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n log n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/customers-who-bought-all-products/">
+        <div class="question-header">
+            <span class="question-title">Customers Who Bought All Products (LC 1045)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Find customers who bought every product in the Product table.</p>
+            <p><strong>Pattern:</strong> Group customers, HAVING distinct product count equals total products.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: customer 1 bought all products
+Output: 1</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT customer_id
+FROM Customer
+GROUP BY customer_id
+HAVING COUNT(DISTINCT product_key) = (SELECT COUNT(*) FROM Product);
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/product-sales-analysis-iii/">
+        <div class="question-header">
+            <span class="question-title">Product Sales Analysis III (LC 1070)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> For each product, report the quantity and price in the first year it was sold.</p>
+            <p><strong>Pattern:</strong> Match each row against (product_id, MIN(year)) per product.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: product 100 sold in 2008 and 2009
+Output: 2008 row</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT product_id, year AS first_year, quantity, price
+FROM Sales
+WHERE (product_id, year) IN (
+    SELECT product_id, MIN(year)
+    FROM Sales
+    GROUP BY product_id
+);
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/project-employees-iii/">
+        <div class="question-header">
+            <span class="question-title">Project Employees III (LC 1077)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> For each project, report the employee(s) with the most experience years.</p>
+            <p><strong>Pattern:</strong> Join project to employee, match against per-project MAX(experience).</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: project 1 most experienced = employee 2
+Output: (1, 2)</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT p.project_id, p.employee_id
+FROM Project p
+JOIN Employee e ON p.employee_id = e.employee_id
+WHERE (p.project_id, e.experience_years) IN (
+    SELECT p2.project_id, MAX(e2.experience_years)
+    FROM Project p2
+    JOIN Employee e2 ON p2.employee_id = e2.employee_id
+    GROUP BY p2.project_id
+);
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/unpopular-books/">
+        <div class="question-header">
+            <span class="question-title">Unpopular Books (LC 1098)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Find books that sold fewer than 10 copies in the last year, excluding books made available within the last month.</p>
+            <p><strong>Pattern:</strong> Filter availability date, then exclude books with &gt;= 10 sold in the window.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: book listed &gt; 1 month, &lt; 10 sold last year
+Output: that book</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT b.book_id, b.name
+FROM Books b
+WHERE b.available_from &lt; &#x27;2019-05-23&#x27;
+AND b.book_id NOT IN (
+    SELECT o.book_id
+    FROM Orders o
+    WHERE o.dispatch_date BETWEEN &#x27;2018-06-23&#x27; AND &#x27;2019-06-23&#x27;
+    GROUP BY o.book_id
+    HAVING SUM(o.quantity) &gt;= 10
+);
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/article-views-ii/">
+        <div class="question-header">
+            <span class="question-title">Article Views II (LC 1149)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Find all viewers who viewed more than one distinct article on the same date, sorted by id.</p>
+            <p><strong>Pattern:</strong> Group by viewer and date, HAVING distinct article count &gt; 1.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: viewer 5 views 2 articles on same day
+Output: 5</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT DISTINCT viewer_id AS id
+FROM Views
+GROUP BY viewer_id, view_date
+HAVING COUNT(DISTINCT article_id) &gt; 1
+ORDER BY id;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/market-analysis-i/">
+        <div class="question-header">
+            <span class="question-title">Market Analysis I (LC 1158)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> For each user, report their join date and the number of orders they placed as a buyer in 2019.</p>
+            <p><strong>Pattern:</strong> LEFT JOIN orders filtered to 2019, group by user.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: user 1 joined 2018, 1 order in 2019
+Output: (1, 2018-01-01, 1)</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT u.user_id AS buyer_id,
+       u.join_date,
+       COUNT(o.order_id) AS orders_in_2019
+FROM Users u
+LEFT JOIN Orders o
+  ON u.user_id = o.buyer_id AND YEAR(o.order_date) = 2019
+GROUP BY u.user_id, u.join_date;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/product-price-at-a-given-date/">
+        <div class="question-header">
+            <span class="question-title">Product Price at a Given Date (LC 1164)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Find the price of every product on 2019-08-16; default price is 10 if no change happened before that date.</p>
+            <p><strong>Pattern:</strong> Take the latest change on/before the date; IFNULL to 10 otherwise.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: product 1 changed to 20 on 2019-08-14
+Output: (1, 20)</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT p.product_id,
+       IFNULL(c.new_price, 10) AS price
+FROM (SELECT DISTINCT product_id FROM Products) p
+LEFT JOIN (
+    SELECT product_id, new_price
+    FROM Products
+    WHERE (product_id, change_date) IN (
+        SELECT product_id, MAX(change_date)
+        FROM Products
+        WHERE change_date &lt;= &#x27;2019-08-16&#x27;
+        GROUP BY product_id
+    )
+) c ON p.product_id = c.product_id;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/immediate-food-delivery-ii/">
+        <div class="question-header">
+            <span class="question-title">Immediate Food Delivery II (LC 1174)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Find the percentage of immediate orders (preferred date = order date) among each customer&#x27;s first order.</p>
+            <p><strong>Pattern:</strong> Restrict to each customer&#x27;s earliest order, average the immediate flag.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: 6 first orders, 2 immediate
+Output: 33.33</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT ROUND(
+    AVG(order_date = customer_pref_delivery_date) * 100, 2
+) AS immediate_percentage
+FROM Delivery
+WHERE (customer_id, order_date) IN (
+    SELECT customer_id, MIN(order_date)
+    FROM Delivery
+    GROUP BY customer_id
+);
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/monthly-transactions-i/">
+        <div class="question-header">
+            <span class="question-title">Monthly Transactions I (LC 1193)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> For each month and country, report total count, approved count, total amount and approved amount.</p>
+            <p><strong>Pattern:</strong> GROUP BY month and country with conditional SUMs.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: transactions across months/countries
+Output: aggregated rows</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT DATE_FORMAT(trans_date, &#x27;%Y-%m&#x27;) AS month,
+       country,
+       COUNT(*) AS trans_count,
+       SUM(state = &#x27;approved&#x27;) AS approved_count,
+       SUM(amount) AS trans_total_amount,
+       SUM(CASE WHEN state = &#x27;approved&#x27; THEN amount ELSE 0 END) AS approved_total_amount
+FROM Transactions
+GROUP BY month, country;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/last-person-to-fit-in-the-bus/">
+        <div class="question-header">
+            <span class="question-title">Last Person to Fit in the Bus (LC 1204)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Find the last person who can board a bus limited to 1000 total weight, boarding in turn order.</p>
+            <p><strong>Pattern:</strong> Running weight via self-join (or window), pick last turn with cumulative &lt;= 1000.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: cumulative weight crosses 1000 after John
+Output: the person before</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT q.person_name
+FROM Queue q
+JOIN Queue q2 ON q2.turn &lt;= q.turn
+GROUP BY q.turn, q.person_name, q.weight
+HAVING SUM(q2.weight) &lt;= 1000
+ORDER BY q.turn DESC
+LIMIT 1;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n^2) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/monthly-transactions-ii/">
+        <div class="question-header">
+            <span class="question-title">Monthly Transactions II (LC 1205)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> For each month and country, report approved count/amount and chargeback count/amount.</p>
+            <p><strong>Pattern:</strong> UNION approved transactions with chargebacks (joined for date/country), then aggregate.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: approvals and chargebacks per month
+Output: four aggregates per row</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT month, country,
+       SUM(type = &#x27;approved&#x27;) AS approved_count,
+       SUM(CASE WHEN type = &#x27;approved&#x27; THEN amount ELSE 0 END) AS approved_amount,
+       SUM(type = &#x27;chargeback&#x27;) AS chargeback_count,
+       SUM(CASE WHEN type = &#x27;chargeback&#x27; THEN amount ELSE 0 END) AS chargeback_amount
+FROM (
+    SELECT DATE_FORMAT(trans_date, &#x27;%Y-%m&#x27;) AS month, country, amount,
+           &#x27;approved&#x27; AS type
+    FROM Transactions WHERE state = &#x27;approved&#x27;
+    UNION ALL
+    SELECT DATE_FORMAT(c.trans_date, &#x27;%Y-%m&#x27;) AS month, t.country, t.amount,
+           &#x27;chargeback&#x27; AS type
+    FROM Chargebacks c JOIN Transactions t ON c.trans_id = t.id
+) s
+GROUP BY month, country;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/capital-gainloss/">
+        <div class="question-header">
+            <span class="question-title">Capital Gain/Loss (LC 1393)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> For each stock, compute the overall capital gain/loss = total sell price minus total buy price.</p>
+            <p><strong>Pattern:</strong> Conditional SUM: add on Sell, subtract on Buy, grouped by stock.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: Corona buy 80 sell 100
+Output: Corona, 20</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT stock_name,
+       SUM(CASE WHEN operation = &#x27;Sell&#x27; THEN price ELSE -price END) AS capital_gain_loss
+FROM Stocks
+GROUP BY stock_name;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/page-recommendations/">
+        <div class="question-header">
+            <span class="question-title">Page Recommendations (LC 1264)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Recommend pages liked by user 1&#x27;s friends that user 1 has not already liked.</p>
+            <p><strong>Pattern:</strong> Resolve friends of user 1, collect their liked pages, exclude user 1&#x27;s likes.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: user 1&#x27;s friends like pages 23,24
+Output: 23, 24</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT DISTINCT l.page_id AS recommended_page
+FROM Likes l
+WHERE l.user_id IN (
+    SELECT user2_id FROM Friendship WHERE user1_id = 1
+    UNION
+    SELECT user1_id FROM Friendship WHERE user2_id = 1
+)
+AND l.page_id NOT IN (
+    SELECT page_id FROM Likes WHERE user_id = 1
+);
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/all-people-report-to-the-given-manager/">
+        <div class="question-header">
+            <span class="question-title">All People Report to the Given Manager (LC 1270)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Find all employees who report directly or indirectly to the head (id 1); depth is at most 3.</p>
+            <p><strong>Pattern:</strong> Chain three self-joins up the management hierarchy to the head.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: 3-level org under head 1
+Output: all reports</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT e1.employee_id
+FROM Employees e1
+JOIN Employees e2 ON e1.manager_id = e2.employee_id
+JOIN Employees e3 ON e2.manager_id = e3.employee_id
+WHERE e3.employee_id = 1 AND e1.employee_id != 1;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/students-and-examinations/">
+        <div class="question-header">
+            <span class="question-title">Students and Examinations (LC 1280)</span>
+            <span class="difficulty easy">Easy</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> For every student and every subject, report how many times the student took that exam (0 if never).</p>
+            <p><strong>Pattern:</strong> CROSS JOIN students with subjects, LEFT JOIN examinations, count.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: Alice never took Math
+Output: (Alice, Math, 0)</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT s.student_id, s.student_name, sub.subject_name,
+       COUNT(e.subject_name) AS attended_exams
+FROM Students s
+CROSS JOIN Subjects sub
+LEFT JOIN Examinations e
+  ON s.student_id = e.student_id AND sub.subject_name = e.subject_name
+GROUP BY s.student_id, s.student_name, sub.subject_name
+ORDER BY s.student_id, sub.subject_name;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(s*j) | <strong>Space:</strong> O(s*j)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/running-total-for-different-genders/">
+        <div class="question-header">
+            <span class="question-title">Running Total for Different Genders (LC 1308)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Report the cumulative score for each gender ordered by day.</p>
+            <p><strong>Pattern:</strong> Running SUM window partitioned by gender, ordered by day.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: F scores 17,23 on day1,day2
+Output: 17, then 40</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT gender, day,
+       SUM(score_points) OVER (
+           PARTITION BY gender ORDER BY day
+       ) AS total
+FROM Scores
+ORDER BY gender, day;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n log n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/restaurant-growth/">
+        <div class="question-header">
+            <span class="question-title">Restaurant Growth (LC 1321)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Compute the 7-day moving total and average customer amount for every day starting from the 7th day.</p>
+            <p><strong>Pattern:</strong> Aggregate daily totals, then 6-preceding window sum/avg, filter to day &gt;= 7th.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: daily totals
+Output: 7-day amount and average_amount</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+WITH daily AS (
+    SELECT visited_on, SUM(amount) AS day_sum
+    FROM Customer
+    GROUP BY visited_on
+)
+SELECT visited_on,
+       SUM(day_sum) OVER (ORDER BY visited_on ROWS 6 PRECEDING) AS amount,
+       ROUND(AVG(day_sum) OVER (ORDER BY visited_on ROWS 6 PRECEDING), 2)
+           AS average_amount
+FROM daily
+WHERE visited_on &gt;= (SELECT MIN(visited_on) FROM daily) + INTERVAL 6 DAY
+ORDER BY visited_on;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n log n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/movie-rating/">
+        <div class="question-header">
+            <span class="question-title">Movie Rating (LC 1341)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Find the user who rated the most movies (ties by name), and the highest-average movie in Feb 2020 (ties by title).</p>
+            <p><strong>Pattern:</strong> Two ordered/limited queries combined with UNION ALL.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: most active user = Daniel; best Feb movie = Frozen 2
+Output: Daniel, Frozen 2</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+(SELECT u.name AS results
+ FROM MovieRating mr
+ JOIN Users u ON mr.user_id = u.user_id
+ GROUP BY mr.user_id, u.name
+ ORDER BY COUNT(*) DESC, u.name
+ LIMIT 1)
+UNION ALL
+(SELECT m.title AS results
+ FROM MovieRating mr
+ JOIN Movies m ON mr.movie_id = m.movie_id
+ WHERE mr.created_at BETWEEN &#x27;2020-02-01&#x27; AND &#x27;2020-02-29&#x27;
+ GROUP BY mr.movie_id, m.title
+ ORDER BY AVG(mr.rating) DESC, m.title
+ LIMIT 1);
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n log n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/count-salary-categories/">
+        <div class="question-header">
+            <span class="question-title">Count Salary Categories (LC 1907)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> Count bank accounts in three salary categories: Low (&lt; 20000), Average (20000-50000), High (&gt; 50000).</p>
+            <p><strong>Pattern:</strong> Three conditional-count SELECTs combined with UNION.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: incomes spread across bands
+Output: count per category</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT &#x27;Low Salary&#x27; AS category,
+       SUM(income &lt; 20000) AS accounts_count
+FROM Accounts
+UNION
+SELECT &#x27;Average Salary&#x27;,
+       SUM(income BETWEEN 20000 AND 50000)
+FROM Accounts
+UNION
+SELECT &#x27;High Salary&#x27;,
+       SUM(income &gt; 50000)
+FROM Accounts;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(1)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/confirmation-rate/">
+        <div class="question-header">
+            <span class="question-title">Confirmation Rate (LC 1934)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> For each signed-up user, report the confirmation rate = confirmed requests / total requests (0 if none), rounded to 2 decimals.</p>
+            <p><strong>Pattern:</strong> LEFT JOIN signups to confirmations, average the confirmed flag.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: user 6 has 2 requests, 1 confirmed
+Output: 0.50</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT s.user_id,
+       ROUND(AVG(IF(c.action = &#x27;confirmed&#x27;, 1, 0)), 2) AS confirmation_rate
+FROM Signups s
+LEFT JOIN Confirmations c ON s.user_id = c.user_id
+GROUP BY s.user_id;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/strong-friendship/">
+        <div class="question-header">
+            <span class="question-title">Strong Friendship (LC 1949)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> A friendship is strong if the two users share at least three common friends. Report each strong pair and its common-friend count.</p>
+            <p><strong>Pattern:</strong> Build an undirected friend set, count mutual friends of each existing pair.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: users 1 and 2 share 3 friends
+Output: (1, 2, 3)</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+WITH undirected AS (
+    SELECT user1_id AS u, user2_id AS v FROM Friendship
+    UNION
+    SELECT user2_id, user1_id FROM Friendship
+)
+SELECT f.user1_id, f.user2_id, COUNT(*) AS common_friend
+FROM Friendship f
+JOIN undirected a ON f.user1_id = a.u
+JOIN undirected b ON f.user2_id = b.u AND a.v = b.v
+GROUP BY f.user1_id, f.user2_id
+HAVING COUNT(*) &gt;= 3;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n^2) | <strong>Space:</strong> O(n)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/count-the-number-of-experiments/">
+        <div class="question-header">
+            <span class="question-title">Count the Number of Experiments (LC 1990)</span>
+            <span class="difficulty medium">Medium</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> For every platform (Android, IOS, Web) and experiment (Reading, Sports, Programming), count experiments performed (0 if none).</p>
+            <p><strong>Pattern:</strong> CROSS JOIN the fixed platform and experiment sets, LEFT JOIN actual data.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: only some combinations exist
+Output: all 9 combinations with counts</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+SELECT p.platform, e.experiment_name,
+       COUNT(r.experiment_id) AS num_experiments
+FROM (SELECT &#x27;Android&#x27; AS platform UNION SELECT &#x27;IOS&#x27; UNION SELECT &#x27;Web&#x27;) p
+CROSS JOIN (
+    SELECT &#x27;Reading&#x27; AS experiment_name
+    UNION SELECT &#x27;Sports&#x27; UNION SELECT &#x27;Programming&#x27;
+) e
+LEFT JOIN Experiments r
+  ON r.platform = p.platform AND r.experiment_name = e.experiment_name
+GROUP BY p.platform, e.experiment_name;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n) | <strong>Space:</strong> O(1)</p></div>
+        </div>
+    </div>
+
+    <div class="question-card" data-leetcode-url="https://leetcode.com/problems/the-number-of-seniors-and-juniors-to-join-the-company/">
+        <div class="question-header">
+            <span class="question-title">The Number of Seniors and Juniors to Join the Company (LC 2004)</span>
+            <span class="difficulty hard">Hard</span>
+        </div>
+        <div class="question-description">
+            <p><strong>Problem:</strong> With a 70000 budget, hire seniors first (cheapest first), then juniors with the remaining budget. Report how many of each are hired.</p>
+            <p><strong>Pattern:</strong> Running salary totals per experience; count seniors within budget, then juniors against leftover.</p>
+        </div>
+        <div class="test-cases">
+            <div class="test-case"><h4>Test Case 1:</h4><pre>Input: budget 70000, salaries per candidate
+Output: Senior count, Junior count</pre></div>
+        </div>
+        <div class="animation-box">
+            <h3>Animation</h3>
+            <div class="step-info" style="min-height:120px; display:flex; align-items:center; justify-content:center; color:#718096;">Placeholder &mdash; animation to be added later.</div>
+        </div>
+        <div class="solution">
+            <h3>Solution (SQL):</h3>
+            <pre>
+WITH ranked AS (
+    SELECT employee_id, experience, salary,
+           SUM(salary) OVER (
+               PARTITION BY experience ORDER BY salary, employee_id
+           ) AS running
+    FROM Candidates
+),
+seniors AS (
+    SELECT * FROM ranked
+    WHERE experience = &#x27;Senior&#x27; AND running &lt;= 70000
+),
+senior_spent AS (
+    SELECT IFNULL(SUM(salary), 0) AS spent FROM seniors
+)
+SELECT &#x27;Senior&#x27; AS experience, COUNT(*) AS accepted_candidates FROM seniors
+UNION ALL
+SELECT &#x27;Junior&#x27;, COUNT(*)
+FROM ranked, senior_spent
+WHERE experience = &#x27;Junior&#x27;
+  AND running &lt;= 70000 - senior_spent.spent;
+            </pre>
+            <div class="complexity"><h4>Complexity:</h4><p><strong>Time:</strong> O(n log n) | <strong>Space:</strong> O(n)</p></div>
         </div>
     </div>
 </section>
