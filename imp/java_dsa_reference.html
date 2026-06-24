@@ -70,6 +70,30 @@ body{font-family:'Inter','Segoe UI',system-ui,-apple-system,sans-serif;backgroun
 /* CODE BLOCKS */
 pre{background:var(--code-bg);border:1px solid var(--code-border);border-radius:8px;padding:14px 18px;overflow-x:auto;margin:10px 0;font-size:.82rem;line-height:1.7;position:relative}
 pre code{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;color:var(--text)}
+/* Type / View Code practice toolbar */
+.codeArea{margin:10px 0}
+.codeBar{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+.codeBtn{display:inline-flex;align-items:center;gap:7px;cursor:pointer;background:var(--surface2);color:var(--accent);border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-family:inherit;font-weight:600;font-size:.78rem;letter-spacing:.2px;transition:border-color .15s,background .15s}
+.codeBtn:hover{border-color:var(--accent)}
+.codeBtn[aria-expanded="true"]{border-color:var(--accent);background:var(--bg)}
+.codeBtn .chev{display:inline-block;transition:transform .2s;font-size:.8em}
+.codeBtn[aria-expanded="true"] .chev{transform:rotate(90deg)}
+.typeBtn .lbl:after{content:'Type'}
+.typeBtn[aria-expanded="true"] .lbl:after{content:'Hide Typing Area'}
+.viewBtn .lbl:after{content:'View Code'}
+.viewBtn[aria-expanded="true"] .lbl:after{content:'Hide Code'}
+.codeInput{width:100%;min-height:200px;resize:vertical;background:var(--code-bg);color:var(--text);border:1px solid var(--code-border);border-radius:8px;padding:14px 16px;font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.82rem;line-height:1.7;tab-size:4;-moz-tab-size:4;white-space:pre;overflow:auto;margin:0 0 10px}
+.codeInput:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(108,140,255,.15)}
+.codeInput::placeholder{color:var(--text2);font-style:italic}
+.codeArea pre{margin:0}
+.codeInput.collapsed,.codeArea pre.collapsed{display:none}
+/* Visible Input / Output box for practice example cards */
+.io-box{background:var(--code-bg);border:1px solid var(--code-border);border-left:3px solid var(--accent2);border-radius:8px;padding:10px 14px;margin:10px 0;font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.8rem;line-height:1.8}
+.io-box .io-label{font-family:'Inter','Segoe UI',sans-serif;font-weight:700;color:var(--accent2);margin-right:6px}
+.io-box code{color:var(--text);background:none;padding:0;font-size:1em}
+/* Practice cards are not collapsible — only Type / View Code toggle */
+.card.static-card .card-body{display:block}
+.card.static-card .card-header{cursor:default}
 .copy-btn{position:absolute;top:6px;right:6px;background:var(--surface2);border:1px solid var(--border);color:var(--text2);padding:3px 8px;border-radius:4px;font-size:.7rem;cursor:pointer;opacity:0;transition:.2s}
 pre:hover .copy-btn{opacity:1}
 .copy-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -271,9 +295,9 @@ kbd{background:var(--surface2);border:1px solid var(--border);border-radius:4px;
   </div>
   <div class="nav-group"><div class="nav-group-title">Functional Java</div>
     <a class="nav-link" href="#lambda">Lambda Expressions</a>
+    <a class="nav-link" href="#comparator">Comparator</a>
     <a class="nav-link" href="#streams">Streams</a>
     <a class="nav-link" href="#streams-advance">Streams — Advance Java</a>
-    <a class="nav-link" href="#comparator">Comparator</a>
   </div>
   <div class="nav-group"><div class="nav-group-title">Modern Java</div>
     <a class="nav-link" href="#modern-java">Java 8 to 21+ Features</a>
@@ -442,7 +466,7 @@ List&lt;String&gt; list = Arrays.stream(str.split("\\."))
 <div class="category-header">
   <div class="category-icon">Aa</div>
   <span class="category-title">Strings</span>
-  <span class="category-count">7 topics</span>
+  <span class="category-count">8 topics</span>
 </div>
 
 <div class="card" data-tags="string functions methods builtin length charAt substring">
@@ -597,6 +621,44 @@ String firstPart = s.substring(0, s.indexOf("|"));
 "apple,banana".split(",")[0]   <span class="cmt">// "apple"</span>
 "2024-01-15".split("-")[0]     <span class="cmt">// "2024"</span>
 "Hello World".split(" ")[0]    <span class="cmt">// "Hello"</span></code></pre>
+</div></div>
+
+<div class="card" data-tags="string replaceAll regex palindrome whitespace digits letters filter cleanup">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q"><code>replaceAll()</code> patterns for string cleanup</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<span class="method-tag">replaceAll()</span>
+<pre><code>String s = "Hello, World! 123";
+
+<span class="cmt">// Remove all spaces</span>
+s.replaceAll("\\s+", "");
+
+<span class="cmt">// Remove spaces, commas, periods</span>
+s.replaceAll("[\\s,.]+", "");
+
+<span class="cmt">// Keep only letters and digits</span>
+s.replaceAll("[^a-zA-Z0-9]", "");
+
+<span class="cmt">// Keep only digits</span>
+s.replaceAll("[^0-9]", "");
+
+<span class="cmt">// Remove all letters</span>
+s.replaceAll("[a-zA-Z]", "");
+
+<span class="cmt">// LeetCode palindrome pattern (most common)</span>
+s = s.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();</code></pre>
+
+<h4>Regex quick reference</h4>
+<pre><code>\s  = whitespace
+\d  = digit
+\w  = word character
+.   = any character
++   = one or more
+*   = zero or more
+[]  = any of these characters
+[^] = not these characters</code></pre>
 </div></div>
 
 </section>
@@ -1866,14 +1928,747 @@ Supplier&lt;T&gt;      → get()             → T
 Comparator&lt;T&gt;    → compare(T, T)     → int</code></pre>
 </div></div>
 
-<div class="card" data-tags="lambda practice exercises learn hands-on animated">
+<div class="card" data-tags="lambda practice exercises filter map collect count">
 <div class="card-header" onclick="toggleCard(this)">
-  <span class="card-q">&#127891; ANIMATED PRACTICE — Watch Lambda pipelines step-by-step</span>
+  <span class="card-q">Ex 1) Squares of even numbers</span>
   <span class="card-arrow">&#9660;</span>
 </div>
 <div class="card-body">
-<div class="anim-problem-tabs" id="lambdaTabs"></div>
-<div id="lambdaAnimContainer"></div>
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</code></div>
+<div><span class="io-label">Output:</span> <code>[4, 16, 36, 64, 100]</code></div>
+</div>
+<pre><code>List&lt;Integer&gt; nums = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+List&lt;Integer&gt; result = nums.stream()
+    .filter(n -&gt; n % 2 == 0)
+    .map(n -&gt; n * n)
+    .collect(Collectors.toList());
+
+// Output: [4, 16, 36, 64, 100]</code></pre>
+</div></div>
+
+<div class="card" data-tags="lambda practice exercises filter map collect count">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">Ex 2) Count names starting with "A"</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>["Alice", "Bob", "Alex", "Charlie", "Anna"]</code></div>
+<div><span class="io-label">Output:</span> <code>3</code></div>
+</div>
+<pre><code>List&lt;String&gt; names = Arrays.asList("Alice", "Bob", "Alex", "Charlie", "Anna");
+
+long result = names.stream()
+    .filter(n -&gt; n.startsWith("A"))
+    .count();
+
+// Output: 3</code></pre>
+</div></div>
+
+<div class="card" data-tags="lambda practice exercises filter map collect count">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">Ex 3) Words longer than 3, uppercased</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>["hi", "hello", "hey", "world", "java"]</code></div>
+<div><span class="io-label">Output:</span> <code>[HELLO, WORLD, JAVA]</code></div>
+</div>
+<pre><code>List&lt;String&gt; words = Arrays.asList("hi", "hello", "hey", "world", "java");
+
+List&lt;String&gt; result = words.stream()
+    .filter(w -&gt; w.length() &gt; 3)
+    .map(w -&gt; w.toUpperCase())
+    .collect(Collectors.toList());
+
+// Output: [HELLO, WORLD, JAVA]</code></pre>
+</div></div>
+
+</section>
+
+<!-- ======================= COMPARATOR ======================= -->
+<section class="category" id="comparator">
+<div class="category-header">
+  <div class="category-icon">&#8660;</div>
+  <span class="category-title">Comparator — Learn to Sort Anything</span>
+  <span class="category-count">6 topics</span>
+</div>
+
+<div class="card" data-tags="comparator what is introduction beginner basics">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#128161; WHAT IS A COMPARATOR? (The simple explanation)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note"><strong>Comparator = A tool to tell Java how to sort things</strong></div>
+
+<h4>The Problem It Solves</h4>
+<pre><code><span class="cmt">// Java knows how to sort numbers and strings:</span>
+List&lt;Integer&gt; nums = Arrays.asList(5, 2, 8, 1);
+Collections.sort(nums);  <span class="cmt">// [1, 2, 5, 8] ✅</span>
+
+<span class="cmt">// But what if you want to sort by custom rules?</span>
+<span class="cmt">// - Sort by absolute value?</span>
+<span class="cmt">// - Sort strings by length?</span>
+<span class="cmt">// - Sort objects by age, then by name?</span>
+
+<span class="cmt">// That's where Comparator comes in!</span></code></pre>
+
+<h4>Basic Concept: Compare Two Things</h4>
+<pre><code><span class="cmt">// A Comparator answers: "Which comes first, A or B?"</span>
+
+(a, b) -&gt; ...
+
+<span class="cmt">// Return negative → a comes BEFORE b</span>
+<span class="cmt">// Return zero     → a equals b (same position)</span>
+<span class="cmt">// Return positive → a comes AFTER b</span></code></pre>
+
+<h4>Simple Example: Sort by Length</h4>
+<pre><code>List&lt;String&gt; words = Arrays.asList("apple", "pie", "banana", "cat");
+
+<span class="cmt">// Sort by length (shorter words first)</span>
+words.sort((a, b) -&gt; a.length() - b.length());
+<span class="cmt">// Result: ["pie", "cat", "apple", "banana"]</span>
+
+<span class="cmt">// How it works:</span>
+<span class="cmt">// "apple".length() - "pie".length() = 5 - 3 = 2 (positive → "pie" comes first)</span>
+<span class="cmt">// "cat".length() - "banana".length() = 3 - 6 = -3 (negative → "cat" comes first)</span></code></pre>
+
+<h4>The Magic Formula</h4>
+<pre><code><span class="cmt">// Ascending (small to big)</span>
+(a, b) -&gt; a - b
+
+<span class="cmt">// Descending (big to small)</span>
+(a, b) -&gt; b - a
+
+<span class="cmt">// That's it! Everything else builds on this.</span></code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator write how to create basic sort ascending descending">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#9997;&#65039; HOW TO WRITE YOUR FIRST COMPARATOR (Step-by-step)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>Step 1: Understand what you're comparing</h4>
+<pre><code><span class="cmt">// Task: Sort numbers from smallest to largest</span>
+
+<span class="cmt">// Ask yourself: Given two numbers a and b,</span>
+<span class="cmt">// which should come first?</span></code></pre>
+
+<h4>Step 2: Write the logic</h4>
+<pre><code><span class="cmt">// If a &lt; b → a should come first → return negative</span>
+<span class="cmt">// If a == b → same position → return 0</span>
+<span class="cmt">// If a &gt; b → b should come first → return positive</span>
+
+<span class="cmt">// Shortcut: Just subtract!</span>
+(a, b) -&gt; a - b</code></pre>
+
+<h4>Step 3: Use it to sort</h4>
+<pre><code>List&lt;Integer&gt; nums = Arrays.asList(5, 2, 8, 1, 9);
+nums.sort((a, b) -&gt; a - b);
+<span class="cmt">// Result: [1, 2, 5, 8, 9]</span></code></pre>
+
+<h4>Common Patterns (Copy these!)</h4>
+<pre><code><span class="cmt">// 1. Sort integers ascending</span>
+nums.sort((a, b) -&gt; a - b);
+
+<span class="cmt">// 2. Sort integers descending</span>
+nums.sort((a, b) -&gt; b - a);
+
+<span class="cmt">// 3. Sort strings alphabetically</span>
+words.sort((a, b) -&gt; a.compareTo(b));
+
+<span class="cmt">// 4. Sort strings by length</span>
+words.sort((a, b) -&gt; a.length() - b.length());
+
+<span class="cmt">// 5. Sort by absolute value</span>
+nums.sort((a, b) -&gt; Math.abs(a) - Math.abs(b));</code></pre>
+
+<h4>Practice: Write comparators for these</h4>
+<pre><code><span class="cmt">// Task 1: Sort strings by length (longest first)</span>
+words.sort((a, b) -&gt; b.length() - a.length());
+
+<span class="cmt">// Task 2: Sort numbers, evens before odds</span>
+nums.sort((a, b) -&gt; (a % 2) - (b % 2));
+
+<span class="cmt">// Task 3: Sort strings case-insensitive</span>
+words.sort((a, b) -&gt; a.toLowerCase().compareTo(b.toLowerCase()));</code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator advanced multi-level secondary sort then">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#128295; ADVANCED: Sort by Multiple Criteria</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="note">Sometimes you need: "Sort by X, and if X is the same, then sort by Y"</div>
+
+<h4>Method 1: Manual Comparison</h4>
+<pre><code>List&lt;String&gt; words = Arrays.asList("apple", "pie", "banana", "cat", "dog");
+
+<span class="cmt">// Sort by length, then alphabetically if same length</span>
+words.sort((a, b) -&gt; {
+    if (a.length() != b.length()) {
+        return a.length() - b.length();  <span class="cmt">// primary: by length</span>
+    }
+    return a.compareTo(b);               <span class="cmt">// secondary: alphabetically</span>
+});
+<span class="cmt">// Result: ["cat", "dog", "pie", "apple", "banana"]</span></code></pre>
+
+<h4>Method 2: Using Comparator.comparing() + thenComparing()</h4>
+<pre><code><span class="cmt">// Same result, cleaner code</span>
+words.sort(
+    Comparator.comparing(s -&gt; s.length())
+        .thenComparing(s -&gt; s)
+);
+
+<span class="cmt">// Or with comparingInt + natural order (lambdas):</span>
+words.sort(
+    Comparator.comparingInt(s -&gt; s.length())
+        .thenComparing(Comparator.naturalOrder())
+);</code></pre>
+
+<h4>Real Example: Sort People</h4>
+<pre><code>class Person {
+    String name;
+    int age;
+    Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+}
+
+List&lt;Person&gt; people = Arrays.asList(
+    new Person("Alice", 25),
+    new Person("Bob", 25),
+    new Person("Charlie", 30)
+);
+
+<span class="cmt">// Sort by age, then by name if same age</span>
+people.sort((p1, p2) -&gt; {
+    if (p1.age != p2.age) {
+        return p1.age - p2.age;
+    }
+    return p1.name.compareTo(p2.name);
+});
+
+<span class="cmt">// Result: Alice(25), Bob(25), Charlie(30)</span></code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator comparing helpers utility methods">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#128736; BUILT-IN HELPERS (Make life easier)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>Comparator.reverseOrder() — Reverse sort</h4>
+<pre><code>List&lt;Integer&gt; nums = Arrays.asList(5, 2, 8, 1, 9);
+
+<span class="cmt">// Sort descending (largest first)</span>
+nums.sort(Comparator.reverseOrder());
+<span class="cmt">// Result: [9, 8, 5, 2, 1]</span></code></pre>
+
+<h4>Comparator.naturalOrder() — Normal sort</h4>
+<pre><code><span class="cmt">// Sort ascending (smallest first)</span>
+nums.sort(Comparator.naturalOrder());
+<span class="cmt">// Result: [1, 2, 5, 8, 9]</span></code></pre>
+
+<h4>Comparator.comparing() — Sort by property</h4>
+<pre><code><span class="cmt">// Sort strings by length</span>
+words.sort(Comparator.comparing(s -&gt; s.length()));
+
+<span class="cmt">// Sort people by age</span>
+people.sort(Comparator.comparing(p -&gt; p.age));
+
+<span class="cmt">// Sort people by name</span>
+people.sort(Comparator.comparing(p -&gt; p.name));</code></pre>
+
+<h4>Comparator.comparingInt/Double/Long — For primitives</h4>
+<pre><code><span class="cmt">// More efficient than comparing()</span>
+words.sort(Comparator.comparingInt(s -&gt; s.length()));
+people.sort(Comparator.comparingInt(p -&gt; p.age));</code></pre>
+
+<h4>.reversed() — Flip the order</h4>
+<pre><code><span class="cmt">// Sort by length descending</span>
+words.sort(Comparator.comparingInt(s -&gt; s.length()).reversed());
+
+<span class="cmt">// Sort by age descending</span>
+people.sort(Comparator.comparingInt(p -&gt; p.age).reversed());</code></pre>
+
+<h4>.thenComparing() — Secondary sort</h4>
+<pre><code><span class="cmt">// Sort by age, then by name</span>
+people.sort(
+    Comparator.comparingInt(p -&gt; p.age)
+        .thenComparing(p -&gt; p.name)
+);
+
+<span class="cmt">// Can chain multiple times</span>
+people.sort(
+    Comparator.comparingInt(p -&gt; p.age)
+        .thenComparing(p -&gt; p.name)
+        .thenComparing(p -&gt; p.address)
+);</code></pre>
+
+<h4>Quick Reference</h4>
+<pre><code>Comparator.naturalOrder()           <span class="cmt">// ascending</span>
+Comparator.reverseOrder()           <span class="cmt">// descending</span>
+Comparator.comparing(p -&gt; p.field)  <span class="cmt">// by property</span>
+Comparator.comparingInt(...)        <span class="cmt">// by int (efficient)</span>
+.reversed()                         <span class="cmt">// flip order</span>
+.thenComparing(...)                 <span class="cmt">// secondary sort</span></code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator real examples use cases practical">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#128200; REAL-WORLD EXAMPLES (Interview favorites)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>1. Sort by frequency, then by value</h4>
+<pre><code>List&lt;Integer&gt; nums = Arrays.asList(1, 1, 1, 2, 2, 3);
+
+<span class="cmt">// Count frequencies</span>
+Map&lt;Integer, Long&gt; freq = nums.stream()
+    .collect(Collectors.groupingBy(n -&gt; n, Collectors.counting()));
+
+<span class="cmt">// Sort: most frequent first, if same frequency then smaller value first</span>
+nums.sort((a, b) -&gt; {
+    long freqA = freq.get(a);
+    long freqB = freq.get(b);
+    if (freqA != freqB) {
+        return Long.compare(freqB, freqA);  <span class="cmt">// desc frequency</span>
+    }
+    return a - b;  <span class="cmt">// asc value</span>
+});
+<span class="cmt">// Result: [1, 1, 1, 2, 2, 3]</span></code></pre>
+
+<h4>2. PriorityQueue with custom order</h4>
+<pre><code><span class="cmt">// Min heap (default)</span>
+PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+
+<span class="cmt">// Max heap (reverse order)</span>
+PriorityQueue&lt;Integer&gt; maxHeap = new PriorityQueue&lt;&gt;(
+    (a, b) -&gt; b - a
+);
+
+<span class="cmt">// By absolute value</span>
+PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;(
+    (a, b) -&gt; Math.abs(a) - Math.abs(b)
+);</code></pre>
+
+<h4>3. Sort 2D array by first element</h4>
+<pre><code>int[][] intervals = {{5,10}, {1,3}, {8,12}};
+
+<span class="cmt">// Sort by start time</span>
+Arrays.sort(intervals, (a, b) -&gt; a[0] - b[0]);
+<span class="cmt">// Result: [[1,3], [5,10], [8,12]]</span>
+
+<span class="cmt">// Sort by end time</span>
+Arrays.sort(intervals, (a, b) -&gt; a[1] - b[1]);
+
+<span class="cmt">// Sort by start, then by end</span>
+Arrays.sort(intervals, (a, b) -&gt; {
+    if (a[0] != b[0]) return a[0] - b[0];
+    return a[1] - b[1];
+});</code></pre>
+
+<h4>4. Find top K elements with Stream</h4>
+<pre><code>List&lt;Integer&gt; nums = Arrays.asList(5, 2, 8, 1, 9, 3, 7);
+
+<span class="cmt">// Get top 3 largest</span>
+List&lt;Integer&gt; top3 = nums.stream()
+    .sorted(Comparator.reverseOrder())
+    .limit(3)
+    .collect(Collectors.toList());
+<span class="cmt">// [9, 8, 7]</span></code></pre>
+
+<h4>5. Custom object sorting</h4>
+<pre><code>class Student {
+    String name;
+    int grade;
+    double gpa;
+}
+
+List&lt;Student&gt; students = ...;
+
+<span class="cmt">// Sort by grade (desc), then GPA (desc), then name (asc)</span>
+students.sort(
+    Comparator.comparingInt((Student s) -&gt; s.grade).reversed()
+        .thenComparingDouble((Student s) -&gt; s.gpa).reversed()
+        .thenComparing(s -&gt; s.name)
+);</code></pre>
+
+<h4>6. Sort map entries by value</h4>
+<pre><code>Map&lt;String, Integer&gt; scores = new HashMap&lt;&gt;();
+scores.put("Alice", 85);
+scores.put("Bob", 92);
+scores.put("Charlie", 78);
+
+<span class="cmt">// Sort by score descending</span>
+List&lt;Map.Entry&lt;String, Integer&gt;&gt; sorted = scores.entrySet().stream()
+    .sorted((e1, e2) -&gt; e2.getValue() - e1.getValue())
+    .collect(Collectors.toList());
+<span class="cmt">// Bob=92, Alice=85, Charlie=78</span></code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator mistakes errors common wrong avoid">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">&#10060; COMMON MISTAKES (Don't make these!)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<h4>Mistake 1: Subtracting doubles/floats</h4>
+<div class="comparison">
+<div class="comp-bad"><div class="comp-label">WRONG</div>
+<pre><code><span class="cmt">// ❌ Casting loses precision!</span>
+(a, b) -&gt; (int)(a - b)</code></pre></div>
+<div class="comp-good"><div class="comp-label">RIGHT</div>
+<pre><code><span class="cmt">// ✅ Use Double.compare()</span>
+(a, b) -&gt; Double.compare(a, b)</code></pre></div>
+</div>
+
+<h4>Mistake 2: Wrong subtraction order</h4>
+<div class="comparison">
+<div class="comp-bad"><div class="comp-label">WRONG</div>
+<pre><code><span class="cmt">// Wanted ascending, wrote descending</span>
+(a, b) -&gt; b - a  <span class="cmt">// ❌ This is DESC!</span></code></pre></div>
+<div class="comp-good"><div class="comp-label">RIGHT</div>
+<pre><code><span class="cmt">// Ascending order</span>
+(a, b) -&gt; a - b  <span class="cmt">// ✅ a-b = ASC</span></code></pre></div>
+</div>
+
+<h4>Mistake 3: Forgetting to return in multi-line</h4>
+<div class="comparison">
+<div class="comp-bad"><div class="comp-label">WRONG</div>
+<pre><code>(a, b) -&gt; {
+    a.length() - b.length()  <span class="cmt">// ❌ No return!</span>
+}</code></pre></div>
+<div class="comp-good"><div class="comp-label">RIGHT</div>
+<pre><code>(a, b) -&gt; {
+    return a.length() - b.length();  <span class="cmt">// ✅</span>
+}</code></pre></div>
+</div>
+
+<h4>Mistake 4: Integer overflow with subtraction</h4>
+<pre><code><span class="cmt">// ❌ If numbers are large, a - b might overflow!</span>
+(a, b) -&gt; a - b
+
+<span class="cmt">// ✅ Use Integer.compare() for safety</span>
+(a, b) -&gt; Integer.compare(a, b)</code></pre>
+
+<h4>Remember:</h4>
+<pre><code>1. (a, b) → a - b = ascending (small to big)
+2. (a, b) → b - a = descending (big to small)
+3. Use .compare() for doubles/floats
+4. Use .compareTo() for Strings
+5. Always return a value in the lambda!</code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator practice sort sorting lambda 2d array intervals">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">C1) Sort strings by length (ascending)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>["apple", "pie", "banana", "cat"]</code></div>
+<div><span class="io-label">Output:</span> <code>[pie, cat, apple, banana]</code></div>
+</div>
+<pre><code>List&lt;String&gt; data = new ArrayList&lt;&gt;(Arrays.asList("apple", "pie", "banana", "cat"));
+
+data.sort((a, b) -&gt; a.length() - b.length());
+
+// Output: [pie, cat, apple, banana]</code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator practice sort sorting lambda 2d array intervals">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">C2) Sort numbers descending</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>[5, 2, 8, 1, 9, 3]</code></div>
+<div><span class="io-label">Output:</span> <code>[9, 8, 5, 3, 2, 1]</code></div>
+</div>
+<pre><code>List&lt;Integer&gt; data = new ArrayList&lt;&gt;(Arrays.asList(5, 2, 8, 1, 9, 3));
+
+data.sort((a, b) -&gt; b - a);
+
+// Output: [9, 8, 5, 3, 2, 1]</code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator practice sort sorting lambda 2d array intervals">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">C3) Evens before odds, then ascending</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>[1, 2, 3, 4, 5, 6]</code></div>
+<div><span class="io-label">Output:</span> <code>[2, 4, 6, 1, 3, 5]</code></div>
+</div>
+<pre><code>List&lt;Integer&gt; data = new ArrayList&lt;&gt;(Arrays.asList(1, 2, 3, 4, 5, 6));
+
+data.sort((a, b) -&gt; {
+    boolean aEven = a % 2 == 0, bEven = b % 2 == 0;
+    if (aEven &amp;&amp; !bEven) return -1;   // even comes first
+    if (!aEven &amp;&amp; bEven) return 1;
+    return a - b;                     // same parity -&gt; ascending
+});
+
+// Output: [2, 4, 6, 1, 3, 5]</code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator practice sort sorting lambda 2d array intervals">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">C4) Sort strings by last character</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>["apple", "dog", "cat", "elephant"]</code></div>
+<div><span class="io-label">Output:</span> <code>[apple, dog, cat, elephant]</code></div>
+</div>
+<pre><code>List&lt;String&gt; data = new ArrayList&lt;&gt;(Arrays.asList("apple", "dog", "cat", "elephant"));
+
+data.sort((a, b) -&gt; a.charAt(a.length() - 1) - b.charAt(b.length() - 1));
+
+// Output: [apple, dog, cat, elephant]</code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator practice sort sorting lambda 2d array intervals">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">C5) Sort 2D array by row sum</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>[[1,2], [5,1], [3,3], [4,0]]</code></div>
+<div><span class="io-label">Output:</span> <code>[[1, 2], [4, 0], [5, 1], [3, 3]]</code></div>
+</div>
+<pre><code>int[][] data = {{1, 2}, {5, 1}, {3, 3}, {4, 0}};
+
+Arrays.sort(data, (a, b) -&gt; (a[0] + a[1]) - (b[0] + b[1]));
+
+// Output: [[1, 2], [4, 0], [5, 1], [3, 3]]</code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator practice sort sorting lambda 2d array intervals">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">C6) Sort intervals by start, tie-break by end</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>[[1,4], [2,3], [1,2], [3,5], [2,6], [3,4]]</code></div>
+<div><span class="io-label">Output:</span> <code>[[1, 2], [1, 4], [2, 3], [2, 6], [3, 4], [3, 5]]</code></div>
+</div>
+<pre><code>int[][] data = {{1, 4}, {2, 3}, {1, 2}, {3, 5}, {2, 6}, {3, 4}};
+
+Arrays.sort(data, (a, b) -&gt; a[0] != b[0] ? a[0] - b[0] : a[1] - b[1]);
+
+// Output: [[1, 2], [1, 4], [2, 3], [2, 6], [3, 4], [3, 5]]</code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator practice sort sorting lambda 2d array intervals">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">C7) Sort intervals by end time (greedy activity selection)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>[[1,5], [3,4], [2,8], [5,7], [4,6], [6,9]]</code></div>
+<div><span class="io-label">Output:</span> <code>[[3, 4], [1, 5], [4, 6], [5, 7], [2, 8], [6, 9]]</code></div>
+</div>
+<pre><code>int[][] data = {{1, 5}, {3, 4}, {2, 8}, {5, 7}, {4, 6}, {6, 9}};
+
+Arrays.sort(data, (a, b) -&gt; a[1] - b[1]);
+
+// Output: [[3, 4], [1, 5], [4, 6], [5, 7], [2, 8], [6, 9]]</code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator practice sort sorting lambda 2d array intervals">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">C8) Sort by frequency (desc), tie-break by value (asc)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>[4, 2, 2, 8, 3, 3, 3, 1, 4, 4]</code></div>
+<div><span class="io-label">Output:</span> <code>[3, 3, 3, 4, 4, 4, 2, 2, 1, 8]</code></div>
+</div>
+<pre><code>int[] arr = {4, 2, 2, 8, 3, 3, 3, 1, 4, 4};
+
+Map&lt;Integer, Long&gt; freq = Arrays.stream(arr).boxed()
+    .collect(Collectors.groupingBy(n -&gt; n, Collectors.counting()));
+
+List&lt;Integer&gt; data = Arrays.stream(arr).boxed()
+    .sorted((a, b) -&gt; !freq.get(a).equals(freq.get(b))
+            ? Long.compare(freq.get(b), freq.get(a))   // higher freq first
+            : a - b)                                    // tie -&gt; value asc
+    .collect(Collectors.toList());
+
+// Output: [3, 3, 3, 4, 4, 4, 2, 2, 1, 8]</code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator practice sort sorting lambda 2d array intervals">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">C9) Sort by absolute distance from target = 50</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>[10, 45, 90, 55, 30, 48, 72, 51]</code></div>
+<div><span class="io-label">Output:</span> <code>[51, 48, 45, 55, 30, 72, 10, 90]</code></div>
+</div>
+<pre><code>List&lt;Integer&gt; data = new ArrayList&lt;&gt;(Arrays.asList(10, 45, 90, 55, 30, 48, 72, 51));
+
+data.sort((a, b) -&gt; Math.abs(a - 50) - Math.abs(b - 50));
+
+// Output: [51, 48, 45, 55, 30, 72, 10, 90]</code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator practice sort sorting lambda 2d array intervals">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">C10) Sort 2D points by distance from origin</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>[[3,4], [1,1], [5,0], [2,3], [0,2], [4,3]]</code></div>
+<div><span class="io-label">Output:</span> <code>[[1, 1], [0, 2], [2, 3], [3, 4], [5, 0], [4, 3]]</code></div>
+</div>
+<pre><code>int[][] data = {{3, 4}, {1, 1}, {5, 0}, {2, 3}, {0, 2}, {4, 3}};
+
+Arrays.sort(data, (a, b) -&gt;
+    (a[0]*a[0] + a[1]*a[1]) - (b[0]*b[0] + b[1]*b[1]));
+
+// Output: [[1, 1], [0, 2], [2, 3], [3, 4], [5, 0], [4, 3]]</code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator practice sort sorting lambda 2d array intervals">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">C11) Sort 2D by col[1] asc, tie-break col[0] desc</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>[[5,2], [3,1], [7,2], [1,3], [4,1], [6,3]]</code></div>
+<div><span class="io-label">Output:</span> <code>[[4, 1], [3, 1], [7, 2], [5, 2], [6, 3], [1, 3]]</code></div>
+</div>
+<pre><code>int[][] data = {{5, 2}, {3, 1}, {7, 2}, {1, 3}, {4, 1}, {6, 3}};
+
+Arrays.sort(data, (a, b) -&gt; a[1] != b[1] ? a[1] - b[1] : b[0] - a[0]);
+
+// Output: [[4, 1], [3, 1], [7, 2], [5, 2], [6, 3], [1, 3]]</code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator practice sort sorting lambda 2d array intervals">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">C12) Sort employees by dept (alpha), then salary (desc)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>[Alice/Eng/90, Bob/Sales/70, Charlie/Eng/85, Diana/Sales/95, Eve/Eng/110, Frank/HR/60]</code></div>
+<div><span class="io-label">Output:</span> <code>Eve/Eng/110, Alice/Eng/90, Charlie/Eng/85, Frank/HR/60, Diana/Sales/95, Bob/Sales/70</code></div>
+</div>
+<pre><code>record Employee(String name, String dept, int salary) {}
+
+List&lt;Employee&gt; data = new ArrayList&lt;&gt;(List.of(
+    new Employee("Alice", "Eng", 90),
+    new Employee("Bob", "Sales", 70),
+    new Employee("Charlie", "Eng", 85),
+    new Employee("Diana", "Sales", 95),
+    new Employee("Eve", "Eng", 110),
+    new Employee("Frank", "HR", 60)));
+
+data.sort(Comparator.comparing(Employee::dept)
+        .thenComparing(Comparator.comparingInt(Employee::salary).reversed()));
+
+// Output (name/dept/salary):
+// Eve/Eng/110, Alice/Eng/90, Charlie/Eng/85, Frank/HR/60, Diana/Sales/95, Bob/Sales/70</code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator practice sort sorting lambda 2d array intervals">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">C13) Sort matrix rows by max element</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>[[3,1,7], [9,2,4], [5,8,1], [6,0,3]]</code></div>
+<div><span class="io-label">Output:</span> <code>[[6, 0, 3], [3, 1, 7], [5, 8, 1], [9, 2, 4]]</code></div>
+</div>
+<pre><code>int[][] data = {{3, 1, 7}, {9, 2, 4}, {5, 8, 1}, {6, 0, 3}};
+
+Arrays.sort(data, (a, b) -&gt;
+    Arrays.stream(a).max().getAsInt() - Arrays.stream(b).max().getAsInt());
+
+// Output: [[6, 0, 3], [3, 1, 7], [5, 8, 1], [9, 2, 4]]</code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator practice sort sorting lambda 2d array intervals">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">C14) Sort 2D points by diagonal (x+y), then x</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>[[0,3], [2,1], [1,1], [3,0], [1,2], [2,2]]</code></div>
+<div><span class="io-label">Output:</span> <code>[[1, 1], [0, 3], [1, 2], [2, 1], [3, 0], [2, 2]]</code></div>
+</div>
+<pre><code>int[][] data = {{0, 3}, {2, 1}, {1, 1}, {3, 0}, {1, 2}, {2, 2}};
+
+Arrays.sort(data, (a, b) -&gt;
+    (a[0] + a[1]) != (b[0] + b[1])
+        ? (a[0] + a[1]) - (b[0] + b[1])
+        : a[0] - b[0]);
+
+// Output: [[1, 1], [0, 3], [1, 2], [2, 1], [3, 0], [2, 2]]</code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator practice sort sorting lambda 2d array intervals">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">C15) Tasks by priority (desc), then deadline (asc)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>[[3,10], [1,5], [2,8], [3,4], [1,12], [2,3]]  // {priority, deadline}</code></div>
+<div><span class="io-label">Output:</span> <code>[[3, 4], [3, 10], [2, 3], [2, 8], [1, 5], [1, 12]]</code></div>
+</div>
+<pre><code>// each task = {priority, deadline}
+int[][] data = {{3, 10}, {1, 5}, {2, 8}, {3, 4}, {1, 12}, {2, 3}};
+
+Arrays.sort(data, (a, b) -&gt; a[0] != b[0] ? b[0] - a[0] : a[1] - b[1]);
+
+// Output: [[3, 4], [3, 10], [2, 3], [2, 8], [1, 5], [1, 12]]</code></pre>
+</div></div>
+
+<div class="card" data-tags="comparator practice sort sorting lambda 2d array intervals">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">C16) Sort by value/weight ratio (desc) — Fractional Knapsack</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>[[10,60], [20,100], [30,120]]  // {weight, value}</code></div>
+<div><span class="io-label">Output:</span> <code>[[10, 60], [20, 100], [30, 120]]  (ratios 6.0, 5.0, 4.0)</code></div>
+</div>
+<pre><code>int[][] items = {{10, 60}, {20, 100}, {30, 120}};   // {weight, value}
+
+// ratio = value / weight is a double — NEVER cast a double subtraction
+// to int (it truncates). Use Double.compare, and swap b/a for descending.
+Arrays.sort(items, (a, b) -&gt;
+    Double.compare((double) b[1] / b[0], (double) a[1] / a[0]));   // ratio desc
+
+// Output: [[10, 60], [20, 100], [30, 120]]   (ratios 6.0, 5.0, 4.0)</code></pre>
 </div></div>
 
 </section>
@@ -2311,14 +3106,330 @@ List&lt;Integer&gt; result = nums.stream()
 4. Always end with collect() if you want a collection</code></pre>
 </div></div>
 
-<div class="card" data-tags="stream practice exercises animated step-by-step">
+<div class="card" data-tags="stream practice filter map reduce collect distinct flatmap">
 <div class="card-header" onclick="toggleCard(this)">
-  <span class="card-q">&#127891; ANIMATED PRACTICE — Watch Stream pipelines step-by-step</span>
+  <span class="card-q">S1) Filter numbers divisible by 10</span>
   <span class="card-arrow">&#9660;</span>
 </div>
 <div class="card-body">
-<div class="anim-problem-tabs" id="streamTabs"></div>
-<div id="streamAnimContainer"></div>
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>[10, 15, 20, 25, 30, 35, 40]</code></div>
+<div><span class="io-label">Output:</span> <code>[10, 20, 30, 40]</code></div>
+</div>
+<pre><code>List&lt;Integer&gt; nums = Arrays.asList(10, 15, 20, 25, 30, 35, 40);
+
+List&lt;Integer&gt; result = nums.stream()
+    .filter(n -&gt; n % 10 == 0)
+    .collect(Collectors.toList());
+
+// Output: [10, 20, 30, 40]</code></pre>
+</div></div>
+
+<div class="card" data-tags="stream practice filter map reduce collect distinct flatmap">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">S2) Uppercase words with length > 3</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>["cat", "elephant", "dog", "giraffe"]</code></div>
+<div><span class="io-label">Output:</span> <code>[ELEPHANT, GIRAFFE]</code></div>
+</div>
+<pre><code>List&lt;String&gt; words = Arrays.asList("cat", "elephant", "dog", "giraffe");
+
+List&lt;String&gt; result = words.stream()
+    .filter(w -&gt; w.length() &gt; 3)
+    .map(w -&gt; w.toUpperCase())
+    .collect(Collectors.toList());
+
+// Output: [ELEPHANT, GIRAFFE]</code></pre>
+</div></div>
+
+<div class="card" data-tags="stream practice filter map reduce collect distinct flatmap">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">S3) Sum of squares of even numbers</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</code></div>
+<div><span class="io-label">Output:</span> <code>220</code></div>
+</div>
+<pre><code>List&lt;Integer&gt; nums = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+int result = nums.stream()
+    .filter(n -&gt; n % 2 == 0)
+    .map(n -&gt; n * n)
+    .reduce(0, (a, b) -&gt; a + b);
+
+// Output: 220</code></pre>
+</div></div>
+
+<div class="card" data-tags="stream practice filter map reduce collect distinct flatmap">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">S4) Join names starting with A or B</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>["Alice", "Bob", "Charlie", "David"]</code></div>
+<div><span class="io-label">Output:</span> <code>Alice, Bob</code></div>
+</div>
+<pre><code>List&lt;String&gt; names = Arrays.asList("Alice", "Bob", "Charlie", "David");
+
+String result = names.stream()
+    .filter(n -&gt; n.startsWith("A") || n.startsWith("B"))
+    .collect(Collectors.joining(", "));
+
+// Output: Alice, Bob</code></pre>
+</div></div>
+
+<div class="card" data-tags="stream practice filter map reduce collect distinct flatmap">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">S5) Pipeline: filter -> map -> sort -> join</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>["Alice", "bob", "CHARLIE", "dave", "Eve", "frank", "Grace"]</code></div>
+<div><span class="io-label">Output:</span> <code>alice | charlie | dave | frank | grace</code></div>
+</div>
+<pre><code>List&lt;String&gt; names = Arrays.asList("Alice", "bob", "CHARLIE", "dave", "Eve", "frank", "Grace");
+
+String result = names.stream()
+    .filter(s -&gt; s.length() &gt;= 4)
+    .map(s -&gt; s.toLowerCase())
+    .sorted()
+    .collect(Collectors.joining(" | "));
+
+// Output: alice | charlie | dave | frank | grace</code></pre>
+</div></div>
+
+<div class="card" data-tags="stream practice filter map reduce collect distinct flatmap">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">S6) E-commerce: total savings on expensive items</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>Laptop $999, Mouse $29, Monitor $450, Keyboard $75, Headset $199, Webcam $89</code></div>
+<div><span class="io-label">Output:</span> <code>330</code></div>
+</div>
+<pre><code>record Product(String name, int price) {}
+
+List&lt;Product&gt; items = List.of(
+    new Product("Laptop", 999),  new Product("Mouse", 29),
+    new Product("Monitor", 450), new Product("Keyboard", 75),
+    new Product("Headset", 199), new Product("Webcam", 89));
+
+int result = items.stream()
+    .filter(p -&gt; p.price() &gt; 100)
+    .map(p -&gt; (int) Math.round(p.price() * 0.2))
+    .reduce(0, (a, b) -&gt; a + b);
+
+// Output: 330   (20% off Laptop + Monitor + Headset = 200 + 90 + 40)</code></pre>
+</div></div>
+
+<div class="card" data-tags="stream practice filter map reduce collect distinct flatmap">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">S7) Get only the duplicate elements</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>[1, 2, 3, 2, 4, 3, 5, 1]</code></div>
+<div><span class="io-label">Output:</span> <code>[2, 3, 1]</code></div>
+</div>
+<pre><code>Set&lt;Integer&gt; seen = new HashSet&lt;&gt;();
+List&lt;Integer&gt; nums = Arrays.asList(1, 2, 3, 2, 4, 3, 5, 1);
+
+List&lt;Integer&gt; result = nums.stream()
+    .filter(i -&gt; !seen.add(i))   // add() returns false if already present
+    .collect(Collectors.toList());
+
+// Output: [2, 3, 1]</code></pre>
+</div></div>
+
+<div class="card" data-tags="stream practice filter map reduce collect distinct flatmap">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">S8) Remove duplicates then sort descending</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>[11, 11, 1, 3, 5, 6, 5]</code></div>
+<div><span class="io-label">Output:</span> <code>[11, 6, 5, 3, 1]</code></div>
+</div>
+<pre><code>List&lt;Integer&gt; nums = Arrays.asList(11, 11, 1, 3, 5, 6, 5);
+
+List&lt;Integer&gt; result = nums.stream()
+    .distinct()
+    .sorted(Comparator.reverseOrder())
+    .toList();
+
+// Output: [11, 6, 5, 3, 1]</code></pre>
+</div></div>
+
+<div class="card" data-tags="stream practice filter map reduce collect distinct flatmap">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">S9) Are all numbers even? (allMatch)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>[2, 4, 6, 8, 10]</code></div>
+<div><span class="io-label">Output:</span> <code>true</code></div>
+</div>
+<pre><code>List&lt;Integer&gt; nums = Arrays.asList(2, 4, 6, 8, 10);
+
+boolean result = nums.stream()
+    .allMatch(i -&gt; i % 2 == 0);
+
+// Output: true</code></pre>
+</div></div>
+
+<div class="card" data-tags="stream practice filter map reduce collect distinct flatmap">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">S10) Does any string start with "A"? (anyMatch)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>["Banana", "Apple", "Cat", "Andrew"]</code></div>
+<div><span class="io-label">Output:</span> <code>true</code></div>
+</div>
+<pre><code>List&lt;String&gt; names = Arrays.asList("Banana", "Apple", "Cat", "Andrew");
+
+boolean result = names.stream()
+    .anyMatch(s -&gt; s.startsWith("A"));
+
+// Output: true</code></pre>
+</div></div>
+
+<div class="card" data-tags="stream practice filter map reduce collect distinct flatmap">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">S11) Top 3 elements</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>[71, 18, 42, 21, 67, 32, 95, 14, 56, 87]</code></div>
+<div><span class="io-label">Output:</span> <code>[95, 87, 71]</code></div>
+</div>
+<pre><code>List&lt;Integer&gt; nums = Arrays.asList(71, 18, 42, 21, 67, 32, 95, 14, 56, 87);
+
+List&lt;Integer&gt; result = nums.stream()
+    .sorted(Comparator.reverseOrder())
+    .limit(3)
+    .toList();
+
+// Output: [95, 87, 71]</code></pre>
+</div></div>
+
+<div class="card" data-tags="stream practice filter map reduce collect distinct flatmap">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">S12) 3rd highest element</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>[71, 18, 42, 21, 67, 32, 95, 14, 56, 87]</code></div>
+<div><span class="io-label">Output:</span> <code>71</code></div>
+</div>
+<pre><code>List&lt;Integer&gt; nums = Arrays.asList(71, 18, 42, 21, 67, 32, 95, 14, 56, 87);
+
+int result = nums.stream()
+    .sorted(Comparator.reverseOrder())
+    .skip(2)
+    .findFirst()
+    .orElse(-1);
+
+// Output: 71</code></pre>
+</div></div>
+
+<div class="card" data-tags="stream practice filter map reduce collect distinct flatmap">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">S13) Count occurrences of "java" (flatMap)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>["java scala ruby", "java react spring java"]</code></div>
+<div><span class="io-label">Output:</span> <code>3</code></div>
+</div>
+<pre><code>List&lt;String&gt; lines = Arrays.asList("java scala ruby", "java react spring java");
+
+long result = lines.stream()
+    .flatMap(s -&gt; Arrays.stream(s.split(" ")))
+    .filter(w -&gt; w.equals("java"))
+    .count();
+
+// Output: 3</code></pre>
+</div></div>
+
+<div class="card" data-tags="stream practice filter map reduce collect distinct flatmap">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">S14) Flatten List<List<Integer>></span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>[[1, 2], [3, 4]]</code></div>
+<div><span class="io-label">Output:</span> <code>[1, 2, 3, 4]</code></div>
+</div>
+<pre><code>List&lt;List&lt;Integer&gt;&gt; nested = List.of(List.of(1, 2), List.of(3, 4));
+
+List&lt;Integer&gt; result = nested.stream()
+    .flatMap(list -&gt; list.stream())
+    .collect(Collectors.toList());
+
+// Output: [1, 2, 3, 4]</code></pre>
+</div></div>
+
+<div class="card" data-tags="stream practice filter map reduce collect distinct flatmap">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">S15) Longest common prefix (reduce)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>["flower", "flow", "flight"]</code></div>
+<div><span class="io-label">Output:</span> <code>fl</code></div>
+</div>
+<pre><code>List&lt;String&gt; words = Arrays.asList("flower", "flow", "flight");
+
+String result = words.stream()
+    .reduce((s1, s2) -&gt; {
+        int i = 0;
+        while (i &lt; Math.min(s1.length(), s2.length()) &amp;&amp; s1.charAt(i) == s2.charAt(i)) i++;
+        return s1.substring(0, i);
+    })
+    .orElse("");
+
+// Output: fl</code></pre>
+</div></div>
+
+<div class="card" data-tags="stream practice filter map reduce collect distinct flatmap">
+<div class="card-header" onclick="toggleCard(this)">
+  <span class="card-q">S16) Most repeated number (max by entry value)</span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+<div class="card-body">
+<div class="io-box">
+<div><span class="io-label">Input:</span> <code>[10, 20, 5, 8, 30, 25, 30]</code></div>
+<div><span class="io-label">Output:</span> <code>30   (appears twice)</code></div>
+</div>
+<pre><code>int[] nums = {10, 20, 5, 8, 30, 25, 30};
+
+Map&lt;Integer, Long&gt; freq = Arrays.stream(nums).boxed()
+    .collect(Collectors.groupingBy(n -&gt; n, Collectors.counting()));
+
+int result = freq.entrySet().stream()
+    .max(Map.Entry.comparingByValue())
+    .map(Map.Entry::getKey)
+    .orElse(-1);
+
+// Output: 30   (appears twice)</code></pre>
 </div></div>
 
 </section>
@@ -3013,397 +4124,6 @@ acc=7,    num=2   → 7 &gt; 2    → acc = 7
 acc=7,    num=10  → 10 &gt; 7   → acc = 10
 acc=10,   num=4   → 10 &gt; 4   → acc = 10   ← answer</span></code></pre>
 <div class="note">Output: <code>10</code></div>
-</div></div>
-
-</section>
-
-<!-- ======================= COMPARATOR ======================= -->
-<section class="category" id="comparator">
-<div class="category-header">
-  <div class="category-icon">&#8660;</div>
-  <span class="category-title">Comparator — Learn to Sort Anything</span>
-  <span class="category-count">6 topics</span>
-</div>
-
-<div class="card" data-tags="comparator what is introduction beginner basics">
-<div class="card-header" onclick="toggleCard(this)">
-  <span class="card-q">&#128161; WHAT IS A COMPARATOR? (The simple explanation)</span>
-  <span class="card-arrow">&#9660;</span>
-</div>
-<div class="card-body">
-<div class="note"><strong>Comparator = A tool to tell Java how to sort things</strong></div>
-
-<h4>The Problem It Solves</h4>
-<pre><code><span class="cmt">// Java knows how to sort numbers and strings:</span>
-List&lt;Integer&gt; nums = Arrays.asList(5, 2, 8, 1);
-Collections.sort(nums);  <span class="cmt">// [1, 2, 5, 8] ✅</span>
-
-<span class="cmt">// But what if you want to sort by custom rules?</span>
-<span class="cmt">// - Sort by absolute value?</span>
-<span class="cmt">// - Sort strings by length?</span>
-<span class="cmt">// - Sort objects by age, then by name?</span>
-
-<span class="cmt">// That's where Comparator comes in!</span></code></pre>
-
-<h4>Basic Concept: Compare Two Things</h4>
-<pre><code><span class="cmt">// A Comparator answers: "Which comes first, A or B?"</span>
-
-(a, b) -&gt; ...
-
-<span class="cmt">// Return negative → a comes BEFORE b</span>
-<span class="cmt">// Return zero     → a equals b (same position)</span>
-<span class="cmt">// Return positive → a comes AFTER b</span></code></pre>
-
-<h4>Simple Example: Sort by Length</h4>
-<pre><code>List&lt;String&gt; words = Arrays.asList("apple", "pie", "banana", "cat");
-
-<span class="cmt">// Sort by length (shorter words first)</span>
-words.sort((a, b) -&gt; a.length() - b.length());
-<span class="cmt">// Result: ["pie", "cat", "apple", "banana"]</span>
-
-<span class="cmt">// How it works:</span>
-<span class="cmt">// "apple".length() - "pie".length() = 5 - 3 = 2 (positive → "pie" comes first)</span>
-<span class="cmt">// "cat".length() - "banana".length() = 3 - 6 = -3 (negative → "cat" comes first)</span></code></pre>
-
-<h4>The Magic Formula</h4>
-<pre><code><span class="cmt">// Ascending (small to big)</span>
-(a, b) -&gt; a - b
-
-<span class="cmt">// Descending (big to small)</span>
-(a, b) -&gt; b - a
-
-<span class="cmt">// That's it! Everything else builds on this.</span></code></pre>
-</div></div>
-
-<div class="card" data-tags="comparator write how to create basic sort ascending descending">
-<div class="card-header" onclick="toggleCard(this)">
-  <span class="card-q">&#9997;&#65039; HOW TO WRITE YOUR FIRST COMPARATOR (Step-by-step)</span>
-  <span class="card-arrow">&#9660;</span>
-</div>
-<div class="card-body">
-<h4>Step 1: Understand what you're comparing</h4>
-<pre><code><span class="cmt">// Task: Sort numbers from smallest to largest</span>
-
-<span class="cmt">// Ask yourself: Given two numbers a and b,</span>
-<span class="cmt">// which should come first?</span></code></pre>
-
-<h4>Step 2: Write the logic</h4>
-<pre><code><span class="cmt">// If a &lt; b → a should come first → return negative</span>
-<span class="cmt">// If a == b → same position → return 0</span>
-<span class="cmt">// If a &gt; b → b should come first → return positive</span>
-
-<span class="cmt">// Shortcut: Just subtract!</span>
-(a, b) -&gt; a - b</code></pre>
-
-<h4>Step 3: Use it to sort</h4>
-<pre><code>List&lt;Integer&gt; nums = Arrays.asList(5, 2, 8, 1, 9);
-nums.sort((a, b) -&gt; a - b);
-<span class="cmt">// Result: [1, 2, 5, 8, 9]</span></code></pre>
-
-<h4>Common Patterns (Copy these!)</h4>
-<pre><code><span class="cmt">// 1. Sort integers ascending</span>
-nums.sort((a, b) -&gt; a - b);
-
-<span class="cmt">// 2. Sort integers descending</span>
-nums.sort((a, b) -&gt; b - a);
-
-<span class="cmt">// 3. Sort strings alphabetically</span>
-words.sort((a, b) -&gt; a.compareTo(b));
-
-<span class="cmt">// 4. Sort strings by length</span>
-words.sort((a, b) -&gt; a.length() - b.length());
-
-<span class="cmt">// 5. Sort by absolute value</span>
-nums.sort((a, b) -&gt; Math.abs(a) - Math.abs(b));</code></pre>
-
-<h4>Practice: Write comparators for these</h4>
-<pre><code><span class="cmt">// Task 1: Sort strings by length (longest first)</span>
-words.sort((a, b) -&gt; b.length() - a.length());
-
-<span class="cmt">// Task 2: Sort numbers, evens before odds</span>
-nums.sort((a, b) -&gt; (a % 2) - (b % 2));
-
-<span class="cmt">// Task 3: Sort strings case-insensitive</span>
-words.sort((a, b) -&gt; a.toLowerCase().compareTo(b.toLowerCase()));</code></pre>
-</div></div>
-
-<div class="card" data-tags="comparator advanced multi-level secondary sort then">
-<div class="card-header" onclick="toggleCard(this)">
-  <span class="card-q">&#128295; ADVANCED: Sort by Multiple Criteria</span>
-  <span class="card-arrow">&#9660;</span>
-</div>
-<div class="card-body">
-<div class="note">Sometimes you need: "Sort by X, and if X is the same, then sort by Y"</div>
-
-<h4>Method 1: Manual Comparison</h4>
-<pre><code>List&lt;String&gt; words = Arrays.asList("apple", "pie", "banana", "cat", "dog");
-
-<span class="cmt">// Sort by length, then alphabetically if same length</span>
-words.sort((a, b) -&gt; {
-    if (a.length() != b.length()) {
-        return a.length() - b.length();  <span class="cmt">// primary: by length</span>
-    }
-    return a.compareTo(b);               <span class="cmt">// secondary: alphabetically</span>
-});
-<span class="cmt">// Result: ["cat", "dog", "pie", "apple", "banana"]</span></code></pre>
-
-<h4>Method 2: Using Comparator.comparing() + thenComparing()</h4>
-<pre><code><span class="cmt">// Same result, cleaner code</span>
-words.sort(
-    Comparator.comparing(s -&gt; s.length())
-        .thenComparing(s -&gt; s)
-);
-
-<span class="cmt">// Or with comparingInt + natural order (lambdas):</span>
-words.sort(
-    Comparator.comparingInt(s -&gt; s.length())
-        .thenComparing(Comparator.naturalOrder())
-);</code></pre>
-
-<h4>Real Example: Sort People</h4>
-<pre><code>class Person {
-    String name;
-    int age;
-    Person(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
-}
-
-List&lt;Person&gt; people = Arrays.asList(
-    new Person("Alice", 25),
-    new Person("Bob", 25),
-    new Person("Charlie", 30)
-);
-
-<span class="cmt">// Sort by age, then by name if same age</span>
-people.sort((p1, p2) -&gt; {
-    if (p1.age != p2.age) {
-        return p1.age - p2.age;
-    }
-    return p1.name.compareTo(p2.name);
-});
-
-<span class="cmt">// Result: Alice(25), Bob(25), Charlie(30)</span></code></pre>
-</div></div>
-
-<div class="card" data-tags="comparator comparing helpers utility methods">
-<div class="card-header" onclick="toggleCard(this)">
-  <span class="card-q">&#128736; BUILT-IN HELPERS (Make life easier)</span>
-  <span class="card-arrow">&#9660;</span>
-</div>
-<div class="card-body">
-<h4>Comparator.reverseOrder() — Reverse sort</h4>
-<pre><code>List&lt;Integer&gt; nums = Arrays.asList(5, 2, 8, 1, 9);
-
-<span class="cmt">// Sort descending (largest first)</span>
-nums.sort(Comparator.reverseOrder());
-<span class="cmt">// Result: [9, 8, 5, 2, 1]</span></code></pre>
-
-<h4>Comparator.naturalOrder() — Normal sort</h4>
-<pre><code><span class="cmt">// Sort ascending (smallest first)</span>
-nums.sort(Comparator.naturalOrder());
-<span class="cmt">// Result: [1, 2, 5, 8, 9]</span></code></pre>
-
-<h4>Comparator.comparing() — Sort by property</h4>
-<pre><code><span class="cmt">// Sort strings by length</span>
-words.sort(Comparator.comparing(s -&gt; s.length()));
-
-<span class="cmt">// Sort people by age</span>
-people.sort(Comparator.comparing(p -&gt; p.age));
-
-<span class="cmt">// Sort people by name</span>
-people.sort(Comparator.comparing(p -&gt; p.name));</code></pre>
-
-<h4>Comparator.comparingInt/Double/Long — For primitives</h4>
-<pre><code><span class="cmt">// More efficient than comparing()</span>
-words.sort(Comparator.comparingInt(s -&gt; s.length()));
-people.sort(Comparator.comparingInt(p -&gt; p.age));</code></pre>
-
-<h4>.reversed() — Flip the order</h4>
-<pre><code><span class="cmt">// Sort by length descending</span>
-words.sort(Comparator.comparingInt(s -&gt; s.length()).reversed());
-
-<span class="cmt">// Sort by age descending</span>
-people.sort(Comparator.comparingInt(p -&gt; p.age).reversed());</code></pre>
-
-<h4>.thenComparing() — Secondary sort</h4>
-<pre><code><span class="cmt">// Sort by age, then by name</span>
-people.sort(
-    Comparator.comparingInt(p -&gt; p.age)
-        .thenComparing(p -&gt; p.name)
-);
-
-<span class="cmt">// Can chain multiple times</span>
-people.sort(
-    Comparator.comparingInt(p -&gt; p.age)
-        .thenComparing(p -&gt; p.name)
-        .thenComparing(p -&gt; p.address)
-);</code></pre>
-
-<h4>Quick Reference</h4>
-<pre><code>Comparator.naturalOrder()           <span class="cmt">// ascending</span>
-Comparator.reverseOrder()           <span class="cmt">// descending</span>
-Comparator.comparing(p -&gt; p.field)  <span class="cmt">// by property</span>
-Comparator.comparingInt(...)        <span class="cmt">// by int (efficient)</span>
-.reversed()                         <span class="cmt">// flip order</span>
-.thenComparing(...)                 <span class="cmt">// secondary sort</span></code></pre>
-</div></div>
-
-<div class="card" data-tags="comparator real examples use cases practical">
-<div class="card-header" onclick="toggleCard(this)">
-  <span class="card-q">&#128200; REAL-WORLD EXAMPLES (Interview favorites)</span>
-  <span class="card-arrow">&#9660;</span>
-</div>
-<div class="card-body">
-<h4>1. Sort by frequency, then by value</h4>
-<pre><code>List&lt;Integer&gt; nums = Arrays.asList(1, 1, 1, 2, 2, 3);
-
-<span class="cmt">// Count frequencies</span>
-Map&lt;Integer, Long&gt; freq = nums.stream()
-    .collect(Collectors.groupingBy(n -&gt; n, Collectors.counting()));
-
-<span class="cmt">// Sort: most frequent first, if same frequency then smaller value first</span>
-nums.sort((a, b) -&gt; {
-    long freqA = freq.get(a);
-    long freqB = freq.get(b);
-    if (freqA != freqB) {
-        return Long.compare(freqB, freqA);  <span class="cmt">// desc frequency</span>
-    }
-    return a - b;  <span class="cmt">// asc value</span>
-});
-<span class="cmt">// Result: [1, 1, 1, 2, 2, 3]</span></code></pre>
-
-<h4>2. PriorityQueue with custom order</h4>
-<pre><code><span class="cmt">// Min heap (default)</span>
-PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
-
-<span class="cmt">// Max heap (reverse order)</span>
-PriorityQueue&lt;Integer&gt; maxHeap = new PriorityQueue&lt;&gt;(
-    (a, b) -&gt; b - a
-);
-
-<span class="cmt">// By absolute value</span>
-PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;(
-    (a, b) -&gt; Math.abs(a) - Math.abs(b)
-);</code></pre>
-
-<h4>3. Sort 2D array by first element</h4>
-<pre><code>int[][] intervals = {{5,10}, {1,3}, {8,12}};
-
-<span class="cmt">// Sort by start time</span>
-Arrays.sort(intervals, (a, b) -&gt; a[0] - b[0]);
-<span class="cmt">// Result: [[1,3], [5,10], [8,12]]</span>
-
-<span class="cmt">// Sort by end time</span>
-Arrays.sort(intervals, (a, b) -&gt; a[1] - b[1]);
-
-<span class="cmt">// Sort by start, then by end</span>
-Arrays.sort(intervals, (a, b) -&gt; {
-    if (a[0] != b[0]) return a[0] - b[0];
-    return a[1] - b[1];
-});</code></pre>
-
-<h4>4. Find top K elements with Stream</h4>
-<pre><code>List&lt;Integer&gt; nums = Arrays.asList(5, 2, 8, 1, 9, 3, 7);
-
-<span class="cmt">// Get top 3 largest</span>
-List&lt;Integer&gt; top3 = nums.stream()
-    .sorted(Comparator.reverseOrder())
-    .limit(3)
-    .collect(Collectors.toList());
-<span class="cmt">// [9, 8, 7]</span></code></pre>
-
-<h4>5. Custom object sorting</h4>
-<pre><code>class Student {
-    String name;
-    int grade;
-    double gpa;
-}
-
-List&lt;Student&gt; students = ...;
-
-<span class="cmt">// Sort by grade (desc), then GPA (desc), then name (asc)</span>
-students.sort(
-    Comparator.comparingInt((Student s) -&gt; s.grade).reversed()
-        .thenComparingDouble((Student s) -&gt; s.gpa).reversed()
-        .thenComparing(s -&gt; s.name)
-);</code></pre>
-
-<h4>6. Sort map entries by value</h4>
-<pre><code>Map&lt;String, Integer&gt; scores = new HashMap&lt;&gt;();
-scores.put("Alice", 85);
-scores.put("Bob", 92);
-scores.put("Charlie", 78);
-
-<span class="cmt">// Sort by score descending</span>
-List&lt;Map.Entry&lt;String, Integer&gt;&gt; sorted = scores.entrySet().stream()
-    .sorted((e1, e2) -&gt; e2.getValue() - e1.getValue())
-    .collect(Collectors.toList());
-<span class="cmt">// Bob=92, Alice=85, Charlie=78</span></code></pre>
-</div></div>
-
-<div class="card" data-tags="comparator mistakes errors common wrong avoid">
-<div class="card-header" onclick="toggleCard(this)">
-  <span class="card-q">&#10060; COMMON MISTAKES (Don't make these!)</span>
-  <span class="card-arrow">&#9660;</span>
-</div>
-<div class="card-body">
-<h4>Mistake 1: Subtracting doubles/floats</h4>
-<div class="comparison">
-<div class="comp-bad"><div class="comp-label">WRONG</div>
-<pre><code><span class="cmt">// ❌ Casting loses precision!</span>
-(a, b) -&gt; (int)(a - b)</code></pre></div>
-<div class="comp-good"><div class="comp-label">RIGHT</div>
-<pre><code><span class="cmt">// ✅ Use Double.compare()</span>
-(a, b) -&gt; Double.compare(a, b)</code></pre></div>
-</div>
-
-<h4>Mistake 2: Wrong subtraction order</h4>
-<div class="comparison">
-<div class="comp-bad"><div class="comp-label">WRONG</div>
-<pre><code><span class="cmt">// Wanted ascending, wrote descending</span>
-(a, b) -&gt; b - a  <span class="cmt">// ❌ This is DESC!</span></code></pre></div>
-<div class="comp-good"><div class="comp-label">RIGHT</div>
-<pre><code><span class="cmt">// Ascending order</span>
-(a, b) -&gt; a - b  <span class="cmt">// ✅ a-b = ASC</span></code></pre></div>
-</div>
-
-<h4>Mistake 3: Forgetting to return in multi-line</h4>
-<div class="comparison">
-<div class="comp-bad"><div class="comp-label">WRONG</div>
-<pre><code>(a, b) -&gt; {
-    a.length() - b.length()  <span class="cmt">// ❌ No return!</span>
-}</code></pre></div>
-<div class="comp-good"><div class="comp-label">RIGHT</div>
-<pre><code>(a, b) -&gt; {
-    return a.length() - b.length();  <span class="cmt">// ✅</span>
-}</code></pre></div>
-</div>
-
-<h4>Mistake 4: Integer overflow with subtraction</h4>
-<pre><code><span class="cmt">// ❌ If numbers are large, a - b might overflow!</span>
-(a, b) -&gt; a - b
-
-<span class="cmt">// ✅ Use Integer.compare() for safety</span>
-(a, b) -&gt; Integer.compare(a, b)</code></pre>
-
-<h4>Remember:</h4>
-<pre><code>1. (a, b) → a - b = ascending (small to big)
-2. (a, b) → b - a = descending (big to small)
-3. Use .compare() for doubles/floats
-4. Use .compareTo() for Strings
-5. Always return a value in the lambda!</code></pre>
-</div></div>
-
-<div class="card" data-tags="comparator practice exercises problems animated">
-<div class="card-header" onclick="toggleCard(this)">
-  <span class="card-q">&#127891; ANIMATED PRACTICE — Watch Comparator sorting step-by-step</span>
-  <span class="card-arrow">&#9660;</span>
-</div>
-<div class="card-body">
-<div class="anim-problem-tabs" id="compTabs"></div>
-<div id="compAnimContainer"></div>
 </div></div>
 
 </section>
@@ -4227,12 +4947,14 @@ function toggleTheme() {
 // Card toggle (with event delegation fallback for mobile)
 let _lastToggle=0;
 function toggleCard(header) {
+  if(header.parentElement.classList.contains('static-card'))return;
   const now=Date.now();if(now-_lastToggle<100)return;_lastToggle=now;
   header.parentElement.classList.toggle('open');
 }
 document.addEventListener('click',function(e){
   const header=e.target.closest('.card-header');
   if(!header)return;
+  if(header.parentElement.classList.contains('static-card'))return;
   const now=Date.now();if(now-_lastToggle<100)return;_lastToggle=now;
   header.parentElement.classList.toggle('open');
 });
@@ -4334,1106 +5056,76 @@ document.querySelectorAll('pre').forEach(pre => {
   pre.appendChild(btn);
 });
 
-/* ================================================================
-   ANIMATION ENGINE v2 — Operation-by-operation pipeline animation
-   ================================================================ */
-(function(){
-function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
-function cell(v,cls){const c=el('span','anim-cell '+(typeof v==='string'&&v.length>2?'str-cell ':'')+( cls||''),v);return c;}
-function display(v){if(Array.isArray(v))return'['+v+']';if(v&&typeof v==='object'){const keys=Object.keys(v);return keys.map(k=>k+':'+v[k]).join(', ');}return v;}
+// "Type" + "View Code" toolbar on the comparator & stream practice example cards
+document.querySelectorAll(
+  '#lambda .card[data-tags*="practice"] .card-body pre, ' +
+  '#comparator .card[data-tags*="practice"] .card-body pre, ' +
+  '#streams .card[data-tags*="practice"] .card-body pre'
+).forEach(function(pre){
+  if (pre.closest('.codeArea')) return;        // guard against double-processing
 
-/* ── Pipeline Animator (Step-by-Step) ── */
-class PipeAnimator{
-  constructor(box,prob){
-    this.box=box;this.prob=prob;this.opIdx=-1;this.speed=1500;this.timers=[];this.playing=false;
-    this.snapshots=[prob.input.slice()];
-    this.stepFn=null;
-    this.build();
-  }
-  clearTimers(){this.timers.forEach(t=>clearTimeout(t));this.timers=[];}
-  build(){
-    this.box.innerHTML='';
-    this.box.appendChild(el('div','anim-title',this.prob.title+' <span class="anim-badge">STEP-BY-STEP</span>'));
-    this.pipeEl=el('div','anim-pipeline');
-    this.pipeLines=this.prob.ops.map((op,i)=>{
-      const ln=el('span','pipe-line',op.code);
-      this.pipeEl.appendChild(ln);
-      if(i<this.prob.ops.length-1)this.pipeEl.appendChild(document.createTextNode('\n'));
-      return ln;
-    });
-    this.box.appendChild(this.pipeEl);
-    this.vizEl=el('div','');this.box.appendChild(this.vizEl);
-    this.logEl=el('div','anim-log','Click <b>Next Step</b> to walk through each element one by one.');
-    this.box.appendChild(this.logEl);
-    const ctrl=el('div','anim-controls');
-    this.playBtn=el('button','anim-btn primary','&#9654; Auto Play');
-    this.nextBtn=el('button','anim-btn','Next Step &#8594;');
-    this.resetBtn=el('button','anim-btn','&#8634; Reset');
-    this.stepInfo=el('span','anim-step-info','');
-    const sp=el('span','anim-speed','Speed ');
-    this.slider=document.createElement('input');this.slider.type='range';this.slider.min='500';this.slider.max='3000';this.slider.value='1500';
-    sp.appendChild(this.slider);
-    [this.playBtn,this.nextBtn,this.resetBtn].forEach(b=>ctrl.appendChild(b));
-    ctrl.appendChild(this.stepInfo);ctrl.appendChild(sp);
-    this.box.appendChild(ctrl);
-    this.playBtn.onclick=()=>this.togglePlay();
-    this.nextBtn.onclick=()=>{this.stopPlay();this.nextStep();};
-    this.resetBtn.onclick=()=>this.reset();
-    this.slider.oninput=()=>{this.speed=+this.slider.value;};
-    this.renderIdle();
-  }
-  renderIdle(){
-    this.vizEl.innerHTML='';
-    this.vizEl.appendChild(el('div','anim-label','Input'));
-    const row=el('div','anim-row');
-    this.prob.input.forEach(v=>row.appendChild(cell(display(v))));
-    this.vizEl.appendChild(row);
-    this.stepInfo.textContent='0 / '+this.prob.ops.length+' operations';
-    this.pipeLines.forEach(l=>{l.classList.remove('active','done');});
-    this.nextBtn.disabled=false;
-    this.opIdx=-1;
-    this.snapshots=[this.prob.input.slice()];
-    this.stepFn=null;
-  }
-  reset(){this.stopPlay();this.clearTimers();this.renderIdle();this.logEl.innerHTML='Click <b>Next Step</b> to start.';}
-
-  nextStep(){
-    this.clearTimers();
-    if(this.stepFn){this.stepFn();}
-    else{this.startNextOp();}
+  // make the example card non-collapsible — only Type / View Code toggle
+  var theCard = pre.closest('.card');
+  if (theCard) {
+    theCard.classList.add('static-card');
+    var hdr = theCard.querySelector('.card-header');
+    if (hdr) { hdr.removeAttribute('onclick'); }
+    var arrow = theCard.querySelector('.card-arrow');
+    if (arrow) { arrow.remove(); }
   }
 
-  startNextOp(){
-    this.opIdx++;
-    if(this.opIdx>=this.prob.ops.length){this.renderDone();this.stopPlay();return;}
-    const op=this.prob.ops[this.opIdx];
-    const input=this.snapshots[this.snapshots.length-1].slice();
-    this.pipeLines.forEach((l,i)=>{l.classList.remove('active');if(i<this.opIdx)l.classList.add('done');});
-    this.pipeLines[this.opIdx].classList.add('active');
-    this.stepInfo.textContent='Op '+(this.opIdx+1)+' / '+this.prob.ops.length;
+  pre.classList.add('collapsed');              // hide the code until "View Code"
 
-    if(op.type==='filter')this.setupFilter(op,input);
-    else if(op.type==='map')this.setupMap(op,input);
-    else if(op.type==='reduce')this.setupReduce(op,input);
-    else if(op.type==='collect')this.setupCollect(op,input);
-    else if(op.type==='count')this.setupCount(op,input);
-    else if(op.type==='joining')this.setupJoining(op,input);
-    else if(op.type==='findFirst')this.setupFindFirst(op,input);
-    else if(op.type==='max')this.setupMax(op,input);
-    else if(op.type==='sorted')this.setupSorted(op,input);
-    else if(op.type==='distinct')this.setupDistinct(op,input);
-    else if(op.type==='duplicatesOnly')this.setupDuplicatesOnly(op,input);
-    else if(op.type==='limit')this.setupLimit(op,input);
-    else if(op.type==='skip')this.setupSkip(op,input);
-    else if(op.type==='allMatch')this.setupAllMatch(op,input);
-    else if(op.type==='anyMatch')this.setupAnyMatch(op,input);
-    else if(op.type==='flatMap')this.setupFlatMap(op,input);
-    else{this.snapshots.push(input);this.finishOp();}
-  }
+  var area = document.createElement('div');
+  area.className = 'codeArea';
+  pre.parentNode.insertBefore(area, pre);
 
-  finishOp(){
-    this.stepFn=null;
-    this.nextBtn.disabled=false;
-    if(this.playing)this.timers.push(setTimeout(()=>this.nextStep(),this.speed));
-  }
+  var bar = document.createElement('div');
+  bar.className = 'codeBar';
+  area.appendChild(bar);
 
-  scheduleAutoNext(){
-    if(this.playing)this.timers.push(setTimeout(()=>this.nextStep(),this.speed*0.5));
-  }
+  var typeBtn = document.createElement('button');
+  typeBtn.type = 'button';
+  typeBtn.className = 'codeBtn typeBtn';
+  typeBtn.setAttribute('aria-expanded', 'false');
+  typeBtn.innerHTML = '<span class="chev">&#9654;</span><span class="lbl"></span>';
+  bar.appendChild(typeBtn);
 
-  /* ──── FILTER (step-by-step) ──── */
-  setupFilter(op,input){
-    this.vizEl.innerHTML='';
-    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
-    this.vizEl.appendChild(el('div','anim-label','Input to this operation'));
-    const inRow=el('div','anim-row');
-    const inCells=input.map(v=>{const c=cell(display(v),'waiting');inRow.appendChild(c);return c;});
-    this.vizEl.appendChild(inRow);
-    this.vizEl.appendChild(el('div','anim-arrow','&#8595;'));
-    this.vizEl.appendChild(el('div','anim-label','Output (elements that pass)'));
-    const outRow=el('div','anim-row anim-output-row');
-    this.vizEl.appendChild(outRow);
-    const output=[];let i=0;const self=this;
-    this.stepFn=()=>{
-      if(i>=input.length){self.snapshots.push(output);self.logEl.innerHTML=`<b>✓ .filter() done!</b> — Kept <span class="v">${output.length}</span> of ${input.length} → <span class="ok">[${output.map(display).join(', ')}]</span>`;self.finishOp();return;}
-      self.nextBtn.disabled=true;
-      const v=input[i];const pass=op.test(v);
-      inCells.forEach(c=>c.classList.remove('highlight'));
-      inCells[i].classList.remove('waiting');inCells[i].classList.add('highlight');
-      self.logEl.innerHTML=op.explain(v,pass);
-      self.timers.push(setTimeout(()=>{
-        if(pass){inCells[i].classList.remove('highlight');inCells[i].classList.add('pass');output.push(v);outRow.appendChild(cell(display(v),'pass'));}
-        else{inCells[i].classList.remove('highlight');inCells[i].classList.add('fail');}
-        i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
-        self.nextBtn.disabled=false;
-        self.scheduleAutoNext();
-      },self.speed*0.4));
-    };
-    this.stepFn();
-  }
+  var viewBtn = document.createElement('button');
+  viewBtn.type = 'button';
+  viewBtn.className = 'codeBtn viewBtn';
+  viewBtn.setAttribute('aria-expanded', 'false');
+  viewBtn.innerHTML = '<span class="chev">&#9654;</span><span class="lbl"></span>';
+  bar.appendChild(viewBtn);
 
-  /* ──── MAP (step-by-step) ──── */
-  setupMap(op,input){
-    this.vizEl.innerHTML='';
-    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
-    this.vizEl.appendChild(el('div','anim-label','Input to this operation'));
-    const inRow=el('div','anim-row');
-    const inCells=input.map(v=>{const c=cell(display(v),'waiting');inRow.appendChild(c);return c;});
-    this.vizEl.appendChild(inRow);
-    this.vizEl.appendChild(el('div','anim-arrow','&#8595; transforms to &#8595;'));
-    this.vizEl.appendChild(el('div','anim-label','Output (transformed elements)'));
-    const outRow=el('div','anim-row anim-output-row');
-    this.vizEl.appendChild(outRow);
-    const output=[];let i=0;const self=this;
-    this.stepFn=()=>{
-      if(i>=input.length){self.snapshots.push(output);self.logEl.innerHTML=`<b>✓ .map() done!</b> — Transformed ${input.length} elements → <span class="ok">[${output.map(display).join(', ')}]</span>`;self.finishOp();return;}
-      self.nextBtn.disabled=true;
-      const v=input[i];const result=op.transform(v);
-      inCells.forEach(c=>c.classList.remove('highlight'));
-      inCells[i].classList.remove('waiting');inCells[i].classList.add('highlight');
-      self.logEl.innerHTML=op.explain(v,result);
-      self.timers.push(setTimeout(()=>{
-        inCells[i].classList.remove('highlight');inCells[i].classList.add('transformed');
-        inCells[i].innerHTML=display(result);
-        output.push(result);outRow.appendChild(cell(display(result),'transformed'));
-        i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
-        self.nextBtn.disabled=false;
-        self.scheduleAutoNext();
-      },self.speed*0.4));
-    };
-    this.stepFn();
-  }
+  var ta = document.createElement('textarea');
+  ta.className = 'codeInput collapsed';
+  ta.spellcheck = false;
+  ta.placeholder = 'Type your solution here…';
+  area.appendChild(ta);
 
-  /* ──── REDUCE (step-by-step) ──── */
-  setupReduce(op,input){
-    this.vizEl.innerHTML='';
-    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
-    this.vizEl.appendChild(el('div','anim-label','Input to this operation'));
-    const inRow=el('div','anim-row');
-    const inCells=input.map(v=>{const c=cell(display(v),'waiting');inRow.appendChild(c);return c;});
-    this.vizEl.appendChild(inRow);
-    this.vizEl.appendChild(el('div','anim-arrow','&#8595; accumulates &#8595;'));
-    this.vizEl.appendChild(el('div','anim-label','Accumulator'));
-    const accRow=el('div','anim-row');
-    const accCell=cell(op.identity,'accum');accRow.appendChild(accCell);
-    this.vizEl.appendChild(accRow);
-    let acc=op.identity;let i=0;const self=this;
-    this.stepFn=()=>{
-      if(i>=input.length){self.snapshots.push([acc]);self.logEl.innerHTML=`<b>✓ .reduce() done!</b> — Final value = <span class="v">${display(acc)}</span>`;self.finishOp();return;}
-      self.nextBtn.disabled=true;
-      const v=input[i];const prev=acc;
-      inCells.forEach(c=>c.classList.remove('highlight'));
-      inCells[i].classList.remove('waiting');inCells[i].classList.add('highlight');
-      self.logEl.innerHTML=op.explain(prev,v);
-      self.timers.push(setTimeout(()=>{
-        acc=op.combine(acc,v);
-        accCell.innerHTML=display(acc);accCell.classList.add('highlight');
-        inCells[i].classList.remove('highlight');inCells[i].classList.add('pass');
-        self.timers.push(setTimeout(()=>{
-          accCell.classList.remove('highlight');
-          i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
-          self.nextBtn.disabled=false;
-          self.scheduleAutoNext();
-        },self.speed*0.3));
-      },self.speed*0.4));
-    };
-    this.stepFn();
-  }
+  area.appendChild(pre);                        // move the code below, collapsed
 
-  /* ──── COLLECT (step-by-step) ──── */
-  setupCollect(op,input){
-    this.vizEl.innerHTML='';
-    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
-    this.vizEl.appendChild(el('div','anim-label','Gathering elements into result'));
-    const inRow=el('div','anim-row');
-    input.forEach(v=>inRow.appendChild(cell(display(v),'waiting')));
-    this.vizEl.appendChild(inRow);
-    this.vizEl.appendChild(el('div','anim-arrow','&#8595;'));
-    const resultTag=el('div','anim-result-tag','✓ RESULT');
-    this.vizEl.appendChild(resultTag);
-    const outRow=el('div','anim-row anim-output-row');
-    this.vizEl.appendChild(outRow);
-    let i=0;const self=this;
-    this.stepFn=()=>{
-      if(i>=input.length){
-        self.snapshots.push(input);
-        self.logEl.innerHTML=`<b>✓ .collect() done!</b> → <span class="ok">[${input.map(display).join(', ')}]</span>`;
-        inRow.querySelectorAll('.anim-cell').forEach(c=>{c.classList.remove('waiting');c.classList.add('sorted');});
-        self.finishOp();return;
-      }
-      const cells=inRow.querySelectorAll('.anim-cell');
-      cells[i].classList.remove('waiting');cells[i].classList.add('sorted');
-      outRow.appendChild(cell(display(input[i]),'sorted'));
-      self.logEl.innerHTML=`Collecting element <span class="v">${display(input[i])}</span> (${i+1}/${input.length})`;
-      i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
-      self.scheduleAutoNext();
-    };
-    this.stepFn();
-  }
-
-  /* ──── COUNT (step-by-step) ──── */
-  setupCount(op,input){
-    this.vizEl.innerHTML='';
-    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">.count()</span>'));
-    this.vizEl.appendChild(el('div','anim-label','Counting elements'));
-    const inRow=el('div','anim-row');
-    input.forEach(v=>inRow.appendChild(cell(display(v),'waiting')));
-    this.vizEl.appendChild(inRow);
-    this.vizEl.appendChild(el('div','anim-arrow','&#8595;'));
-    const cntCell=cell('0','accum');
-    const cntRow=el('div','anim-row');cntRow.appendChild(cntCell);
-    this.vizEl.appendChild(cntRow);
-    let count=0;let i=0;const self=this;
-    this.stepFn=()=>{
-      if(i>=input.length){self.snapshots.push([count]);self.logEl.innerHTML=`<b>✓ .count() done!</b> → <span class="v">${count}</span>`;self.finishOp();return;}
-      self.nextBtn.disabled=true;
-      count++;const cells=inRow.querySelectorAll('.anim-cell');
-      cells[i].classList.remove('waiting');cells[i].classList.add('pass');
-      cntCell.innerHTML=count;cntCell.classList.add('highlight');
-      self.logEl.innerHTML=`Counting... element <span class="v">${display(input[i])}</span> → count = <span class="v">${count}</span>`;
-      self.timers.push(setTimeout(()=>{
-        cntCell.classList.remove('highlight');
-        i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
-        self.nextBtn.disabled=false;
-        self.scheduleAutoNext();
-      },self.speed*0.4));
-    };
-    this.stepFn();
-  }
-
-  /* ──── JOINING (step-by-step) ──── */
-  setupJoining(op,input){
-    this.vizEl.innerHTML='';
-    const delim=op.delimiter||', ';
-    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">.collect(Collectors.joining("'+delim+'"))</span>'));
-    this.vizEl.appendChild(el('div','anim-label','Input strings'));
-    const inRow=el('div','anim-row');
-    input.forEach(v=>inRow.appendChild(cell(display(v),'waiting')));
-    this.vizEl.appendChild(inRow);
-    this.vizEl.appendChild(el('div','anim-arrow','&#8595; joining &#8595;'));
-    const resultCell=cell('""','accum');
-    const rRow=el('div','anim-row');rRow.appendChild(resultCell);
-    this.vizEl.appendChild(rRow);
-    let built='';let i=0;const self=this;
-    this.stepFn=()=>{
-      if(i>=input.length){self.snapshots.push([built]);self.logEl.innerHTML=`<b>✓ .joining() done!</b> → <span class="ok">"${built}"</span>`;self.finishOp();return;}
-      self.nextBtn.disabled=true;
-      const cells=inRow.querySelectorAll('.anim-cell');
-      cells[i].classList.remove('waiting');cells[i].classList.add('highlight');
-      built+=(i>0?delim:'')+input[i];
-      resultCell.innerHTML='"'+built+'"';resultCell.classList.add('highlight');
-      self.logEl.innerHTML=`Appending <span class="v">"${input[i]}"</span>${i>0?' with delimiter "'+delim+'"':''} → <span class="v">"${built}"</span>`;
-      self.timers.push(setTimeout(()=>{
-        cells[i].classList.remove('highlight');cells[i].classList.add('pass');
-        resultCell.classList.remove('highlight');
-        i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
-        self.nextBtn.disabled=false;
-        self.scheduleAutoNext();
-      },self.speed*0.5));
-    };
-    this.stepFn();
-  }
-
-  /* ──── FIND FIRST (step-by-step) ──── */
-  setupFindFirst(op,input){
-    this.vizEl.innerHTML='';
-    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">.findFirst()</span>'));
-    const inRow=el('div','anim-row');
-    input.forEach(v=>inRow.appendChild(cell(display(v),'waiting')));
-    this.vizEl.appendChild(inRow);
-    this.vizEl.appendChild(el('div','anim-arrow','&#8595;'));
-    const rRow=el('div','anim-row anim-output-row');this.vizEl.appendChild(rRow);
-    const self=this;
-    this.stepFn=()=>{
-      self.nextBtn.disabled=true;
-      if(input.length>0){
-        const cells=inRow.querySelectorAll('.anim-cell');
-        cells[0].classList.remove('waiting');cells[0].classList.add('highlight');
-        self.logEl.innerHTML=`Checking element: <span class="v">${display(input[0])}</span>`;
-        self.timers.push(setTimeout(()=>{
-          cells[0].classList.remove('highlight');cells[0].classList.add('sorted');
-          rRow.appendChild(cell(display(input[0]),'sorted'));
-          self.snapshots.push([input[0]]);
-          self.logEl.innerHTML=`<b>✓ Found first!</b> → <span class="ok">${display(input[0])}</span>`;
-          self.nextBtn.disabled=false;
-          self.finishOp();
-        },self.speed*0.4));
-      } else {
-        self.snapshots.push([]);
-        self.logEl.innerHTML='<b>✓ findFirst()</b> — Empty stream, no element found';
-        self.finishOp();
-      }
-    };
-    this.stepFn();
-  }
-
-  /* ──── MAX (step-by-step) ──── */
-  setupMax(op,input){
-    this.vizEl.innerHTML='';
-    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
-    const inRow=el('div','anim-row');
-    input.forEach(v=>inRow.appendChild(cell(display(v),'waiting')));
-    this.vizEl.appendChild(inRow);
-    this.vizEl.appendChild(el('div','anim-arrow','&#8595;'));
-    const maxCell=cell('?','accum');
-    const rRow=el('div','anim-row');rRow.appendChild(maxCell);this.vizEl.appendChild(rRow);
-    let curMax=null;let i=0;const self=this;
-    this.stepFn=()=>{
-      if(i>=input.length){self.snapshots.push([curMax]);self.logEl.innerHTML=`<b>✓ .max() done!</b> → <span class="v">${display(curMax)}</span>`;self.finishOp();return;}
-      self.nextBtn.disabled=true;
-      const cells=inRow.querySelectorAll('.anim-cell');
-      cells[i].classList.remove('waiting');cells[i].classList.add('highlight');
-      const v=input[i];
-      const isNew=curMax===null||(op.compareFn?op.compareFn(v,curMax)>0:v>curMax);
-      if(isNew)curMax=v;
-      maxCell.innerHTML=display(curMax);if(isNew)maxCell.classList.add('highlight');
-      self.logEl.innerHTML=`Checking <span class="v">${display(v)}</span> — ${isNew?'<span class="ok">New max!</span>':'not bigger'} — current max = <span class="v">${display(curMax)}</span>`;
-      self.timers.push(setTimeout(()=>{
-        cells[i].classList.remove('highlight');cells[i].classList.add(isNew?'sorted':'pass');
-        maxCell.classList.remove('highlight');
-        i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
-        self.nextBtn.disabled=false;
-        self.scheduleAutoNext();
-      },self.speed*0.4));
-    };
-    this.stepFn();
-  }
-
-  /* ──── SORTED / comparator (step-by-step per comparison) ──── */
-  setupSorted(op,input){
-    const arr=input.slice();const n=arr.length;
-    this.vizEl.innerHTML='';
-    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
-    const row=el('div','anim-row');
-    arr.forEach(v=>row.appendChild(cell(display(v))));
-    this.vizEl.appendChild(row);
-    let i=0,j=0;const self=this;
-    const totalComps=(n*(n-1))/2;let compsDone=0;
-    this.stepFn=()=>{
-      if(i>=n-1){
-        self.snapshots.push(arr.slice());
-        row.querySelectorAll('.anim-cell').forEach(c=>{c.classList.remove('highlight','swap-a','swap-b','pass');c.classList.add('sorted');});
-        self.logEl.innerHTML=`<b>✓ .sorted() done!</b> → <span class="ok">[${arr.map(display).join(', ')}]</span>`;
-        self.finishOp();return;
-      }
-      if(j>=n-i-1){i++;j=0;if(i>=n-1){self.stepFn();return;}}
-      self.nextBtn.disabled=true;
-      const cells=row.querySelectorAll('.anim-cell');
-      cells.forEach(c=>c.classList.remove('highlight','swap-a','swap-b','pass'));
-      const cmpVal=op.compareFn(arr[j],arr[j+1]);
-      const willSwap=cmpVal>0;
-      self.logEl.innerHTML=op.explain(arr[j],arr[j+1],cmpVal,willSwap);
-      cells[j].classList.add('swap-a');cells[j+1].classList.add('swap-b');
-      self.timers.push(setTimeout(()=>{
-        if(willSwap){
-          const tmp=arr[j];arr[j]=arr[j+1];arr[j+1]=tmp;
-          cells[j].innerHTML=display(arr[j]);cells[j+1].innerHTML=display(arr[j+1]);
-        }
-        cells[j].classList.remove('swap-a','swap-b');cells[j+1].classList.remove('swap-a','swap-b');
-        if(willSwap){cells[j].classList.add('pass');cells[j+1].classList.add('pass');}
-        self.timers.push(setTimeout(()=>{
-          cells[j].classList.remove('pass');cells[j+1].classList.remove('pass');
-          j++;compsDone++;
-          self.stepInfo.textContent='Op '+(self.opIdx+1)+' — cmp '+compsDone+'/~'+totalComps;
-          self.nextBtn.disabled=false;
-          self.scheduleAutoNext();
-        },self.speed*0.2));
-      },self.speed*0.5));
-    };
-    this.stepFn();
-  }
-
-  /* ──── DISTINCT (step-by-step) ──── */
-  setupDistinct(op,input){
-    this.vizEl.innerHTML='';
-    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
-    this.vizEl.appendChild(el('div','anim-label','Input to this operation'));
-    const inRow=el('div','anim-row');
-    const inCells=input.map(v=>{const c=cell(display(v),'waiting');inRow.appendChild(c);return c;});
-    this.vizEl.appendChild(inRow);
-    this.vizEl.appendChild(el('div','anim-arrow','&#8595;'));
-    this.vizEl.appendChild(el('div','anim-label','Output (unique elements)'));
-    const outRow=el('div','anim-row anim-output-row');
-    this.vizEl.appendChild(outRow);
-    const output=[];const seen=new Set();let i=0;const self=this;
-    this.stepFn=()=>{
-      if(i>=input.length){self.snapshots.push(output);self.logEl.innerHTML=`<b>✓ done!</b> — Kept <span class="v">${output.length}</span> unique of ${input.length} → <span class="ok">[${output.map(display).join(', ')}]</span>`;self.finishOp();return;}
-      self.nextBtn.disabled=true;
-      const v=input[i];const key=JSON.stringify(v);const pass=!seen.has(key);
-      if(pass)seen.add(key);
-      inCells.forEach(c=>c.classList.remove('highlight'));
-      inCells[i].classList.remove('waiting');inCells[i].classList.add('highlight');
-      self.logEl.innerHTML=op.explain?op.explain(v,pass):`<span class="v">${display(v)}</span> → ${pass?'<span class="ok">first time → KEEP ✓</span>':'<span class="no">duplicate → REMOVE ✗</span>'}`;
-      self.timers.push(setTimeout(()=>{
-        if(pass){inCells[i].classList.remove('highlight');inCells[i].classList.add('pass');output.push(v);outRow.appendChild(cell(display(v),'pass'));}
-        else{inCells[i].classList.remove('highlight');inCells[i].classList.add('fail');}
-        i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
-        self.nextBtn.disabled=false;
-        self.scheduleAutoNext();
-      },self.speed*0.4));
-    };
-    this.stepFn();
-  }
-
-  /* ──── DUPLICATES ONLY (step-by-step) ──── */
-  setupDuplicatesOnly(op,input){
-    this.vizEl.innerHTML='';
-    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
-    this.vizEl.appendChild(el('div','anim-label','Input to this operation'));
-    const inRow=el('div','anim-row');
-    const inCells=input.map(v=>{const c=cell(display(v),'waiting');inRow.appendChild(c);return c;});
-    this.vizEl.appendChild(inRow);
-    this.vizEl.appendChild(el('div','anim-arrow','&#8595;'));
-    this.vizEl.appendChild(el('div','anim-label','Output (only duplicates)'));
-    const outRow=el('div','anim-row anim-output-row');
-    this.vizEl.appendChild(outRow);
-    const output=[];const seen=new Set();let i=0;const self=this;
-    this.stepFn=()=>{
-      if(i>=input.length){self.snapshots.push(output);self.logEl.innerHTML=`<b>✓ done!</b> — Found <span class="v">${output.length}</span> duplicates → <span class="ok">[${output.map(display).join(', ')}]</span>`;self.finishOp();return;}
-      self.nextBtn.disabled=true;
-      const v=input[i];const key=JSON.stringify(v);const isDup=seen.has(key);
-      seen.add(key);
-      inCells.forEach(c=>c.classList.remove('highlight'));
-      inCells[i].classList.remove('waiting');inCells[i].classList.add('highlight');
-      self.logEl.innerHTML=op.explain?op.explain(v,isDup):`<span class="v">${display(v)}</span> → ${isDup?'<span class="ok">duplicate → KEEP ✓</span>':'<span class="no">first time → REMOVE ✗</span>'}`;
-      self.timers.push(setTimeout(()=>{
-        if(isDup){inCells[i].classList.remove('highlight');inCells[i].classList.add('pass');output.push(v);outRow.appendChild(cell(display(v),'pass'));}
-        else{inCells[i].classList.remove('highlight');inCells[i].classList.add('fail');}
-        i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
-        self.nextBtn.disabled=false;
-        self.scheduleAutoNext();
-      },self.speed*0.4));
-    };
-    this.stepFn();
-  }
-
-  /* ──── LIMIT (step-by-step) ──── */
-  setupLimit(op,input){
-    this.vizEl.innerHTML='';
-    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
-    this.vizEl.appendChild(el('div','anim-label','Taking first '+op.n+' elements'));
-    const inRow=el('div','anim-row');
-    const inCells=input.map(v=>{const c=cell(display(v),'waiting');inRow.appendChild(c);return c;});
-    this.vizEl.appendChild(inRow);
-    this.vizEl.appendChild(el('div','anim-arrow','&#8595;'));
-    this.vizEl.appendChild(el('div','anim-label','Output (first '+op.n+')'));
-    const outRow=el('div','anim-row anim-output-row');
-    this.vizEl.appendChild(outRow);
-    const output=[];let i=0;const self=this;
-    this.stepFn=()=>{
-      if(i>=input.length||output.length>=op.n){
-        self.snapshots.push(output);
-        self.logEl.innerHTML=`<b>✓ .limit(${op.n}) done!</b> — Took <span class="v">${output.length}</span> elements → <span class="ok">[${output.map(display).join(', ')}]</span>`;
-        self.finishOp();return;
-      }
-      self.nextBtn.disabled=true;
-      const v=input[i];
-      inCells.forEach(c=>c.classList.remove('highlight'));
-      inCells[i].classList.remove('waiting');inCells[i].classList.add('highlight');
-      self.logEl.innerHTML=`Element <span class="v">${display(v)}</span> — taken ${output.length+1}/${op.n} → <span class="ok">TAKE ✓</span>`;
-      self.timers.push(setTimeout(()=>{
-        inCells[i].classList.remove('highlight');inCells[i].classList.add('pass');
-        output.push(v);outRow.appendChild(cell(display(v),'pass'));
-        i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
-        self.nextBtn.disabled=false;
-        self.scheduleAutoNext();
-      },self.speed*0.4));
-    };
-    this.stepFn();
-  }
-
-  /* ──── SKIP (step-by-step) ──── */
-  setupSkip(op,input){
-    this.vizEl.innerHTML='';
-    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
-    this.vizEl.appendChild(el('div','anim-label','Skipping first '+op.n+' elements'));
-    const inRow=el('div','anim-row');
-    const inCells=input.map(v=>{const c=cell(display(v),'waiting');inRow.appendChild(c);return c;});
-    this.vizEl.appendChild(inRow);
-    this.vizEl.appendChild(el('div','anim-arrow','&#8595;'));
-    this.vizEl.appendChild(el('div','anim-label','Output (after skipping '+op.n+')'));
-    const outRow=el('div','anim-row anim-output-row');
-    this.vizEl.appendChild(outRow);
-    const output=[];let i=0;const self=this;
-    this.stepFn=()=>{
-      if(i>=input.length){
-        self.snapshots.push(output);
-        self.logEl.innerHTML=`<b>✓ .skip(${op.n}) done!</b> — Skipped ${Math.min(op.n,input.length)}, kept <span class="v">${output.length}</span> → <span class="ok">[${output.map(display).join(', ')}]</span>`;
-        self.finishOp();return;
-      }
-      self.nextBtn.disabled=true;
-      const v=input[i];const skip=i<op.n;
-      inCells.forEach(c=>c.classList.remove('highlight'));
-      inCells[i].classList.remove('waiting');inCells[i].classList.add('highlight');
-      self.logEl.innerHTML=`Element <span class="v">${display(v)}</span> at index ${i} — ${skip?'<span class="no">SKIP ✗ (index '+i+' < '+op.n+')</span>':'<span class="ok">KEEP ✓ (past skip zone)</span>'}`;
-      self.timers.push(setTimeout(()=>{
-        if(!skip){inCells[i].classList.remove('highlight');inCells[i].classList.add('pass');output.push(v);outRow.appendChild(cell(display(v),'pass'));}
-        else{inCells[i].classList.remove('highlight');inCells[i].classList.add('fail');}
-        i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
-        self.nextBtn.disabled=false;
-        self.scheduleAutoNext();
-      },self.speed*0.4));
-    };
-    this.stepFn();
-  }
-
-  /* ──── ALL MATCH (step-by-step) ──── */
-  setupAllMatch(op,input){
-    this.vizEl.innerHTML='';
-    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
-    this.vizEl.appendChild(el('div','anim-label','Testing every element'));
-    const inRow=el('div','anim-row');
-    const inCells=input.map(v=>{const c=cell(display(v),'waiting');inRow.appendChild(c);return c;});
-    this.vizEl.appendChild(inRow);
-    this.vizEl.appendChild(el('div','anim-arrow','&#8595;'));
-    const resultCell=cell('?','accum');
-    const rRow=el('div','anim-row');rRow.appendChild(resultCell);
-    this.vizEl.appendChild(rRow);
-    let i=0;const self=this;
-    this.stepFn=()=>{
-      if(i>=input.length){
-        self.snapshots.push([true]);
-        resultCell.innerHTML='TRUE';resultCell.classList.remove('accum');resultCell.classList.add('pass');
-        self.logEl.innerHTML=`<b>✓ allMatch() done!</b> → <span class="ok">true</span> — All elements matched!`;
-        self.finishOp();return;
-      }
-      self.nextBtn.disabled=true;
-      const v=input[i];const pass=op.test(v);
-      inCells.forEach(c=>c.classList.remove('highlight'));
-      inCells[i].classList.remove('waiting');inCells[i].classList.add('highlight');
-      self.logEl.innerHTML=op.explain(v,pass);
-      self.timers.push(setTimeout(()=>{
-        inCells[i].classList.remove('highlight');inCells[i].classList.add(pass?'pass':'fail');
-        i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
-        if(!pass){
-          self.snapshots.push([false]);
-          resultCell.innerHTML='FALSE';resultCell.classList.remove('accum');resultCell.classList.add('fail');
-          self.logEl.innerHTML=`<b>✓ allMatch() → FALSE</b> — Short-circuited! <span class="v">${display(v)}</span> failed.`;
-          self.nextBtn.disabled=false;
-          self.finishOp();
-        } else {
-          self.nextBtn.disabled=false;
-          self.scheduleAutoNext();
-        }
-      },self.speed*0.4));
-    };
-    this.stepFn();
-  }
-
-  /* ──── ANY MATCH (step-by-step) ──── */
-  setupAnyMatch(op,input){
-    this.vizEl.innerHTML='';
-    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
-    this.vizEl.appendChild(el('div','anim-label','Testing elements for any match'));
-    const inRow=el('div','anim-row');
-    const inCells=input.map(v=>{const c=cell(display(v),'waiting');inRow.appendChild(c);return c;});
-    this.vizEl.appendChild(inRow);
-    this.vizEl.appendChild(el('div','anim-arrow','&#8595;'));
-    const resultCell=cell('?','accum');
-    const rRow=el('div','anim-row');rRow.appendChild(resultCell);
-    this.vizEl.appendChild(rRow);
-    let i=0;const self=this;
-    this.stepFn=()=>{
-      if(i>=input.length){
-        self.snapshots.push([false]);
-        resultCell.innerHTML='FALSE';resultCell.classList.remove('accum');resultCell.classList.add('fail');
-        self.logEl.innerHTML=`<b>✓ anyMatch() done!</b> → <span class="no">false</span> — No elements matched.`;
-        self.finishOp();return;
-      }
-      self.nextBtn.disabled=true;
-      const v=input[i];const pass=op.test(v);
-      inCells.forEach(c=>c.classList.remove('highlight'));
-      inCells[i].classList.remove('waiting');inCells[i].classList.add('highlight');
-      self.logEl.innerHTML=op.explain(v,pass);
-      self.timers.push(setTimeout(()=>{
-        inCells[i].classList.remove('highlight');inCells[i].classList.add(pass?'pass':'fail');
-        i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
-        if(pass){
-          self.snapshots.push([true]);
-          resultCell.innerHTML='TRUE';resultCell.classList.remove('accum');resultCell.classList.add('pass');
-          self.logEl.innerHTML=`<b>✓ anyMatch() → TRUE</b> — Short-circuited! <span class="v">${display(v)}</span> matched.`;
-          self.nextBtn.disabled=false;
-          self.finishOp();
-        } else {
-          self.nextBtn.disabled=false;
-          self.scheduleAutoNext();
-        }
-      },self.speed*0.4));
-    };
-    this.stepFn();
-  }
-
-  /* ──── FLAT MAP (step-by-step) ──── */
-  setupFlatMap(op,input){
-    this.vizEl.innerHTML='';
-    this.vizEl.appendChild(el('div','anim-label','Operation: <span class="op-tag">'+op.code+'</span>'));
-    this.vizEl.appendChild(el('div','anim-label','Input to this operation'));
-    const inRow=el('div','anim-row');
-    const inCells=input.map(v=>{const c=cell(display(v),'waiting');inRow.appendChild(c);return c;});
-    this.vizEl.appendChild(inRow);
-    this.vizEl.appendChild(el('div','anim-arrow','&#8595; flattens to &#8595;'));
-    this.vizEl.appendChild(el('div','anim-label','Output (flattened elements)'));
-    const outRow=el('div','anim-row anim-output-row');
-    this.vizEl.appendChild(outRow);
-    const output=[];let i=0;const self=this;
-    this.stepFn=()=>{
-      if(i>=input.length){self.snapshots.push(output);self.logEl.innerHTML=`<b>✓ .flatMap() done!</b> — ${input.length} elements → <span class="v">${output.length}</span> flattened → <span class="ok">[${output.map(display).join(', ')}]</span>`;self.finishOp();return;}
-      self.nextBtn.disabled=true;
-      const v=input[i];const items=op.transform(v);
-      inCells.forEach(c=>c.classList.remove('highlight'));
-      inCells[i].classList.remove('waiting');inCells[i].classList.add('highlight');
-      self.logEl.innerHTML=op.explain(v,items);
-      self.timers.push(setTimeout(()=>{
-        inCells[i].classList.remove('highlight');inCells[i].classList.add('transformed');
-        items.forEach(item=>{output.push(item);outRow.appendChild(cell(display(item),'pass'));});
-        i++;self.stepInfo.textContent='Op '+(self.opIdx+1)+' — elem '+i+'/'+input.length;
-        self.nextBtn.disabled=false;
-        self.scheduleAutoNext();
-      },self.speed*0.4));
-    };
-    this.stepFn();
-  }
-
-  renderDone(){
-    this.pipeLines.forEach(l=>{l.classList.remove('active');l.classList.add('done');});
-    this.stepInfo.textContent='Done!';this.nextBtn.disabled=true;
-    this.vizEl.innerHTML='';
-    const last=this.snapshots[this.snapshots.length-1];
-    this.vizEl.appendChild(el('div','anim-result-tag','✓ FINAL RESULT'));
-    const row=el('div','anim-row');
-    last.forEach(v=>row.appendChild(cell(display(v),'sorted')));
-    this.vizEl.appendChild(row);
-    this.logEl.innerHTML='<span class="ok">Pipeline complete!</span> All operations executed.';
-  }
-  togglePlay(){if(this.playing)this.stopPlay();else{this.playing=true;this.playBtn.innerHTML='&#9646;&#9646; Pause';if(this.opIdx>=this.prob.ops.length-1&&!this.stepFn)this.reset();this.nextStep();}}
-  stopPlay(){this.playing=false;this.playBtn.innerHTML='&#9654; Auto Play';}
-}
-
-/* ── Tab builder ── */
-function buildTabs(tabsEl,containerEl,problems){
-  problems.forEach((p,i)=>{
-    const tab=el('button','anim-problem-tab'+(i===0?' active':''),p.tabName);
-    tab.onclick=()=>{
-      tabsEl.querySelectorAll('.anim-problem-tab').forEach(t=>t.classList.remove('active'));
-      tab.classList.add('active');
-      containerEl.innerHTML='';const box=el('div','anim-box');containerEl.appendChild(box);
-      new PipeAnimator(box,p);
-    };
-    tabsEl.appendChild(tab);
+  typeBtn.addEventListener('click', function(){
+    var open = ta.classList.toggle('collapsed') === false;
+    typeBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open) ta.focus();
   });
-  const box=el('div','anim-box');containerEl.appendChild(box);
-  new PipeAnimator(box,problems[0]);
-}
+  viewBtn.addEventListener('click', function(){
+    var open = pre.classList.toggle('collapsed') === false;
+    viewBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  ta.addEventListener('keydown', function(e){
+    if (e.key === 'Tab'){
+      e.preventDefault();
+      var s = ta.selectionStart, en = ta.selectionEnd;
+      ta.value = ta.value.slice(0, s) + '\t' + ta.value.slice(en);
+      ta.selectionStart = ta.selectionEnd = s + 1;
+    }
+  });
+});
 
-/* ================================================================
-   PROBLEM DEFINITIONS
-   ================================================================ */
 
-/* ── LAMBDA PROBLEMS ── */
-const lambdaProblems=[
-  {tabName:'Ex 1: Squares of Evens',title:'Squares of even numbers',input:[1,2,3,4,5,6,7,8,9,10],ops:[
-    {code:'.filter(n → n % 2 == 0)',type:'filter',test:n=>n%2===0,explain:(n,p)=>`Checking <span class="v">${n}</span>: ${n} % 2 = ${n%2} → ${p?'<span class="ok">KEEP ✓ (even)</span>':'<span class="no">REMOVE ✗ (odd)</span>'}`},
-    {code:'.map(n → n * n)',type:'map',transform:n=>n*n,explain:(n,r)=>`Transform <span class="v">${n}</span> → ${n} × ${n} = <span class="v">${r}</span>`},
-    {code:'.collect(Collectors.toList())',type:'collect'}
-  ]},
-  {tabName:'Ex 2: Count names with A',title:'Count names starting with "A"',input:["Alice","Bob","Alex","Charlie","Anna"],ops:[
-    {code:'.filter(n → n.startsWith("A"))',type:'filter',test:n=>n.startsWith("A"),explain:(n,p)=>`Checking <span class="v">"${n}"</span>: starts with A? → ${p?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`},
-    {code:'.count()',type:'count'}
-  ]},
-  {tabName:'Ex 3: Filter + Uppercase',title:'Words length > 3, uppercased',input:["hi","hello","hey","world","java"],ops:[
-    {code:'.filter(w → w.length() > 3)',type:'filter',test:w=>w.length>3,explain:(w,p)=>`Checking <span class="v">"${w}"</span>: length = ${w.length} > 3? → ${p?'<span class="ok">KEEP ✓</span>':'<span class="no">REMOVE ✗</span>'}`},
-    {code:'.map(w → w.toUpperCase())',type:'map',transform:w=>w.toUpperCase(),explain:(w,r)=>`Transform <span class="v">"${w}"</span> → <span class="v">"${r}"</span>`},
-    {code:'.collect(Collectors.toList())',type:'collect'}
-  ]}
-];
-
-/* ── STREAM PROBLEMS ── */
-const streamProblems=[
-  {tabName:'P1: Divisible by 10',title:'Filter numbers divisible by 10',input:[10,15,20,25,30,35,40],ops:[
-    {code:'.filter(n → n % 10 == 0)',type:'filter',test:n=>n%10===0,explain:(n,p)=>`<span class="v">${n}</span> % 10 = ${n%10} → ${p?'<span class="ok">KEEP ✓</span>':'<span class="no">REMOVE ✗</span>'}`},
-    {code:'.collect(Collectors.toList())',type:'collect'}
-  ]},
-  {tabName:'P2: Filter + Uppercase',title:'Uppercase words with length > 3',input:["cat","elephant","dog","giraffe"],ops:[
-    {code:'.filter(w → w.length() > 3)',type:'filter',test:w=>w.length>3,explain:(w,p)=>`<span class="v">"${w}"</span> length=${w.length} > 3? → ${p?'<span class="ok">KEEP ✓</span>':'<span class="no">REMOVE ✗</span>'}`},
-    {code:'.map(w → w.toUpperCase())',type:'map',transform:w=>w.toUpperCase(),explain:(w,r)=>`<span class="v">"${w}"</span> → <span class="v">"${r}"</span>`},
-    {code:'.collect(Collectors.toList())',type:'collect'}
-  ]},
-  {tabName:'P3: Sum prices > 100',title:'Sum of prices greater than 100',input:[100,50,200,75,150],ops:[
-    {code:'.filter(p → p > 100)',type:'filter',test:p=>p>100,explain:(p,pass)=>`<span class="v">${p}</span> > 100? → ${pass?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`},
-    {code:'.reduce(0, (a, b) -> a + b)',type:'reduce',identity:0,combine:(a,b)=>a+b,explain:(acc,v)=>`Accumulator: <span class="v">${acc}</span> + <span class="v">${v}</span> = <span class="v">${acc+v}</span>`}
-  ]},
-  {tabName:'P4: Sum squares of evens',title:'Sum of squares of even numbers',input:[1,2,3,4,5,6,7,8,9,10],ops:[
-    {code:'.filter(n → n % 2 == 0)',type:'filter',test:n=>n%2===0,explain:(n,p)=>`<span class="v">${n}</span> % 2 = ${n%2} → ${p?'<span class="ok">EVEN ✓</span>':'<span class="no">ODD ✗</span>'}`},
-    {code:'.map(n → n * n)',type:'map',transform:n=>n*n,explain:(n,r)=>`<span class="v">${n}</span> × ${n} = <span class="v">${r}</span>`},
-    {code:'.reduce(0, (a, b) -> a + b)',type:'reduce',identity:0,combine:(a,b)=>a+b,explain:(acc,v)=>`<span class="v">${acc}</span> + <span class="v">${v}</span> = <span class="v">${acc+v}</span>`}
-  ]},
-  {tabName:'P5: String joining',title:'Join names starting with A or B',input:["Alice","Bob","Charlie","David"],ops:[
-    {code:'.filter(n → n.startsWith("A") || n.startsWith("B"))',type:'filter',test:n=>n.startsWith("A")||n.startsWith("B"),explain:(n,p)=>`<span class="v">"${n}"</span> starts with A or B? → ${p?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`},
-    {code:'.collect(Collectors.joining(", "))',type:'joining',delimiter:', '}
-  ]},
-
-  /* ── COMPLEX PROBLEMS ── */
-
-  {tabName:'P6: Sort + Map + Reduce',title:'Sort descending, double each, find total',input:[5,12,3,18,7,25,1,9],ops:[
-    {code:'.sorted(Comparator.reverseOrder())',type:'sorted',compareFn:(a,b)=>b-a,
-     explain:(a,b,r,sw)=>`Descending: <span class="v">${b}</span> vs <span class="v">${a}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`},
-    {code:'.map(n → n * 2)',type:'map',transform:n=>n*2,explain:(n,r)=>`<span class="v">${n}</span> × 2 = <span class="v">${r}</span>`},
-    {code:'.reduce(0, (a, b) -> a + b)',type:'reduce',identity:0,combine:(a,b)=>a+b,explain:(acc,v)=>`<span class="v">${acc}</span> + <span class="v">${v}</span> = <span class="v">${acc+v}</span>`}
-  ]},
-
-  {tabName:'P7: Multi-filter chain',title:'Even numbers > 5 and < 50, squared',input:[2,8,3,15,42,60,7,24,11,36],ops:[
-    {code:'.filter(n → n % 2 == 0)',type:'filter',test:n=>n%2===0,explain:(n,p)=>`<span class="v">${n}</span> % 2 = ${n%2} → ${p?'<span class="ok">EVEN ✓</span>':'<span class="no">ODD ✗</span>'}`},
-    {code:'.filter(n → n > 5)',type:'filter',test:n=>n>5,explain:(n,p)=>`<span class="v">${n}</span> > 5? → ${p?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`},
-    {code:'.filter(n → n < 50)',type:'filter',test:n=>n<50,explain:(n,p)=>`<span class="v">${n}</span> < 50? → ${p?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`},
-    {code:'.map(n → n * n)',type:'map',transform:n=>n*n,explain:(n,r)=>`<span class="v">${n}</span> × ${n} = <span class="v">${r}</span>`},
-    {code:'.collect(Collectors.toList())',type:'collect'}
-  ]},
-
-  {tabName:'P8: Product via reduce',title:'Product of all elements after filtering',input:[2,5,0,3,4,1,6],ops:[
-    {code:'.filter(n → n > 0)',type:'filter',test:n=>n>0,explain:(n,p)=>`<span class="v">${n}</span> > 0? → ${p?'<span class="ok">KEEP ✓</span>':'<span class="no">REMOVE ✗ (zero!)</span>'}`},
-    {code:'.filter(n → n <= 4)',type:'filter',test:n=>n<=4,explain:(n,p)=>`<span class="v">${n}</span> ≤ 4? → ${p?'<span class="ok">KEEP ✓</span>':'<span class="no">REMOVE ✗ (too big)</span>'}`},
-    {code:'.reduce(1, (a,b) → a * b)',type:'reduce',identity:1,combine:(a,b)=>a*b,explain:(acc,v)=>`Accumulator: <span class="v">${acc}</span> × <span class="v">${v}</span> = <span class="v">${acc*v}</span>`}
-  ]},
-
-  {tabName:'P9: String pipeline',title:'Process names: filter → map → sort → join',input:["Alice","bob","CHARLIE","dave","Eve","frank","Grace"],ops:[
-    {code:'.filter(s → s.length() >= 4)',type:'filter',test:s=>s.length>=4,explain:(s,p)=>`<span class="v">"${s}"</span> length=${s.length} ≥ 4? → ${p?'<span class="ok">KEEP ✓</span>':'<span class="no">REMOVE ✗</span>'}`},
-    {code:'.map(s → s.toLowerCase())',type:'map',transform:s=>s.toLowerCase(),explain:(s,r)=>`<span class="v">"${s}"</span> → <span class="v">"${r}"</span>`},
-    {code:'.sorted()',type:'sorted',compareFn:(a,b)=>a.localeCompare(b),
-     explain:(a,b,r,sw)=>`"<span class="v">${a}</span>" vs "<span class="v">${b}</span>": compareTo = <span class="v">${r>0?'+':''}${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`},
-    {code:'.collect(Collectors.joining(" | "))',type:'joining',delimiter:' | '}
-  ]},
-
-  {tabName:'P10: Max after transform',title:'Find longest word length after filtering',input:["hi","strawberry","cat","watermelon","go","blueberry","pineapple"],ops:[
-    {code:'.filter(w → w.length() > 3)',type:'filter',test:w=>w.length>3,explain:(w,p)=>`<span class="v">"${w}"</span> length=${w.length} > 3? → ${p?'<span class="ok">KEEP ✓</span>':'<span class="no">REMOVE ✗</span>'}`},
-    {code:'.map(w → w.length())',type:'map',transform:w=>w.length,explain:(w,r)=>`<span class="v">"${w}"</span> → length = <span class="v">${r}</span>`},
-    {code:'.max((a, b) -> a.compareTo(b))',type:'max',compareFn:(a,b)=>a-b}
-  ]},
-
-  {tabName:'P11: FlatMap concept',title:'Distinct chars from filtered words, sorted',input:["apple","ant","ball","bat","cat"],ops:[
-    {code:'.filter(w → w.startsWith("a"))',type:'filter',test:w=>w.startsWith("a"),explain:(w,p)=>`<span class="v">"${w}"</span> starts with "a"? → ${p?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`},
-    {code:'.map(w → w.charAt(w.length()-1))',type:'map',transform:w=>w.charAt(w.length-1),explain:(w,r)=>`<span class="v">"${w}"</span> → last char = <span class="v">"${r}"</span>`},
-    {code:'.sorted()',type:'sorted',compareFn:(a,b)=>a.localeCompare(b),
-     explain:(a,b,r,sw)=>`"<span class="v">${a}</span>" vs "<span class="v">${b}</span>": <span class="v">${r>0?'+':''}${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`},
-    {code:'.collect(Collectors.joining(""))',type:'joining',delimiter:''}
-  ]},
-
-  {tabName:'P12: Salary pipeline',title:'Avg salary of high-earners (filter → map → reduce)',input:[45000,72000,38000,91000,55000,120000,63000,87000],ops:[
-    {code:'.filter(s → s >= 60000)',type:'filter',test:s=>s>=60000,explain:(s,p)=>`<span class="v">$${s.toLocaleString()}</span> ≥ $60,000? → ${p?'<span class="ok">HIGH EARNER ✓</span>':'<span class="no">BELOW THRESHOLD ✗</span>'}`},
-    {code:'.map(s → s / 1000)',type:'map',transform:s=>s/1000,explain:(s,r)=>`<span class="v">$${s.toLocaleString()}</span> → <span class="v">${r}K</span> (in thousands)`},
-    {code:'.reduce(0, (a, b) -> a + b)',type:'reduce',identity:0,combine:(a,b)=>a+b,explain:(acc,v)=>`Running total: <span class="v">${acc}K</span> + <span class="v">${v}K</span> = <span class="v">${acc+v}K</span>`}
-  ]},
-
-  {tabName:'P13: Chained transforms',title:'Triple pipeline: filter → map → map → filter → count',input:[1,2,3,4,5,6,7,8,9,10,11,12],ops:[
-    {code:'.filter(n → n % 3 == 0)',type:'filter',test:n=>n%3===0,explain:(n,p)=>`<span class="v">${n}</span> % 3 = ${n%3} → ${p?'<span class="ok">DIVISIBLE ✓</span>':'<span class="no">NOT DIVISIBLE ✗</span>'}`},
-    {code:'.map(n → n * n)',type:'map',transform:n=>n*n,explain:(n,r)=>`<span class="v">${n}</span>² = <span class="v">${r}</span>`},
-    {code:'.map(n → n + 1)',type:'map',transform:n=>n+1,explain:(n,r)=>`<span class="v">${n}</span> + 1 = <span class="v">${r}</span>`},
-    {code:'.filter(n → n > 30)',type:'filter',test:n=>n>30,explain:(n,p)=>`<span class="v">${n}</span> > 30? → ${p?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`},
-    {code:'.count()',type:'count'}
-  ]},
-
-  {tabName:'P14: Word frequency',title:'Filter words → lengths → sort descending → findFirst (longest)',input:["java","python","go","javascript","c","typescript","rust"],ops:[
-    {code:'.filter(w → w.length() > 2)',type:'filter',test:w=>w.length>2,explain:(w,p)=>`<span class="v">"${w}"</span> length=${w.length} > 2? → ${p?'<span class="ok">KEEP ✓</span>':'<span class="no">TOO SHORT ✗</span>'}`},
-    {code:'.map(w → w.toUpperCase())',type:'map',transform:w=>w.toUpperCase(),explain:(w,r)=>`<span class="v">"${w}"</span> → <span class="v">"${r}"</span>`},
-    {code:'.sorted((a,b) → b.length() - a.length())',type:'sorted',compareFn:(a,b)=>b.length-a.length,
-     explain:(a,b,r,sw)=>`"<span class="v">${a}</span>"(${a.length}) vs "<span class="v">${b}</span>"(${b.length}): ${sw?'<span class="no">SWAP (shorter first)</span>':'<span class="ok">OK (already desc)</span>'}`},
-    {code:'.findFirst()',type:'findFirst'}
-  ]},
-
-  {tabName:'P15: E-commerce',title:'Discounted prices of expensive items, total savings',input:[{name:"Laptop",price:999},{name:"Mouse",price:29},{name:"Monitor",price:450},{name:"Keyboard",price:75},{name:"Headset",price:199},{name:"Webcam",price:89}],ops:[
-    {code:'.filter(p → p.price > 100)',type:'filter',test:p=>p.price>100,explain:(p,pass)=>`<span class="v">${p.name} ($${p.price})</span> > $100? → ${pass?'<span class="ok">EXPENSIVE ✓</span>':'<span class="no">CHEAP ✗</span>'}`},
-    {code:'.map(p → p.price * 0.2)',type:'map',transform:p=>Math.round(p.price*0.2),explain:(p,r)=>`<span class="v">${typeof p==='object'?p.name:p}</span>: 20% of $${typeof p==='object'?p.price:p} = <span class="v">$${r}</span> saved`},
-    {code:'.reduce(0, (a, b) -> a + b)',type:'reduce',identity:0,combine:(a,b)=>a+b,explain:(acc,v)=>`Total savings: <span class="v">$${acc}</span> + <span class="v">$${v}</span> = <span class="v">$${acc+v}</span>`}
-  ]},
-
-  /* ── STREAMS PROGRAMMING & SCENARIOS ── */
-
-  {tabName:'P16: Remove dupes (Set)',title:'Remove duplicates using filter + HashSet.add()',input:[1,2,3,2,4,3,5,1],ops:[
-    {code:'.filter(i → seen.add(i))',type:'distinct',explain:(v,pass)=>`<span class="v">${v}</span> → seen.add(${v}) returns ${pass?'<span class="ok">true (first time) → KEEP ✓</span>':'<span class="no">false (already seen) → REMOVE ✗</span>'}`},
-    {code:'.collect(Collectors.toList())',type:'collect'}
-  ]},
-
-  {tabName:'P17: Get duplicates',title:'Get only duplicate elements using !seen.add()',input:[1,2,3,2,4,3,5,1],ops:[
-    {code:'.filter(i → !seen.add(i))',type:'duplicatesOnly',explain:(v,isDup)=>`<span class="v">${v}</span> → !seen.add(${v}) = ${isDup?'<span class="ok">true (was seen before) → KEEP ✓</span>':'<span class="no">false (first time) → REMOVE ✗</span>'}`},
-    {code:'.collect(Collectors.toList())',type:'collect'}
-  ]},
-
-  {tabName:'P18: Distinct + Sort desc',title:'Remove duplicates then sort descending',input:[11,11,1,3,5,6,5],ops:[
-    {code:'.distinct()',type:'distinct',explain:(v,pass)=>`<span class="v">${v}</span> → ${pass?'<span class="ok">first occurrence → KEEP ✓</span>':'<span class="no">duplicate → REMOVE ✗</span>'}`},
-    {code:'.sorted(Comparator.reverseOrder())',type:'sorted',compareFn:(a,b)=>b-a,
-     explain:(a,b,r,sw)=>`Descending: <span class="v">${b}</span> vs <span class="v">${a}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`},
-    {code:'.toList()',type:'collect'}
-  ]},
-
-  {tabName:'P19: Sort by length',title:'Sort strings by increasing order of their length',input:["Java","Python","C#","HTML","Kotlin","C++","COBOL","C"],ops:[
-    {code:'.sorted(Comparator.comparing(s → s.length()))',type:'sorted',compareFn:(a,b)=>a.length-b.length,
-     explain:(a,b,r,sw)=>`<span class="v">"${a}"</span>(len ${a.length}) vs <span class="v">"${b}"</span>(len ${b.length}): ${a.length}-${b.length}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`},
-    {code:'.collect(Collectors.toList())',type:'collect'}
-  ]},
-
-  {tabName:'P20: Find max',title:'Find maximum number in a list',input:[1,2,4,41,4],ops:[
-    {code:'.max(Comparator.naturalOrder())',type:'max',compareFn:(a,b)=>a-b}
-  ]},
-
-  {tabName:'P21: allMatch (even)',title:'Check if all numbers are even using allMatch',input:[2,4,6,8,10],ops:[
-    {code:'.allMatch(i → i % 2 == 0)',type:'allMatch',test:n=>n%2===0,
-     explain:(n,p)=>`<span class="v">${n}</span> % 2 = ${n%2} → ${p?'<span class="ok">EVEN ✓</span>':'<span class="no">ODD ✗ — FAILS!</span>'}`}
-  ]},
-
-  {tabName:'P22: anyMatch',title:'Check if any string starts with "A"',input:["Banana","Apple","Cat","Andrew"],ops:[
-    {code:'.anyMatch(s → s.startsWith("A"))',type:'anyMatch',test:s=>s.startsWith('A'),
-     explain:(s,p)=>`<span class="v">"${s}"</span>.startsWith("A")? → ${p?'<span class="ok">YES ✓ — MATCH FOUND!</span>':'<span class="no">NO ✗</span>'}`}
-  ]},
-
-  {tabName:'P23: Starts with 1',title:'Find numbers starting with digit 1',input:[10,12,20,19,30],ops:[
-    {code:'.filter(i → String.valueOf(i).startsWith("1"))',type:'filter',test:n=>String(n).startsWith('1'),
-     explain:(n,p)=>`<span class="v">${n}</span> → "${n}".startsWith("1")? → ${p?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`},
-    {code:'.toList()',type:'collect'}
-  ]},
-
-  {tabName:'P24: Palindromes',title:'Find palindrome strings from a list',input:["Telugu","Tamil","Malayalam"],ops:[
-    {code:'.filter(s → s.equalsIgnoreCase(reverse(s)))',type:'filter',
-     test:s=>s.toLowerCase()===s.toLowerCase().split('').reverse().join(''),
-     explain:(s,p)=>{const rev=s.toLowerCase().split('').reverse().join('');return `<span class="v">"${s}"</span> → lower="${s.toLowerCase()}" reverse="${rev}" → ${p?'<span class="ok">PALINDROME ✓</span>':'<span class="no">NOT palindrome ✗</span>'}`;}},
-    {code:'.toList()',type:'collect'}
-  ]},
-
-  {tabName:'P25: Longest word',title:'Find the longest word in a list',input:["cat","elephant","dog","giraffe","zebra"],ops:[
-    {code:'.max((o1, o2) → o1.length() - o2.length())',type:'max',compareFn:(a,b)=>a.length-b.length}
-  ]},
-
-  {tabName:'P26: Cube > 50',title:'Cube list elements and filter numbers greater than 50',input:[1,2,3,4,5],ops:[
-    {code:'.map(n → n * n * n)',type:'map',transform:n=>n*n*n,explain:(n,r)=>`<span class="v">${n}</span>³ = <span class="v">${r}</span>`},
-    {code:'.filter(n → n > 50)',type:'filter',test:n=>n>50,explain:(n,p)=>`<span class="v">${n}</span> > 50? → ${p?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`},
-    {code:'.collect(Collectors.toList())',type:'collect'}
-  ]},
-
-  {tabName:'P27: Merge + sort',title:'Merge [4,2,7,1] and [8,3,9,5] into single sorted array',input:[4,2,7,1,8,3,9,5],ops:[
-    {code:'.sorted()',type:'sorted',compareFn:(a,b)=>a-b,
-     explain:(a,b,r,sw)=>`<span class="v">${a}</span> vs <span class="v">${b}</span>: ${a}-${b}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`},
-    {code:'.toArray()',type:'collect'}
-  ]},
-
-  {tabName:'P28: Top 3 elements',title:'Get top 3 elements from a list',input:[71,18,42,21,67,32,95,14,56,87],ops:[
-    {code:'.sorted(Comparator.reverseOrder())',type:'sorted',compareFn:(a,b)=>b-a,
-     explain:(a,b,r,sw)=>`Desc: <span class="v">${b}</span> vs <span class="v">${a}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`},
-    {code:'.limit(3)',type:'limit',n:3},
-    {code:'.toList()',type:'collect'}
-  ]},
-
-  {tabName:'P29: 3rd highest',title:'Get 3rd highest element from a list',input:[71,18,42,21,67,32,95,14,56,87],ops:[
-    {code:'.sorted(Comparator.reverseOrder())',type:'sorted',compareFn:(a,b)=>b-a,
-     explain:(a,b,r,sw)=>`Desc: <span class="v">${b}</span> vs <span class="v">${a}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`},
-    {code:'.skip(2)',type:'skip',n:2},
-    {code:'.findFirst().orElse(-1)',type:'findFirst'}
-  ]},
-
-  {tabName:'P30: Anagram check',title:'Check anagram: sort chars of "RaceCar" → compare with "CarRace"',input:["R","a","c","e","C","a","r"],ops:[
-    {code:'.map(c → c.toUpperCase())',type:'map',transform:s=>s.toUpperCase(),explain:(s,r)=>`<span class="v">"${s}"</span> → <span class="v">"${r}"</span>`},
-    {code:'.sorted()',type:'sorted',compareFn:(a,b)=>a.localeCompare(b),
-     explain:(a,b,r,sw)=>`"<span class="v">${a}</span>" vs "<span class="v">${b}</span>" → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`},
-    {code:'.collect(Collectors.joining())',type:'joining',delimiter:''}
-  ]},
-
-  {tabName:'P31: Sum of digits',title:'Sum of all digits in number 15623',input:["1","5","6","2","3"],ops:[
-    {code:'.map(s → Integer.parseInt(s))',type:'map',transform:s=>parseInt(s),explain:(s,r)=>`<span class="v">"${s}"</span> → parseInt → <span class="v">${r}</span>`},
-    {code:'.reduce(0, (a,b) → a + b)',type:'reduce',identity:0,combine:(a,b)=>a+b,explain:(acc,v)=>`<span class="v">${acc}</span> + <span class="v">${v}</span> = <span class="v">${acc+v}</span>`}
-  ]},
-
-  {tabName:'P32: Common elements',title:'Find common elements between two arrays',input:[71,21,34,89,56,28],ops:[
-    {code:'.filter(i → list2.contains(i))',type:'filter',
-     test:(function(){const l2=[12,56,17,21,94,34];return n=>l2.includes(n);})(),
-     explain:(function(){const l2=[12,56,17,21,94,34];return(n,p)=>`<span class="v">${n}</span> in [12,56,17,21,94,34]? → ${p?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`;})()},
-    {code:'.collect(Collectors.toList())',type:'collect'}
-  ]},
-
-  {tabName:'P33: Reverse words',title:'Reverse each word of "Java Concept Of The Day"',input:["Java","Concept","Of","The","Day"],ops:[
-    {code:'.map(s → new StringBuilder(s).reverse())',type:'map',transform:s=>s.split('').reverse().join(''),
-     explain:(s,r)=>`<span class="v">"${s}"</span> → reversed → <span class="v">"${r}"</span>`},
-    {code:'.collect(Collectors.joining(" "))',type:'joining',delimiter:' '}
-  ]},
-
-  {tabName:'P34: Count "java"',title:'Count occurrences of "java" using flatMap',input:["java scala ruby","java react spring java"],ops:[
-    {code:'.flatMap(s → Arrays.stream(s.split(" ")))',type:'flatMap',transform:s=>s.split(' '),
-     explain:(s,items)=>`<span class="v">"${s}"</span> → split → [${items.map(w=>'"'+w+'"').join(', ')}]`},
-    {code:'.filter(w → w.equals("java"))',type:'filter',test:w=>w==='java',
-     explain:(w,p)=>`<span class="v">"${w}"</span> equals "java"? → ${p?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`},
-    {code:'.count()',type:'count'}
-  ]},
-
-  {tabName:'P35: Unique words',title:'Convert sentences into unique words using flatMap + distinct',input:["java is cool","cool code in java"],ops:[
-    {code:'.flatMap(s → Arrays.stream(s.split(" ")))',type:'flatMap',transform:s=>s.split(' '),
-     explain:(s,items)=>`<span class="v">"${s}"</span> → split → [${items.map(w=>'"'+w+'"').join(', ')}]`},
-    {code:'.distinct()',type:'distinct',explain:(v,pass)=>`<span class="v">"${v}"</span> → ${pass?'<span class="ok">first time → KEEP ✓</span>':'<span class="no">duplicate → REMOVE ✗</span>'}`},
-    {code:'.collect(Collectors.toSet())',type:'collect'}
-  ]},
-
-  {tabName:'P36: Flatten lists',title:'Flatten List<List<Integer>> into single list',input:[[1,2],[3,4]],ops:[
-    {code:'.flatMap(list → list.stream())',type:'flatMap',transform:arr=>Array.from(arr),
-     explain:(arr,items)=>`<span class="v">[${arr}]</span> → stream → [${items.join(', ')}]`},
-    {code:'.collect(Collectors.toList())',type:'collect'}
-  ]},
-
-  {tabName:'P37: All longest words',title:'Find all longest words (maxLength=9)',input:["apple","banana","orange","pineapple","blueberry"],ops:[
-    {code:'.filter(s → s.length() == maxLength)',type:'filter',test:s=>s.length===9,
-     explain:(s,p)=>`<span class="v">"${s}"</span> length=${s.length} == 9 (maxLength)? → ${p?'<span class="ok">YES ✓</span>':'<span class="no">NO ✗</span>'}`},
-    {code:'.toList()',type:'collect'}
-  ]},
-
-  {tabName:'P38: Sum (reduce)',title:'Sum of numbers using reduce',input:[5,10,15,20],ops:[
-    {code:'.reduce(0, (a,b) → a + b)',type:'reduce',identity:0,combine:(a,b)=>a+b,
-     explain:(acc,v)=>`<span class="v">${acc}</span> + <span class="v">${v}</span> = <span class="v">${acc+v}</span>`}
-  ]},
-
-  {tabName:'P39: Common prefix',title:'Find longest common prefix of ["flower","flow","flight"]',input:["flow","flight"],ops:[
-    {code:'.reduce((s1, s2) → commonPrefix(s1, s2))',type:'reduce',identity:"flower",
-     combine:(a,b)=>{const len=Math.min(a.length,b.length);let i=0;while(i<len&&a[i]===b[i])i++;return a.substring(0,i);},
-     explain:(acc,v)=>{const len=Math.min(acc.length,v.length);let i=0;while(i<len&&acc[i]===v[i])i++;const pfx=acc.substring(0,i);return `Compare "<span class="v">${acc}</span>" with "<span class="v">${v}</span>" char by char → common prefix = "<span class="v">${pfx}</span>"`;}}
-  ]},
-
-  {tabName:'P40: First non-repeat',title:'First non-repeating character in "aabbcdeffg"',
-   input:[{c:"a",n:2},{c:"b",n:2},{c:"c",n:1},{c:"d",n:1},{c:"e",n:1},{c:"f",n:2},{c:"g",n:1}],ops:[
-    {code:'.filter(entry → entry.getValue() == 1)',type:'filter',test:e=>e.n===1,
-     explain:(e,p)=>`<span class="v">"${e.c}"</span> count=${e.n} == 1? → ${p?'<span class="ok">NON-REPEATING ✓</span>':'<span class="no">REPEATING ✗</span>'}`},
-    {code:'.map(entry → entry.getKey())',type:'map',transform:e=>e.c,
-     explain:(e,r)=>`Entry {<span class="v">${typeof e==='object'?'"'+e.c+'": count '+e.n:e}</span>} → key = <span class="v">"${r}"</span>`},
-    {code:'.findFirst()',type:'findFirst'}
-  ]},
-
-  {tabName:'P41: Most repeated',title:'Find most repeated number in [10,20,5,8,30,25,30]',
-   input:[{k:10,v:1},{k:20,v:1},{k:5,v:1},{k:8,v:1},{k:30,v:2},{k:25,v:1}],ops:[
-    {code:'.max(Map.Entry.comparingByValue())',type:'max',compareFn:(a,b)=>a.v-b.v},
-    {code:'.map(entry → entry.getKey())',type:'map',transform:e=>e.k,
-     explain:(e,r)=>`Entry {<span class="v">${typeof e==='object'?e.k+': count '+e.v:e}</span>} → key = <span class="v">${r}</span>`}
-  ]}
-];
-
-/* ── COMPARATOR PROBLEMS ── */
-const compProblems=[
-  {tabName:'P1: Sort by length',title:'Sort strings by length (ascending)',input:["apple","pie","banana","cat"],ops:[
-    {code:'.sort((a,b) → a.length() - b.length())',type:'sorted',compareFn:(a,b)=>a.length-b.length,
-     explain:(a,b,r,sw)=>`Comparing <span class="v">"${a}"</span>(len ${a.length}) vs <span class="v">"${b}"</span>(len ${b.length}): ${a.length}-${b.length} = <span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`}
-  ]},
-  {tabName:'P2: Sort descending',title:'Sort numbers descending (b - a)',input:[5,2,8,1,9,3],ops:[
-    {code:'.sort((a,b) → b - a)',type:'sorted',compareFn:(a,b)=>b-a,
-     explain:(a,b,r,sw)=>`Comparing: <span class="v">${b}</span> - <span class="v">${a}</span> = <span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`}
-  ]},
-  {tabName:'P3: Evens first',title:'Sort evens before odds, then ascending',input:[1,2,3,4,5,6],ops:[
-    {code:'.sort(evens first, then a - b)',type:'sorted',compareFn:(a,b)=>{if(a%2===0&&b%2!==0)return-1;if(a%2!==0&&b%2===0)return 1;return a-b;},
-     explain:(a,b,r,sw)=>{const aE=a%2===0,bE=b%2===0;let why='';if(aE&&!bE)why=`${a}(even) vs ${b}(odd) → even first`;else if(!aE&&bE)why=`${a}(odd) vs ${b}(even) → even first`;else why=`both ${aE?'even':'odd'}: ${a}-${b}=${a-b}`;return `${why} → <span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;}}
-  ]},
-  {tabName:'P4: Sort by last char',title:'Sort strings by last character',input:["apple","dog","cat","elephant"],ops:[
-    {code:'.sort((a,b) → lastChar(a) - lastChar(b))',type:'sorted',compareFn:(a,b)=>a.charCodeAt(a.length-1)-b.charCodeAt(b.length-1),
-     explain:(a,b,r,sw)=>{const la=a[a.length-1],lb=b[b.length-1];return `<span class="v">"${a}"</span> last='${la}' vs <span class="v">"${b}"</span> last='${lb}': '${la}'-'${lb}'=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;}}
-  ]},
-  {tabName:'P5: 2D by sum',title:'Sort 2D array by sum of elements',input:[[1,2],[5,1],[3,3],[4,0]],ops:[
-    {code:'.sort((a,b) → sum(a) - sum(b))',type:'sorted',compareFn:(a,b)=>(a[0]+a[1])-(b[0]+b[1]),
-     explain:(a,b,r,sw)=>{const sa=a[0]+a[1],sb=b[0]+b[1];return `[${a}] sum=<span class="v">${sa}</span> vs [${b}] sum=<span class="v">${sb}</span>: ${sa}-${sb}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;}}
-  ]},
-
-  /* ── COMPLEX COMPARATOR PROBLEMS ── */
-
-  {tabName:'P6: Intervals by start→end',title:'Sort intervals: by start time, if equal then by end time (Interval Scheduling)',input:[[1,4],[2,3],[1,2],[3,5],[2,6],[3,4]],ops:[
-    {code:'.sort((a,b) → a[0]!=b[0] ? a[0]-b[0] : a[1]-b[1])',type:'sorted',
-     compareFn:(a,b)=>a[0]!==b[0]?a[0]-b[0]:a[1]-b[1],
-     explain:(a,b,r,sw)=>{
-       const sa=`[${a[0]},${a[1]}]`,sb=`[${b[0]},${b[1]}]`;
-       if(a[0]!==b[0])return `<span class="v">${sa}</span> vs <span class="v">${sb}</span>: start ${a[0]}≠${b[0]} → ${a[0]}-${b[0]}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
-       return `<span class="v">${sa}</span> vs <span class="v">${sb}</span>: start equal(${a[0]}), compare end: ${a[1]}-${b[1]}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
-     }}
-  ]},
-
-  {tabName:'P7: Merge intervals prep',title:'Sort intervals by end time (Greedy Activity Selection)',input:[[1,5],[3,4],[2,8],[5,7],[4,6],[6,9]],ops:[
-    {code:'.sort((a,b) → a[1] - b[1])',type:'sorted',
-     compareFn:(a,b)=>a[1]-b[1],
-     explain:(a,b,r,sw)=>{
-       return `<span class="v">[${a[0]},${a[1]}]</span> vs <span class="v">[${b[0]},${b[1]}]</span>: end ${a[1]}-${b[1]}=<span class="v">${r}</span> → pick earlier finish first → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
-     }}
-  ]},
-
-  {tabName:'P8: Frequency sort',title:'Sort by frequency (desc), if tie then by value (asc)',input:[4,2,2,8,3,3,3,1,4,4],ops:[
-    {code:'.sort(freq desc, then val asc)',type:'sorted',
-     compareFn:(function(){const freq={};[4,2,2,8,3,3,3,1,4,4].forEach(n=>freq[n]=(freq[n]||0)+1);return(a,b)=>freq[b]!==freq[a]?freq[b]-freq[a]:a-b;})(),
-     explain:(function(){const freq={};[4,2,2,8,3,3,3,1,4,4].forEach(n=>freq[n]=(freq[n]||0)+1);return(a,b,r,sw)=>{
-       if(freq[a]!==freq[b])return `<span class="v">${a}</span>(freq=${freq[a]}) vs <span class="v">${b}</span>(freq=${freq[b]}): freq ${freq[b]}-${freq[a]}=<span class="v">${r}</span> → higher freq first → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
-       return `<span class="v">${a}</span> vs <span class="v">${b}</span>: same freq(${freq[a]}), compare val: ${a}-${b}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
-     };})()}
-  ]},
-
-  {tabName:'P9: Closest to target',title:'Sort by absolute distance from target=50',input:[10,45,90,55,30,48,72,51],ops:[
-    {code:'.sort((a,b) → |a-50| - |b-50|)',type:'sorted',
-     compareFn:(a,b)=>Math.abs(a-50)-Math.abs(b-50),
-     explain:(a,b,r,sw)=>{
-       const da=Math.abs(a-50),db=Math.abs(b-50);
-       return `<span class="v">${a}</span> dist=|${a}-50|=<span class="v">${da}</span> vs <span class="v">${b}</span> dist=|${b}-50|=<span class="v">${db}</span>: ${da}-${db}=<span class="v">${r}</span> → closer first → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
-     }}
-  ]},
-
-  {tabName:'P10: Points by distance',title:'Sort 2D points by distance from origin (0,0)',input:[[3,4],[1,1],[5,0],[2,3],[0,2],[4,3]],ops:[
-    {code:'.sort((a,b) → dist(a) - dist(b))',type:'sorted',
-     compareFn:(a,b)=>(a[0]*a[0]+a[1]*a[1])-(b[0]*b[0]+b[1]*b[1]),
-     explain:(a,b,r,sw)=>{
-       const da=a[0]*a[0]+a[1]*a[1],db=b[0]*b[0]+b[1]*b[1];
-       return `<span class="v">(${a[0]},${a[1]})</span> dist²=${a[0]}²+${a[1]}²=<span class="v">${da}</span> vs <span class="v">(${b[0]},${b[1]})</span> dist²=${b[0]}²+${b[1]}²=<span class="v">${db}</span>: ${da}-${db}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
-     }}
-  ]},
-
-  {tabName:'P11: 2D col1 asc, col0 desc',title:'Sort 2D: by column[1] ascending, tie-break column[0] descending',input:[[5,2],[3,1],[7,2],[1,3],[4,1],[6,3]],ops:[
-    {code:'.sort(col[1] asc, then col[0] desc)',type:'sorted',
-     compareFn:(a,b)=>a[1]!==b[1]?a[1]-b[1]:b[0]-a[0],
-     explain:(a,b,r,sw)=>{
-       const sa=`[${a[0]},${a[1]}]`,sb=`[${b[0]},${b[1]}]`;
-       if(a[1]!==b[1])return `<span class="v">${sa}</span> vs <span class="v">${sb}</span>: col[1] ${a[1]}≠${b[1]} → ${a[1]}-${b[1]}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
-       return `<span class="v">${sa}</span> vs <span class="v">${sb}</span>: col[1] tie(${a[1]}), col[0] desc: ${b[0]}-${a[0]}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
-     }}
-  ]},
-
-  {tabName:'P12: Employees multi-sort',title:'Sort employees: by dept (alpha), then salary (desc)',
-   input:[{n:"Alice",d:"Eng",s:90},{n:"Bob",d:"Sales",s:70},{n:"Charlie",d:"Eng",s:85},{n:"Diana",d:"Sales",s:95},{n:"Eve",d:"Eng",s:110},{n:"Frank",d:"HR",s:60}],ops:[
-    {code:'.sort(dept asc, then salary desc)',type:'sorted',
-     compareFn:(a,b)=>{const dc=a.d.localeCompare(b.d);return dc!==0?dc:b.s-a.s;},
-     explain:(a,b,r,sw)=>{
-       const dc=a.d.localeCompare(b.d);
-       if(dc!==0)return `<span class="v">${a.n}(${a.d})</span> vs <span class="v">${b.n}(${b.d})</span>: dept "${a.d}" vs "${b.d}" → <span class="v">${dc>0?'+':''}${dc}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
-       return `<span class="v">${a.n}(${a.d},$${a.s}K)</span> vs <span class="v">${b.n}(${b.d},$${b.s}K)</span>: same dept, salary desc: ${b.s}-${a.s}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
-     }}
-  ]},
-
-  {tabName:'P13: Matrix row sort',title:'Sort rows of matrix by max element in each row',input:[[3,1,7],[9,2,4],[5,8,1],[6,0,3]],ops:[
-    {code:'.sort((a,b) → max(a) - max(b))',type:'sorted',
-     compareFn:(a,b)=>Math.max(...a)-Math.max(...b),
-     explain:(a,b,r,sw)=>{
-       const ma=Math.max(...a),mb=Math.max(...b);
-       return `<span class="v">[${a}]</span> max=<span class="v">${ma}</span> vs <span class="v">[${b}]</span> max=<span class="v">${mb}</span>: ${ma}-${mb}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
-     }}
-  ]},
-
-  {tabName:'P14: Diagonal sort',title:'Sort 2D points by diagonal value (x+y), then by x',input:[[0,3],[2,1],[1,1],[3,0],[1,2],[2,2]],ops:[
-    {code:'.sort(x+y asc, then x asc)',type:'sorted',
-     compareFn:(a,b)=>{const d=(a[0]+a[1])-(b[0]+b[1]);return d!==0?d:a[0]-b[0];},
-     explain:(a,b,r,sw)=>{
-       const da=a[0]+a[1],db=b[0]+b[1];
-       if(da!==db)return `<span class="v">(${a[0]},${a[1]})</span> diag=${a[0]}+${a[1]}=<span class="v">${da}</span> vs <span class="v">(${b[0]},${b[1]})</span> diag=${b[0]}+${b[1]}=<span class="v">${db}</span>: ${da}-${db}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
-       return `<span class="v">(${a[0]},${a[1]})</span> vs <span class="v">(${b[0]},${b[1]})</span>: diag tie(${da}), by x: ${a[0]}-${b[0]}=<span class="v">${r}</span> → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
-     }}
-  ]},
-
-  {tabName:'P15: Custom priority',title:'Priority queue: sort tasks by priority (high→low), then by deadline (earliest first)',
-   input:[[3,10],[1,5],[2,8],[3,4],[1,12],[2,3]],ops:[
-    {code:'.sort(priority desc, then deadline asc)',type:'sorted',
-     compareFn:(a,b)=>a[0]!==b[0]?b[0]-a[0]:a[1]-b[1],
-     explain:(a,b,r,sw)=>{
-       const pLbl={3:'HIGH',2:'MED',1:'LOW'};
-       const sa=`[P${a[0]}(${pLbl[a[0]]||a[0]}),d=${a[1]}]`,sb=`[P${b[0]}(${pLbl[b[0]]||b[0]}),d=${b[1]}]`;
-       if(a[0]!==b[0])return `<span class="v">${sa}</span> vs <span class="v">${sb}</span>: priority ${b[0]}-${a[0]}=<span class="v">${b[0]-a[0]}</span> → higher priority first → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
-       return `<span class="v">${sa}</span> vs <span class="v">${sb}</span>: same priority(${pLbl[a[0]]}), deadline: ${a[1]}-${b[1]}=<span class="v">${r}</span> → earlier deadline first → ${sw?'<span class="no">SWAP</span>':'<span class="ok">OK</span>'}`;
-     }}
-  ]}
-];
-
-/* ── Init sections ── */
-const pairs=[['lambdaTabs','lambdaAnimContainer',lambdaProblems],['streamTabs','streamAnimContainer',streamProblems],['compTabs','compAnimContainer',compProblems]];
-pairs.forEach(([tId,cId,probs])=>{const t=document.getElementById(tId),c=document.getElementById(cId);if(t&&c)buildTabs(t,c,probs);});
-})();
 </script>
 </body>
 </html>

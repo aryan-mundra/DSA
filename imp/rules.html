@@ -970,12 +970,11 @@ boolean binarySearch(int[] arr, int target) {
 <b>Output:</b> [1,1,4,2,1,1,0,0]</div>
 <pre>int[] result = new int[n];
 Arrays.fill(result, -1);
-Stack&lt;Integer&gt; stack = new Stack&lt;&gt;();        // stores indices
+Stack&lt;Integer&gt; stack = new Stack&lt;&gt;();
 for (int i = 0; i &lt; n; i++) {
     while (!stack.isEmpty() &amp;&amp; arr[stack.peek()] &lt; arr[i]) {
         int idx = stack.pop();
-        result[idx] = i - idx;    // Daily Temperatures: days until warmer
-        // result[idx] = arr[i];  // Next Greater Element: the greater VALUE
+        result[idx] = i - idx;
     }
     stack.push(i);
 }</pre>
@@ -1027,18 +1026,34 @@ return result;</pre>
     <p class="prob"><b>Problem.</b> Remove k digits to make the smallest possible number.</p>
     <div class="tc"><b>Input:</b>  num = "1432219", k = 3
 <b>Output:</b> "1219"</div>
-<pre>Stack&lt;Character&gt; stack = new Stack&lt;&gt;();
-for (char d : num.toCharArray()) {
-    while (!stack.isEmpty() &amp;&amp; k &gt; 0 &amp;&amp; stack.peek() &gt; d) {
-        stack.pop();
-        k--;
+<pre>class Solution {
+    public String removeKdigits(String num, int k) {
+        Stack&lt;Character&gt; stack = new Stack&lt;&gt;();
+        for (char digit : num.toCharArray()) {
+            // pop bigger digits on top so smaller ones lead
+            while (!stack.isEmpty() &amp;&amp; k &gt; 0 &amp;&amp; stack.peek() &gt; digit) {
+                stack.pop();
+                k--;
+            }
+            stack.push(digit);
+        }
+        // still have removals left? drop from the end
+        while (k &gt; 0) {
+            stack.pop();
+            k--;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (char c : stack) {
+            sb.append(c);
+        }
+        // strip leading zeros (e.g. "0200" -&gt; "200")
+        while (sb.length() &gt; 0 &amp;&amp; sb.charAt(0) == '0') {
+            sb.deleteCharAt(0);
+        }
+        // if everything got stripped, the number is "0"
+        return sb.length() == 0 ? "0" : sb.toString();
     }
-    stack.push(d);
-}
-while (k &gt; 0) {
-    stack.pop();
-    k--;
-}    // then strip leading zeros</pre>
+}</pre>
   </div>
 
   <table class="cheat">
