@@ -31,16 +31,7 @@
     padding: 0 10mm;            /* safe horizontal margin */
   }
 
-  /* ---- Cutting border around every sticker ---- */
-  .sticker::before {
-    content: "";
-    position: absolute;
-    top: 3mm; right: 3mm; bottom: 3mm; left: 3mm;
-    border: 1px dashed #999;
-    pointer-events: none;
-  }
-
-  /* Solid cut line between stickers */
+  /* ---- Horizontal cut mark between stickers only ---- */
   .sticker::after {
     content: "";
     position: absolute;
@@ -52,9 +43,8 @@
 
   .sticker:last-of-type::after { display: none; }
 
-  /* Hide all cut guides when printing */
+  /* Hide cut guides when printing */
   @media print {
-    .sticker::before,
     .sticker::after { display: none; }
   }
 
