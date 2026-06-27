@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Heritage Necklace (Premium) Stickers</title>
+<style>
+  @page { size: A4; margin: 0; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 210mm;
+    height: 297mm;
+    background: #ffffff;
+    overflow: hidden;
+  }
+
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+  }
+
+  /* ---- Each sticker = 9 cm high, full A4 width ---- */
+  .sticker {
+    width: 210mm;
+    height: 90mm;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 0 10mm;            /* safe horizontal margin */
+  }
+
+  /* ---- Cutting border around every sticker ---- */
+  .sticker::before {
+    content: "";
+    position: absolute;
+    top: 3mm; right: 3mm; bottom: 3mm; left: 3mm;
+    border: 1px dashed #999;
+    pointer-events: none;
+  }
+
+  /* Solid cut line between stickers */
+  .sticker::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-bottom: 1px dashed #555;
+  }
+
+  .sticker:last-of-type::after { display: none; }
+
+  /* Hide all cut guides when printing */
+  @media print {
+    .sticker::before,
+    .sticker::after { display: none; }
+  }
+
+  /* ---- Text block ---- */
+  .text {
+    text-align: center;
+    line-height: 0.95;
+    width: 100%;
+  }
+
+  /* ---- Golden gradient + black outline ---- */
+  .line {
+    display: block;
+    font-weight: bold;
+    letter-spacing: 1px;
+    background: linear-gradient(
+      to bottom,
+      #fffdd8 0%,
+      #fff58c 12%,
+      #ffe94d 24%,
+      #ffd700 40%,
+      #ffc400 58%,
+      #ffdb1f 76%,
+      #fff6a8 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 2px #000;
+    text-rendering: geometricPrecision;
+    -webkit-font-smoothing: antialiased;
+    paint-order: stroke fill;   /* keep stroke behind fill for clean gold */
+  }
+
+  /* ===== 1-LINE LAYOUT ===== */
+  .one .line {
+    font-size: 60px;
+    white-space: nowrap;
+  }
+
+  /* ===== 2-LINE LAYOUT ===== */
+  .two .line {
+    font-size: 80px;
+  }
+  .two .line + .line { margin-top: 6px; }
+
+  /* ===== 3-LINE LAYOUT ===== */
+  .three .line {
+    font-size: 96px;
+  }
+  .three .line + .line { margin-top: 4px; }
+</style>
+</head>
+<body>
+
+  <!-- Sticker 1 : ONE LINE -->
+  <div class="sticker">
+    <div class="text one">
+      <span class="line">Heritage Necklace (Premium)</span>
+    </div>
+  </div>
+
+  <!-- Sticker 2 : TWO LINES -->
+  <div class="sticker">
+    <div class="text two">
+      <span class="line">Heritage Necklace</span>
+      <span class="line">(Premium)</span>
+    </div>
+  </div>
+
+  <!-- Sticker 3 : THREE LINES -->
+  <div class="sticker">
+    <div class="text three">
+      <span class="line">Heritage</span>
+      <span class="line">Necklace</span>
+      <span class="line">(Premium)</span>
+    </div>
+  </div>
+
+</body>
+</html>
