@@ -20,3 +20,149 @@ then now i think we store the image path also in the mobile only ,what happens i
 then i as a maker founder of this app what can i do  i mean will i have to keep every users db with me for backup that incase their data gets deleted i can provide them again
 i mean will it be feasible for 1000 users in the app 
 
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Heritage Necklace (Premium) Stickers</title>
+
+<style>
+@page {
+    size: A4;
+    margin: 0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 210mm;
+    height: 297mm;
+    background: #ffffff;
+    overflow: hidden;
+}
+
+body {
+    font-family: Georgia, "Times New Roman", serif;
+}
+
+/* Each sticker = 9 cm high */
+.sticker {
+    width: 210mm;
+    height: 90mm;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Cut guides (visible only on screen) */
+.sticker::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-bottom: 2px dashed #888;
+}
+
+/* Hide cut guides when printing */
+@media print {
+    .sticker::after {
+        display: none;
+    }
+}
+
+.sticker:last-of-type::after {
+    display: none;
+}
+
+/* Text container */
+.text {
+    text-align: center;
+    line-height: 0.9;
+}
+
+/* Common gold style */
+.line {
+    display: block;
+    font-weight: bold;
+    letter-spacing: 1px;
+
+    background: linear-gradient(
+        to bottom,
+        #fffdd8 0%,
+        #fff58c 12%,
+        #ffe94d 24%,
+        #ffd700 40%,
+        #ffc400 58%,
+        #ffdb1f 76%,
+        #fff6a8 100%
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    -webkit-text-stroke: 2px #000;
+
+    text-rendering: geometricPrecision;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Line sizes */
+.line1 {
+    font-size: 92px;
+}
+
+.line2 {
+    font-size: 72px;
+    margin-top: 8px;
+}
+
+/* Remaining A4 portion */
+.blank {
+    height: 27mm;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- Sticker 1 -->
+<div class="sticker">
+    <div class="text">
+        <span class="line line1"></span>
+        <span class="line line1">  </span>
+    </div>
+</div>
+
+<!-- Sticker 2 -->
+<div class="sticker">
+    <div class="text">
+        <span class="line line1">Heritage Necklace</span>
+        <span class="line line1">(Premium)</span>
+    </div>
+</div>
+
+<!-- Sticker 3 -->
+<div class="sticker">
+    <div class="text">
+        <span class="line line1">Necklace</span>
+        <span class="line line1">(Premium)</span>
+    </div>
+</div>
+
+<div class="blank"></div>
+
+</body>
+</html>
+
