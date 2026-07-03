@@ -247,7 +247,7 @@ footer{text-align:center;color:var(--soft);font-style:italic;padding:30px;font-s
   <div class="cover">
     <div class="kicker">DSA Quick Revision</div>
     <h1>Patterns &mdash; A Field Guide</h1>
-    <p>Twelve core patterns &bull; when to reach for them &bull; the templates that solve them</p>
+    <p>Thirteen core patterns &bull; when to reach for them &bull; the templates that solve them</p>
   </div>
 
   <nav class="toc">
@@ -263,6 +263,7 @@ footer{text-align:center;color:var(--soft);font-style:italic;padding:30px;font-s
     <a href="#c10">10 Graph BFS/DFS</a>
     <a href="#c11">11 Dynamic Programming</a>
     <a href="#c12">12 Intervals</a>
+    <a href="#c13">13 Linked Lists</a>
   </nav>
 
 <!-- ============================================================ 01 ============================================================ -->
@@ -673,7 +674,7 @@ return res;</pre>
   </ul>
 
   <h3 class="sec">Interview Signal</h3>
-  <p class="signal">The data is sorted or monotonic, or the phrase <em>minimize the maximum / maximize the minimum</em> appears &mdash; a hint to binary search the <em>answer</em>, not an array.</p>
+  <p class="signal">The data is sorted or monotonic, or the phrase <em>minimize the maximum / maximize the minimum</em> appears &mdash; a hint to binary search the <em>answer</em>, not an array. <strong>Complexity tell:</strong> if the target time is <strong>O(log&nbsp;N)</strong> &mdash; or <strong>O(N&nbsp;log&nbsp;N)</strong> once you account for a sort &mdash; it is almost certainly binary search; nothing else hits a log bound on a search.</p>
 
   <h3 class="sec">Classic Problem</h3>
   <p class="classic">Search a sorted array for a target</p>
@@ -739,7 +740,9 @@ while (left &lt;= right) {
         right = mid - 1;
     }
 }
-return -1;</pre>
+return -1;
+// search-insert / lower bound: use `return left;` instead — when the
+// target is absent, left is exactly the index where it would be inserted</pre>
   </div>
 
     <div class="rule">
@@ -977,7 +980,17 @@ for (int i = 0; i &lt; n; i++) {
         result[idx] = i - idx;
     }
     stack.push(i);
-}</pre>
+}
+// ─────────────────────────────────────────────
+// CIRCULAR array (Next Greater Element II): loop 2n times with i % n,
+// and only push during the first pass so each index is placed once
+for (int i = 0; i &lt; 2 * n; i++) {
+    while (!stack.isEmpty() &amp;&amp; arr[stack.peek()] &lt; arr[i % n]) {
+        result[stack.pop()] = arr[i % n];     // store the value, not the gap
+    }
+    if (i &lt; n) stack.push(i);
+}
+// PREVIOUS greater/smaller: same template, just scan right -&gt; left</pre>
   </div>
 
     <div class="rule">
@@ -985,16 +998,75 @@ for (int i = 0; i &lt; n; i++) {
     <p class="prob"><b>Problem.</b> Largest rectangle area in a histogram of bar heights.</p>
     <div class="tc"><b>Input:</b>  heights = [2,1,5,6,2,3]
 <b>Output:</b> 10</div>
-<pre>Stack&lt;Integer&gt; stack = new Stack&lt;&gt;();
-int maxArea = 0;
-for (int i = 0; i &lt;= n; i++) {
-    int cur = (i == n) ? 0 : heights[i];
-    while (!stack.isEmpty() &amp;&amp; heights[stack.peek()] &gt; cur) {
-        int h = heights[stack.pop()];
-        int w = stack.isEmpty() ? i : i - stack.peek() - 1;
-        maxArea = Math.max(maxArea, h * w);
+<pre>class Solution {
+
+    public int largestRectangleArea(int[] heights) {
+
+        int[] leftIndex = previousSmaller(heights);
+        int[] rightIndex = nextSmaller(heights);
+
+        int maxArea = 0;
+
+        for (int i = 0; i &lt; heights.length; i++) {
+
+            int width = rightIndex[i] - leftIndex[i] - 1;
+            int area = heights[i] * width;
+
+            maxArea = Math.max(maxArea, area);
+        }
+
+        return maxArea;
     }
-    stack.push(i);
+
+    // Previous Smaller Element (stores left boundary index)
+    private int[] previousSmaller(int[] heights) {
+
+        int n = heights.length;
+        int[] leftIndex = new int[n];
+        Stack&lt;Integer&gt; st = new Stack&lt;&gt;();
+
+        for (int i = 0; i &lt; n; i++) {
+
+            while (!st.isEmpty() &amp;&amp; heights[st.peek()] &gt;= heights[i]) {
+                st.pop();
+            }
+
+            if (st.isEmpty()) {
+                leftIndex[i] = -1;
+            } else {
+                leftIndex[i] = st.peek();
+            }
+
+            st.push(i);
+        }
+
+        return leftIndex;
+    }
+
+    // Next Smaller Element (stores right boundary index)
+    private int[] nextSmaller(int[] heights) {
+
+        int n = heights.length;
+        int[] rightIndex = new int[n];
+        Stack&lt;Integer&gt; st = new Stack&lt;&gt;();
+
+        for (int i = n - 1; i &gt;= 0; i--) {
+
+            while (!st.isEmpty() &amp;&amp; heights[st.peek()] &gt;= heights[i]) {
+                st.pop();
+            }
+
+            if (st.isEmpty()) {
+                rightIndex[i] = n;
+            } else {
+                rightIndex[i] = st.peek();
+            }
+
+            st.push(i);
+        }
+
+        return rightIndex;
+    }
 }</pre>
   </div>
 
@@ -1113,17 +1185,18 @@ return result;</pre>
     <p class="prob"><b>Problem.</b> Pick two lines that, with the x-axis, hold the most water.</p>
     <div class="tc"><b>Input:</b>  height = [1,8,6,2,5,4,8,3,7]
 <b>Output:</b> 49</div>
-<pre>int left = 0;
-int right = n - 1;
-while (left &lt; right) {
-    if (conditionMet) {
-        /* record */ left++;
-        right--;
-    } else if (needSmallerSum) right--;
-    else {
-        left++;
+<pre>int area = 0;
+int l = 0;
+int h = n - 1;
+while (l &lt; h) {
+    area = Math.max(area, (h - l) * Math.min(arr[l], arr[h]));
+    if (arr[l] &lt; arr[h]) {
+        l++;
+    } else {
+        h--;
     }
-}</pre>
+}
+return area;</pre>
     <p class="meta"><b>Time</b> O(N) &nbsp;&middot;&nbsp; <b>Space</b> O(1)</p>
   </div>
 
@@ -1141,7 +1214,16 @@ while (fast != null &amp;&amp; fast.next != null) {
         return true;        // cycle found
     }
 }
-// middle: when fast hits the end, slow is the midpoint</pre>
+// middle: when fast hits the end, slow is the midpoint
+// ─────────────────────────────────────────────
+// cycle START (Linked List Cycle II): break (don't return) when slow == fast,
+// then reset one pointer to head and step both by 1 — they meet at the entrance
+ListNode p = head;
+while (p != slow) {         // slow = the meeting point from the loop above
+    p = p.next;
+    slow = slow.next;
+}
+return p;   // node where the cycle begins</pre>
   </div>
 
   <table class="cheat">
@@ -1453,7 +1535,9 @@ return value;</pre>
     cur.add(nums[i]);
     subsets(nums, i + 1, cur, res);            // include
     cur.remove(cur.size() - 1);                // backtrack
-}</pre>
+}
+// with DUPLICATES (Subsets II): sort first, then use the start-index loop
+// form from Rule #3 and skip equal siblings (see the note there)</pre>
     <p class="meta"><b>Time</b> O(2&#8319;) &nbsp;&middot;&nbsp; <b>Space</b> O(N)</p>
   </div>
 
@@ -1477,7 +1561,10 @@ return value;</pre>
         cur.remove(cur.size() - 1);
         used[i] = false;
     }
-}</pre>
+}
+// with DUPLICATES (Permutations II): sort first, then also skip a duplicate
+// whose identical twin is still unused:
+// if (i &gt; 0 &amp;&amp; nums[i] == nums[i - 1] &amp;&amp; !used[i - 1]) continue;</pre>
     <p class="meta"><b>Time</b> O(N! &middot; N) &nbsp;&middot;&nbsp; <b>Space</b> O(N)</p>
   </div>
 
@@ -1496,7 +1583,11 @@ return value;</pre>
         combine(n, k, i + 1, cur, res);   // i + 1: forward only
         cur.remove(cur.size() - 1);
     }
-}</pre>
+}
+// REUSE allowed (Combination Sum): recurse with i instead of i + 1
+// DUPLICATES in input (Combination Sum II / Subsets II): sort first, then
+// skip equal siblings at the same depth:
+// if (i &gt; start &amp;&amp; nums[i] == nums[i - 1]) continue;</pre>
   </div>
 
     <div class="rule">
@@ -1743,10 +1834,13 @@ while (!minHeap.isEmpty()) {
     if (node == null) {
         return;
     }
-    inorder(node.left, out);
-    out.add(node.val);
-    inorder(node.right, out);
-}</pre>
+    inorder(node.left, out);     // left
+    out.add(node.val);           // node   &lt;- INORDER = left, node, right
+    inorder(node.right, out);    // right
+}
+// same three lines, just move the visit (out.add):
+// preorder:  node, left, right   — out.add BEFORE both recursive calls
+// postorder: left, right, node   — out.add AFTER  both recursive calls</pre>
   </div>
 
     <div class="rule">
@@ -2135,6 +2229,18 @@ boolean inorderValid(TreeNode node) {
     if (prev != null &amp;&amp; node.val &lt;= prev) return false;       // not strictly increasing
     prev = node.val;
     return inorderValid(node.right);
+}
+
+// ------------------------------------------------------------------------------
+
+// KTH SMALLEST — inorder visits a BST in ascending order, so the kth node
+// reached IS the kth smallest. Count along the way and stop as soon as k hits.
+int count = 0, answer = -1;
+void kthSmallest(TreeNode node, int k) {
+    if (node == null || answer != -1) return;
+    kthSmallest(node.left, k);
+    if (++count == k) { answer = node.val; return; }   // kth in sorted order
+    kthSmallest(node.right, k);
 }</pre>
   </div>
 </section>
@@ -2546,14 +2652,61 @@ for (int i = 1; i &lt; n; i++) {
     <p class="prob"><b>Problem.</b> Longest palindromic substring.</p>
     <div class="tc"><b>Input:</b>  s = "babad"
 <b>Output:</b> "bab"   (or "aba")</div>
-<pre>// dp[i][j] = true if s[i..j] is a palindrome
-dp[i][j] = (s[i] == s[j]) &amp;&amp; dp[i+1][j-1];
+<pre>// IDEA: dp[i][j] answers a question about the window s[i..j].
+// A window depends on its SMALLER inner window dp[i+1][j-1],
+// so we must fill smaller windows first => loop by length (2..n).
 
-// Longest Palindromic Subsequence
-if (s[i] == s[j]) {
-    dp[i][j] = dp[i+1][j-1] + 2;
-} else {
-    dp[i][j] = max(dp[i+1][j], dp[i][j-1]);
+// ---------- 1) Longest Palindromic SUBSTRING (contiguous) ----------
+String longestPalindrome(String s) {
+    int n = s.length();
+    if (n &lt; 2) return s;
+
+    boolean[][] dp = new boolean[n][n];   // dp[i][j] = is s[i..j] a palindrome?
+    int start = 0, maxLen = 1;
+
+    // every single character is a palindrome
+    for (int i = 0; i &lt; n; i++) dp[i][i] = true;
+
+    // grow the window length from 2 up to n
+    for (int len = 2; len &lt;= n; len++) {
+        for (int i = 0; i + len - 1 &lt; n; i++) {
+            int j = i + len - 1;              // right end of window
+
+            if (s.charAt(i) == s.charAt(j)) {
+                // ends match; the inside must also be a palindrome.
+                // len == 2 has nothing inside, so it's automatically OK.
+                if (len == 2 || dp[i + 1][j - 1]) {
+                    dp[i][j] = true;
+                    if (len &gt; maxLen) { start = i; maxLen = len; }
+                }
+            }
+        }
+    }
+    return s.substring(start, start + maxLen);
+}
+
+// ---------- 2) Longest Palindromic SUBSEQUENCE (can skip chars) ----------
+int longestPalinSubseq(String s) {
+    int n = s.length();
+    int[][] dp = new int[n][n];   // dp[i][j] = length of LPS in s[i..j]
+
+    // a single character is a palindrome of length 1
+    for (int i = 0; i &lt; n; i++) dp[i][i] = 1;
+
+    for (int len = 2; len &lt;= n; len++) {
+        for (int i = 0; i + len - 1 &lt; n; i++) {
+            int j = i + len - 1;
+
+            if (s.charAt(i) == s.charAt(j)) {
+                // both ends help: take them + best inside
+                dp[i][j] = dp[i + 1][j - 1] + 2;
+            } else {
+                // drop one end, keep the better side
+                dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+    return dp[0][n - 1];          // answer for the whole string
 }</pre>
   </div>
 
@@ -2562,14 +2715,68 @@ if (s[i] == s[j]) {
     <p class="prob"><b>Problem.</b> Can s be segmented into space-separated dictionary words?</p>
     <div class="tc"><b>Input:</b>  s = "leetcode", wordDict = ["leet","code"]
 <b>Output:</b> true</div>
-<pre>boolean[] dp = new boolean[n + 1];
-dp[0] = true;
-for (int i = 1; i &lt;= n; i++) {
-    for (int j = 0; j &lt; i; j++) {
-        if (dp[j] &amp;&amp; wordSet.contains(s.substring(j, i))) {
-            dp[i] = true;
-            break;
+<pre>boolean wordBreak(String s, List&lt;String&gt; wordDict) {
+
+    // Convert the dictionary to a set for O(1) lookups
+    Set&lt;String&gt; wordSet = new HashSet&lt;&gt;(wordDict);
+
+    // Find the maximum word length in the dictionary
+    int maxLen = 0;
+    for (String word : wordDict) {
+        maxLen = Math.max(maxLen, word.length());
+    }
+
+    int n = s.length();
+    // dp[i] states if the substring s[0..i] can be segmented
+    boolean[] dp = new boolean[n + 1];
+
+    // Base case: empty string is valid
+    dp[0] = true;
+
+    for (int i = 1; i &lt;= n; i++)
+
+        // Check prefixes of length up to maxLen
+        for (int j = i - 1; j &gt;= Math.max(0, i - maxLen); j--)
+            if (dp[j] &amp;&amp; wordSet.contains(s.substring(j, i))) {
+                dp[i] = true;
+                break; // No need to check further prefixes
+            }
+
+    return dp[n];
+}
+
+----------------------------------------  (Alternative: Stack / DFS)
+
+class Solution {
+    public boolean wordBreak(String s, List&lt;String&gt; wordDict) {
+
+        Set&lt;String&gt; wordSet = new HashSet&lt;&gt;(wordDict);
+
+        Stack&lt;Integer&gt; stack = new Stack&lt;&gt;();
+        stack.push(0);          // Start from index 0
+
+        while (!stack.isEmpty()) {
+
+            int start = stack.pop();
+
+            for (int end = start + 1; end &lt;= s.length(); end++) {
+
+                String word = s.substring(start, end);
+
+                if (wordSet.contains(word)) {
+
+                    // Entire string is segmented
+                    if (end == s.length()) {
+                        return true;
+                    }
+
+                    // Continue checking from this position
+                    stack.push(end);
+                }
+            }
         }
+
+        return false;
     }
 }</pre>
   </div>
@@ -2749,6 +2956,191 @@ return removed;</pre>
     <p>&#10007; Forgetting to <b>sort first</b> &mdash; every overlap test assumes sorted order.</p>
     <p>&#10007; Sorting by <b>start</b> for greedy selection &mdash; the "keep most intervals" family needs sort by <b>end</b>.</p>
     <p>&#10007; Boundary confusion: do touching intervals <code>[1,2],[2,3]</code> count as overlap? Pick <code>&lt;</code> vs <code>&le;</code> and stay consistent (in Rule&nbsp;#3, <code>ends[e] &le; starts[s]</code> frees the room).</p>
+  </div>
+</section>
+
+<!-- ============================================================ 13 ============================================================ -->
+<section class="chapter" id="c13">
+  <div class="chap-head"><span class="chap-num">13</span><span class="chap-dash">&mdash;</span><span class="chap-title">Linked Lists</span></div>
+  <hr class="chap-rule">
+  <p class="lead">A chain of nodes with no random access &mdash; every problem comes down to carefully walking and rewiring <code>next</code> pointers, almost always in a single pass with O(1) extra space.</p>
+
+  <h3 class="sec">When to use</h3>
+  <ul class="bul">
+    <li>Reverse, reorder, or rotate a list</li>
+    <li>Find the middle, detect a cycle, test a palindrome</li>
+    <li>Merge or partition sorted lists</li>
+    <li>Remove the Nth node from the end</li>
+  </ul>
+
+  <h3 class="sec">Interview Signal</h3>
+  <p class="signal">The input is a <code>ListNode head</code> you cannot index into &mdash; the task is about rewiring pointers, finding a position relative to the end, or detecting structure (cycle / midpoint) without extra memory.</p>
+
+  <h3 class="sec">Classic Problem</h3>
+  <p class="classic">Reverse a Linked List</p>
+
+  <div class="fig">
+    <div class="fig-cap">Reverse <b>1 &rarr; 2 &rarr; 3 &rarr; &empty;</b> by flipping each <code>next</code> pointer &mdash; same nodes, arrows reversed</div>
+    <svg class="dia" viewBox="0 0 520 180" width="520" height="180" role="img" aria-label="Reversing a linked list by flipping next pointers">
+      <defs>
+        <marker id="llah" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#6366f1"/>
+        </marker>
+      </defs>
+      <text x="8" y="61" font-size="11" font-style="italic" fill="#64748b">before</text>
+      <text x="8" y="141" font-size="11" font-style="italic" fill="#64748b">after</text>
+
+      <!-- before: 1 -> 2 -> 3 -> null -->
+      <g fill="#eef2ff" stroke="#c7d2fe" stroke-width="1.5">
+        <rect x="70" y="40" width="56" height="34" rx="7"/>
+        <rect x="190" y="40" width="56" height="34" rx="7"/>
+        <rect x="310" y="40" width="56" height="34" rx="7"/>
+      </g>
+      <g font-size="14" font-weight="700" text-anchor="middle" fill="#1e293b">
+        <text x="98" y="62">1</text><text x="218" y="62">2</text><text x="338" y="62">3</text>
+      </g>
+      <g stroke="#6366f1" stroke-width="1.6" marker-end="url(#llah)">
+        <line x1="128" y1="57" x2="186" y2="57"/>
+        <line x1="248" y1="57" x2="306" y2="57"/>
+        <line x1="368" y1="57" x2="416" y2="57"/>
+      </g>
+      <text x="430" y="62" font-size="14" fill="#94a3b8">&empty;</text>
+      <text x="98" y="30" font-size="10" text-anchor="middle" fill="#4f46e5" font-style="italic">head</text>
+
+      <!-- after: same boxes, arrows flipped -> 3 -> 2 -> 1 -> null -->
+      <g fill="#eef2ff" stroke="#c7d2fe" stroke-width="1.5">
+        <rect x="70" y="120" width="56" height="34" rx="7"/>
+        <rect x="190" y="120" width="56" height="34" rx="7"/>
+        <rect x="310" y="120" width="56" height="34" rx="7"/>
+      </g>
+      <g font-size="14" font-weight="700" text-anchor="middle" fill="#1e293b">
+        <text x="98" y="142">1</text><text x="218" y="142">2</text><text x="338" y="142">3</text>
+      </g>
+      <g stroke="#6366f1" stroke-width="1.6" marker-end="url(#llah)">
+        <line x1="308" y1="137" x2="250" y2="137"/>
+        <line x1="188" y1="137" x2="130" y2="137"/>
+        <line x1="68" y1="137" x2="46" y2="137"/>
+      </g>
+      <text x="36" y="142" font-size="14" fill="#94a3b8">&empty;</text>
+      <text x="338" y="110" font-size="10" text-anchor="middle" fill="#4f46e5" font-style="italic">head</text>
+    </svg>
+  </div>
+
+  <div class="keyidea"><span class="ic">&#128279;</span><div><b>Key Idea.</b> Almost every list problem is just <b>walking pointers</b>: a <b>dummy node</b> erases head edge-cases, <b>prev/cur/next</b> reverses links in place, and <b>fast/slow</b> finds the middle or a cycle in one pass. Always save <code>cur.next</code> <em>before</em> you overwrite it.</div></div>
+
+  <div class="tmpl-h">Templates</div>
+
+    <div class="rule">
+    <h4>Rule #1 &mdash; Dummy Node (kill head edge-cases)</h4>
+    <p class="prob"><b>Problem.</b> Remove every node whose value equals val.</p>
+    <div class="tc"><b>Input:</b>  head = [1,2,6,3,4,5,6], val = 6
+<b>Output:</b> [1,2,3,4,5]</div>
+<pre>ListNode dummy = new ListNode(0);   // sits BEFORE head, so head can change safely
+dummy.next = head;
+ListNode prev = dummy;
+ListNode cur = head;
+while (cur != null) {
+    if (cur.val == val) {
+        prev.next = cur.next;        // unlink — no special case for the head
+    } else {
+        prev = cur;
+    }
+    cur = cur.next;
+}
+return dummy.next;                   // real head, even if the old one was removed</pre>
+    <p class="meta"><b>Time</b> O(N) &nbsp;&middot;&nbsp; <b>Space</b> O(1)</p>
+  </div>
+
+    <div class="rule">
+    <h4>Rule #2 &mdash; Reverse a List (prev / cur / next flip)</h4>
+    <p class="prob"><b>Problem.</b> Reverse a singly linked list.</p>
+    <div class="tc"><b>Input:</b>  head = [1,2,3,4,5]
+<b>Output:</b> [5,4,3,2,1]</div>
+<pre>ListNode prev = null;
+ListNode cur = head;
+while (cur != null) {
+    ListNode next = cur.next;   // save the rest of the list
+    cur.next = prev;            // flip this node's pointer
+    prev = cur;                 // advance prev
+    cur = next;                 // advance cur
+}
+return prev;                    // prev is the new head
+// recursive: newHead = reverse(head.next); head.next.next = head; head.next = null;</pre>
+    <p class="meta"><b>Time</b> O(N) &nbsp;&middot;&nbsp; <b>Space</b> O(1)</p>
+  </div>
+
+    <div class="rule">
+    <h4>Rule #3 &mdash; Fast / Slow (middle + cycle)</h4>
+    <p class="prob"><b>Problem.</b> Return the middle node of a linked list.</p>
+    <div class="tc"><b>Input:</b>  head = [1,2,3,4,5]
+<b>Output:</b> node 3</div>
+<pre>ListNode slow = head;
+ListNode fast = head;
+while (fast != null &amp;&amp; fast.next != null) {
+    slow = slow.next;          // 1 step
+    fast = fast.next.next;     // 2 steps
+}
+return slow;   // fast ran off the end -&gt; slow is the middle
+// even length: slow lands on the SECOND of the two middle nodes
+// cycle: if (slow == fast) inside the loop, a cycle exists (see Two Pointers #2)</pre>
+    <p class="meta"><b>Time</b> O(N) &nbsp;&middot;&nbsp; <b>Space</b> O(1)</p>
+  </div>
+
+    <div class="rule">
+    <h4>Rule #4 &mdash; Merge Two Sorted Lists (dummy + tail)</h4>
+    <p class="prob"><b>Problem.</b> Merge two sorted linked lists into one sorted list.</p>
+    <div class="tc"><b>Input:</b>  l1 = [1,2,4], l2 = [1,3,4]
+<b>Output:</b> [1,1,2,3,4,4]</div>
+<pre>ListNode dummy = new ListNode(0);
+ListNode tail = dummy;
+while (l1 != null &amp;&amp; l2 != null) {
+    if (l1.val &lt;= l2.val) {
+        tail.next = l1;
+        l1 = l1.next;
+    } else {
+        tail.next = l2;
+        l2 = l2.next;
+    }
+    tail = tail.next;
+}
+tail.next = (l1 != null) ? l1 : l2;   // attach whichever list still has nodes
+return dummy.next;</pre>
+    <p class="meta"><b>Time</b> O(N + M) &nbsp;&middot;&nbsp; <b>Space</b> O(1)</p>
+  </div>
+
+    <div class="rule">
+    <h4>Rule #5 &mdash; Remove Nth From End (two-pointer gap)</h4>
+    <p class="prob"><b>Problem.</b> Remove the nth node from the end and return the head.</p>
+    <div class="tc"><b>Input:</b>  head = [1,2,3,4,5], n = 2
+<b>Output:</b> [1,2,3,5]</div>
+<pre>ListNode dummy = new ListNode(0);
+dummy.next = head;
+ListNode fast = dummy;
+ListNode slow = dummy;
+for (int i = 0; i &lt; n; i++) {
+    fast = fast.next;          // open a gap of n nodes ahead
+}
+while (fast.next != null) {    // walk both until fast is on the last node
+    fast = fast.next;
+    slow = slow.next;
+}
+slow.next = slow.next.next;    // slow sits just before the target -&gt; unlink it
+return dummy.next;</pre>
+    <p class="meta"><b>Time</b> O(N) one pass &nbsp;&middot;&nbsp; <b>Space</b> O(1)</p>
+  </div>
+
+  <table class="cheat">
+    <tr><th>Problem</th><th>Technique</th></tr>
+    <tr><td>Head might change / deletions</td><td>Dummy node before head</td></tr>
+    <tr><td>Reverse / reorder</td><td><code>prev / cur / next</code> flip</td></tr>
+    <tr><td>Middle, cycle, palindrome</td><td>Fast &amp; slow pointers</td></tr>
+    <tr><td>Nth from end, gaps</td><td>Two pointers, n apart</td></tr>
+    <tr><td>Merge sorted lists</td><td>Dummy + tail stitch</td></tr>
+  </table>
+  <div class="mistakes"><h5>Common mistakes</h5>
+    <p>&#10007; Losing the rest of the list &mdash; save <code>cur.next</code> <b>before</b> reassigning it.</p>
+    <p>&#10007; Null-pointer on <code>fast.next.next</code> &mdash; guard <code>fast != null &amp;&amp; fast.next != null</code>.</p>
+    <p>&#10007; Skipping the dummy node, then needing a special case to delete the head.</p>
   </div>
 </section>
 
