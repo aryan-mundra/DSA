@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parking Lot LLD — Learn by Building</title>
+<style>
+  :root{
+    --ink:#1f2937;--muted:#64748b;--line:#e2e8f0;--bg:#eef2f9;--panel:#ffffff;--panel2:#f1f5f9;
+    --blue:#2563eb;--green:#0ea371;--orange:#d97706;--purple:#7c5cff;--red:#e5484d;--yellow:#f5c518;
+    --codebg:#f8fafc;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+       background:linear-gradient(160deg,#f0f4fb 0%,#eef2f9 40%,#f3eefb 100%);background-attachment:fixed;
+       color:var(--ink);line-height:1.6;}
+  a{color:var(--blue);}
+  code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+
+  /* header + nav */
+  header{padding:22px 26px 0;max-width:1080px;margin:0 auto;}
+  h1{font-size:26px;margin:0 0 2px;}
+  .tagline{color:var(--muted);margin:0 0 16px;font-size:15px;}
+  nav{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:0;}
+  nav button{background:none;border:none;color:var(--muted);font-size:14px;font-weight:600;padding:10px 14px;cursor:pointer;border-bottom:3px solid transparent;border-radius:6px 6px 0 0;}
+  nav button:hover{color:var(--ink);background:var(--panel);}
+  nav button.active{color:var(--blue);border-bottom-color:var(--blue);}
+  nav button .num{display:inline-block;width:20px;height:20px;line-height:20px;text-align:center;background:var(--panel2);border-radius:50%;font-size:12px;margin-right:6px;}
+  nav button.active .num{background:var(--blue);color:#fff;}
+
+  main{max-width:1080px;margin:0 auto;padding:24px 26px 80px;}
+  section{display:none;animation:fade .3s ease;}
+  section.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+  h2{font-size:22px;margin:0 0 4px;}
+  .hint{color:var(--muted);font-size:14.5px;margin:0 0 20px;}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0;}
+  .card h3{margin:0 0 8px;font-size:17px;}
+  .pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;color:#0f131c;}
+  .p-actor{background:var(--purple);} .p-entity{background:var(--green);} .p-behavior{background:var(--orange);}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:760px){.grid2{grid-template-columns:1fr;}}
+  ul{margin:8px 0;padding-left:20px;} li{margin:4px 0;}
+  .kbd{background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-size:12.5px;}
+
+  /* requirements checklist */
+  .req{display:flex;align-items:flex-start;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 15px;margin:8px 0;cursor:pointer;transition:.15s;}
+  .req:hover{border-color:var(--blue);transform:translateX(3px);}
+  .req .box{width:22px;height:22px;border-radius:6px;border:2px solid var(--line);flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;transition:.15s;}
+  .req.done .box{background:var(--green);border-color:var(--green);}
+  .req .tag{font-size:11px;font-weight:800;padding:2px 8px;border-radius:6px;color:#0f131c;margin-right:4px;}
+  .req.f .tag{background:var(--blue);} .req.nf .tag{background:var(--red);}
+  .req .txt{font-size:14.5px;}
+  .req .go{margin-left:auto;color:var(--blue);font-size:13px;font-weight:700;white-space:nowrap;align-self:center;}
+  .legend2{font-size:13px;color:var(--muted);margin:6px 0 16px;}
+
+  /* incremental design */
+  .stepbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+  .stepbar .dot{width:34px;height:34px;border-radius:9px;background:var(--panel2);color:var(--muted);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;cursor:pointer;transition:.15s;}
+  .stepbar .dot.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+  .stepbar .dot.done{color:var(--green);border-color:var(--green);}
+  .stepbar .conn{flex:1;height:2px;background:var(--line);min-width:8px;}
+  .navbtns{display:flex;justify-content:space-between;margin-top:18px;gap:10px;}
+  .btn{background:var(--blue);color:#fff;border:none;border-radius:9px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;transition:.15s;}
+  .btn:hover{filter:brightness(1.1);} .btn:disabled{opacity:.35;cursor:default;}
+  .btn.ghost{background:var(--panel2);color:var(--ink);border:1px solid var(--line);}
+
+  .why{background:var(--panel2);border-left:3px solid var(--orange);border-radius:8px;padding:10px 14px;font-size:14px;margin:12px 0;}
+  .why b{color:var(--orange);}
+
+  .qawrap{margin:16px 0 4px;}
+  .qawrap .qatitle{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.05em;margin-bottom:8px;text-transform:uppercase;}
+  details.qa{background:var(--panel);border:1px solid var(--line);border-radius:9px;margin:7px 0;overflow:hidden;}
+  details.qa summary{cursor:pointer;padding:11px 15px;font-size:14.5px;font-weight:600;list-style:none;display:flex;gap:9px;align-items:flex-start;}
+  details.qa summary::-webkit-details-marker{display:none;}
+  details.qa summary .q{color:var(--blue);font-weight:800;flex-shrink:0;}
+  details.qa summary::after{content:"+";margin-left:auto;color:var(--muted);font-size:18px;line-height:1;font-weight:700;}
+  details.qa[open] summary::after{content:"–";}
+  details.qa summary:hover{background:var(--panel2);}
+  details.qa .ans{padding:2px 15px 13px 34px;font-size:14px;color:var(--ink);border-top:1px solid var(--line);}
+  details.qa .ans code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:12.5px;}
+  .chips{margin:10px 0;}
+  .chip{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:3px 10px;font-size:12.5px;margin:3px 5px 3px 0;color:var(--muted);}
+  .chip.new{background:rgba(49,196,141,.15);border-color:var(--green);color:var(--green);font-weight:700;}
+
+  pre{background:var(--codebg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;overflow:auto;font-size:13px;line-height:1.45;margin:10px 0;color:#111827;}
+  pre .cl{white-space:pre;padding-left:10px;box-shadow:inset 3px 0 0 transparent;}
+  pre .cl.new{box-shadow:inset 3px 0 0 #94a3b8;}
+  pre .cm{color:#98a2b3;}   /* comments in grey, code stays black */
+  .newbadge{display:inline-block;background:var(--yellow);color:#0f131c;font-size:9.5px;font-weight:800;padding:1px 5px;border-radius:4px;vertical-align:middle;margin-left:6px;}
+
+  /* class diagram */
+  .diagram{display:flex;flex-wrap:wrap;gap:16px;}
+  .umlbox{background:var(--panel);border:1px solid var(--line);border-radius:10px;min-width:190px;flex:1 1 190px;overflow:hidden;}
+  .umlbox .t{padding:8px 12px;font-weight:800;color:#0f131c;font-size:14px;}
+  .umlbox .sec{padding:8px 12px;font-size:12.5px;border-top:1px solid var(--line);}
+  .umlbox .sec .mono{color:var(--muted);display:block;}
+  .t-model{background:var(--green);} .t-service{background:var(--orange);} .t-enum{background:var(--purple);} .t-if{background:var(--blue);}
+  .rel{display:flex;gap:12px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--line);font-size:14px;}
+  .rel:last-child{border:none;} .rel .a{font-family:monospace;color:var(--blue);font-weight:800;min-width:58px;}
+
+  /* dry run */
+  .drywrap{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;}
+  @media(max-width:820px){.drywrap{grid-template-columns:1fr;}}
+  .lotview{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;}
+  .floorlabel{font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:700;letter-spacing:.05em;}
+  .spots{display:flex;gap:12px;flex-wrap:wrap;}
+  .spot{flex:1 1 90px;min-width:90px;border-radius:10px;border:2px solid var(--line);background:var(--panel2);padding:10px;text-align:center;transition:.35s;}
+  .spot .id{font-weight:800;font-size:14px;} .spot .sz{font-size:10px;color:var(--muted);letter-spacing:.05em;}
+  .spot .occ{margin-top:8px;font-size:12px;font-weight:700;padding:3px;border-radius:6px;background:#eef2f7;color:var(--muted);}
+  .spot.occupied{border-color:var(--red);background:rgba(249,112,102,.12);} .spot.occupied .occ{color:var(--red);background:rgba(249,112,102,.15);}
+  .spot.flash{animation:flash .7s ease;} @keyframes flash{0%{transform:scale(1);}40%{transform:scale(1.08);box-shadow:0 0 0 4px rgba(79,140,255,.4);}100%{transform:scale(1);}}
+  .console{background:#0f172a;border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-family:ui-monospace,monospace;font-size:13px;min-height:180px;}
+  .console .ln{padding:2px 0;opacity:0;animation:slidein .3s forwards;}
+  @keyframes slidein{to{opacity:1;}}
+  .console .in{color:var(--blue);} .console .out{color:var(--green);} .console .warn{color:var(--red);} .console .sys{color:var(--muted);}
+  .narr{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px 15px;margin-top:14px;font-size:14.5px;min-height:52px;}
+  .narr b{color:var(--yellow);}
+  .tickets{margin-top:12px;font-size:12.5px;color:var(--muted);}
+  .tickets .tk{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:3px 9px;margin:3px 4px 0 0;}
+
+  /* ---------------- MOBILE RESPONSIVE ---------------- */
+  @media(max-width:600px){
+    body{line-height:1.55;}
+    header{padding:16px 14px 0;}
+    main{padding:18px 14px 70px;}
+    h1{font-size:21px;} .tagline{font-size:13.5px;}
+    h2{font-size:19px;} h3{font-size:16px;}
+    .hint{font-size:13.5px;}
+
+    /* tabs: single scrollable row instead of wrapping/cramping */
+    nav{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+    nav::-webkit-scrollbar{display:none;}
+    nav button{white-space:nowrap;padding:9px 11px;font-size:13px;flex:0 0 auto;}
+    nav button .num{width:18px;height:18px;font-size:11px;margin-right:5px;}
+
+    .card{padding:14px 15px;}
+    .grid2{grid-template-columns:1fr;}      /* stack the actor/entity cards */
+
+    /* step bar: let dots wrap, drop the stretchy connectors */
+    .stepbar{gap:6px;}
+    .stepbar .conn{display:none;}
+    .stepbar .dot{width:38px;height:38px;font-size:12px;}
+
+    pre{font-size:12px;padding:10px 12px;}
+    .navbtns{flex-direction:column;}
+    .navbtns .btn{width:100%;}
+
+    /* class diagram: one column, full width boxes */
+    .umlbox{flex:1 1 100%;min-width:0;}
+
+    /* dry run already stacks (<=820); tighten spots so a few fit per row */
+    .spots{gap:8px;}
+    .spot{flex:1 1 72px;min-width:72px;padding:8px;}
+    .console{min-height:140px;font-size:12px;}
+
+    details.qa summary{font-size:13.5px;padding:10px 12px;}
+    details.qa .ans{font-size:13px;padding:2px 12px 12px 28px;}
+    .req{padding:11px 12px;}
+    .req .go{display:none;}   /* save width; the whole row is tappable anyway */
+  }
+  @media(max-width:380px){
+    .stepbar .dot{width:33px;height:33px;font-size:11px;}
+    .spot{flex:1 1 100%;}     /* very narrow: one spot per row */
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>🅿️ Parking Lot — Low Level Design</h1>
+  <p class="tagline">Learn by building it the way an interviewer expects: understand → gather requirements → design one requirement at a time → integrate → dry run.</p>
+  <nav id="nav">
+    <button data-t="understand" class="active"><span class="num">1</span>Understand</button>
+    <button data-t="requirements"><span class="num">2</span>Requirements</button>
+    <button data-t="design"><span class="num">3</span>Incremental Design</button>
+    <button data-t="integration"><span class="num">4</span>Final Integration</button>
+    <button data-t="dryrun"><span class="num">5</span>Dry Run</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ========== 1. UNDERSTAND ========== -->
+<section id="understand" class="active">
+  <h2>1 · Understand the problem</h2>
+  <p class="hint">Before any code, say the problem out loud in plain English. Build intuition first.</p>
+
+  <div class="card">
+    <h3>📝 Problem statement</h3>
+    <p>Design the software for a <b>parking lot</b>. Vehicles enter, are given a place to park, and pay a fee based on how long they stayed when they leave. The lot has multiple <b>floors</b>, spots come in different <b>sizes</b>, and different <b>vehicles</b> need different-sized spots.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3><span class="pill p-actor">ACTORS</span> Who uses it?</h3>
+      <ul>
+        <li><b>Driver</b> — brings a vehicle, wants to park &amp; pay.</li>
+        <li><b>System</b> — assigns spots, issues tickets, charges fees.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="pill p-entity">ENTITIES</span> What "things" exist?</h3>
+      <ul>
+        <li>Parking Lot, Floor, Spot</li>
+        <li>Vehicle (Car / Motorcycle / Truck)</li>
+        <li>Ticket, Fee</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="pill p-behavior">BEHAVIOR</span> What happens? (the flow)</h3>
+    <p style="font-size:15px;" class="mono">enter → find a fitting free spot → park &amp; get ticket → (time passes) → exit → free spot → pay fee</p>
+    <p class="hint" style="margin:6px 0 0;">If you can narrate this flow, you understand the system. Everything we design will serve this flow.</p>
+  </div>
+
+  <div class="card" style="border-color:var(--blue);">
+    👉 <b>Next:</b> go to the <b>Requirements</b> tab and start clicking requirements one by one. Each click builds a piece of the design.
+  </div>
+</section>
+
+<!-- ========== 2. REQUIREMENTS ========== -->
+<section id="requirements">
+  <h2>2 · Gather requirements</h2>
+  <p class="hint">Split into <b style="color:var(--blue)">Functional</b> (what it must do) and <b style="color:var(--red)">Non-functional</b> (how well). Click a requirement to jump to its design step.</p>
+  <div class="legend2">Tip: label them F1, F2… so every class you create later can be traced back to a requirement.</div>
+  <div id="reqList"></div>
+</section>
+
+<!-- ========== 3. INCREMENTAL DESIGN ========== -->
+<section id="design">
+  <h2>3 · Design — one requirement at a time</h2>
+  <p class="hint">Each step adds <b>only</b> what's needed for that requirement. Newly added lines are marked with a bar on the left. The design grows; it never restarts.</p>
+
+  <div class="stepbar" id="stepbar"></div>
+
+  <div class="card" id="stepReq" style="border-color:var(--blue);"></div>
+  <div class="why" id="stepWhy"></div>
+  <div>
+    <div style="font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.05em;margin-bottom:4px;">DESIGN SO FAR</div>
+    <div class="chips" id="stepChips"></div>
+  </div>
+  <div id="stepCode"></div>
+  <div id="stepQA"></div>
+
+  <div class="navbtns">
+    <button class="btn ghost" id="prevBtn">← Previous</button>
+    <button class="btn" id="nextBtn">Next requirement →</button>
+  </div>
+</section>
+
+<!-- ========== 4. INTEGRATION ========== -->
+<section id="integration">
+  <h2>4 · Final integration</h2>
+  <p class="hint">All pieces combined. Here's the complete class diagram, the relationships, and the end-to-end flow.</p>
+
+  <h3 style="margin-top:18px;">📦 Class diagram</h3>
+  <div class="diagram">
+    <div class="umlbox"><div class="t t-enum">«enum» VehicleType</div><div class="sec"><span class="mono">MOTORCYCLE, CAR, TRUCK</span></div></div>
+    <div class="umlbox"><div class="t t-enum">«enum» SpotType</div><div class="sec"><span class="mono">SMALL, MEDIUM, LARGE</span></div></div>
+    <div class="umlbox"><div class="t t-model">Vehicle «abstract»</div><div class="sec"><span class="mono">- licensePlate</span><span class="mono">- type</span></div><div class="sec"><span class="mono">↑ Car, Motorcycle, Truck</span></div></div>
+    <div class="umlbox"><div class="t t-model">ParkingSpot</div><div class="sec"><span class="mono">- spotType</span><span class="mono">- parkedVehicle</span></div><div class="sec"><span class="mono">+ canFit(v)</span><span class="mono">+ park(v) / remove()</span></div></div>
+    <div class="umlbox"><div class="t t-model">Ticket</div><div class="sec"><span class="mono">- vehicle, spot</span><span class="mono">- entryTime, exitTime</span></div></div>
+    <div class="umlbox"><div class="t t-service">ParkingFloor</div><div class="sec"><span class="mono">- List&lt;ParkingSpot&gt;</span></div><div class="sec"><span class="mono">+ findAvailableSpot(v)</span></div></div>
+    <div class="umlbox"><div class="t t-service">ParkingLot</div><div class="sec"><span class="mono">- List&lt;ParkingFloor&gt;</span><span class="mono">- FeeStrategy</span></div><div class="sec"><span class="mono">+ park(v):Ticket</span><span class="mono">+ exit(id):double</span></div></div>
+    <div class="umlbox"><div class="t t-if">«interface» FeeStrategy</div><div class="sec"><span class="mono">+ calculate(ticket)</span></div><div class="sec"><span class="mono">↑ Hourly, Flat, Weekend</span></div></div>
+  </div>
+
+  <h3 style="margin-top:24px;">🔗 Relationships (in plain words)</h3>
+  <div class="card">
+    <div class="rel"><span class="a">──▷</span><div><b>IS-A:</b> Car / Motorcycle / Truck <i>is a</i> Vehicle. HourlyFee <i>is a</i> FeeStrategy.</div></div>
+    <div class="rel"><span class="a">◆──</span><div><b>HAS-MANY (owns):</b> ParkingLot has a <code>List&lt;ParkingFloor&gt;</code>; ParkingFloor has a <code>List&lt;ParkingSpot&gt;</code>.</div></div>
+    <div class="rel"><span class="a">◇──</span><div><b>REFERS-TO:</b> Ticket points to a Vehicle and a ParkingSpot.</div></div>
+    <div class="rel"><span class="a">- -▷</span><div><b>USES:</b> ParkingLot uses a FeeStrategy on exit.</div></div>
+  </div>
+
+  <h3 style="margin-top:24px;">🌊 End-to-end flow</h3>
+  <div class="card mono" style="font-size:14px;line-height:1.9;">
+    park(car)<br>
+    &nbsp;&nbsp;└─ lot loops floors → floor.findAvailableSpot(car)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ spot.canFit(car)? → yes → spot.park(car)<br>
+    &nbsp;&nbsp;└─ create Ticket(car, spot, now) → return to driver<br>
+    <span class="cm">// ...time passes...</span><br>
+    exit(ticketId)<br>
+    &nbsp;&nbsp;└─ spot.remove() &nbsp; +&nbsp; feeStrategy.calculate(ticket) → amount 💰
+  </div>
+</section>
+
+<!-- ========== 5. DRY RUN ========== -->
+<section id="dryrun">
+  <h2>5 · Dry run</h2>
+  <p class="hint">Step through a real scenario. Watch spots fill up, tickets get created, and fees get charged. Use <span class="kbd">Next step ▶</span>.</p>
+
+  <div class="drywrap">
+    <div>
+      <div class="lotview">
+        <div class="floorlabel">FLOOR 1</div>
+        <div class="spots" id="spots"></div>
+        <div class="tickets" id="tickets"></div>
+      </div>
+      <div class="narr" id="narr">Press <b>Next step ▶</b> to begin.</div>
+      <div class="navbtns">
+        <button class="btn ghost" id="dryReset">⟲ Reset</button>
+        <button class="btn" id="dryNext">Next step ▶</button>
+      </div>
+    </div>
+    <div class="console" id="console"></div>
+  </div>
+</section>
+
+</main>
+
+<script>
+/* ---------------- TAB NAV ---------------- */
+const nav = document.getElementById('nav');
+nav.addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  showTab(b.dataset.t);
+});
+function showTab(t){
+  document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active', x.dataset.t===t));
+  document.querySelectorAll('section').forEach(s=>s.classList.toggle('active', s.id===t));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ---------------- REQUIREMENTS ---------------- */
+const requirements = [
+  {id:'F1', kind:'f', text:'The lot has multiple floors, each with many parking spots.'},
+  {id:'F2', kind:'f', text:'Spots have sizes; each vehicle type only fits certain sizes.'},
+  {id:'F3', kind:'f', text:'A vehicle can park in a free fitting spot and receives a ticket.'},
+  {id:'F4', kind:'f', text:'On exit, the spot is freed and a fee is charged by time + vehicle type.'},
+  {id:'F5', kind:'f', text:'If no spot fits anywhere, the system reports "lot full".'},
+  {id:'NF1',kind:'nf',text:'Pricing rules change often — they must be easy to swap out.'},
+];
+const reqList = document.getElementById('reqList');
+requirements.forEach((r,i)=>{
+  const el = document.createElement('div');
+  el.className = 'req '+r.kind;
+  el.innerHTML = `<div class="box">✓</div>
+     <div class="txt"><span class="tag">${r.id}</span>${r.text}</div>
+     <span class="go">design this →</span>`;
+  el.onclick = ()=>{ el.classList.add('done'); goToStep(i); showTab('design'); };
+  reqList.appendChild(el);
+});
+
+/* ---------------- INCREMENTAL DESIGN ---------------- */
+// helper to render code with simple syntax coloring; lines wrapped in [[ ]] are "new"
+function code(str){
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return '<pre>'+str.split('\n').map(line=>{
+    let isNew=false;
+    if(line.includes('[[')){ isNew=true; line=line.replace(/\[\[|\]\]/g,''); }
+    let h = esc(line)
+      .replace(/(\/\*[\s\S]*?\*\/)/g,'<span class="cm">$1</span>')  // /* inline */ comments
+      .replace(/(\/\/.*)$/,'<span class="cm">$1</span>');            // // line comments
+    if(!h) h='&nbsp;';
+    return '<div class="cl'+(isNew?' new':'')+'">'+h+'</div>';
+  }).join('')+'</pre>';
+}
+
+const steps = [
+  { req:'F1', label:'F1 · Multiple floors, each with many spots',
+    why:'"has many" translates directly to a <b>List</b>. The lot owns a list of floors; each floor owns a list of spots. Three container classes, nothing more.',
+    chips:['ParkingLot','ParkingFloor','ParkingSpot'], newChips:['ParkingLot','ParkingFloor','ParkingSpot'],
+    code:
+`[[class ParkingSpot {              // smallest unit: one physical spot]]
+[[    String id;]]
+[[}]]
+
+[[class ParkingFloor {             // a floor "has many" spots -> use a List]]
+[[    List<ParkingSpot> spots = new ArrayList<>();]]
+[[}]]
+
+[[class ParkingLot {               // the lot "has many" floors -> a List again]]
+[[    List<ParkingFloor> floors = new ArrayList<>();]]
+[[}]]`
+  },
+  { req:'F2', label:'F2 · Sizes; vehicles fit certain spot sizes',
+    why:'Fixed menus → <b>enums</b>. The rule is STRICT 1:1 (motorcycle→SMALL, car→MEDIUM, truck→LARGE), so we store the required spot ON the vehicle type — fitting is then one equality check. Vehicles share fields but differ → an <b>abstract</b> base + subclasses. The rule belongs on the spot → <code>canFit()</code>.',
+    chips:['ParkingLot','ParkingFloor','ParkingSpot','VehicleType','SpotType','Vehicle','Car','Motorcycle','Truck'],
+    newChips:['VehicleType','SpotType','Vehicle','Car','Motorcycle','Truck'],
+    code:
+`[[// enum = a fixed set of values, checked by the compiler (no String typos).]]
+[[enum SpotType { SMALL, MEDIUM, LARGE }]]
+
+[[// STRICT rule: each vehicle type is bound to the ONE spot type it may use.]]
+[[// Storing that mapping on the enum keeps the "fits?" check to a single line.]]
+[[enum VehicleType {]]
+[[    MOTORCYCLE(SpotType.SMALL),]]
+[[    CAR(SpotType.MEDIUM),]]
+[[    TRUCK(SpotType.LARGE);]]
+[[    final SpotType requiredSpot;]]
+[[    VehicleType(SpotType requiredSpot) { this.requiredSpot = requiredSpot; }]]
+[[}]]
+
+[[// abstract = you can never do "new Vehicle()"; only real types exist.]]
+[[// It holds fields every vehicle shares, so subclasses don't repeat them.]]
+[[abstract class Vehicle {]]
+[[    String licensePlate;]]
+[[    VehicleType type;]]
+[[}]]
+
+[[// subclasses add no new data; each just fixes its own type in its constructor]]
+[[class Car        extends Vehicle { }]]
+[[class Motorcycle extends Vehicle { }]]
+[[class Truck      extends Vehicle { }]]
+
+class ParkingSpot {
+    String id;
+[[    SpotType spotType;                     // this spot's size]]
+[[    Vehicle parkedVehicle;                 // null means free (no extra boolean needed)]]
+
+[[    // rule lives HERE, not in the lot: the spot knows what it can hold.]]
+[[    // Free AND an exact type match. Adding a new vehicle type needs NO change]]
+[[    // here - you just give that type its required spot in the enum.]]
+[[    boolean canFit(Vehicle v) {]]
+[[        if (parkedVehicle != null) {]]
+[[            return false;                  // already taken]]
+[[        }]]
+[[        return spotType == v.type.requiredSpot;   // exact match only]]
+[[    }]]
+}`
+  },
+  { req:'F3', label:'F3 · Park a vehicle → get a ticket',
+    why:'Someone must orchestrate parking (<code>ParkingLot.park</code>), a floor must find a fitting free spot (<code>findAvailableSpot</code>), and we need proof of parking → a new <b>Ticket</b> class.',
+    chips:['ParkingLot','ParkingFloor','ParkingSpot','Vehicle+subs','enums','Ticket'],
+    newChips:['Ticket'],
+    code:
+`[[// Ticket = proof of parking; links a vehicle to its spot.]]
+[[// It's a plain data holder (a "model"/VO) - no behavior, just fields.]]
+[[class Ticket {]]
+[[    String id;]]
+[[    Vehicle vehicle;]]
+[[    ParkingSpot spot;]]
+[[}]]
+
+class ParkingFloor {
+    List<ParkingSpot> spots;
+
+[[    // floor's only job: scan its own spots, return the first that fits]]
+[[    ParkingSpot findAvailableSpot(Vehicle v) {]]
+[[        for (ParkingSpot s : spots) {]]
+[[            if (s.canFit(v)) {]]
+[[                return s;]]
+[[            }]]
+[[        }]]
+[[        return null;                        // nothing on this floor fits v]]
+[[    }]]
+}
+
+[[// ParkingLot is the FACADE: the single entry point callers talk to.]]
+class ParkingLot {
+    List<ParkingFloor> floors;
+
+[[    Ticket park(Vehicle v) {]]
+[[        for (ParkingFloor f : floors) {                 // try each floor in order]]
+[[            ParkingSpot s = f.findAvailableSpot(v);]]
+[[            if (s != null) {]]
+[[                s.parkedVehicle = v;                     // claim the spot]]
+[[                return new Ticket(v, s);                 // hand driver a ticket]]
+[[            }]]
+[[        }]]
+[[        return null;]]
+[[    }]]
+}`
+  },
+  { req:'F4', label:'F4 · Exit → free spot + charge fee',
+    why:'To price by time, the Ticket needs <b>entry/exit times</b>. "Charge money" is its own responsibility that fits no existing class → a new <b>FeeCalculator</b> service (Single Responsibility).',
+    chips:['...previous...','entry/exitTime','FeeCalculator','exit()'],
+    newChips:['FeeCalculator','exit()','entry/exitTime'],
+    code:
+`class Ticket {
+    String id; Vehicle vehicle; ParkingSpot spot;
+[[    LocalDateTime entryTime = LocalDateTime.now();   // stamped when issued]]
+[[    LocalDateTime exitTime;                          // filled in on exit]]
+}
+
+[[// Its own class = Single Responsibility: pricing is isolated, so changing]]
+[[// rates never risks breaking the parking logic. Easy to test on its own too.]]
+[[class FeeCalculator {]]
+[[    double calculate(Ticket t) {]]
+[[        long hrs = Math.max(1, hoursBetween(t.entryTime, t.exitTime));  // min 1 hr]]
+[[        return hrs * rateFor(t.vehicle.type);        // bike 10 / car 20 / truck 40]]
+[[    }]]
+[[}]]
+
+class ParkingLot {
+[[    double exit(String ticketId) {]]
+[[        Ticket t = activeTickets.remove(ticketId);   // find + close the ticket]]
+[[        t.exitTime = LocalDateTime.now();]]
+[[        t.spot.parkedVehicle = null;                 // free the spot for reuse]]
+[[        return new FeeCalculator().calculate(t);]]
+[[    }]]
+}`
+  },
+  { req:'F5', label:'F5 · No spot fits → "lot full"',
+    why:'This adds <b>no new class</b> — it\'s just an edge case. <code>park()</code> already returns <code>null</code> when no floor has a spot; the caller treats null as "lot full". Recognizing when NOT to add a class keeps the design lean.',
+    chips:['(no new class — edge-case logic only)'],
+    newChips:[],
+    code:
+`class ParkingLot {
+    Ticket park(Vehicle v) {
+        for (ParkingFloor f : floors) {
+            ParkingSpot s = f.findAvailableSpot(v);
+            if (s != null) {
+                // park & return ticket (from F3)
+            }
+        }
+[[        return null;   // nothing fit anywhere -> caller shows "LOT FULL". No new class.]]
+    }
+}`
+  },
+  { req:'NF1', label:'NF1 · Pricing must be swappable',
+    why:'A non-functional requirement usually introduces a <b>pattern</b>, not just a class. "Swappable rules" = the <b>Strategy pattern</b>: turn pricing into an interface with interchangeable implementations.',
+    chips:['...previous...','FeeStrategy (interface)','HourlyFee','FlatFee','WeekendFee'],
+    newChips:['FeeStrategy','HourlyFee','FlatFee'],
+    code:
+`[[// interface = a contract ("anyone who prices must have calculate()").]]
+[[// Strategy pattern: many rules, one shape. Open/Closed principle -]]
+[[// add a new rate by adding a class, WITHOUT editing existing code.]]
+[[interface FeeStrategy {]]
+[[    double calculate(Ticket t);]]
+[[}]]
+
+[[class HourlyFeeStrategy  implements FeeStrategy { /* per hour   */ }]]
+[[class FlatFeeStrategy    implements FeeStrategy { /* flat rate  */ }]]
+[[class WeekendFeeStrategy implements FeeStrategy { /* 2x weekend */ }]]
+
+class ParkingLot {
+[[    FeeStrategy feeStrategy;               // plug in any rule; swap without code changes]]
+
+    double exit(String ticketId) {
+        // ...free the spot...
+[[        return feeStrategy.calculate(t);   // uses whichever strategy is set]]
+    }
+}`
+  },
+];
+
+// Interviewer-style follow-ups per requirement
+const qaByReq = {
+  F1: [
+    {q:'Why a List for floors/spots instead of an array?', a:'A lot grows and shrinks (spots open/close, floors added), and we don\'t know the size up front. A <code>List</code> is dynamic and gives handy operations (add, iterate, remove). Arrays are fixed-size — a poor fit here.'},
+    {q:'Why three classes? Couldn\'t ParkingLot just hold all spots?', a:'It could, but modelling the real world (Lot → Floor → Spot) keeps responsibilities clean: a floor searches its own spots, the lot just loops floors. It also scales — per-floor displays, floor-level rules, etc. become easy.'},
+  ],
+  F2: [
+    {q:'Why an enum instead of a String or int constant?', a:'Type-safety: the compiler only allows valid values, so no <code>"car"</code> vs <code>"CAR"</code> typos. It\'s self-documenting, works cleanly in <code>switch</code>, and you can\'t pass a random number like <code>5</code>.'},
+    {q:'Why is Vehicle abstract and not a normal class or interface?', a:'Abstract because a bare "Vehicle" is meaningless — you always have a concrete Car/Truck/Bike — yet they share fields (plate, type), which an abstract class can hold. An <code>interface</code> can\'t hold that shared state, so abstract class fits better here.'},
+    {q:'Why does canFit() live on ParkingSpot, not on ParkingLot?', a:'Encapsulation: the spot owns the data the decision depends on (its size + whether it\'s occupied), so it should own the decision. This keeps the lot/floor simple and puts the rule in exactly one place.'},
+    {q:'Why store requiredSpot on the enum instead of an if/switch per type?', a:'The rule is a fixed 1:1 mapping (motorcycle→SMALL, car→MEDIUM, truck→LARGE), so put that data on the enum. <code>canFit</code> becomes one equality check. Adding a new vehicle type is just a new enum entry with its spot — no branch to add, nothing existing to touch (Open/Closed). An if/switch would grow a new case every time.'},
+    {q:'What if one vehicle could use SEVERAL spot types (not strict 1:1)?', a:'Then a single <code>requiredSpot</code> isn\'t enough. Give each VehicleType an <code>EnumSet&lt;SpotType&gt;</code> of allowed spots and check <code>allowed.contains(spotType)</code>. Or, if "bigger also works", give sizes a rank and compare <code>spot.size &gt;= vehicle.minSize</code>. The right model depends on the rule.'},
+    {q:'Why use "parkedVehicle == null" instead of a boolean isFree flag?', a:'One source of truth. A separate boolean can drift out of sync with the actual vehicle reference. Deriving "free" from <code>parkedVehicle == null</code> means the two can never disagree.'},
+  ],
+  F3: [
+    {q:'Why a separate Ticket class instead of returning the spot?', a:'A ticket bundles everything the exit flow needs later — vehicle, spot, and (next step) the entry time. It\'s the natural unit to look up on exit, and mirrors the real paper slip.'},
+    {q:'Why does ParkingLot orchestrate parking — what pattern is that?', a:'It\'s a <b>Facade</b>: one simple entry point (<code>park</code> / <code>exit</code>) hides the floors-and-spots machinery. Callers don\'t need to know the internals.'},
+    {q:'findAvailableSpot returns the FIRST fit. Is that optimal?', a:'It\'s "first-fit" — simple and fine for v1. If asked to optimise (e.g. put a bike in the smallest spot to save big spots for trucks), I\'d switch to "best-fit" or keep size-bucketed free lists for O(1) lookup.'},
+  ],
+  F4: [
+    {q:'Why a FeeCalculator class instead of a method on ParkingLot?', a:'Single Responsibility. Pricing rules change often and for different reasons than parking logic; isolating them means a price change can\'t break parking, and the calculator can be unit-tested alone.'},
+    {q:'Where should entry/exit time live — Ticket or Spot?', a:'On the Ticket. The time is about this particular parking session, not the physical spot (which is reused by many vehicles). The ticket is the session record.'},
+    {q:'What if two threads exit the same ticket at once?', a:'Look-up-and-remove must be atomic. Using a thread-safe map with <code>remove()</code> (which returns null if already gone) prevents double-charging — a nice lead-in to the concurrency discussion.'},
+  ],
+  F5: [
+    {q:'Why return null instead of throwing an exception?', a:'Either is defensible. "Lot full" is an expected outcome, not an error, so returning null (or better, an <code>Optional</code>/result object) is reasonable. Throwing is fine if you\'d rather force the caller to handle it explicitly — I\'d state the trade-off.'},
+    {q:'Isn\'t returning null risky (NullPointerException)?', a:'Yes, raw null is easy to misuse. A cleaner version returns <code>Optional&lt;Ticket&gt;</code> or a small <code>ParkResult</code> object with a status — that makes "lot full" impossible to ignore.'},
+  ],
+  NF1: [
+    {q:'What design pattern is this and why use it here?', a:'The <b>Strategy pattern</b>. Pricing is a family of interchangeable algorithms (hourly, flat, weekend). Putting them behind one interface lets the lot pick/swap a rule at runtime without knowing the details.'},
+    {q:'How does this follow the Open/Closed Principle?', a:'Open for extension, closed for modification: to add a new rate you add a new <code>FeeStrategy</code> class — you never edit <code>ParkingLot</code> or the existing strategies, so you can\'t break what already works.'},
+    {q:'How would ParkingLot get its strategy?', a:'Dependency injection — pass it into the constructor (or a setter). The lot depends on the <code>FeeStrategy</code> interface, not a concrete class, which also makes it easy to inject a fake in tests.'},
+  ],
+};
+
+let cur = 0;
+const stepbar = document.getElementById('stepbar');
+steps.forEach((s,i)=>{
+  if(i) { const c=document.createElement('div'); c.className='conn'; stepbar.appendChild(c); }
+  const d = document.createElement('div');
+  d.className='dot'; d.textContent=s.req; d.onclick=()=>goToStep(i);
+  stepbar.appendChild(d);
+});
+function goToStep(i){ cur=i; renderStep(); showTab('design'); }
+function renderStep(){
+  const s = steps[cur];
+  document.getElementById('stepReq').innerHTML = `<h3 style="margin:0;">📌 ${s.label}</h3>`;
+  document.getElementById('stepWhy').innerHTML = `<b>Why:</b> ${s.why}`;
+  document.getElementById('stepChips').innerHTML = s.chips.map(c=>{
+    const isNew = s.newChips.some(n=>c.includes(n)) || s.newChips.includes(c);
+    return `<span class="chip ${isNew?'new':''}">${isNew?'+ ':''}${c}</span>`;
+  }).join('');
+  document.getElementById('stepCode').innerHTML = code(s.code);
+  const qs = qaByReq[s.req] || [];
+  document.getElementById('stepQA').innerHTML = qs.length ? (
+    '<div class="qawrap"><div class="qatitle">🎤 Interviewer might ask…</div>' +
+    qs.map(x=>`<details class="qa"><summary><span class="q">Q.</span>${x.q}</summary><div class="ans">${x.a}</div></details>`).join('') +
+    '</div>'
+  ) : '';
+  document.querySelectorAll('#stepbar .dot').forEach((d,i)=>{
+    d.classList.toggle('active', i===cur);
+    d.classList.toggle('done', i<cur);
+  });
+  document.getElementById('prevBtn').disabled = cur===0;
+  const nb = document.getElementById('nextBtn');
+  nb.textContent = cur===steps.length-1 ? 'See final integration →' : 'Next requirement →';
+}
+document.getElementById('prevBtn').onclick = ()=>{ if(cur>0){cur--;renderStep();} };
+document.getElementById('nextBtn').onclick = ()=>{
+  if(cur<steps.length-1){ cur++; renderStep(); }
+  else showTab('integration');
+};
+renderStep();
+
+/* ---------------- DRY RUN ---------------- */
+const initialSpots = [
+  {id:'F1-S1', sz:'SMALL',  occ:null},
+  {id:'F1-M1', sz:'MEDIUM', occ:null},
+  {id:'F1-L1', sz:'LARGE',  occ:null},
+];
+// each step: {narr, log:{txt,cls}, mutate(spots,state), flash:spotId}
+const dry = [
+  { narr:'Build the lot: 1 floor with a SMALL, a MEDIUM and a LARGE spot.',
+    log:{txt:'ParkingLot lot = new ParkingLot(1 floor, 3 spots);', cls:'sys'} },
+  { narr:'A <b>motorcycle</b> arrives. Strict rule: a motorcycle may only use a SMALL spot → F1-S1. A ticket is issued.',
+    log:{txt:'park(Motorcycle "BIKE-1")  →  spot F1-S1  →  Ticket T1', cls:'in'},
+    flash:'F1-S1', mutate:(s,st)=>{ s[0].occ='BIKE-1'; st.tickets.push({id:'T1',v:'BIKE-1',spot:'F1-S1'});} },
+  { narr:'A <b>car</b> arrives. A car may only use a MEDIUM spot → F1-M1.',
+    log:{txt:'park(Car "CAR-1")  →  spot F1-M1  →  Ticket T2', cls:'in'},
+    flash:'F1-M1', mutate:(s,st)=>{ s[1].occ='CAR-1'; st.tickets.push({id:'T2',v:'CAR-1',spot:'F1-M1'});} },
+  { narr:'A <b>truck</b> arrives. Only LARGE fits a truck → F1-L1.',
+    log:{txt:'park(Truck "TRUCK-1")  →  spot F1-L1  →  Ticket T3', cls:'in'},
+    flash:'F1-L1', mutate:(s,st)=>{ s[2].occ='TRUCK-1'; st.tickets.push({id:'T3',v:'TRUCK-1',spot:'F1-L1'});} },
+  { narr:'A second <b>car</b> arrives — but the only spot a car may use (MEDIUM) is already taken. <b>Lot full!</b> park() returns null.',
+    log:{txt:'park(Car "CAR-2")  →  null  →  ⚠ LOT FULL', cls:'warn'} },
+  { narr:'CAR-1 <b>exits</b>. Its spot (F1-M1) is freed and the fee is calculated from the time parked.',
+    log:{txt:'exit(T2)  →  free F1-M1  →  fee = 20.0 💰', cls:'out'},
+    flash:'F1-M1', mutate:(s,st)=>{ s[1].occ=null; st.tickets=st.tickets.filter(t=>t.id!=='T2');} },
+  { narr:'Now CAR-2 tries again — MEDIUM is free, so it parks. The system recovered on its own. ✅',
+    log:{txt:'park(Car "CAR-2")  →  spot F1-M1  →  Ticket T4', cls:'in'},
+    flash:'F1-M1', mutate:(s,st)=>{ s[1].occ='CAR-2'; st.tickets.push({id:'T4',v:'CAR-2',spot:'F1-M1'});} },
+];
+
+let dryStep = 0, dspots, dstate;
+function renderLot(flash){
+  const wrap = document.getElementById('spots');
+  wrap.innerHTML = dspots.map(s=>`
+    <div class="spot ${s.occ?'occupied':''} ${s.id===flash?'flash':''}">
+      <div class="id">${s.id}</div><div class="sz">${s.sz}</div>
+      <div class="occ">${s.occ||'FREE'}</div>
+    </div>`).join('');
+  document.getElementById('tickets').innerHTML =
+    dstate.tickets.length ? 'Active tickets: '+dstate.tickets.map(t=>`<span class="tk">${t.id}: ${t.v} @ ${t.spot}</span>`).join('') : '';
+}
+function dryReset(){
+  dryStep=0;
+  dspots = initialSpots.map(s=>({...s}));
+  dstate = {tickets:[]};
+  document.getElementById('console').innerHTML='<div class="ln sys">// console ready — press Next step ▶</div>';
+  document.getElementById('narr').innerHTML='Press <b>Next step ▶</b> to begin.';
+  document.getElementById('dryNext').disabled=false;
+  document.getElementById('dryNext').textContent='Next step ▶';
+  renderLot(null);
+}
+function dryNext(){
+  if(dryStep>=dry.length) return;
+  const step = dry[dryStep];
+  if(step.mutate) step.mutate(dspots, dstate);
+  renderLot(step.flash||null);
+  document.getElementById('narr').innerHTML = step.narr;
+  const c = document.getElementById('console');
+  const ln = document.createElement('div');
+  ln.className='ln '+step.log.cls;
+  ln.textContent = '> '+step.log.txt;
+  c.appendChild(ln); c.scrollTop=c.scrollHeight;
+  dryStep++;
+  if(dryStep>=dry.length){
+    const done=document.createElement('div'); done.className='ln sys'; done.textContent='// dry run complete ✅';
+    c.appendChild(done);
+    document.getElementById('dryNext').disabled=true;
+    document.getElementById('dryNext').textContent='Done ✓';
+  }
+}
+document.getElementById('dryNext').onclick = dryNext;
+document.getElementById('dryReset').onclick = dryReset;
+dryReset();
+</script>
+</body>
+</html>
