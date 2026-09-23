@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Design &amp; Backend Interview Questions</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background: #f4f6fa;
+    color: #1f2933;
+    line-height: 1.55;
+  }
+  header {
+    position: sticky;
+    top: 0;
+    background: #1e293b;
+    color: #fff;
+    padding: 16px 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 10;
+  }
+  header h1 { margin: 0 0 10px; font-size: 1.4rem; }
+  .controls { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  #search {
+    flex: 1;
+    min-width: 220px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+  }
+  #count { font-size: 0.9rem; color: #cbd5e1; }
+  main { max-width: 960px; margin: 24px auto; padding: 0 16px; }
+  ol { padding: 0; margin: 0; list-style: none; counter-reset: q; }
+  li {
+    counter-increment: q;
+    background: #fff;
+    margin-bottom: 10px;
+    padding: 14px 18px 14px 70px;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    position: relative;
+  }
+  li::before {
+    content: attr(data-n);
+    position: absolute;
+    left: 16px;
+    top: 13px;
+    min-width: 40px;
+    padding: 2px 6px;
+    text-align: center;
+    background: #e0e7ff;
+    color: #3730a3;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+  li.hidden, section.hidden, #index li.hidden { display: none; }
+  #index {
+    background: #fff;
+    border-radius: 12px;
+    padding: 18px 22px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    margin-bottom: 28px;
+  }
+  #index h2 { margin: 0 0 12px; font-size: 1.2rem; }
+  #index ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    columns: 2 280px;
+    column-gap: 24px;
+  }
+  #index ul li {
+    all: unset;
+    display: block;
+    break-inside: avoid;
+    padding: 5px 0;
+  }
+  #index ul li::before { content: none; }
+  #index a { color: #3730a3; text-decoration: none; font-weight: 500; }
+  #index a:hover { text-decoration: underline; }
+  #index .badge {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 0 8px;
+    border-radius: 999px;
+    background: #e0e7ff;
+    color: #3730a3;
+    font-size: 0.8rem;
+  }
+  section { margin-bottom: 32px; scroll-margin-top: 120px; }
+  section h2 {
+    font-size: 1.2rem;
+    margin: 0 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #c7d2fe;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  section h2 a { font-size: 0.8rem; font-weight: 400; color: #64748b; text-decoration: none; }
+  #index .answered { background: #dcfce7; color: #166534; }
+  .btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 8px;
+    background: #334155;
+    color: #fff;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+  .btn:hover { background: #475569; }
+  .q-text { font-weight: 500; }
+  details { margin-top: 10px; }
+  summary {
+    cursor: pointer;
+    color: #4338ca;
+    font-weight: 600;
+    font-size: 0.9rem;
+    user-select: none;
+  }
+  .answer {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed #cbd5e1;
+    font-size: 0.95rem;
+  }
+  .answer h4 { margin: 16px 0 6px; color: #1e293b; font-size: 1rem; }
+  .answer p { margin: 8px 0; }
+  .answer ul, .answer ol { margin: 6px 0 6px 20px; padding: 0; }
+  .answer li {
+    all: unset;
+    display: list-item;
+    margin: 4px 0;
+  }
+  .answer ol > li { list-style: decimal; }
+  .answer ul > li { list-style: disc; }
+  .answer li::before { content: none; }
+  .answer code {
+    background: #f1f5f9;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 0.88em;
+  }
+  .answer pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 14px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+  .answer pre.diagram { background: #f8fafc; color: #0f172a; border: 1px solid #cbd5e1; }
+  .answer .tldr {
+    background: #eef2ff;
+    border-left: 4px solid #6366f1;
+    padding: 10px 14px;
+    border-radius: 6px;
+  }
+  .answer .tip {
+    background: #fefce8;
+    border-left: 4px solid #eab308;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-top: 14px;
+  }
+  .answer table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.9rem; }
+  .answer th, .answer td { border: 1px solid #cbd5e1; padding: 6px 10px; text-align: left; vertical-align: top; }
+  .answer th { background: #f1f5f9; }
+  .answer .simple {
+    background: #ecfdf5;
+    border-left: 4px solid #10b981;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    font-size: 1rem;
+  }
+  .answer table { display: block; overflow-x: auto; }
+  .answer code { overflow-wrap: anywhere; }
+  .answer pre { -webkit-overflow-scrolling: touch; max-width: 100%; }
+  .q-text, .answer { overflow-wrap: break-word; }
+
+  @media (max-width: 700px) {
+    header { position: static; padding: 12px 14px; }
+    header h1 { font-size: 1.1rem; }
+    .controls { gap: 8px; }
+    #search { min-width: 100%; font-size: 16px; }
+    .btn { flex: 1; padding: 10px; }
+    #count { width: 100%; font-size: 0.8rem; }
+    main { margin: 14px auto; padding: 0 10px; }
+    #index { padding: 14px; }
+    #index ul { columns: 1; }
+    #index ul li { padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
+    section h2 { font-size: 1.05rem; flex-direction: column; gap: 4px; }
+    section { scroll-margin-top: 10px; }
+    li { padding: 40px 14px 14px 14px; }
+    li::before { left: 14px; top: 12px; min-width: 0; }
+    .answer { font-size: 0.93rem; }
+    .answer .simple { font-size: 0.97rem; }
+    .answer pre { font-size: 0.72rem; padding: 10px; }
+    .answer ul, .answer ol { margin-left: 16px; }
+    .answer th, .answer td { padding: 5px 7px; font-size: 0.85rem; }
+    summary { padding: 6px 0; font-size: 0.95rem; }
+  }
+  mark { background: #fde68a; padding: 0 2px; border-radius: 3px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>System Design &amp; Backend Interview Questions</h1>
+  <div class="controls">
+    <input id="search" type="search" placeholder="Search questions (e.g. Kafka, JWT, Redis, RAG)...">
+    <button class="btn" id="expand-all">Expand all answers</button>
+    <button class="btn" id="collapse-all">Collapse all</button>
+    <span id="count"></span>
+  </div>
+</header>
+<main>
+<nav id="index">
+  <h2>Topics</h2>
+  <ul id="index-list"></ul>
+</nav>
+<div id="sections"></div>
+<ol id="questions" hidden>
+<li>A user clicks the "Pay Now" button twice because the first request is slow. Both requests reach your payment server. How do you make sure the customer isn't charged twice?</li>
+<li>You're building a web application with JWT authentication. Where would you store the access token and refresh token? How would you handle token expiry securely?</li>
+<li>Your Redis cache has a TTL of exactly 10 minutes. Every 10 minutes, thousands of keys expire at almost the same time, and your database suddenly gets overloaded. How would you fix it?</li>
+<li>Redis goes down for 30 seconds. When it comes back online, 1 million requests hit the database within 5 seconds, causing it to crash. How would you prevent this?</li>
+<li>A deployment of Service B introduces a breaking API change, but Service A is still using the old contract. How would you deploy changes without breaking existing services?</li>
+<li>Your microservices communicate synchronously using REST, but the number of service-to-service calls has increased significantly. How would you decide which communication should become event-driven?</li>
+<li>Service A calls Service B, B calls C, and C calls D. If D becomes slow, the entire request becomes slow. How would you prevent this cascading failure?</li>
+<li>One microservice is receiving extremely high traffic and becomes a bottleneck while other services are underutilized. How would you scale the system?</li>
+<li>Your REST API needs to support multiple API versions without breaking existing clients. How would you implement API versioning?</li>
+<li>Your Spring Boot application suddenly starts consuming very high memory after running for several hours. How would you debug the issue?</li>
+<li>Two users try to book the same appointment at exactly the same time. How would you prevent double booking in a Spring Boot application?</li>
+<li>You have an API that receives multiple requests simultaneously, and the application starts throwing timeout and connection errors. How would you investigate and improve it?</li>
+<li>Your application works perfectly on your local machine but fails to start in production because of configuration differences. How would you troubleshoot it?</li>
+<li>How would you design a secure CI/CD pipeline on AWS for deploying Spring Boot microservices?</li>
+<li>Your application has several services that need the same exception-handling logic. How would you implement global exception handling?</li>
+<li>Your application is experiencing database connection pool exhaustion. What could cause it, and how would you troubleshoot it?</li>
+<li>Multiple APIs in your application require the same authentication and authorization logic. How would you implement it using Spring Security?</li>
+<li>You need to support cross-region Kafka replication for disaster recovery. How would you design it?</li>
+<li>Your Customer Service is calling Account Service synchronously, but Account Service becomes unavailable. How would you prevent the failure from propagating to Customer Service?</li>
+<li>How would you identify the root cause of increased latency across distributed services?</li>
+<li>A container cannot connect to the database running on another server. How would you troubleshoot it?</li>
+<li>How would you pass environment-specific configurations to Docker containers?</li>
+<li>How would you optimize Docker layer caching in CI/CD pipelines?</li>
+<li>You need to run multiple Java applications in isolated environments. How would Docker help?</li>
+<li>How would you secure Docker images before deploying them to production?</li>
+<li>A Docker container exits immediately after startup. How would you debug it?</li>
+<li>A single business transaction updates five microservices. How would you maintain consistency?</li>
+<li>How would you migrate from REST-based communication to gRPC between microservices?</li>
+<li>A downstream service is unavailable for several hours. How would you queue requests without losing data?</li>
+<li>How would you design microservices for a multi-tenant SaaS application?</li>
+<li>One microservice must support multiple versions simultaneously. How would you implement backward compatibility?</li>
+<li>Multiple containers need to communicate securely within the same environment. How would you configure networking?</li>
+<li>Sensitive credentials are currently stored inside the Docker image. How would you secure them?</li>
+<li>A producer publishes events successfully, but consumers process them out of order. How would you troubleshoot?</li>
+<li>You need to archive old Kafka events to cheaper storage while keeping recent events available. How would you implement it?</li>
+<li>Your Kafka cluster must support 100 TB of event retention. What design considerations would you make?</li>
+<li>A consumer takes 10 minutes to process a message, causing frequent rebalances. How would you solve this?</li>
+<li>A service receives traffic spikes only during business hours. How would you optimize infrastructure costs?</li>
+<li>Your services are generating millions of logs per day. How would you design centralized logging and log retention?</li>
+<li>You need to implement a feature that spans multiple microservices but must be released gradually. How would you design it?</li>
+<li>During a database migration, one microservice has already migrated while others still use the old schema. How would you handle compatibility?</li>
+<li>A service needs customer data from three different microservices. How would you avoid excessive network calls and improve performance?</li>
+<li>How would you handle version compatibility between old and new Kafka consumers?</li>
+<li>How would you migrate a monolithic banking application into microservices step by step?</li>
+<li>How would you handle long-running event processing in Kafka consumers?</li>
+<li>You need to skip poison messages without stopping the entire consumer. How would you implement it?</li>
+<li>You need retry logic with exponential backoff for failed events. How would you design it?</li>
+<li>A database update succeeds, but Kafka event publishing fails. How would you ensure consistency?</li>
+<li>Producer throughput is low despite high hardware capacity. How would you tune Kafka producer performance?</li>
+<li>How would you secure sensitive banking events flowing through Kafka?</li>
+<li>How would you design high availability for banking microservices across multiple regions?</li>
+<li>A rollback is required when one step in a distributed flow fails. How do you design rollback logic?</li>
+<li>How would you design a resilient customer onboarding system using Microservices and Kafka?</li>
+<li>How would you design a notification microservice that can handle millions of events daily?</li>
+<li>You need to aggregate data from multiple microservices into a single response. Which design pattern would you use?</li>
+<li>Your microservice database is becoming a bottleneck due to heavy read traffic. How would you improve performance?</li>
+<li>Your AccountService depends on CustomerService, but CustomerService becomes slow intermittently. How would you prevent cascading failures?</li>
+<li>A service is down. How will you prevent cascading failure?</li>
+<li>How would you redesign the communication architecture between these services to achieve high throughput, scalability, and fault tolerance?</li>
+<li>How will you design horizontal scaling using Docker &amp; Kubernetes?</li>
+<li>How will you handle timeout and fallback responses?</li>
+<li>How will you implement retry mechanism between services?</li>
+<li>How will you reduce database load in microservices?</li>
+<li>How will you ensure eventual consistency in your system?</li>
+<li>How will you implement Saga Pattern (Choreography vs Orchestration)?</li>
+<li>How will you design a distributed transaction in microservices?</li>
+<li>Your microservice crashes after consuming a corrupt message. How would you prevent system-wide failure?</li>
+<li>After deployment, consumers are not receiving messages. What steps would you check first?</li>
+<li>You have multiple consumers in the same group. How does Kafka ensure load balancing?</li>
+<li>Messages are getting lost after service restart. What could be the reason and how would you solve it?</li>
+<li>How would you migrate from synchronous REST communication to Kafka-based event-driven architecture?</li>
+<li>A consumer is processing duplicate messages. How would you ensure idempotency?</li>
+<li>You need to send transaction events from TransactionService to NotificationService asynchronously. How would you design this using Kafka?</li>
+<li>How would you handle distributed transactions during fund transfer between two services?</li>
+<li>How would you implement distributed tracing across multiple microservices to debug production issues?</li>
+<li>You need to implement service discovery in a dynamic cloud environment. What approach would you use and why?</li>
+<li>Your application memory keeps increasing over time. How would you detect memory leaks?</li>
+<li>You need to enrich events by calling another microservice. How do you avoid latency issues?</li>
+<li>A consumer crashes after processing a message but before committing offset. What happens and how do you handle it?</li>
+<li>Producer crashes mid-send. How do you ensure no data loss?</li>
+<li>You want to decouple Order Service from Payment Service using Kafka. How would you design the event flow?</li>
+<li>How do you handle version mismatch between calling and called services?</li>
+<li>How would you implement retries without causing duplicate processing?</li>
+<li>How do you design a transaction validation system to check fraud, limits, and compliance before initiating transfers?</li>
+<li>IMPS transfer is successful but customer balance is not updated. How would you trace the issue?</li>
+<li>How would you design masking for account numbers, so only last four digits are visible?</li>
+<li>Mini-statement API is taking too long due to huge transaction data. What optimizations would you apply?</li>
+<li>Account balance is not updating correctly after multiple concurrent transactions. How will you ensure data accuracy?</li>
+<li>You must design a workflow where Aadhaar OTP verification, KYC check, and account creation must happen sequentially. How will you design this flow?</li>
+<li>Your service must call the RBI/UPI system, but the downstream API is slow. How will you implement retry + circuit breaker?</li>
+<li>Your banking API must comply with PCI-DSS. What changes must be applied at system level?</li>
+<li>You need to implement OTP-based 2FA for high-value transactions. What cases must you handle?</li>
+<li>Loan EMI records are inconsistent because of failures in a scheduler job. How do you fix &amp; validate this?</li>
+<li>Loan interest calculation differs based on loan type (home, vehicle, personal). How will you design a flexible calculation module?</li>
+<li>A bank wants to provide real-time account balance updates after every transaction. How will you design this architecture?</li>
+<li>A customer updates their Aadhaar address; how do you ensure the changes reflect consistently across all systems (CRM, Loan, Savings)?</li>
+<li>The system rejects customer KYC due to inconsistent data from third-party API. How will you ensure data validation + reconciliation?</li>
+<li>During onboarding, PAN verification fails for some users but works for others. How would you debug and implement fallback logic?</li>
+<li>You have multiple beans implementing the same interface. How do you dynamically select which bean to autowire based on config?</li>
+<li>You need to coordinate a distributed transaction (e.g. money transfer across services). How would you approach it (e.g. Saga, two-phase commit)?</li>
+<li>A service fails but its dependent service must still proceed. How would you implement fallback or degrade gracefully?</li>
+<li>One microservice must maintain session state (sticky). How do you scale or avoid statefulness?</li>
+<li>Some services share a common domain model. How do you avoid coupling via shared libraries?</li>
+<li>A microservice needs to broadcast a state change event to others. Which messaging pattern would you use?</li>
+<li>You observe latency spikes when one service calls many downstream services. How would you mitigate that?</li>
+<li>You want to monitor health (database connectivity, external APIs). How do you create custom health indicators in Spring Boot Actuator?</li>
+<li>One external API is slow and occasionally fails. How would you configure a timeout and fallback using RestTemplate or WebClient?</li>
+<li>You wish to integrate with a message broker (e.g. RabbitMQ or Kafka) for asynchronous tasks. How would you set up producers/consumers in Spring Boot?</li>
+<li>You need to support file upload (multipart) and store files either on disk or in S3, based on config. How will you implement that?</li>
+<li>You want to monitor performance metrics (response times, error rates). How will you integrate with Micrometer / Actuator?</li>
+<li>You have multiple microservices, each with its own Spring Boot app. You want to centralize configuration (e.g. DB URLs). How do you set up Spring Cloud Config or similar?</li>
+<li>You detect that some requests take much longer because of large database joins. How might you use @Transactional boundaries or lazy loading to optimize?</li>
+<li>Your application needs to send emails asynchronously after certain events. How would you design that?</li>
+<li>You must restrict certain API endpoints to users with certain roles—how do you configure method-level security (e.g. @PreAuthorize) in Spring Boot?</li>
+<li>You need to delay initialization of certain beans until they are first used. How do you make beans lazy in Spring Boot?</li>
+<li>Your system must detect and handle deadlocks at runtime (or preempt them). How would you approach that?</li>
+<li>You have a large in-memory data structure; you want to serialize portions on demand to disk. How would you manage memory vs IO concerns?</li>
+<li>You need to run a Spring Boot microservice with auto-scaling. How would you design the architecture on AWS?</li>
+<li>You need to secure communication between microservices. What strategies would you use?</li>
+<li>You added a new service to your microservices architecture but other services can't call. What could be issue?</li>
+<li>A DB Query inside your Spring boot API is slow .what step will you make to identify &amp; fix it?</li>
+<li>How do you Improve the performance of complex Joins in Spring boot (JPA / SQL)?</li>
+<li>How do you restrict access to API based on roles using Spring Security?</li>
+<li>How do you Secure internal microservices Communication in Spring Boot?</li>
+<li>How Would you handle Service failure in microservices chain?</li>
+<li>How to Secure Sensitive Data in request and response body?</li>
+<li>You have 10+ Microservices running in production. when something break, it's hard to trace the error. What is your approach?</li>
+<li>How Would you ensure reliability when order service calls payment service and face intermittent network failures ?</li>
+<li>How do you manage user authentication and authorization across multiple microservices?</li>
+<li>If the bank wants to expose account balance details via an API, how would you secure this endpoint so only authenticated customers can access it?</li>
+<li>How do you secure a REST API endpoint in Spring Boot?</li>
+<li>How do you handle configuration management in Spring Boot microservices across environments?</li>
+<li>How do you scale a single microservice independently in a production environment?</li>
+<li>How would you handle shared data between multiple microservices?</li>
+<li>Your app's image upload feature is very slow. How will you improve it?</li>
+<li>A Java application in production is throwing ConcurrentModificationException. What could be the cause and how do you fix it?</li>
+<li>You have a collection of employee records that must remain sorted as new employees join. Which data structure will you choose and why?</li>
+<li>If a file upload request is sent multiple times due to slow or no API response, how would you handle it to ensure that the file is not uploaded or processed more than once?</li>
+<li>In your application, multiple threads need to update a shared counter. How would you handle race conditions?</li>
+<li>You want to reduce database calls by implementing caching. Which caching mechanism in Spring Boot would you use?</li>
+<li>You need to secure a few endpoints with JWT while keeping others public. How will you configure Spring Security?</li>
+<li>A downstream service is failing frequently. How would you add a retry mechanism in Spring Boot?</li>
+<li>A new version of a microservice introduces breaking changes. How do you ensure backward compatibility?</li>
+<li>Your Node.js application needs to work with PostgreSQL, MongoDB and Redis. How would you manage multiple databases?</li>
+<li>You have a notification system serving 10 million users. A user triggers an important notification, but Kafka is temporarily unavailable, some consumers are down, and the notification provider is timing out. Users must NOT receive duplicate notifications. How would you design this?</li>
+<li>WhatsApp Status expires after 24 hours, and assume 3 billion status updates are created every day. A single cron job to delete all expired statuses could overwhelm the database. How would you design it?</li>
+<li>Your Kafka producer is pushing 5,000 messages/sec but your consumer can handle only 500. How would you identify the bottleneck, fix the lag, and prevent it from happening again?</li>
+<li>You have 5 EC2 instances running your application. One handles the Payment Service and crashes in the morning while users keep sending payment requests. How would you design the system so that a single EC2 failure does not bring down the entire Payment Service?</li>
+<li>You're booking a movie ticket on BookMyShow. Only 2 seats are left, 100K users try to book them, your Payment Kafka topic receives huge traffic, and Broker 2 crashes. How will you handle this?</li>
+<li>Your application has been running perfectly for 6 years, but suddenly P95/P99 latency increased and nothing was intentionally changed. How would you find out why this happened?</li>
+<li>You have built a Netflix-like application supporting 100K users. Tomorrow, traffic can grow to 5 million users. How would you scale the system?</li>
+<li>Your Order Service handles 50K requests/sec. The Payment Service becomes extremely slow (200ms to 10 seconds) while traffic stays at 50K/sec. You know timeout, retry, and circuit breaker — but when would you use which one?</li>
+<li>Redis is finally back online after being down, and now you have 1 million cache keys to rebuild. How would you handle this?</li>
+<li>A customer clicks Pay, the payment gateway processes it, but suddenly your server loses connectivity. How do you know whether the payment succeeded or failed?</li>
+<li>Your API is handling 10M requests. Suddenly Redis goes down. What happens? Will all the traffic hit the Primary DB? How would you prevent a cache stampede?</li>
+<li>Latency increased and you suspect the database — but it could be Node.js, Redis, network, or the database. How do you find out where the real bottleneck is?</li>
+<li>What is the difference between HTTP and HTTPS?</li>
+<li>Your API traffic grew from 1K requests to 10M requests. What would you change in the architecture?</li>
+<li>Your API triggers a long-running task. The user waits too long and clicks Cancel or closes the request, but the backend task is still running. How would you handle it?</li>
+<li>You know Session, JWT, OAuth, API Keys and mTLS. How would you decide which one to use?</li>
+<li>How many ways can you authenticate an application apart from JWT?</li>
+<li>Design a Rate Limiter for an API handling 50K requests/sec across multiple servers.</li>
+<li>You need to add a Rate Limiter to your API. You have 4 options: Fixed Window, Sliding Window, Token Bucket, and Leaky Bucket. Which one would you choose?</li>
+<li>You scaled from 2 EC2 instances to 20, but now your database CPU is at 95%. What would you do?</li>
+<li>Your API normally handles 1,000 RPS. Suddenly traffic becomes 10x. At the same time, Redis starts missing heavily and most requests hit your primary database. How would you protect the database?</li>
+<li>You have MySQL, NoSQL, and Object Storage available. How would you decide where your application's data should go?</li>
+<li>Why does the user see "Payment Successful" instantly, but the bank SMS arrives 2 minutes later?</li>
+<li>You have a dating app with Normal Users (5 actions/day) and VIP Users (20 actions/day). How would you design this so users can't bypass the limit?</li>
+<li>If your DB handles 500K RPS but suddenly receives 10M RPS because Redis is down, how would you design the system to survive?</li>
+<li>You have 100M+ users and 8 database shards. During a Big Billion Sale, traffic suddenly jumps 10x and one shard becomes a hot shard. How would you prevent or resolve this?</li>
+<li>How would you scale a database from 1M to 10M+ users?</li>
+<li>You paid ₹10,000, the payment failed due to a network issue, you try again, but suddenly ₹20,000 is deducted. How can this happen?</li>
+<li>How does YouTube upload a 100GB video without restarting when your internet disconnects?</li>
+<li>Amazon uses separate databases for every microservice — but how do they keep all databases consistent?</li>
+<li>How does Hotstar handle 10 million users during IPL without crashing?</li>
+<li>How does Instagram show 100K story viewers instantly?</li>
+<li>A user adds an item to their cart on their phone, and at almost the same time opens their laptop. The laptop immediately shows the updated cart without a page refresh. Walk me through the architecture you would use to achieve cross-device, real-time cart synchronization.</li>
+<li>How are tokens converted into vectors before self-attention?</li>
+<li>Your RAG system has been stable in production for months. Suddenly, answer accuracy drops significantly. The code hasn't changed, the LLM hasn't changed, and retrieval is still returning the correct documents. Why might the RAG system still be producing worse answers, and how would you investigate the root cause?</li>
+<li>Your LLM-powered application is performing at 500ms latency in production, but as traffic scales, latency increases to 2 seconds. How would you diagnose the bottleneck and bring the latency back down?</li>
+<li>If HTTPS encrypts the request, how does the server decrypt it? Where does the encryption key come from, and how is it securely shared?</li>
+<li>Passwords have worked for decades. So why is the whole industry switching to Passkeys?</li>
+<li>Your LLM gets the same question 100 different ways. How do you design a cache for it?</li>
+<li>What's the difference between an API Gateway, a Load Balancer, and a Reverse Proxy? When would you use each?</li>
+<li>Both UUID and auto-increment give unique IDs. So why can UUIDs make your database slower?</li>
+<li>Three servers. One scheduled job. Three emails. Why—and how do you fix it?</li>
+<li>A column currently allows NULL and has 1 million existing records. The business now requires it to be NOT NULL. What would you do?</li>
+<li>If an LLM already has extensive knowledge, why would you add RAG to your AI application? What problem does RAG actually solve?</li>
+<li>Your API returns 1 million records. How will you design pagination?</li>
+<li>If JWT is stateless, why would you still need a server-side session?</li>
+<li>If static methods are faster and don't require object creation, why don't we make every method static?</li>
+<li>Your table has 500 million rows, and you need to change a column's data type. The application can't have any downtime. How would you do it?</li>
+<li>Three developers say their commits disappeared after your git push --force. What do you do next?</li>
+<li>How do you secure an MVC application against CSRF, XSS, and SQL Injection?</li>
+<li>A developer accidentally pushed a .env file with production secrets to a public GitHub repository. What's the first thing you would do?</li>
+<li>Your homepage takes 5 seconds to load in production. What's the first thing you would cache—and why?</li>
+<li>Can you explain the complete MVC request life cycle from the moment a user enters a URL until the response is returned?</li>
+<li>What is an LLM Gateway, and why do companies use it?</li>
+<li>How do you manage secrets in production (API keys, passwords, tokens, etc.)?</li>
+<li>What happens if Redis suddenly crashes? Does your entire application go down?</li>
+<li>If anyone can decode a JWT token, why is it still secure and used everywhere?</li>
+<li>Millions of users are clicking the Like button at the same time. How would you ensure the like count is updated correctly without losing any likes?</li>
+<li>After deployment, your application starts getting "Access Denied" while reading files from Amazon S3. What could be the reason?</li>
+<li>CPU usage suddenly jumped to 100%. The application is responding very slowly, and users have started reporting issues. Where would you start investigating?</li>
+<li>Yesterday, your SQL query ran in 2 seconds. Today, the same query takes 2 minutes. What changed?</li>
+<li>If JWT is stateless, how do companies immediately block a stolen token?</li>
+<li>Two users are accessing your API with the exact same JWT token. Is that possible?</li>
+<li>If Azure API Management already secures your APIs, why do backend APIs still validate JWT tokens?</li>
+<li>I accidentally executed a TRUNCATE command. Can I still ROLLBACK the changes?</li>
+<li>Can JWT work without OAuth?</li>
+<li>What happens if your JWT token expires in the middle of an API request?</li>
+<li>If Kafka guarantees delivery, why do we still need a Dead Letter Queue (DLQ)?</li>
+<li>What happens if you remove the PRIMARY KEY from a table with 100 million records?</li>
+<li>If JSON is so popular, why do companies still use XML in some systems?</li>
+<li>If passwords are stored as hashes and Google never knows your actual password, how can it still tell you this password is too weak?</li>
+<li>Why do we need GitHub if Git already exists?</li>
+<li>What problems does GraphQL solve that REST APIs cannot?</li>
+<li>You need to delete 100 million rows from a table. Will you use DELETE or TRUNCATE?</li>
+<li>Your database has grown to 10 TB and receives millions of requests daily. Would you use Sharding, Replication, or both? Explain your architecture and reason.</li>
+<li>What is the difference between COUNT(*) and COUNT(column_name), and which one performs better?</li>
+<li>How would you design a "Notify Me When Available" system for out-of-stock products? Which design pattern would you use and why?</li>
+<li>How does OFFSET/FETCH work in SQL pagination?</li>
+<li>Two transactions are waiting for each other forever. What is this situation called and how would you resolve it?</li>
+<li>I don't know your password. I don't know your username. Yet I logged into your application. How?</li>
+<li>How would you fetch records 101-110 from a table containing millions of rows?</li>
+<li>A hacker steals your JWT token. You immediately log out. But the hacker is still able to access your account. How is that possible, and what would you do to stop it?</li>
+<li>If two users update the same record at the same time, how would you prevent data loss?</li>
+<li>Your database server suddenly crashes at midnight. What's your first action as an engineer?</li>
+<li>You say your application is highly available. But what happens if the load balancer itself goes down? How would you design around that?</li>
+<li>30% of your API requests contain null values and your app crashes. What will you do?</li>
+<li>JWT is stateless. How would you implement logout, and more importantly, logout from all devices?</li>
+<li>Payment is successful and booking is created, but seat reservation failed. Would you refund the customer, cancel the booking, or do something smarter?</li>
+<li>You added caching to make the application faster, but now the system is slower. How is that possible?</li>
+<li>Database has new data, but cache still has old data. What will you do?</li>
+<li>Would you store JWT in LocalStorage or HttpOnly cookies? Why?</li>
+<li>A customer places an order, but your server crashes before sending a response. Did the order go through or not?</li>
+<li>If you need to call multiple independent APIs, would you call them sequentially or in parallel? Why?</li>
+<li>If Abstraction already hides details, then why do we still need Encapsulation in OOP design?</li>
+<li>If WHERE and HAVING are both used for filtering, what is the difference between them and which is better in performance in SQL?</li>
+<li>You request an OTP, and it expires in exactly 30 seconds. No matter when you request it, the timer is always precise. How does this work technically?</li>
+<li>Your application needs to run a task every 5 minutes. How would you schedule it in production?</li>
+<li>Attackers bypass rate limiting using multiple IPs. How would you protect your API in production?</li>
+<li>JWT token is never stored on server. Then how does server verify it's valid?</li>
+<li>How do you decide whether microservices should communicate using REST APIs, gRPC, or messaging systems like Kafka/RabbitMQ?</li>
+<li>You need to implement authentication in your app. Which one will you use: JWT or OAuth?</li>
+<li>If mobile data and Wi-Fi are OFF, how does Google Maps still know where you are?</li>
+<li>What happens when you type google.com in the browser and press Enter?</li>
+<li>Why should we use async/await in APIs?</li>
+<li>What is wrong with the SQL query DELETE FROM Employee WHERE salary &lt; AVG(salary) intended to delete employees whose salary is below the average?</li>
+<li>A junior engineer runs an ad-hoc query in Snowflake/BigQuery, and your monthly cloud budget burns out in 45 minutes. What query pattern caused this, and what safeguard was missing?</li>
+<li>What happens if you execute a DELETE statement on a parent table containing millions of rows referenced by child tables?</li>
+<li>You discover that a production table was corrupted 6 hours ago, but the issue was only noticed now. How would you determine the exact point at which corruption began?</li>
+<li>What happens if you execute a DELETE statement without a WHERE clause on a 100-million-row table?</li>
+<li>A DELETE statement was executed against the wrong database because two databases had similar names. What would you check immediately?</li>
+<li>A developer accidentally executes DROP TABLE Customers in production. The table contains 10 years of critical customer data. What would you do next?</li>
+<li>A developer deletes 25 million rows from a production table. The transaction has already been committed. Is the data recoverable? What would you check first?</li>
+<li>A migration script ran twice by accident and duplicated every single row in your orders table. 12 million rows became 24 million. How do you clean this up?</li>
+<li>A stored procedure inserts duplicate rows every time it fails halfway through and gets rerun. The table has no primary key. How do you find and remove the duplicates without deleting genuine repeat orders?</li>
+<li>A DELETE query removed the wrong 2 million records, but you don't know exactly which records were deleted. How would you identify and restore them?</li>
+<li>You dropped a production table by mistake. The table contained 500 million rows. What would you do in the first 5 minutes?</li>
+<li>A developer accidentally dropped a production table containing 5 years of transaction data. There is no replica available. How would you recover it?</li>
+<li>You meant to update 1 customer record, but missed the WHERE condition. Every single row's email is now set to test@gmail.com. The transaction already committed. What's your step-by-step fix?</li>
+<li>You accidentally run an UPDATE without a WHERE clause in production. Millions of rows are modified. How would you determine whether the operation can be rolled back?</li>
+<li>You intended to update 500 rows, but your query updated 5 million. How would you determine exactly which records were affected?</li>
+<li>You created an index on a column with 500M rows, but EXPLAIN ANALYZE shows a sequential/table scan. Why did the optimizer ignore it?</li>
+<li>A query suddenly became 100x slower in production, but it works perfectly in development. What would you investigate?</li>
+<li>Your database has 1 billion rows. A query that took 20 ms yesterday now takes 15 seconds. The SQL query hasn't changed. What happened?</li>
+<li>You accidentally ran a DELETE query in production without a WHERE clause. 10 million rows are gone in 3 seconds. How do you recover from this?</li>
+<li>You are swapping embedding models on 200 million vectors in production. Search cannot go down, and you have one index. How would you plan the migration?</li>
+<li>Your model has a 128K context window. The contract is 900,000 tokens. The user asks one question about clause 340. How would you handle it?</li>
+<li>One sentence from a user made your chatbot print its entire 900-word system prompt, including an internal URL. What is your plan for Monday?</li>
+<li>Your model scores 0.94 offline and 0.71 in production. Same model, same feature names, same week. What did you get wrong?</li>
+<li>Your GPU bill went from $8,000 to $24,000. Traffic is flat. Nobody deployed anything. How do you find the money?</li>
+<li>Explain attention like you run sales, not engineering. Then tell me why doubling the context window costs 4x, not 2x.</li>
+<li>A bad model shipped 6 hours ago and approved 12,000 loans. You rolled it back. Your CEO asks if the problem is fixed. What is your answer?</li>
+<li>Your RAG app hit the front page. 50x traffic overnight. Something breaks in the next 10 minutes. Which piece breaks first, and why that one?</li>
+<li>Same prompt, same input. It worked yesterday, today it does not. Nothing was deployed in 6 days. Give me four reasons.</li>
+<li>You have 50 fine-tuned models, 14GB each. You have 4 GPUs. One pod per model does not fit. How would you design a system that does?</li>
+<li>Your team wants to ship a feature. You had 4 outages this month. What is the exact number that decides who wins that argument?</li>
+<li>At 3 AM, your inference p99 just tripled. CPU is sitting at 20 percent. Nothing was deployed today. Where do you look?</li>
+<li>You have 1 billion embeddings. The index wants 3TB of RAM. Your biggest machine has 128GB. Search still has to answer in 100ms. How?</li>
+<li>Your bot keeps getting the company refund policy wrong. Your lead says fine-tune it on 10,000 support tickets. You disagree. Why?</li>
+<li>The same Terraform apply ran clean in staging. In prod it replaced the database. 40GB gone. Give me every way that happens.</li>
+<li>Your chatbot remembers every message. By turn 200, one reply costs 40x what turn 1 did. How would you design memory that survives 100 million users?</li>
+<li>Your RAG bot cited a policy document in 400 customer emails. Legal went to find it. It does not exist. Where do you look first?</li>
+<li>Your agent has called the same tool 400 times in 6 minutes and burned $80. It thinks it is making progress. How do you stop it?</li>
+<li>Your AI agent has a company card and a $500 cap. A user hides "ignore your budget" inside a PDF it reads. How do you stop it?</li>
+<li>You changed one line of a prompt. 2 million users get the new one tomorrow. No labels, no correct answer. How do you prove it is better?</li>
+<li>Your accuracy dashboard has been flat green for 3 weeks. Support tickets tripled in the same 3 weeks. Both numbers are correct. Explain.</li>
+<li>What happens if Redis crashes before data is persisted to disk?</li>
+<li>How does Redis persistence work? What's the difference between RDB and AOF?</li>
+<li>What data structures does Redis provide, and when would you use each one?</li>
+<li>Stored procedures can run faster than application-side queries. So why do many modern teams avoid them?</li>
+<li>You committed your changes, but your teammate can't see them. Are they actually in Git?</li>
+<li>The LLM keeps ignoring the output format. Should you spend $1,000 fine-tuning it?</li>
+<li>Your AI agent can delete files and spend money. How do you prevent it from taking actions it shouldn't?</li>
+<li>How does Redis achieve such high performance and low latency?</li>
+<li>How does an LLM like ChatGPT or Gemini predict the next token when generating an answer?</li>
+<li>Aadhaar has over 1.3 billion biometric records. How can it check your fingerprint against all of them in under 3 seconds?</li>
+<li>Your RAG system worked perfectly in production. Three months later, it starts retrieving irrelevant results. You haven't changed the code. What went wrong?</li>
+<li>If NoSQL databases are faster, why do banks and large enterprises still rely on SQL databases?</li>
+<li>Python has garbage collection. So why does a Python program still keep using more and more memory?</li>
+<li>A user uploads a 5 GB video. How would you handle it without crashing your API server?</li>
+<li>How does Zomato prevent two delivery partners from accepting the same order?</li>
+<li>User A logs in and sees User B's private data. Your code has no obvious bug, and it only happens under heavy traffic. How could this happen?</li>
+<li>Your app is painfully slow, but CPU and memory usage look normal. Nothing seems overloaded. So what could be causing the slowdown?</li>
+<li>You need to process a 5 GB CSV file, but your server has only 2 GB of RAM. Loading the entire file crashes the server. How would you process it?</li>
+<li>At peak traffic, your database starts throwing 'too many connections' and the entire system goes down. But the database can handle much more traffic. What went wrong?</li>
+<li>Your payment API times out, but the money may have already been deducted. How would you design the system to handle this safely?</li>
+<li>Your API is working fine, but suddenly its response time jumps from 100ms to 5 seconds. What would you check first?</li>
+<li>Your PDF contains tables, images, and text. After chunking, the relationships between them are lost. How would you design a RAG pipeline that preserves this context?</li>
+<li>If Redis uses a single main thread, why can it be faster than many multithreaded databases?</li>
+<li>Your LLM API keeps hitting rate limits in production. How would you design a rate limiter to control and manage the traffic?</li>
+<li>If an LLM has a 1-million-token context window, does that eliminate the need for RAG?</li>
+<li>Encryption and hashing both transform data. So why do we hash passwords instead of encrypting them?</li>
+<li>A user asks you to delete their account. You execute a DELETE operation, but you may have just created a security and legal problem. How?</li>
+<li>How did you reduce database query time from 5 seconds to just 50 milliseconds?</li>
+<li>How would you implement a blue-green deployment strategy for a microservices application?</li>
+<li>Your Redis cache crashes at 2 AM, and suddenly your entire application goes down. Redis was supposed to be just a cache. Why did everything fail?</li>
+<li>What would you do if a bug reaches production but you can't reproduce it on your local machine?</li>
+<li>You've built a RAG system. How would you deploy it to production?</li>
+<li>We already have SQL and NoSQL databases. So why did AI create the need for an entirely new type of database called a 'vector database'?</li>
+<li>If adding more servers (horizontal scaling) can handle increasing traffic, why do teams still invest in bigger servers (vertical scaling)?</li>
+<li>If LLMs are known to hallucinate, why would you trust another LLM to evaluate their outputs? How do you make an LLM-as-a-Judge reliable?</li>
+<li>Bitly turns huge URLs into just 7 characters. With billions of links, how does it avoid running out of unique short URLs or generating duplicates?</li>
+<li>Everyone talks about LangChain and LangGraph, but what do they actually do?</li>
+<li>You have an array of 10 million integers, but only O(1) extra memory is available. Find the duplicate number. No HashSet. No extra array. How would you solve it?</li>
+<li>Your application hangs in production, and a thread dump shows a deadlock. How would you troubleshoot and fix it?</li>
+<li>Your RAG knowledge base is updated frequently and requires versioning. How would you design and manage it?</li>
+<li>Why does a test case pass locally but fail in CI/CD every single time?</li>
+<li>How does Amazon deploy code to production without logging users out?</li>
+<li>A bad deployment corrupted user sessions. How would you safely log everyone out?</li>
+<li>If vector search finds similar documents, why isn't the closest vector always the best answer?</li>
+<li>You're given a dataset with 40% missing values. What would you do?</li>
+<li>You're fine-tuning an LLM. How do you decide when to stop training?</li>
+<li>There are three switches outside a room and one light bulb inside. You can enter the room only once. How would you identify which switch controls the bulb?</li>
+<li>Your API latency suddenly increases from 80 ms to 8 seconds, but the CPU, memory, and database metrics all look normal. How would you investigate and debug the issue?</li>
+<li>A user is uploading a 5 GB video to Google Drive. The internet disconnects when the upload reaches 60%. When the connection is restored, how does the upload resume from 60% instead of starting over from 0%?</li>
+<li>A WhatsApp group has 1,024 members. You send a single message. Does the system perform 1 database write or 1,024 database writes?</li>
+<li>Your internet speed suddenly drops from 100 Mbps to 2 Mbps. How does YouTube switch from 1080p to 360p without restarting the video?</li>
+<li>How would you design WhatsApp's 'Delete for Everyone' feature so it still works even if the recipient is offline for 3 days?</li>
+<li>How would you design the IRCTC Tatkal booking system to handle 2 million users competing for 500 seats without double-booking?</li>
+<li>How would you design a real-time UPI fraud detection system that blocks fraudulent transactions in under 100 ms for 500 million users?</li>
+<li>Design a notification system that sends Email, SMS, and Push Notifications. How would you prevent one channel's failure from affecting the others?</li>
+<li>A user successfully jailbreaks your LLM in production. How would you detect the attack in real time and mitigate its impact?</li>
+<li>Your microservice has become slow due to multiple external API calls. How would you improve its performance?</li>
+<li>Your API Gateway is up, and all your microservices are healthy. Why is every request still returning 503 Service Unavailable?</li>
+<li>Your API returned 200 OK, but the data never made it to the database. How could this happen?</li>
+<li>This function has O(1) time complexity, yet it's slower than an O(n) solution in production. How is that possible?</li>
+<li>Why does adding more servers sometimes make a system slower instead of faster?</li>
+<li>WhatsApp chats are end-to-end encrypted. So, how does 'Delete for Everyone' actually work?</li>
+<li>What's the difference between git pull and git fetch?</li>
+<li>Why does an LLM take much longer to generate the first token than every token that follows?</li>
+<li>Which Git command is the safest way to undo a commit that has already been pushed to a shared branch?</li>
+<li>What are the different types of AI guardrails?</li>
+<li>An AI agent is about to go live, but 1% of its responses violate company policy. What would you do?</li>
+<li>How can you work on two Git branches simultaneously without constantly switching branches or using git stash?</li>
+<li>GitHub hosts billions of repositories. How can cloning a large repository begin within seconds?</li>
+<li>A user deletes their account while a payment is still being processed. How would you design the system to handle this scenario?</li>
+<li>Your branch is 200 commits behind main. What would you do: merge or rebase?</li>
+<li>How does HNSW search millions of embeddings so quickly without scanning the entire vector database?</li>
+<li>Your AI agent keeps getting stuck in an infinite loop in production. How would you identify the root cause and fix it?</li>
+<li>There are no traffic cameras, road sensors, or police officers nearby. So how does Google Maps know there's traffic, even at 3 AM?</li>
+<li>You're working in a monorepo with 50,000 files, but you only need 200 of them. How would you reduce the clone time?</li>
+<li>A deployment completed successfully, but users still can't access the application. What would you check first?</li>
+<li>How would you fix a bug in a commit from five commits ago without cluttering your Git history?</li>
+<li>Your Linux server has plenty of free CPU and memory, but applications are still responding very slowly. What could actually be wrong?</li>
+<li>You've built a RAG system. How would you evaluate whether it's actually working?</li>
+<li>Your RAG chatbot is generating incorrect answers even though the correct information exists in the source documents. How would you improve its accuracy?</li>
+<li>You accidentally close a browser tab, and Chrome instantly restores it using the 'Reopen Closed Tab' feature. Which data structure is likely being used behind the scenes? How would you design and implement this functionality?</li>
+<li>How does Gmail know an email is spam before you've even opened it?</li>
+<li>Your API takes 50 ms. Your database query takes 20 ms. CPU usage is only 15%. So why are users still waiting 5 seconds for a response?</li>
+<li>A user clicks 'Delete Account.' Why doesn't Instagram permanently delete 10 years of photos, messages, comments, likes, and other data instantly?</li>
+<li>Zerodha processes over 1 crore trades every day. Trade execution must happen with extremely low latency, as even a small delay can result in significant financial losses. How does Zerodha design its systems to handle such scale without performance bottlenecks or failures?</li>
+<li>Two AI agents need to communicate with each other. How can they verify that they're communicating with the legitimate agent and not a hacker impersonating it?</li>
+<li>Your Rapido app displays the message: '14 captains rejected your ride request.' Why would a company intentionally expose this information to users instead of hiding it?</li>
+<li>If models such as Gemini, Claude, and OpenAI already provide APIs, why does LangChain exist? What problem does it solve?</li>
+<li>A bank transfers ₹10,000 from Account A to Account B. The server crashes in the middle of the transaction. How does the banking system ensure that the money is neither lost nor duplicated?</li>
+<li>Tatkal booking opens at exactly 10:00 AM, and nearly 1 million users click 'Book Now' at almost the same time. Since everyone is competing for the same limited set of seats, how does IRCTC determine who gets the ticket?</li>
+<li>Your application stores passwords securely using hashing. If the database is leaked, why are users still advised to change their passwords immediately?</li>
+<li>You accidentally deployed a bug to production, and millions of users are affected. What would you do first?</li>
+<li>Your company has been hacked, and customer data may have been leaked. What immediate actions would you take?</li>
+<li>When a customer places an order on Amazon, how is inventory updated across millions of users in real time without causing overselling?</li>
+<li>Two users attempt to book the same movie seat at the exact same millisecond. Who gets the seat?</li>
+<li>A user forgets their password and requests an OTP 50 times within one minute. How would you prevent abuse?</li>
+<li>What is the Poison Pill problem in Kafka?</li>
+<li>You broke a monolith into microservices. Why did the system become slower?</li>
+<li>What measures would you take to protect APIs from unauthorized access in a microservices architecture?</li>
+<li>Why do large companies place an API Gateway in front of their microservices?</li>
+<li>The same API responds in 200 ms for users in the US, but takes 3 seconds for users in India. How would you fix global latency?</li>
+<li>You talk about sneakers once, and suddenly Instagram starts showing you sneaker ads everywhere. How does that happen?</li>
+<li>How do apps like Google Pay and PhonePe show your bank balance almost instantly, while many banking apps take much longer?</li>
+<li>Your application is slowing down due to 100K requests. Would you choose concurrency, parallelism, or async processing, and why?</li>
+<li>Your API is being flooded with 1 million fake requests. How would you survive a DDoS attack?</li>
+<li>How did JioHotstar handle 22 crore concurrent viewers during the PBKS vs RCB match without crashing?</li>
+<li>How would you design Instagram's new 'Instants' feature, where photos disappear after a single view?</li>
+<li>Your RAG chatbot accidentally leaked internal roadmap details to an external user. How would you prevent this?</li>
+<li>If a cache is faster than a database, why don't we store everything in the cache?</li>
+<li>Your LLM responses are sometimes brilliant and sometimes completely chaotic. You were told to 'just lower the temperature.' Is that enough?</li>
+<li>When you switch from Wi-Fi to mobile data mid-scroll on Instagram, nothing breaks. How does this work?</li>
+<li>Why does IRCTC often struggle during Tatkal booking at 10 AM, while Amazon handles massive sale traffic without crashing?</li>
+<li>You turn on Airplane Mode for 2 hours, then turn it off. Suddenly, 50 WhatsApp messages appear instantly. How did the server know you were offline the entire time?</li>
+<li>You have high GPU utilization, but your LLM API is struggling to handle many concurrent requests. What's going on?</li>
+<li>Your LLM API has high response times, but you can't upgrade to newer GPUs. What can you do?</li>
+<li>An Instagram post suddenly gets 1 million likes in under a minute. How does the like count update without crashing the system?</li>
+<li>On Amazon, only one item is left in stock. Two users click 'Buy Now' at the exact same time. How does the system decide who gets it?</li>
+<li>Why doesn't Netflix crash when 100 million users click 'Play' at the exact same moment a new episode is released?</li>
+<li>If you had to deploy an LLM to production tomorrow, what's the first step you'd take?</li>
+<li>How do you handle hallucinations in LLMs?</li>
+<li>Your model produces correct predictions locally but gives incorrect outputs after deployment. What could be the issue?</li>
+<li>Your AI workflow handles 5K+ requests per hour. How would you reduce both token costs and parsing overhead?</li>
+<li>Even with a RAG system in place, your LLM is hallucinating. How would you improve its factual accuracy?</li>
+<li>Your Python script takes 5 minutes to process data that should only take 3 seconds. You're using Pandas. What's the bottleneck?</li>
+<li>Users often ask vague or ambiguous questions, causing our RAG system to fail. How would you improve it?</li>
+<li>You download a movie on Netflix for offline viewing, but it disappears after 30 days. How does offline mode work?</li>
+<li>Your LLM API is taking 10 seconds to respond. How would you reduce the response time?</li>
+<li>Your LLM application is in production, and you're concerned about prompt injection attacks. How would you mitigate them?</li>
+<li>Your Python script crashes with an 'Out of Memory' error while processing a 10GB dataset, but you only have 8GB of RAM. How would you fix it?</li>
+<li>Your RAG system retrieves irrelevant chunks from long documents. How would you improve retrieval quality?</li>
+<li>Your Python script makes 100 API calls and takes a long time to run. How would you fix it?</li>
+<li>How does the 'typing...' indicator appear instantly on WhatsApp? Is a request sent to the server for every key press?</li>
+<li>If an OTP is valid for only 30 seconds and isn't stored on the server, how can the server still verify it?</li>
+<li>Your PyTorch model is 500MB and runs too slowly on a mobile device. How would you reduce its size and improve performance without retraining from scratch?</li>
+<li>How does a 75GB file become 20GB when compressed (zipped)?</li>
+<li>Why does an API work in Postman but not in the browser?</li>
+<li>When you close your laptop and open Slack on your phone, how does it show you as 'away' on one device and 'online' on the other?</li>
+<li>How does TikTok load videos seamlessly with every swipe, without buffering?</li>
+<li>A celebrity tweets, and it starts trending within 5 minutes. How does Twitter detect trends in real time?</li>
+<li>On YouTube, a video is available in multiple resolutions like 1080p and 144p. Does the server store separate files for each resolution?</li>
+<li>When you type a function name and tools like Cursor generate the entire function body in real time, how does the system do that?</li>
+<li>A tiny QR code can open a website, connect to Wi-Fi, or even enable payments. How does it store so much data?</li>
+<li>When you toggle dark mode once and every screen updates instantly, how does the app apply theming without restarting?</li>
+<li>When you order food and the app shows an estimated delivery time (e.g., '30 minutes') even before a rider is assigned, how is that prediction made?</li>
+<li>Why does Netflix block screen recording and display a black screen during playback?</li>
+<li>You can run a few containers using Docker, but when traffic scales to thousands of users, what role does Kubernetes play that Docker alone cannot handle?</li>
+<li>Users often think repeated searches cause flight prices to increase. From a system design perspective, what actually drives these price changes?</li>
+<li>How do you design an API that can handle millions of requests per second?</li>
+<li>Why does Uber generate a different OTP for every ride, while Rapido often uses the same OTP?</li>
+<li>When a user enters a credit card number and the frontend instantly marks it as valid or invalid without calling any backend API, how is this validation implemented?</li>
+<li>Your frontend is running on localhost:3000 and your backend on localhost:8000. Why do you get a CORS error?</li>
+<li>Explain the difference between a Large Language Model (LLM) and Retrieval-Augmented Generation (RAG) in simple terms.</li>
+<li>With 2+ billion users, how does Instagram instantly tell whether a username is available or already taken without scanning the entire database?</li>
+<li>Your friend sees 1,001 likes on the same Reel, but you see 999. Is someone wrong?</li>
+<li>How does Instagram load your feed in milliseconds without scanning billions of posts?</li>
+<li>Your monolith responded in 200 ms. After migrating to microservices, it takes 800 ms. What went wrong?</li>
+<li>Your Redis cache crashed. How do you stop your database from crashing next?</li>
+<li>Two users select the last available flight seat at the same time. How does only one booking succeed?</li>
+<li>A user is uploading a 50 GB file. The internet disconnects at 49.8 GB. How do you resume the upload instead of starting over?</li>
+<li>How does Netflix start streaming so quickly, even before the entire movie is downloaded?</li>
+<li>Your URL shortener suddenly gets 1 million clicks on the same link. How do you stop your database from crashing?</li>
+<li>You follow thousands of people. How does Instagram load your feed almost instantly?</li>
+<li>LinkedIn tells you instantly when someone views your profile. But what if they open it 10 times in one hour? How do you avoid sending 10 notifications?</li>
+<li>Your website needs 30 fields. Your mobile app needs only 5, but it's slow because the API still returns all 30. How would you fix it?</li>
+<li>Your database search takes 1,000 ms. But users expect results in under 100 ms. How would you fix it?</li>
+<li>A user types 'iPh'. How would your backend instantly suggest 'iPhone 16' without scanning millions of products in the database?</li>
+<li>You applied IP-based rate limiting, but the server still crashed during an attack. What went wrong?</li>
+<li>How do companies like Amazon return search results in milliseconds?</li>
+<li>Netflix deploys new code while millions of people are watching. How do they avoid downtime?</li>
+<li>What is the difference between package.json and package-lock.json? And why do we commit both to Git?</li>
+<li>Adding an index makes database queries faster. So what are the actual disadvantages of adding indexes?</li>
+<li>What actually happens when you send a prompt to an LLM? What happens between your message and the final answer?</li>
+<li>You found a critical bug in production. The proper fix takes 2 days. A workaround takes 2 hours, but doesn't fix the root cause. Release is in 4 hours. What do you do?</li>
+<li>A JWT is valid when an API request starts, but it expires while the request is still processing. Will the request fail?</li>
+<li>Your cache stores user data. Suddenly, the cache expires. 10,000 requests arrive for the same data. All of them hit the DB. The database crashes. How do you prevent this?</li>
+<li>Someone steals a user's JWT. The token says role: user. What if they change it to role: admin? Can they access the admin panel?</li>
+<li>What is the difference between Pass by Value and Pass by Reference?</li>
+<li>A user searches: laptop, laptop bag, laptop stand. Each search calls an API. But 'laptop' responds last. How do you prevent the old API response from showing in the UI?</li>
+<li>Polling vs SSE vs Webhooks: What's the difference? And when would you use each?</li>
+<li>Your cache hit rate is 99%. Why can your database still be overloaded?</li>
+<li>API Rate Limiting and Throttling sound the same. So what's the difference, and why do we need both?</li>
+<li>Your application gets 1 million requests. You have 10 servers. How does the load balancer decide which server handles each request?</li>
+<li>Two API requests are fired. Request A is slow, Request B is fast. But A returns after B. How do you prevent stale data from overwriting the latest result?</li>
+<li>React.js or Next.js? You're building a new application. Which one would you choose and why?</li>
+<li>Your system suddenly gets 1 million requests/sec. What breaks first? How would you handle it?</li>
+<li>A food delivery app has 1 million active orders. Every rider sends GPS updates every 5 seconds. How would you track everyone in real time without writing millions of updates directly to the database?</li>
+<li>Your application works perfectly with 1,000 concurrent users. At 100,000 concurrent users, requests start timing out even though CPU is only at 40%. What is the bottleneck?</li>
+<li>100 users are editing the same document at the same time. How does Google Docs prevent overwriting without locks?</li>
+<li>Your app generates 1 billion small 1KB files daily. You put them in S3. After 30 days your S3 bill is 5x more than storage size. Why?</li>
+<li>Your database says an order is PAID. Your payment gateway says FAILED. Which system do you trust, and how do you recover the order safely?</li>
+<li>Your database is healthy. Your API servers are healthy. Your network is healthy. Yet users in one region suddenly experience 10-second latency. What would you investigate first?</li>
+<li>Your API works perfectly for 99.9% of users. But users from one specific country suddenly get random 502 errors. Your servers and database look healthy. What could be happening?</li>
+<li>How would you design UPI AutoPay that deducts Netflix/Spotify every month at 2 AM even if your bank server is down at that exact time?</li>
+<li>How would you design Google Maps that shows red traffic instantly when a jam happens for 10 crore users looking at the same road?</li>
+<li>How would you design JioCinema that handled 3.2 crore users watching the World Cup Final live for free without buffering or crashing?</li>
+<li>How would you design a PhonePe/Paytm soundbox that says 'Rs 100 received' instantly even on 2G and never misses a payment?</li>
+<li>How would you design a WhatsApp group with 1 lakh members and unread count sync without lag?</li>
+<li>How would you design Zepto 10-minute delivery stock sync that never shows an out-of-stock item?</li>
+<li>How would you design UPI that handles 15 billion transactions per month without double-spending?</li>
+<li>How would you design a URL shortener like Bitly that also shows who clicked, from which city, and blocks fake bot clicks?</li>
+<li>How would you design an Aadhaar eKYC system that handles 1 billion authentications per day and can never go down?</li>
+<li>How would you design Ludo King/BGMI matchmaking for 1 million concurrent games with cheater detection?</li>
+<li>How would you design Truecaller to show 'Spam' caller name in 0.5 seconds before you even pick up the call?</li>
+<li>How would you design a Zerodha/Groww order matching engine that handles 1 million orders/sec when the market crashes 10% in 1 minute?</li>
+<li>How would you design Blinkit/Zepto inventory where 500 people have the same milk in their cart but only 5 are left in the dark store?</li>
+<li>You're designing an Undo feature for a document editor. Ctrl+Z restored it instantly. Which data structure would you choose and why? The app should not run out of memory and crash.</li>
+<li>You're in the middle of a feature branch with dozens of uncommitted changes. Suddenly, production needs an urgent hotfix. What do you do?</li>
+<li>You say the user is authenticated. But tell me exactly where is that authentication stored in backend memory?</li>
+<li>Your UPI payment failed, but money got deducted. Where did the money go? How do you handle this in production?</li>
+<li>How would you design a system that stores passwords securely?</li>
+<li>Everyone's talking about MCP Servers. What exactly are they?</li>
+<li>An IPL match hits the last over and millions refresh scores at the same second. How does the system not crash?</li>
+<li>Your search API must respond in under 100 ms, but your database takes 500 ms. How do you fix it?</li>
+<li>How do PhonePe and Paytm make sure your payment isn't lost even if the system crashes mid-transaction?</li>
+<li>As you move the map, Airbnb updates prices and homes in real time. How?</li>
+<li>How does a database find a record so quickly with millions of rows?</li>
+<li>How does HTTPS actually keep your data secure?</li>
+<li>How would you prevent duplicate records in your database?</li>
+<li>What happens when your database goes down?</li>
+<li>What actually happens when you click the Login button?</li>
+<li>UUIDs are random, so why is the chance of collision practically zero?</li>
+<li>How does Kafka ensure messages aren't lost or processed twice?</li>
+<li>What is CORS, and why does the browser block your API request?</li>
+<li>What happens when two users update the same record at the same time?</li>
+<li>Your production API suddenly becomes 10x slower. What do you check first?</li>
+</ol>
+</main>
+<script src="answers/payments.js"></script>
+<script src="answers/banking.js"></script>
+<script src="answers/security.js"></script><script>
+  const TOPICS = [
+    ['Idempotency & Payments', [1,83,138,154,167,172,236,309,479,498,503]],
+    ['Banking & Fintech Systems', [53,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,378]],
+    ['Authentication, JWT & Security', [2,119,126,129,130,160,161,182,190,194,195,199,201,206,207,208,210,211,215,224,226,231,235,240,243,245,315,316,332,380,388,422,463,465,497,499,509]],
+    ['Rate Limiting & API Protection', [162,163,168,242,385,394,456,470]],
+    ['Caching & Redis', [3,4,153,155,165,169,196,200,233,234,290,291,292,297,312,319,398,446,450,464,469]],
+    ['Microservices Architecture & Communication', [6,28,30,42,44,55,59,76,103,120,134,244,387,389,445]],
+    ['Resilience: Timeouts, Retries & Circuit Breakers', [7,19,29,57,58,61,62,101,125,128,152]],
+    ['Distributed Transactions, Saga & Consistency', [27,48,52,64,65,66,74,100,174,232,359]],
+    ['Kafka & Messaging', [18,34,35,36,37,43,45,46,47,49,50,67,68,69,70,71,72,73,78,79,80,81,104,147,212,386,511]],
+    ['API Design, Versioning & Compatibility', [5,9,31,41,82,143,159,189,214,217,453,468]],
+    ['Spring Boot & Java', [15,17,99,106,107,108,109,110,111,112,113,114,115,123,124,131,132,140,141,142]],
+    ['Concurrency, Locking & Race Conditions', [11,116,136,139,186,202,223,227,304,305,328,384,393,406,447,513]],
+    ['Databases & SQL', [56,63,121,122,144,164,166,170,171,185,187,192,205,209,213,218,219,220,222,225,239,249,251,265,266,267,293,301,317,454,460,505,507,508]],
+    ['Production Incidents & Data Recovery', [228,250,252,253,254,255,256,257,258,259,260,261,262,263,264,268,381,382,462]],
+    ['Performance, Debugging & Observability', [10,12,16,20,39,75,77,105,127,150,156,204,230,237,306,308,310,320,337,346,347,348,367,372,476,480,502,514]],
+    ['Scalability & High Availability', [8,38,51,60,102,118,133,148,151,158,229,323,350,390,437,471,474]],
+    ['Docker, Kubernetes, Cloud & CI/CD', [13,14,21,22,23,24,25,26,32,33,40,203,241,279,283,318,330,331,365,435,458,478]],
+    ['File Uploads & Storage', [135,173,303,338,448]],
+    ['System Design Problems', [54,145,146,149,177,325,341,342,343,344,396,452,455,475,482,483,484,485,486,487,488,489,490,491,492,493,494]],
+    ['How Popular Apps Work', [175,176,246,299,339,340,351,363,371,373,374,376,379,383,391,392,395,400,401,402,405,407,415,421,426,427,428,429,431,433,434,436,438,442,443,444,449,451,457,477,501,504]],
+    ['AI, LLMs & RAG', [178,179,180,183,188,198,269,270,271,272,273,274,275,276,277,278,280,281,282,284,285,286,287,288,289,295,296,298,300,311,313,314,321,322,324,326,329,333,334,335,345,353,355,356,361,362,368,369,375,377,397,399,403,404,408,409,410,411,412,414,416,417,419,423,430,441,461,500]],
+    ['Python & Data Processing', [302,307,413,418,420]],
+    ['Networking, Web & Frontend', [157,181,184,197,247,425,432,439,440,459,467,472,473,481,506,512]],
+    ['Git & Version Control', [193,216,294,352,354,357,358,360,364,366,496]],
+    ['Programming Fundamentals, DSA & Puzzles', [117,137,191,221,238,248,327,336,349,370,424,466,495,510]],
+  ];
+
+  const texts = Array.from(document.querySelectorAll('#questions li')).map(li => li.textContent);
+  const assigned = new Set(TOPICS.flatMap(([, nums]) => nums));
+  const unassigned = texts.map((_, i) => i + 1).filter(n => !assigned.has(n));
+  if (unassigned.length) TOPICS.push(['Miscellaneous', unassigned]);
+
+  const indexList = document.getElementById('index-list');
+  const sectionsEl = document.getElementById('sections');
+  const items = [];
+  const originals = [];
+  const sections = [];
+
+  TOPICS.forEach(([name, nums], t) => {
+    const id = 'topic-' + (t + 1);
+    const section = document.createElement('section');
+    section.id = id;
+    section.innerHTML = `<h2><span>${t + 1}. ${name}</span><a href="#index">↑ Topics</a></h2>`;
+    const ol = document.createElement('ol');
+    let answeredCount = 0;
+    nums.slice().sort((a, b) => a - b).forEach((n, idx) => {
+      const li = document.createElement('li');
+      li.dataset.n = idx + 1;
+      li.dataset.qid = n;
+      const qText = document.createElement('div');
+      qText.className = 'q-text';
+      qText.textContent = texts[n - 1];
+      li.appendChild(qText);
+      const answer = (window.ANSWERS || {})[n];
+      if (answer) {
+        answeredCount++;
+        const details = document.createElement('details');
+        details.innerHTML = '<summary>Show answer</summary><div class="answer">' + answer + '</div>';
+        li.appendChild(details);
+      }
+      ol.appendChild(li);
+      items.push(li);
+      originals.push(texts[n - 1]);
+    });
+    section.appendChild(ol);
+    sectionsEl.appendChild(section);
+
+    const entry = document.createElement('li');
+    entry.innerHTML = `<a href="#${id}">${t + 1}. ${name}</a><span class="badge">${nums.length}</span>` +
+      (answeredCount ? `<span class="badge answered">${answeredCount} answered</span>` : '');
+    indexList.appendChild(entry);
+    sections.push({ section, entry, badge: entry.querySelector('.badge'), total: nums.length });
+  });
+  document.getElementById('questions').remove();
+
+  const search = document.getElementById('search');
+  const count = document.getElementById('count');
+
+  function escapeHtml(s) {
+    return s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  function update() {
+    const q = search.value.trim().toLowerCase();
+    let visible = 0;
+    items.forEach((li, i) => {
+      const text = originals[i];
+      const match = !q || text.toLowerCase().includes(q);
+      li.classList.toggle('hidden', !match);
+      if (match) {
+        visible++;
+        const qText = li.querySelector('.q-text');
+        if (q) {
+          const re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+          qText.innerHTML = escapeHtml(text).replace(re, '<mark>$1</mark>');
+        } else {
+          qText.textContent = text;
+        }
+      }
+    });
+    sections.forEach(({ section, entry, badge, total }) => {
+      const shown = section.querySelectorAll('li:not(.hidden)').length;
+      section.classList.toggle('hidden', shown === 0);
+      entry.classList.toggle('hidden', shown === 0);
+      badge.textContent = q ? `${shown}/${total}` : total;
+    });
+    count.textContent = `Showing ${visible} of ${items.length} questions in ${sections.length} topics`;
+  }
+
+  search.addEventListener('input', update);
+  document.getElementById('expand-all').addEventListener('click', () =>
+    document.querySelectorAll('details').forEach(d => d.open = true));
+  document.getElementById('collapse-all').addEventListener('click', () =>
+    document.querySelectorAll('details').forEach(d => d.open = false));
+  update();
+</script>
+</body>
+</html>
