@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Interviewer Cheat Sheet - GenAI / Agentic (5 YOE)</title>
+<style>
+  body{font-family:Segoe UI,Arial,sans-serif;margin:0;background:#f4f6fa;color:#1d2330}
+  header{position:sticky;top:0;background:#1f3a60;color:#fff;padding:12px 24px;display:flex;justify-content:space-between;align-items:center;z-index:5}
+  header h1{font-size:18px;margin:0}
+  #total{font-size:18px;font-weight:700;background:#fff;color:#1f3a60;padding:6px 14px;border-radius:6px}
+  main{max-width:1000px;margin:auto;padding:16px}
+  .legend{background:#fff;border-radius:8px;padding:10px 16px;margin-bottom:14px;font-size:14px}
+  h2{background:#2d5a8e;color:#fff;padding:8px 14px;border-radius:6px;font-size:17px;margin-top:28px}
+  .q{background:#fff;border-radius:8px;padding:12px 16px;margin:10px 0;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  .qh{display:flex;justify-content:space-between;gap:12px;font-weight:600}
+  .w{white-space:nowrap;color:#2d5a8e}
+  ul{margin:8px 0 4px;padding-left:4px;list-style:none}
+  li{margin:4px 0;font-size:14px}
+  li label{cursor:pointer}
+  .red{color:#b3261e;font-size:13px;margin-top:6px}
+  .bonus{color:#1b7a3a;font-size:13px}
+  .ex{background:#fff8e1;border-left:4px solid #f0b400;padding:8px 12px;margin:8px 0;font-size:14px;line-height:1.5;border-radius:4px}
+  .say{font-size:16px;font-weight:600;color:#1d2330}
+  .orig{font-size:12px;color:#888;margin-top:4px}
+  .lk{font-weight:600;font-size:13px;margin-top:8px;color:#2d5a8e}
+  .q.imp{border:2px solid #f0b400}
+  .star{color:#e0a800;font-size:18px}
+  code{background:#eef1f6;padding:1px 4px;border-radius:3px}
+  pre{background:#eef1f6;padding:8px;border-radius:6px;font-size:12.5px;overflow:auto}
+  button{margin-left:10px;padding:5px 10px;cursor:pointer}
+  @media print{header{position:static}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Interviewer Cheat Sheet: GenAI / Agentic Systems (5 YOE)</h1>
+  <div><span id="total">Score: 0 / 70</span><button onclick="resetAll()">Reset</button></div>
+</header>
+<main>
+<div class="legend">
+  <b>How to use:</b> tick each bullet the candidate covers. The score for a question = weight × (ticked / total bullets), and it's added up automatically.
+  <span style="color:#b3261e">Red</span> = red flags. <span style="color:#1b7a3a">Green</span> = bonus/senior signals.
+  Rough bar for 5 YOE: covers about 60% of the bullets on most questions and can give real examples, not just definitions.
+</div>
+<div id="app"></div>
+</main>
+
+<script>
+const data = [
+{sec:"OOP Warm-up (Java)", w:10, qs:[
+ {imp:true, w:2,
+  q:"Explain the 4 pillars of OOP with real examples. Difference between abstraction and encapsulation?",
+  say:"Let's warm up with some OOP. You've obviously used OOP for years, but tell me how you see the four pillars, ideally with examples from your own code. And people often mix up abstraction and encapsulation. How would you explain the difference?",
+  ex:"This tests basics, but at 5 years you should expect <b>real-project examples</b>, not textbook definitions. <b>Encapsulation</b> = hiding data (private fields plus getters/setters or methods), which protects internal state. <b>Abstraction</b> = hiding complexity (interfaces and abstract classes), so callers only see <i>what</i> something does, not <i>how</i>. <b>Inheritance</b> = reusing code through a parent class. <b>Polymorphism</b> = one interface, many implementations (method overriding at runtime, overloading at compile time).",
+  b:["Encapsulation: private fields, controlled access, validation in setters; protects state",
+     "Abstraction: interface/abstract class exposes what, hides how (e.g., PaymentService interface, many implementations)",
+     "Inheritance: IS-A relationship, code reuse; mentions its downsides (tight coupling)",
+     "Polymorphism: runtime (overriding, dynamic dispatch) vs compile-time (overloading)",
+     "Gives examples from their own project, not animal/shape textbook examples"],
+  red:"Says abstraction and encapsulation are the same thing", bonus:"Mentions that Spring DI depends on polymorphism (coding to interfaces)"},
+ {imp:true, w:2,
+  q:"Abstract class vs interface, especially after Java 8 (default/static methods). When to use which?",
+  say:"Since Java 8, interfaces can have default methods too. So in practice, when do you still go for an abstract class instead of an interface?",
+  ex:"A classic Java question with a modern twist. Since Java 8, interfaces can have <b>default</b> and <b>static</b> methods (and private methods since Java 9), so the line between the two is blurry. The real differences: abstract classes can have <b>state</b> (instance fields) and <b>constructors</b>, and a class can extend only ONE of them. A class can implement MANY interfaces. Rule of thumb: an interface defines a <i>capability or contract</i>, and an abstract class shares <i>common code and state</i> between closely related classes.",
+  b:["Abstract class: can have instance fields/state, constructors, any access modifiers",
+     "Interface: multiple inheritance of type; fields are public static final (constants)",
+     "Java 8 default methods: add a method to an interface without breaking existing implementations",
+     "Diamond problem with default methods: class must override when two interfaces clash",
+     "Use interface for contract/capability, abstract class for shared base behaviour (template method)"],
+  red:"Answer stuck in Java 7 ('interfaces can't have method bodies')", bonus:"Mentions functional interfaces / lambdas, sealed interfaces (Java 17)"},
+ {imp:true, w:2,
+  q:"SOLID principles: explain with examples where they applied/violated them.",
+  say:"Talk me through SOLID. Rather than all five definitions, pick two or three that you've actually applied or seen broken in a project, and tell me what happened.",
+  ex:"<b>S</b>ingle Responsibility (a class has one reason to change), <b>O</b>pen/Closed (add new behaviour without modifying existing code), <b>L</b>iskov Substitution (a subclass must work wherever its parent is expected), <b>I</b>nterface Segregation (many small interfaces are better than one fat one), <b>D</b>ependency Inversion (depend on abstractions, not concrete classes, which is what Spring DI does). The real test is whether they can tell a <b>story</b> from their own code, not just recite the acronym.",
+  b:["SRP: e.g., split a god-class service into validator, mapper, repository",
+     "OCP: new feature via a new class (strategy/new implementation), not if-else edits",
+     "LSP: classic example: Square extends Rectangle breaks expectations",
+     "ISP: split fat interfaces so clients don't implement unused methods",
+     "DIP: depend on interfaces and inject implementations (Spring @Autowired interface)",
+     "Gives a real example of refactoring or a violation from their work"],
+  red:"Can only recite the acronym with no examples", bonus:"Talks about the trade-off of over-engineering with too many abstractions"},
+ {w:1,
+  q:"Composition vs inheritance: why 'favour composition over inheritance'?",
+  say:"You've probably heard 'favour composition over inheritance'. Do you agree with it? When has inheritance caused you trouble?",
+  ex:"<b>Inheritance</b> = IS-A (a Dog is an Animal). <b>Composition</b> = HAS-A (a Car has an Engine): the class holds a reference to another object and delegates to it. Deep inheritance trees become fragile: a change in the parent can break every child (the 'fragile base class' problem). Composition is more flexible because you can swap parts at runtime.",
+  b:["Inheritance = IS-A, tight coupling, fixed at compile time",
+     "Composition = HAS-A, loose coupling, behaviour can be swapped at runtime",
+     "Fragile base class problem / deep hierarchies hard to maintain",
+     "Use inheritance only for true IS-A relationships with stable parents"],
+  red:"Doesn't know what composition means", bonus:"Links it to Strategy/Decorator patterns"},
+ {imp:true, w:2,
+  q:"Design patterns you've used: Singleton (thread-safe), Factory, Builder, Strategy, Observer.",
+  say:"Which design patterns do you actually use day to day? And if I asked you to write a thread-safe Singleton, how would you do it?",
+  ex:"This checks practical pattern knowledge. <b>Singleton</b>: one instance only; the thread-safe versions are double-checked locking with <code>volatile</code>, the Bill Pugh holder class, or an <b>enum</b> singleton (the best option). <b>Factory</b>: creates objects without exposing which class is used. <b>Builder</b>: step-by-step construction of complex objects (Lombok @Builder). <b>Strategy</b>: swap algorithms at runtime. <b>Observer</b>: publish/subscribe (Spring events). Note that Spring beans are singletons by default.",
+  b:["Names patterns they've really used, with context (not just a list)",
+     "Thread-safe Singleton: double-checked locking + volatile, holder class, or enum",
+     "Knows Spring beans are singleton scope by default (and the thread-safety impact on stateful beans)",
+     "Builder for objects with many optional fields; Factory/Strategy to avoid if-else chains",
+     "Where Spring uses patterns: Proxy (AOP, @Transactional), Template (JdbcTemplate), Observer (events)"],
+  red:"Singleton without synchronization / volatile", bonus:"Mentions that reflection/serialization can break a Singleton, which enum prevents"},
+ {w:1,
+  q:"equals()/hashCode() contract and immutability. How to make a class immutable?",
+  say:"Quick one: if I override equals but forget hashCode, what breaks? And how would you make a class truly immutable?",
+  ex:"<b>Contract</b>: if two objects are equal by equals(), they MUST have the same hashCode(). Break it and HashMap/HashSet misbehave (you can't find keys, you get duplicates). <b>Immutable class</b>: its state can't change after creation (like String), which makes it naturally thread-safe and safe to use as a map key.",
+  b:["Equal objects must have equal hashCode; otherwise HashMap/HashSet lookups fail",
+     "Immutable: final class, private final fields, no setters",
+     "Defensive copies of mutable fields (List, Date) in constructor and getters",
+     "Benefits: thread-safe, safe HashMap keys, caching"],
+  red:"Thinks hashCode doesn't matter unless you call it", bonus:"Java records (Java 16+), List.copyOf"}
+]},
+{sec:"GenAI / Agentic Systems (core differentiator)", w:30, qs:[
+ {q:"Single LLM call vs RAG pipeline vs multi-agent system. When orchestration over single agent?", w:4, b:[
+  "Single LLM call: one prompt → one answer, stateless, only knows its training data",
+  "RAG: retrieve relevant docs (vector DB/search) → inject into prompt → grounded answer; reduces hallucination, uses private/fresh data",
+  "Multi-agent: several specialised agents (planner, executor, reviewer) with tools, collaborating on multi-step tasks",
+  "Choose orchestration when: task is multi-step, needs different skills/tools, needs checks/review, or needs parallel work",
+  "Trade-off: more agents means more cost, latency, and debugging complexity, so start simple and add agents only when needed"],
+  red:"Says 'always use multi-agent', or can't explain what retrieval actually does", bonus:"Mentions a router/supervisor, or starting with a single agent plus tools first"},
+ {q:"LangGraph vs plain LangChain chain? Why graph/state-machine for agents?", w:4, b:[
+  "LangChain chain = linear/DAG pipeline (A → B → C), no easy loops",
+  "LangGraph = nodes + edges + shared STATE object; supports cycles, conditional edges, branching",
+  "Loops are needed for agents: think → act → observe → repeat",
+  "Checkpointing/persistence: resume, human-in-the-loop (interrupt, approve, continue), time travel",
+  "State machine = predictable, debuggable, controllable flow vs a free-running agent"],
+  red:"Thinks they are totally unrelated, or can't name 'state'", bonus:"Mentions checkpointer, interrupt_before, subgraphs, or LangSmith tracing"},
+ {q:"What is MCP? Expose internal tool/API via MCP vs custom function-calling tool?", w:4, b:[
+  "MCP = open protocol (by Anthropic) standardising how LLM apps connect to tools/data; 'USB-C for AI'",
+  "Client–server: MCP server exposes Tools, Resources, Prompts; host/client (IDE, agent) discovers them",
+  "Transport: stdio (local) or HTTP/SSE (streamable HTTP) for remote",
+  "Custom function calling: define a JSON schema per tool inside ONE app/model, so it's tightly coupled",
+  "MCP: write once, reusable across many agents/clients; tool discovery at runtime; central auth/governance",
+  "Wrap internal REST API as an MCP server: define tool name, description, input schema → call API → return result"],
+  red:"Confuses MCP with a model or a fine-tuning technique", bonus:"Talks about auth (OAuth), security of tool exposure, or versioning of MCP servers"},
+ {q:"Design multi-agent system for 'requirement validation and autocorrection'. Roles & communication?", w:4, b:[
+  "Roles, e.g. Ingestion/Parser agent → Validator agent (completeness, ambiguity, INVEST rules) → Corrector/Rewriter agent → Reviewer/Critic agent",
+  "Supervisor/orchestrator agent routes tasks and decides when done",
+  "Communication options: shared state/memory (blackboard), message passing, supervisor pattern; should pick one and justify it",
+  "Uses RAG over domain docs/standards/past requirements for validation context",
+  "Loop: validate → correct → re-validate until pass or max iterations",
+  "Human-in-the-loop approval before final output; structured output (JSON) with issues + fixes"],
+  red:"Only one big prompt, no validation loop, no stop condition", bonus:"Confidence scores, audit trail of changes, evaluation dataset"},
+ {q:"Prevent infinite loops / runaway costs in agent that calls tools and re-plans?", w:2, b:[
+  "Max iterations / recursion limit (e.g., LangGraph recursion_limit)",
+  "Token/cost budget per request/session; timeouts",
+  "Detect repeated identical tool calls/state (loop detection)",
+  "Fallback/escalate to human when limit reached",
+  "Monitoring + alerts on cost per session"],
+  red:"'The LLM will figure it out'", bonus:"Rate limiting per user, cheaper model for retries"},
+ {q:"Short-term vs long-term memory. Session vs persistent (vector DB)?", w:2, b:[
+  "Short-term = current conversation/context window (message history, state)",
+  "Long-term = across sessions: user prefs, past facts, stored externally",
+  "Session memory: in-memory/Redis/checkpointer keyed by session_id; summarise or trim when long",
+  "Persistent: embed + store in vector DB (Pinecone, pgvector, Chroma, FAISS), retrieve by similarity when needed",
+  "Concerns: what to store, expiry (TTL), privacy/PII, relevance"],
+  red:"Thinks the LLM remembers by itself", bonus:"Summary memory, episodic vs semantic memory"},
+ {q:"Making an agent 'self-healing' (e.g., automation script generation). Detect failure & repair?", w:2, b:[
+  "Detect failure: run/execute script, capture errors, exit codes, test failures, validation of output schema",
+  "Feed error + stack trace + context back to LLM to fix (reflection loop)",
+  "Retry with a limit; exponential backoff for transient errors",
+  "For UI automation: locator failures → re-find element (alternate selectors, DOM snapshot)",
+  "Log fixes; escalate to human after N failures"],
+  red:"No detection mechanism, just 'retry'", bonus:"Critic agent, storing successful fixes for reuse"},
+ {q:"Evaluate agent output quality/reliability before production (not just PoC)?", w:2, b:[
+  "Golden/eval dataset with expected outputs (test cases)",
+  "Metrics: accuracy, faithfulness/groundedness, relevance, hallucination rate, tool-call correctness, latency, cost",
+  "LLM-as-a-judge + human review sampling",
+  "Tools: LangSmith, RAGAS, DeepEval, Promptfoo, TruLens",
+  "Regression tests in CI when prompts/models change; A/B tests; monitoring in prod"],
+  red:"'I checked a few outputs manually'", bonus:"Offline + online eval, feedback loop from users"},
+ {q:"Explain hybrid RAG. When combine vector search with keyword/SQL?", w:2, b:[
+  "Hybrid = semantic (vector embeddings) + lexical (BM25/keyword) search, results merged",
+  "Merge via re-ranking (cross-encoder) or Reciprocal Rank Fusion (RRF)",
+  "Keyword wins for: exact IDs, codes, names, acronyms, error codes",
+  "SQL for structured data: numbers, filters, aggregates (text-to-SQL)",
+  "Metadata filtering (date, department) + vectors"],
+  red:"Only knows vector search", bonus:"Chunking strategy, re-ranker"},
+ {q:"Reduce token usage & latency in multi-step pipeline?", w:2, b:[
+  "Caching: exact response cache, semantic cache, provider prompt caching",
+  "Prompt compression: shorter prompts, summarise history, retrieve fewer/better chunks",
+  "Model routing: small/cheap model for simple steps, big model only when needed",
+  "Parallel tool calls / async, streaming responses",
+  "Limit max_tokens, structured outputs, fewer agent hops"],
+  red:"Only says 'use a faster model'", bonus:"Batching, measure per-step token cost"},
+ {q:"Guardrails for LLM agent with tool access in regulated banking?", w:2, b:[
+  "RBAC: agent acts with the user's permissions; least privilege per tool",
+  "Audit logging: every prompt, tool call, input/output, user, timestamp (immutable)",
+  "PII redaction/masking before sending to LLM; data residency",
+  "Input guardrails: prompt-injection detection; output guardrails: validation, toxicity, policy checks",
+  "Human approval for high-risk actions (payments, writes); read-only by default",
+  "Tools: Guardrails AI, NeMo Guardrails, Azure content safety, Presidio (PII)"],
+  red:"No mention of prompt injection or human approval", bonus:"Model risk management, explainability for compliance"}
+]},
+{sec:"System Design / Architecture", w:6, qs:[
+ {q:"Design agent pipeline to auto-generate test scenarios from a user story (ingestion → agent → validation → output).", w:3, b:[
+  "Ingestion: pull story from Jira/ADO (API/webhook), clean & parse acceptance criteria",
+  "Context: RAG over existing test cases, domain docs, app specs",
+  "Agent: generate scenarios (positive, negative, edge, boundary) in structured format (Gherkin/JSON)",
+  "Validation: critic agent / rules checks coverage of each acceptance criterion, duplicates, format",
+  "Output: push to test management tool (Xray/TestRail) / Jira; human review",
+  "Feedback loop + metrics (acceptance rate of generated tests)"],
+  red:"Just 'send story to GPT'", bonus:"Traceability matrix (AC → test), async queue"},
+ {q:"Containerize & deploy agent service (Docker/K8s), CI/CD with observability?", w:2, b:[
+  "Dockerfile (slim base, multi-stage), env config, secrets via Vault/K8s secrets (not in image)",
+  "K8s: Deployment, Service, HPA autoscaling, liveness/readiness probes, resource limits",
+  "CI/CD: build → unit tests → eval tests → image scan → deploy (Jenkins/GitHub Actions/ArgoCD)",
+  "Observability: trace each agent step & tool call (LangSmith, Langfuse, OpenTelemetry), structured logs, metrics (Prometheus/Grafana)",
+  "Track tokens, cost, latency, errors per request"],
+  red:"No idea how to trace agent steps", bonus:"Canary/blue-green deploys, correlation IDs"},
+ {q:"Version-control prompts & agent configs safely across environments?", w:1, b:[
+  "Prompts stored as files in Git (not hard-coded), reviewed via PRs",
+  "Versioning/tags; config per env (dev/qa/prod) like Spring profiles",
+  "Prompt registry (LangSmith Hub, Langfuse, MLflow) with rollback",
+  "Eval tests run before promoting a prompt version"],
+  red:"Edits prompts directly in prod", bonus:"Feature flags / A/B on prompt versions"}
+]},
+{sec:"DSA (Part A style, timed)", w:12, qs:[
+ {q:"Reverse a linked list / detect a cycle.", w:2, b:[
+  "Reverse: iterative with prev, curr, next pointers; O(n) time, O(1) space",
+  "Cycle: Floyd's slow/fast pointers; they meet → cycle exists",
+  "Handles edge cases: empty list, single node",
+  "Can find cycle start (reset one pointer to head, move both 1 step)"],
+  red:"Uses extra list and can't do O(1) space", bonus:"Recursive reverse too",
+  code:`Node prev=null, cur=head;
+while(cur!=null){ Node nx=cur.next; cur.next=prev; prev=cur; cur=nx; }
+return prev;`},
+ {q:"Stream of tool-call logs, longest sequence without repeated tool (sliding window).", w:2, b:[
+  "Same as 'longest substring without repeating characters'",
+  "Two pointers (left, right) + HashMap tool → last index (or HashSet)",
+  "On repeat: move left = max(left, lastIndex+1)",
+  "O(n) time, O(k) space"],
+  red:"O(n²) brute force only", bonus:"Mentions streaming (process one item at a time)",
+  code:`Map<String,Integer> last=new HashMap<>(); int l=0,best=0;
+for(int r=0;r<logs.length;r++){
+  if(last.containsKey(logs[r])) l=Math.max(l,last.get(logs[r])+1);
+  last.put(logs[r],r); best=Math.max(best,r-l+1);
+}`},
+ {q:"Implement LRU cache.", w:2, b:[
+  "HashMap + doubly linked list; get/put O(1)",
+  "On get: move node to front; on put: insert front, evict tail when over capacity",
+  "Java shortcut: LinkedHashMap(cap, 0.75f, true) + override removeEldestEntry",
+  "Thread safety for prod (synchronized / ConcurrentHashMap / Caffeine)"],
+  red:"Uses a list scan, so O(n)", bonus:"Mentions TTL, Caffeine/Redis for prompt caching"},
+ {q:"Topological sort (agent task/dependency graphs).", w:2, b:[
+  "Only for DAGs; ordering where dependency comes before dependent",
+  "Kahn's algorithm: in-degree count + queue of zero in-degree nodes",
+  "Or DFS + stack (post-order)",
+  "If output count < nodes → cycle exists",
+  "O(V+E)"],
+  red:"Doesn't know it needs a DAG", bonus:"Level-by-level for parallel execution"},
+ {q:"Graph of agent handoffs: detect cycle.", w:2, b:[
+  "Directed graph: DFS with 3 colours/states (unvisited, visiting, visited); back-edge to 'visiting' → cycle",
+  "Or Kahn's: if not all nodes processed → cycle",
+  "O(V+E)",
+  "Links to agent orchestration: prevents infinite handoff loops"],
+  red:"Uses undirected-graph logic (parent check) for directed graph", bonus:"Returns the cycle path"},
+ {q:"Hash map vs trie for lookup-heavy agent tool?", w:2, b:[
+  "HashMap: O(1) avg exact lookup, simple, good for exact key match",
+  "Trie: O(L) by key length; great for prefix search, autocomplete, 'starts with'",
+  "Trie uses more memory (many nodes); HashMap can't do prefix queries efficiently",
+  "Choose by query type: exact → HashMap, prefix/autocomplete → Trie"],
+  red:"'Trie is always faster'", bonus:"Radix/compressed trie, memory trade-offs"}
+]},
+{sec:"SQL", w:10, qs:[
+ {q:"Top 3 most-used tools per agent from tool_calls(agent_id, tool_name, called_at).", w:2, b:[
+  "GROUP BY agent_id, tool_name with COUNT(*)",
+  "Window function ROW_NUMBER() / DENSE_RANK() OVER (PARTITION BY agent_id ORDER BY cnt DESC)",
+  "Filter rank <= 3 in outer query / CTE",
+  "Knows the difference RANK vs DENSE_RANK vs ROW_NUMBER for ties"],
+  red:"Uses LIMIT 3 globally (only top 3 overall)", bonus:"",
+  code:`WITH c AS (
+  SELECT agent_id, tool_name, COUNT(*) cnt,
+         DENSE_RANK() OVER (PARTITION BY agent_id ORDER BY COUNT(*) DESC) rk
+  FROM tool_calls GROUP BY agent_id, tool_name)
+SELECT * FROM c WHERE rk <= 3;`},
+ {q:"agents, sessions, messages: sessions with more than N agent-to-agent handoffs.", w:2, b:[
+  "Identify handoff = message where sender is agent and receiver is another agent (or agent changes between consecutive messages)",
+  "Join messages with agents (both sender & receiver are agents)",
+  "GROUP BY session_id HAVING COUNT(*) > N",
+  "If 'change of agent' definition: use LAG(agent_id) OVER (PARTITION BY session_id ORDER BY created_at)"],
+  red:"Uses WHERE instead of HAVING for the aggregate", bonus:"Asks clarifying question about schema",
+  code:`SELECT session_id FROM (
+  SELECT session_id, agent_id,
+         LAG(agent_id) OVER (PARTITION BY session_id ORDER BY created_at) prev
+  FROM messages) t
+WHERE prev IS NOT NULL AND prev <> agent_id
+GROUP BY session_id HAVING COUNT(*) > :N;`},
+ {q:"Explain window functions (e.g., running token cost per session).", w:2, b:[
+  "Calculates over a set of rows WITHOUT collapsing them (unlike GROUP BY)",
+  "PARTITION BY = groups, ORDER BY = order inside the window",
+  "Example: SUM(tokens) OVER (PARTITION BY session_id ORDER BY created_at) = running total",
+  "Others: ROW_NUMBER, RANK, LAG/LEAD, AVG over frames (ROWS BETWEEN ...)"],
+  red:"Confuses with GROUP BY", bonus:"Frame clause explanation"},
+ {q:"INNER vs LEFT JOIN; when is LEFT JOIN ... WHERE right.id IS NULL useful?", w:2, b:[
+  "INNER: only matching rows in both tables",
+  "LEFT: all rows from left + matches from right (NULL when no match)",
+  "LEFT JOIN + WHERE right.id IS NULL = anti-join: rows in left with NO match",
+  "Example: stories never validated: stories LEFT JOIN validations ... WHERE v.id IS NULL",
+  "Alternative: NOT EXISTS"],
+  red:"Puts right-table filter in WHERE and doesn't realise it turns into INNER", bonus:"NOT EXISTS vs NOT IN NULL pitfall"},
+ {q:"Index a table logging millions of agent audit events for lookup by date + agent_id?", w:2, b:[
+  "Composite index (agent_id, created_at): equality column first, range column second",
+  "Explain why column order matters (leftmost prefix rule)",
+  "Partitioning by date (monthly/daily) for huge tables + easy archival",
+  "Use EXPLAIN plan; avoid functions on indexed column in WHERE",
+  "Trade-off: indexes slow down inserts (write-heavy log table)"],
+  red:"Separate single-column indexes only, or 'index every column'", bonus:"Covering index, time-series DB / Elasticsearch for logs"}
+]},
+{sec:"Python / Java basics", w:8, qs:[
+ {q:"Python: decorators, generators, async/await, GIL implications for concurrent tool calls.", w:2, b:[
+  "Decorator: function wrapping another function (@retry, @log, @timer)",
+  "Generator: yield, lazy evaluation, memory efficient; used for streaming LLM tokens",
+  "async/await: asyncio event loop, non-blocking I/O; asyncio.gather for parallel tool calls",
+  "GIL: only one thread runs Python bytecode at a time; fine for I/O-bound (API calls), bad for CPU-bound → use multiprocessing"],
+  red:"Thinks threads give CPU parallelism in Python", bonus:""},
+ {q:"Spring Boot: DI, REST controller, wrap agent as a microservice.", w:2, b:[
+  "DI: Spring IoC container injects beans; constructor injection preferred; @Component/@Service/@Bean",
+  "@RestController + @PostMapping, @RequestBody DTO, ResponseEntity, validation (@Valid)",
+  "Agent wrapped in @Service calling LLM (Spring AI / LangChain4j / REST to Python service)",
+  "Config via application.yml + profiles; API keys in secrets",
+  "Timeouts, async/streaming (WebFlux/SSE), global exception handler (@ControllerAdvice)"],
+  red:"Field injection only, can't explain why constructor injection", bonus:"Spring AI, Resilience4j, Actuator"},
+ {q:"OOP: Agent base class with pluggable Tool implementations.", w:2, b:[
+  "Tool interface: name(), description(), inputSchema(), execute(input)",
+  "Agent (abstract) holds a registry Map<String, Tool>; picks tool by name from LLM output",
+  "Open/Closed principle: add new tool without changing Agent (strategy pattern)",
+  "Register tools via DI (Spring injects List<Tool>) or plugin/factory",
+  "Common error handling/logging in base class (template method)"],
+  red:"Big if-else on tool name inside agent", bonus:"SOLID terms, decorator for logging/retry around tools",
+  code:`interface Tool { String name(); String description(); String execute(String input); }
+abstract class Agent {
+  protected final Map<String,Tool> tools;
+  Agent(List<Tool> ts){ tools = ts.stream().collect(toMap(Tool::name, t->t)); }
+  abstract String run(String task);
+}`},
+ {q:"Retry patterns for flaky tool calls (exponential backoff, circuit breaker).", w:2, b:[
+  "Retry only transient errors (timeouts, 5xx, 429) not 4xx validation errors",
+  "Exponential backoff + jitter (1s, 2s, 4s… plus random) with max attempts",
+  "Circuit breaker: Closed → Open (fail fast after N failures) → Half-open (test calls)",
+  "Idempotency for retried write operations",
+  "Libraries: Resilience4j / Spring Retry (Java), tenacity (Python); fallback responses"],
+  red:"Infinite retry / retry on everything", bonus:"Bulkhead, timeouts, rate limiter"}
+]},
+{sec:"Domain fit", w:4, qs:[
+ {q:"Time you shipped to production vs just PoC: what changed?", w:2, b:[
+  "Concrete project example (STAR: situation, task, action, result)",
+  "Added: error handling, testing/evals, security, logging/monitoring, scalability",
+  "Cost & latency considerations, SLAs",
+  "Stakeholder sign-off, documentation, rollout plan / rollback",
+  "Measurable outcome (numbers)"],
+  red:"Vague, no real example, only PoCs", bonus:"Lessons learned / post-incident fixes"},
+ {q:"Mentor a teammate unfamiliar with GenAI on prompt design?", w:1, b:[
+  "Start with basics: role, context, instructions, examples (few-shot), output format",
+  "Hands-on pairing, sample prompt library/templates",
+  "Teach iteration + evaluation (not guesswork)",
+  "Share pitfalls: hallucinations, prompt injection, vague instructions"],
+  red:"'Just tell them to Google it'", bonus:""},
+ {q:"Explain an agent's decision/risk assessment to a non-technical stakeholder?", w:1, b:[
+  "Plain language, no jargon; focus on business impact",
+  "Show reasoning/evidence: sources used, steps taken, confidence level",
+  "Be clear about limitations and where humans review",
+  "Visuals/dashboards, examples"],
+  red:"Explains with technical terms like embeddings/tokens", bonus:"Explainability logs, audit trail for compliance"}
+]},
+{sec:"System Design (General)", w:12, qs:[
+ {imp:true, w:2,
+  q:"Design a GenAI chat assistant for 10k concurrent bank employees.",
+  say:"Let's zoom out to a bigger design. Say we want an internal AI chat assistant for the whole bank, around ten thousand employees using it at the same time. How would you design it at a high level?",
+  ex:"This is an open-ended high-level design (HLD) question. Look for a <b>structured approach</b>: first clarify requirements (users, latency, security), then draw the components (UI → API gateway → chat service → LLM, plus a session store, a vector DB for RAG, and logging), then talk about scaling. The LLM is slow and rate-limited, so they need <b>streaming</b>, <b>queuing</b>, and <b>rate limiting</b>. At 5 years they should at least mention trade-offs.",
+  b:["Asks clarifying questions first (scale, latency, data sensitivity, SSO)",
+     "Components: API gateway, auth (SSO/OAuth), stateless chat service, LLM provider, session store (Redis), vector DB, audit logs",
+     "Streaming responses (SSE/WebSocket) for better UX",
+     "Horizontal scaling (stateless pods + load balancer); rate limiting per user",
+     "Handles LLM limits: quotas, fallback model, retries, caching frequent answers",
+     "Security: PII masking, RBAC on documents in RAG, audit logging"],
+  red:"Jumps into code/tech names without a structure or clarifying questions", bonus:"Back-of-envelope estimates (QPS, tokens/day, cost)"},
+ {imp:true, w:2,
+  q:"Design a rate limiter (e.g., to protect LLM API quota).",
+  say:"Our LLM provider gives us a fixed quota, and we don't want one team burning through it. How would you build a rate limiter for that?",
+  ex:"A classic system design question. Common algorithms: <b>Token bucket</b> (a bucket refills at a fixed rate and each request takes a token, which allows short bursts), <b>Leaky bucket</b> (smooths traffic to a constant rate), <b>Fixed window</b> (e.g., 100 requests per minute, simple but allows bursts at window edges), and <b>Sliding window</b> (more accurate). With multiple servers the counter has to be shared, usually in <b>Redis</b>.",
+  b:["Names and explains at least one algorithm (token bucket / sliding window)",
+     "Where to apply: API gateway or middleware; key = user/team/API key",
+     "Distributed: counters in Redis (atomic INCR + TTL or Lua script)",
+     "Response: HTTP 429 + Retry-After header",
+     "For LLMs: limit by tokens, not just requests"],
+  red:"In-memory counter only on a multi-instance service", bonus:"Resilience4j RateLimiter, Bucket4j, per-tier quotas"},
+ {imp:true, w:2,
+  q:"Long-running async jobs (agent task takes 2–5 min): API design, queue, status.",
+  say:"Some agent tasks take a few minutes to finish. We can't keep the HTTP request open that long. How would you design the API and the backend for that?",
+  ex:"This tests <b>async processing</b> knowledge. The standard pattern: the client submits a job, gets back <b>202 Accepted</b> with a jobId immediately, the job goes onto a <b>queue</b> (Kafka/RabbitMQ/SQS), workers process it, and the client gets the result by <b>polling</b> a status endpoint, via a <b>webhook</b> callback, or via WebSocket/SSE push. Also check <b>idempotency</b> (a duplicate submission must not run the job twice) and what happens when a worker crashes.",
+  b:["Submit returns 202 + jobId; GET /jobs/{id} for status (PENDING/RUNNING/DONE/FAILED)",
+     "Message queue (Kafka/RabbitMQ/SQS) + scalable worker pool",
+     "Job status stored in DB/Redis; result stored for retrieval",
+     "Notify via polling, webhook, or WebSocket/SSE",
+     "Idempotency key, retries, dead-letter queue for failures, timeouts"],
+  red:"Keeps the HTTP call open / increases timeout to 10 minutes", bonus:"Kafka partitions/consumer groups, @Async vs queue trade-off"},
+ {w:2,
+  q:"Monolith vs microservices; sync vs async communication; distributed transactions (Saga).",
+  say:"You've worked with Spring Boot microservices. When would you actually NOT split into microservices? And when a flow spans multiple services, how do you keep data consistent?",
+  ex:"This checks <b>mature judgment</b>: microservices are not always better. Monoliths are simpler to build, deploy, and debug. Microservices give independent scaling and deployment but bring network failures, harder debugging, and data consistency problems. <b>Sync</b> = REST/gRPC (simple, but it couples services). <b>Async</b> = events through Kafka (decoupled, eventually consistent). The <b>Saga</b> pattern handles transactions across services: each service does its local step, and if a later step fails, <b>compensating actions</b> undo the earlier ones.",
+  b:["Microservices trade-offs: independent deploy/scale vs operational complexity",
+     "Monolith (or modular monolith) is fine for small team / early product",
+     "Sync (REST/Feign/gRPC) vs async (Kafka events), and when to use each",
+     "No 2PC across services, so use Saga (choreography vs orchestration) with compensating transactions",
+     "Supporting pieces: API gateway, service discovery, circuit breaker, distributed tracing"],
+  red:"'Microservices are always better'", bonus:"Outbox pattern for reliable event publishing"},
+ {w:2,
+  q:"Caching strategy: cache-aside, TTL, invalidation, consistency (Redis).",
+  say:"Where have you used caching in your projects? How did you decide what to cache and when to invalidate it?",
+  ex:"'There are only two hard things in CS: cache invalidation and naming things.' <b>Cache-aside</b> (most common): read from the cache, and on a miss read the DB and put the result in the cache. <b>Write-through</b>: write to the cache and the DB together. <b>TTL</b>: entries expire automatically. The main risk is <b>stale data</b>. Other problems: a <b>cache stampede</b> (many requests hit the DB at the same moment when a popular key expires) and cache penetration (repeated requests for keys that don't exist).",
+  b:["Explains cache-aside (and optionally write-through/write-behind)",
+     "TTL + explicit invalidation on update/delete",
+     "What NOT to cache: highly volatile or user-sensitive data without care",
+     "Distributed cache (Redis) vs local cache (Caffeine) trade-off",
+     "Knows stampede/thundering herd and a fix (locking, jittered TTL)"],
+  red:"No idea about invalidation / stale data", bonus:"Spring @Cacheable, semantic cache for LLM responses"},
+ {w:2,
+  q:"Scaling the database: indexing, read replicas, sharding, CAP theorem.",
+  say:"Suppose the app grows and the database becomes the bottleneck. What steps would you take, and in what order?",
+  ex:"Look for a <b>sensible order</b>, cheapest fixes first: optimize queries and indexes → add caching → add <b>read replicas</b> (copies that serve reads) → <b>partitioning</b> → <b>sharding</b> (splitting data across multiple DBs by a key, which is complex). <b>CAP theorem</b>: when the network partitions, a distributed system must choose between Consistency (everyone sees the latest data) and Availability (always responding). Banks usually prefer consistency.",
+  b:["Starts with cheap fixes: query optimization, indexes, EXPLAIN, connection pooling",
+     "Caching layer to reduce reads",
+     "Read replicas for read-heavy load (and replication lag issue)",
+     "Partitioning/sharding by a key; knows it makes joins and transactions hard",
+     "CAP theorem basics; SQL vs NoSQL choice based on the use case"],
+  red:"Jumps straight to sharding or 'switch to NoSQL'", bonus:"HikariCP tuning, CQRS"}
+]}
+];
+
+const imp=new Set([1,2,3,4,5,8,11,12,17,19,21,23,27,28,29,30]);
+const ex={
+1:"Asks if the candidate understands the 3 levels of GenAI apps. A <b>single LLM call</b> is like calling one REST API: you send a prompt and get text back, and the model only knows what it learned in training. <b>RAG (Retrieval-Augmented Generation)</b> first searches your own documents (usually a vector DB), then pastes the relevant pieces into the prompt so the answer is based on your data. A <b>multi-agent system</b> is several LLM 'workers', each with its own role and tools (APIs, DB, code), handing work to each other like microservices. The second part checks judgment: when is the extra complexity worth it?",
+2:"<b>LangChain</b> is a Python/JS library for building LLM apps; a <b>chain</b> is a fixed pipeline of steps (prompt, then LLM, then parser), like a straight line. <b>LangGraph</b> (from the same team) models the app as a <b>graph</b>: nodes are steps, edges decide what runs next, and a shared <b>state</b> object is passed around. Think of it like a Spring State Machine or a workflow engine. Agents need loops (try, check result, try again), which a straight chain can't do cleanly.",
+3:"<b>MCP (Model Context Protocol)</b> is a new standard, released by Anthropic in late 2024, for plugging tools and data into any AI app. Before MCP, every app wrote its own 'function calling' glue: you describe a function in JSON, the LLM asks to call it, and your code calls it. With MCP you build an <b>MCP server</b> once (like a small REST service that wraps your internal API) and any MCP-compatible client (Claude, Cursor, custom agents) can discover and use it. The question checks whether they know the difference: reusable standard vs. one-off, per-app code.",
+4:"The job description mentions a product that checks requirements (user stories/specs) for problems and fixes them automatically. This is a design question: how would they split the work across agents? For example, one agent reads the requirement, one checks it for gaps and ambiguity, one rewrites it, and one reviews the result. It also asks how the agents talk to each other: a <b>shared memory</b> (a common state everyone reads and writes), <b>message passing</b> (agents send messages to each other), or a <b>supervisor pattern</b> (a boss agent assigns tasks and collects results).",
+5:"Agents decide on their own what to do next, so they can get stuck repeating the same step forever, and every step costs money (tokens). The question asks what hard safety limits they put in place. It's like protecting a service against an infinite loop or a runaway batch job.",
+6:"<b>Short-term memory</b> is what the agent remembers within the current chat (like an HTTP session). <b>Long-term memory</b> is what it remembers across days or sessions (like a database). A <b>vector DB</b> stores text as numeric 'embeddings' so you can search by meaning, not exact words. The question checks whether they know where each type of memory lives and how to fetch it back.",
+7:"'Self-healing' means that when the agent's output fails (for example, a generated test automation script crashes because a button locator changed), the agent notices, figures out why, and fixes itself without a human. Check that they have a clear way to <b>detect</b> failure (errors, test results) and a loop to <b>repair and retry</b> with a limit.",
+8:"Lots of people build demos (PoCs). This question checks whether they know how to <b>prove</b> an AI system is good enough for real users. Think of it as unit and regression testing for AI: a fixed test set with expected answers, metrics, and automated checks in the CI pipeline.",
+9:"<b>Vector search</b> finds text with similar meaning ('car' matches 'vehicle') but is bad at exact matches like account numbers or error codes. <b>Keyword search (BM25)</b> is classic search-engine exact matching. <b>SQL</b> is for structured data such as amounts and dates. <b>Hybrid RAG</b> combines them to get the best of each. The question checks whether they know when each one fails.",
+10:"Every LLM call costs money (priced per token, roughly per word) and takes time (often seconds). An agent may make 5–20 calls per request. The question asks how they make it cheaper and faster, the same idea as optimizing slow microservice calls.",
+11:"This is a bank, so the agent must follow strict rules. <b>RBAC</b> (role-based access control) means the agent can only do what the user is allowed to do. <b>Audit logging</b> means recording everything for regulators. <b>PII redaction</b> means hiding personal data (names, account numbers, PAN/Aadhaar) before it is sent to the LLM. A strong answer also covers <b>prompt injection</b>, where a user tricks the AI into ignoring its rules.",
+12:"This is an end-to-end design question for a practical use case: given a Jira user story, automatically produce test cases. Ask them to walk through each stage: how the story comes in, what the agent does, how the output is checked for quality, and where the result ends up. Similar to designing any data pipeline or microservice flow.",
+13:"This is the DevOps side. How do they package the agent (Docker), run it at scale (Kubernetes), and deploy it automatically (CI/CD such as Jenkins or GitHub Actions)? The key AI-specific part is <b>observability</b>: being able to see each step the agent took and each tool it called, like distributed tracing (Zipkin/Jaeger) in microservices.",
+14:"Prompts are effectively code: changing one sentence can change the app's behavior. The question asks how they manage prompts and agent settings safely across dev, QA, and prod. It's like managing application.yml and Spring profiles, plus Git reviews and rollback.",
+15:"Classic warm-up DSA question. <b>Reverse</b>: flip the next pointers so the list runs backwards. <b>Detect cycle</b>: check whether following next ever loops back (Floyd's 'tortoise and hare': one pointer moves 1 step, the other 2, and if they meet there is a loop).",
+16:"This is the well-known LeetCode problem 'Longest substring without repeating characters', dressed up with tool names. Input: a list like [search, db, search, email, api]. Find the longest continuous stretch where no tool repeats. The expected technique is a <b>sliding window</b> (two pointers plus a HashMap).",
+17:"<b>LRU (Least Recently Used) cache</b>: a fixed-size cache that, when full, throws out the item that hasn't been used for the longest time. It's relevant because caching LLM responses saves cost. The expected answer is get/put in O(1) time using a HashMap plus a doubly linked list (or LinkedHashMap in Java).",
+18:"<b>Topological sort</b>: given tasks with dependencies ('B needs A first'), produce a valid order to run them. Like Maven resolving module build order. Works only when there are no cycles (a DAG).",
+19:"Agents hand work to each other (A to B to C). If C hands back to A, it might loop forever. This asks for cycle detection in a <b>directed</b> graph, a standard DFS question, tied directly to the earlier question about agents stuck in infinite loops.",
+20:"This is a theory question with no coding. A <b>HashMap</b> gives very fast exact lookups. A <b>Trie</b> (prefix tree) stores strings character by character and is great for 'find everything starting with abc' (autocomplete). The question checks whether they pick the data structure based on the type of query.",
+21:"Given a table of every tool call, for EACH agent find its 3 most-used tools. The trick is 'per agent': a plain LIMIT 3 gives the top 3 overall, which is wrong. The expected answer is GROUP BY plus a window function (ROW_NUMBER/DENSE_RANK with PARTITION BY agent_id).",
+22:"A 'handoff' is when a conversation moves from one agent to another. Find sessions where that happened more than N times. They need to define what counts as a handoff and then use GROUP BY + HAVING (or LAG to compare consecutive messages). Good candidates ask clarifying questions about the table columns.",
+23:"<b>Window functions</b> compute values across related rows while keeping every row, unlike GROUP BY, which squashes rows together. The example asks for a running total of token cost within each session, ordered by time.",
+24:"Basic SQL JOINs. The special pattern <b>LEFT JOIN ... WHERE right.id IS NULL</b> finds rows that have NO match in the other table, for example user stories that were never validated. Checks practical SQL knowledge.",
+25:"A huge log table (millions of rows) is slow to search. Which index would they create for queries like 'events for agent X between two dates'? Expected answer: a composite index (agent_id, created_at), with an explanation of why the column order matters, plus possibly table partitioning by date.",
+26:"Python fundamentals used heavily in AI frameworks. <b>Decorator</b>: a wrapper that adds behavior to a function (like Spring AOP annotations). <b>Generator</b>: produces values one at a time with yield (used to stream LLM output). <b>async/await</b>: non-blocking calls so many API calls can run at once. <b>GIL</b>: a Python lock that allows only one thread to run Python code at a time. It's fine for waiting on APIs, but bad for heavy CPU work.",
+27:"This is your area, so dig deep here. It checks whether they really know Spring Boot: dependency injection (how Spring creates and wires beans), building REST endpoints, and how they'd put an AI agent behind a REST API as a proper microservice (config, timeouts, error handling, streaming).",
+28:"This is a low-level design (LLD) question. How would they design an <b>Agent</b> class so new <b>Tools</b> (search, DB, email, and so on) can be added without changing the Agent code? Expected answer: a Tool interface plus a registry, following the Strategy pattern and the Open/Closed principle.",
+29:"External APIs fail randomly. <b>Exponential backoff</b>: retry after waiting 1s, then 2s, then 4s, and so on. <b>Circuit breaker</b>: after too many failures, stop calling the service for a while and fail fast, so a broken dependency doesn't take your system down with it (Resilience4j in Spring).",
+30:"This is a behavioral question. Have they actually shipped real software to users, or only built demos? Listen for concrete details: what extra work production needed (testing, monitoring, security, scaling). Use STAR: Situation, Task, Action, Result.",
+31:"This is a soft skills and leadership question for a 5-year level. How would they teach a junior (or a Java developer new to AI) to write good prompts? Look for a structured teaching approach and practical tips.",
+32:"This is a communication question. A manager or business person asks 'why did the AI reject this?'. Can they explain it simply, in terms of business impact, with evidence and honesty about limits?"
+};
+const say={
+1:"Let's start simple. Say I have a use case where I could just call an LLM directly, or build a RAG setup, or go all the way with multiple agents. How do you see the difference between these three, and what would push you towards having multiple agents instead of just one?",
+2:"I see LangGraph coming up a lot these days. In your experience, what does it give you that a normal LangChain chain doesn't? Why do people model agents as a graph?",
+3:"Have you worked with MCP at all? Suppose we have an internal API and we want an agent to use it. Would you expose it through MCP or just write a normal function-calling tool, and why?",
+4:"Let's do a small design exercise. Imagine we want a system that takes requirements, finds problems in them, and fixes them automatically. If you were building this with agents, what agents would you create, and how would they talk to each other?",
+5:"One thing I've seen go wrong is an agent that keeps calling tools and re-planning and just doesn't stop, and the bill keeps growing. How do you usually protect against that?",
+6:"How do you handle memory in your agents? What does the agent remember within one conversation, versus things it should still remember next week?",
+7:"Say your agent generates an automation script and the script fails. How would you make the agent notice that and fix it by itself, without someone stepping in every time?",
+8:"Building a demo is one thing, but how do you actually convince yourself, and your team, that the agent is good enough to go to production?",
+9:"Have you used hybrid search in RAG? In what kinds of situations does vector search alone not cut it, so you'd bring in keyword or SQL search?",
+10:"If a multi-step agent flow is getting too slow or too expensive, what are the first things you'd look at to bring the tokens and latency down?",
+11:"Let's say this agent runs inside a bank and can actually call tools that touch real data. What safety measures would you put around it?",
+12:"Let's take a real scenario. A user story comes in from Jira and we want test scenarios generated automatically. Can you walk me through how you'd build that end to end, from how the story comes in to where the test cases end up?",
+13:"Once that service is built, how would you ship it? Talk me through containerizing it, deploying it, hooking it into CI/CD, and how you'd see what the agent is doing step by step in production.",
+14:"Prompts change quite often. How do you manage prompts and agent configs so that a change in dev doesn't accidentally break prod?",
+15:"Quick coding warm-up: can you reverse a linked list for me? And while we're there, how would you check whether a list has a loop in it?",
+16:"Here's a small problem. You get a stream of tool names from logs, like search, db, search, email. Find the longest continuous stretch where no tool repeats.",
+17:"Can you implement an LRU cache? Think of it as caching LLM responses: when the cache is full, the least recently used entry gets thrown out.",
+18:"Suppose you have a bunch of agent tasks where some depend on others. How would you figure out a valid order to run them in?",
+19:"Now say agents hand work off to each other, and you have a map of who hands off to whom. How would you check whether there's a loop in those handoffs?",
+20:"If you're building a tool that does a lot of lookups, when would you just go with a HashMap, and when would a Trie make more sense?",
+21:"Let's do some SQL. There's a tool_calls table with agent_id, tool_name and called_at. How would you get the top 3 most-used tools for each agent?",
+22:"Say you have agents, sessions and messages tables. How would you find the sessions where the conversation was handed from one agent to another more than N times?",
+23:"How comfortable are you with window functions? Can you explain them with an example, say, a running total of token cost within each session?",
+24:"What's the practical difference between INNER JOIN and LEFT JOIN? And have you used the LEFT JOIN where the right side IS NULL trick? Where would that be useful?",
+25:"Imagine an audit table with millions of agent events, and people mostly search by agent and date range. How would you index it so those queries stay fast?",
+26:"On the Python side: where have you used decorators, generators, or async/await? And does the GIL matter when your agent is making a lot of tool calls at the same time?",
+27:"Coming to Spring Boot: how does dependency injection work in practice, and how would you set up a REST controller? If I gave you an agent, how would you wrap it as a proper Spring Boot microservice?",
+28:"If you were designing an Agent class where people can keep plugging in new tools, how would you structure the classes? Language of your choice.",
+29:"External tools can be flaky: timeouts, 500s, rate limits. How do you handle retries without making things worse?",
+30:"Tell me about something you took all the way to production, not just a PoC. What did you have to do differently once it was going live?",
+31:"Suppose someone joins your team who's new to GenAI. How would you help them get good at writing prompts?",
+32:"Suppose a business stakeholder asks why the agent flagged something as high risk. How would you explain the agent's decision to them?"
+};
+document.querySelector('.legend').insertAdjacentHTML('beforeend',
+ `<div style="margin-top:6px"><b style="color:#d4a000">★ = Important</b>: ask these first if you are short on time.
+  <label style="margin-left:12px"><input type="checkbox" id="onlyImp"> Show only ★ questions</label></div>`);
+const app=document.getElementById('app'); let n=0, ok=0;
+const MAX=data.reduce((a,s)=>a+s.qs.reduce((x,q)=>x+q.w,0),0);
+data.forEach(s=>{
+  const h=document.createElement('h2'); h.innerHTML=`${s.sec} <span style="float:right">Weight ${s.w}</span>`; app.appendChild(h);
+  s.qs.forEach(q=>{
+    const id='q'+(n++);
+    const k=q.say?0:++ok;
+    const isImp=q.say?!!q.imp:imp.has(k), sayTxt=q.say||say[k]||q.q, exTxt=q.ex||ex[k]||'';
+    const d=document.createElement('div'); d.className='q'+(isImp?' imp':''); d.dataset.w=q.w;
+    d.innerHTML=`<div class="qh"><span>${isImp?'<span class="star">★</span> ':''}${n}. <span class="say">"${sayTxt}"</span></span><span class="w"><span class="sc">0</span> / ${q.w}</span></div>
+      <div class="orig">Original: ${q.q}</div>
+      <div class="ex"><b>What is this question asking?</b> ${exTxt}</div>
+      <div class="lk">What to listen for:</div>
+      <ul>${q.b.map((b,i)=>`<li><label><input type="checkbox" id="${id}_${i}"> ${b}</label></li>`).join('')}</ul>
+      ${q.code?`<pre>${q.code.replace(/</g,'&lt;')}</pre>`:''}
+      ${q.red?`<div class="red">Red flag: ${q.red}</div>`:''}
+      ${q.bonus?`<div class="bonus">Bonus: ${q.bonus}</div>`:''}`;
+    app.appendChild(d);
+  });
+});
+function recalc(){
+  let t=0;
+  document.querySelectorAll('.q').forEach(q=>{
+    const cb=q.querySelectorAll('input'), c=[...cb].filter(x=>x.checked).length;
+    const s=Math.round(q.dataset.w*c/cb.length*10)/10; q.querySelector('.sc').textContent=s; t+=s;
+  });
+  document.getElementById('total').textContent=`Score: ${Math.round(t*10)/10} / ${MAX}`;
+}
+recalc();
+function resetAll(){document.querySelectorAll('input').forEach(x=>x.checked=false);recalc();}
+document.addEventListener('change',e=>{
+  if(e.target.id==='onlyImp'){document.querySelectorAll('.q:not(.imp)').forEach(q=>q.style.display=e.target.checked?'none':'');return;}
+  recalc();
+});
+</script>
+</body>
+</html>
